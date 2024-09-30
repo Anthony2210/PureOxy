@@ -1,0 +1,75 @@
+/* Carte et clusters */
+#map {
+    height: 600px;
+    width: 100%;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cluster-icon {
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid white;
+}
+
+.cluster-icon.small {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 123, 255, 0.6);
+}
+
+.cluster-icon.medium {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 193, 7, 0.6);
+}
+
+.cluster-icon.large {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(220, 53, 69, 0.6);
+}
+
+/* Conteneur des filtres */
+.leaflet-control-layers-expanded {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-control-layers-label {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Boutons et filtres améliorés */
+.leaflet-control-layers-selector {
+    display: inline-block;
+    margin-right: 10px;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color: transparent;
+}
+
+.leaflet-control-layers-selector:checked {
+    background-color: #007bff;
+    border-color: #0056b3;
+}
+
+#carte-interactive h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+    font-weight: bold;
+}
