@@ -17,7 +17,7 @@
 <?php
 include 'bd/bd.php';  // Fichier contenant la connexion à la base de données
 
-// Requête SQL pour récupérer les données des villes et les types de polluants
+// Requête SQL pour récupérer les polluants distincts
 $sql = "SELECT DISTINCT pollutant FROM pollution_villes";
 $pollutantsResult = $conn->query($sql);
 
@@ -37,12 +37,22 @@ $result = $conn->query($sql);
 $villes = array();
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $villes[] = $row;  // Ajouter chaque ligne au tableau $villes
+        $coord_key = $row['lat'] . ',' . $row['lon'];
+        if (!isset($villes[$coord_key])) {
+            $villes[$coord_key] = [
+                'nom' => $row['nom'],
+                'lat' => $row['lat'],
+                'lon' => $row['lon'],
+                'pollutants' => []
+            ];
+        }
+        // Ajouter chaque polluant et sa valeur à la liste des polluants de cette ville
+        $villes[$coord_key]['pollutants'][$row['pollutant']] = $row['pollution'];
     }
 }
 
 // Encoder les résultats en JSON pour les utiliser dans JavaScript
-$json_villes = json_encode($villes);
+$json_villes = json_encode(array_values($villes));
 $pollutants_json = json_encode($pollutants);
 ?>
 
@@ -50,11 +60,14 @@ $pollutants_json = json_encode($pollutants);
     <h2>Carte interactive de la qualité de l'air</h2>
     <div id="map"></div>
 </section>
+
 <?php include 'footer.php'; ?>
+
 <!-- Leaflet JavaScript -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<<script>
+
+<script>
     // Initialiser la carte avec Leaflet
     var map = L.map('map').setView([46.603354, 1.888334], 6);
 
@@ -86,13 +99,24 @@ $pollutants_json = json_encode($pollutants);
     // Boucler à travers les villes et ajouter les marqueurs dans les bons clusters
     villes.forEach(function(ville) {
         var marker = L.marker([ville.lat, ville.lon])
-            .bindPopup(ville.nom + ', Pollution: ' + ville.pollution + ' µg/m³ (' + ville.pollutant + ')');
+            .bindPopup(`
+                <div class="popup-container">
+                    <h3>Pollution à ${ville.nom}</h3>
+                    <ul>
+                        ${Object.keys(ville.pollutants).map(function(pollutant) {
+                return `<li><strong>${pollutant} :</strong> ${ville.pollutants[pollutant]} µg/m³</li>`;
+            }).join('')}
+                    </ul>
+                </div>
+            `);
 
         // Ajouter le marqueur à la couche correspondant au polluant
-        if (layers[ville.pollutant]) {
-            layers[ville.pollutant].addLayer(marker);  // Ajouter au cluster du polluant
-            allClusters.addLayer(marker);  // Ajouter également au cluster "Tous les polluants"
-        }
+        Object.keys(ville.pollutants).forEach(function(pollutant) {
+            if (layers[pollutant]) {
+                layers[pollutant].addLayer(marker);  // Ajouter au cluster du polluant
+                allClusters.addLayer(marker);  // Ajouter également au cluster "Tous les polluants"
+            }
+        });
     });
 
     // Afficher "Tous les polluants" par défaut
