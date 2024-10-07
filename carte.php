@@ -5,35 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Carte interactive</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/carte.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
 
 <?php include 'header.php'; ?>
 
 <?php
-include 'bd/bd.php';  // Fichier contenant la connexion à la base de données
+include 'bd/bd.php';  // Connexion à la base de données
 
-// Requête SQL pour récupérer les polluants distincts
-$sql = "SELECT DISTINCT pollutant FROM pollution_villes";
-$pollutantsResult = $conn->query($sql);
-
-// Créer un tableau pour stocker les types de polluants
-$pollutants = array();
-if ($pollutantsResult->num_rows > 0) {
-    while($row = $pollutantsResult->fetch_assoc()) {
-        $pollutants[] = $row['pollutant'];
-    }
-}
-
-// Requête SQL pour récupérer les données des villes avec les types de polluants
-$sql = "SELECT city AS nom, latitude AS lat, longitude AS lon, value AS pollution, pollutant FROM pollution_villes";
+// Requête SQL pour récupérer les données des villes avec les types de polluants et la date de mise à jour
+$sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date FROM pollution_villes";
 $result = $conn->query($sql);
 
-// Créer un tableau pour stocker les données
+// Créer un tableau pour regrouper les polluants par coordonnées (latitude, longitude)
 $villes = array();
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
@@ -43,17 +30,21 @@ if ($result->num_rows > 0) {
                 'nom' => $row['nom'],
                 'lat' => $row['lat'],
                 'lon' => $row['lon'],
-                'pollutants' => []
+                'location' => $row['location'],  // Inclure la localisation
+                'pollutants' => [],
+                'date' => $row['date']
             ];
         }
-        // Ajouter chaque polluant et sa valeur à la liste des polluants de cette ville
-        $villes[$coord_key]['pollutants'][$row['pollutant']] = $row['pollution'];
+        // Ajouter les différents polluants pour cette localisation
+        $villes[$coord_key]['pollutants'][] = [
+            'pollutant' => $row['pollutant'],
+            'value' => $row['pollution']
+        ];
     }
 }
 
 // Encoder les résultats en JSON pour les utiliser dans JavaScript
 $json_villes = json_encode(array_values($villes));
-$pollutants_json = json_encode($pollutants);
 ?>
 
 <section id="carte-interactive">
@@ -63,11 +54,23 @@ $pollutants_json = json_encode($pollutants);
 
 <?php include 'footer.php'; ?>
 
-<!-- Leaflet JavaScript -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
 <script>
+    // Fonction pour formater la date dans le style souhaité
+    function formatDate(dateStr) {
+        // Convertir la chaîne de date en objet Date
+        var dateObj = new Date(dateStr);
+
+        // Obtenir les parties de la date
+        var day = dateObj.getDate();
+        var month = dateObj.toLocaleString('fr-FR', { month: 'long' });  // Mois en français
+        var year = dateObj.getFullYear();
+        var hours = dateObj.getHours();
+        var minutes = dateObj.getMinutes().toString().padStart(2, '0');  // Ajoute un zéro si nécessaire
+
+        // Retourner la date formatée
+        return `Dernière analyse le ${day} ${month} ${year} à ${hours}h${minutes}`;
+    }
+
     // Initialiser la carte avec Leaflet
     var map = L.map('map').setView([46.603354, 1.888334], 6);
 
@@ -79,95 +82,40 @@ $pollutants_json = json_encode($pollutants);
 
     // Injecter les données PHP (JSON) dans JavaScript
     var villes = <?php echo $json_villes; ?>;
-    var pollutants = <?php echo $pollutants_json; ?>;
 
-    // Créer des groupes de clusters pour chaque polluant
-    var layers = {};
-    var allClusters = L.markerClusterGroup({
-        maxClusterRadius: 50,  // Optimisation pour limiter les clusters trop larges
-        disableClusteringAtZoom: 12  // Ne pas créer de clusters au-dessus d'un certain niveau de zoom
-    });
-
-    // Créer un cluster pour chaque polluant
-    pollutants.forEach(function(pollutant) {
-        layers[pollutant] = L.markerClusterGroup({
-            maxClusterRadius: 50,
-            disableClusteringAtZoom: 12
-        });
-    });
-
-    // Boucler à travers les villes et ajouter les marqueurs dans les bons clusters
+    // Boucler à travers les villes et ajouter les marqueurs avec regroupement des polluants
     villes.forEach(function(ville) {
-        var marker = L.marker([ville.lat, ville.lon])
-            .bindPopup(`
-                <div class="popup-container">
-                    <h3>Pollution à ${ville.nom}</h3>
-                    <ul>
-                        ${Object.keys(ville.pollutants).map(function(pollutant) {
-                return `<li><strong>${pollutant} :</strong> ${ville.pollutants[pollutant]} µg/m³</li>`;
-            }).join('')}
-                    </ul>
+        var marker = L.marker([ville.lat, ville.lon]).addTo(map);
+
+        // Gérer l'événement 'click' pour chaque marqueur
+        marker.on('click', function() {
+            // Construction de la liste des polluants
+            var pollutantList = ville.pollutants.map(function(pollutant) {
+                return `<li><strong>${pollutant.pollutant} :</strong> ${pollutant.value} µg/m³</li>`;
+            }).join('');
+
+            // Ajouter la localisation uniquement si elle n'est pas "Inconnu"
+            var locationInfo = (ville.location !== "Inconnu") ? `<strong>Localisation :</strong> ${ville.location}<br>` : '';
+
+            // Formater la date dans le style souhaité
+            var formattedDate = formatDate(ville.date);
+
+            // Mise à jour des détails dans une fenêtre flottante
+            var popupContent = `
+                <div class="popup-content">
+                    <strong>Ville :</strong> ${ville.nom}<br>
+                    ${locationInfo}
+                    <strong>${formattedDate}</strong><br>
+                    <ul>${pollutantList}</ul>
                 </div>
-            `);
+            `;
 
-        // Ajouter le marqueur à la couche correspondant au polluant
-        Object.keys(ville.pollutants).forEach(function(pollutant) {
-            if (layers[pollutant]) {
-                layers[pollutant].addLayer(marker);  // Ajouter au cluster du polluant
-                allClusters.addLayer(marker);  // Ajouter également au cluster "Tous les polluants"
-            }
+            // Afficher la fenêtre flottante (popup) sur la carte
+            var popup = L.popup()
+                .setLatLng([ville.lat, ville.lon])
+                .setContent(popupContent)
+                .openOn(map);
         });
-    });
-
-    // Afficher "Tous les polluants" par défaut
-    map.addLayer(allClusters);
-
-    // Gestion du contrôle des filtres pour activer/désactiver les clusters
-    var baseLayers = {};
-    pollutants.forEach(function(pollutant) {
-        baseLayers[pollutant] = layers[pollutant];  // Ajouter chaque cluster au contrôle de couches
-    });
-    baseLayers["Tous les polluants"] = allClusters;  // Ajouter "Tous les polluants" au contrôle de couches
-
-    // Ajouter le contrôle de couches à la carte
-    var layerControl = L.control.layers(null, baseLayers, { collapsed: false }).addTo(map);
-
-    // Gérer l'activation/désactivation de la couche "Tous les polluants"
-    map.on('overlayadd', function(e) {
-        if (e.name === "Tous les polluants") {
-            // Activer toutes les couches si "Tous" est activé
-            pollutants.forEach(function(pollutant) {
-                if (!map.hasLayer(layers[pollutant])) {
-                    map.addLayer(layers[pollutant]);
-                }
-            });
-        }
-    });
-
-    map.on('overlayremove', function(e) {
-        if (e.name === "Tous les polluants") {
-            // Désactiver toutes les couches si "Tous" est décoché
-            pollutants.forEach(function(pollutant) {
-                if (map.hasLayer(layers[pollutant])) {
-                    map.removeLayer(layers[pollutant]);
-                }
-            });
-        }
-    });
-
-    // Gérer les filtres individuels
-    map.on('overlayadd', function(e) {
-        if (e.name !== "Tous les polluants") {
-            // Ajouter uniquement la couche du polluant sélectionné
-            map.addLayer(layers[e.name]);
-        }
-    });
-
-    map.on('overlayremove', function(e) {
-        if (e.name !== "Tous les polluants") {
-            // Retirer uniquement la couche du polluant désactivé
-            map.removeLayer(layers[e.name]);
-        }
     });
 </script>
 

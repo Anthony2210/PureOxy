@@ -1,61 +1,47 @@
-/* Carte et clusters */
+/* Style général pour la carte */
 #map {
-    height: 500px; /* Hauteur ajustée */
+    height: 500px;
     width: 100%;
-    margin: 0 auto;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Style pour la fenêtre flottante (popup) */
-.popup-container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    max-width: 300px;
-}
-
-.popup-container h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
-
-.popup-container p {
-    font-size: 1em;
-    margin: 5px 0;
-    color: #555;
-}
-
-.popup-container p strong {
-    color: #3bafda;
-}
-
-/* Autres styles pour améliorer l'interface */
-.leaflet-control-layers-expanded {
+.popup-content {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+    line-height: 1.6;
+    padding: 10px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.leaflet-control-layers-label {
-    color: #333;
-    font-weight: 500;
+.popup-content strong {
+    color: #007bff;
 }
 
-.leaflet-control-layers-selector {
-    display: inline-block;
-    margin-right: 10px;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    border: 2px solid #007bff;
-    background-color: transparent;
+.popup-content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
 }
 
-.leaflet-control-layers-selector:checked {
-    background-color: #007bff;
-    border-color: #0056b3;
+.popup-content li {
+    background-color: #f0f8ff;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content li strong {
+    color: #007bff;
+}
+
+/* Ajustement des contrôles de la carte */
+.leaflet-control {
+    margin-right: 15px;
+    margin-top: 10px;
 }
