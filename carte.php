@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/carte.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="erreur_formulaire.js"></script>
+
 </head>
 <body>
 
@@ -16,29 +18,46 @@
 <?php
 include 'bd/bd.php';  // Connexion à la base de données
 
-// Requête SQL pour récupérer les données des villes avec les types de polluants et la date de mise à jour
-$sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date FROM pollution_villes";
+// Requête SQL pour récupérer les points de pollution
+$sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date
+        FROM pollution_villes
+        ORDER BY date";
 $result = $conn->query($sql);
 
-// Créer un tableau pour regrouper les polluants par coordonnées (latitude, longitude)
+// Créer un tableau pour regrouper les polluants par nom de ville
 $villes = array();
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $coord_key = $row['lat'] . ',' . $row['lon'];
-        if (!isset($villes[$coord_key])) {
-            $villes[$coord_key] = [
+        // Utiliser le nom de la ville comme clé pour fusionner les points
+        $city_key = $row['nom'];
+
+        // Si la ville n'existe pas encore, l'ajouter au tableau
+        if (!isset($villes[$city_key])) {
+            $villes[$city_key] = [
                 'nom' => $row['nom'],
                 'lat' => $row['lat'],
                 'lon' => $row['lon'],
-                'location' => $row['location'],  // Inclure la localisation
+                'location' => $row['location'],
                 'pollutants' => [],
-                'date' => $row['date']
+                'dates' => []
             ];
         }
-        // Ajouter les différents polluants pour cette localisation
-        $villes[$coord_key]['pollutants'][] = [
-            'pollutant' => $row['pollutant'],
-            'value' => $row['pollution']
+
+        // Ajouter les données spécifiques à chaque ville et polluant
+        if (!isset($villes[$city_key]['pollutants'][$row['pollutant']])) {
+            $villes[$city_key]['pollutants'][$row['pollutant']] = [];
+        }
+
+        $villes[$city_key]['pollutants'][$row['pollutant']][] = [
+            'value' => $row['pollution'],
+            'date' => $row['date'],
+            'location' => $row['location']
+        ];
+
+        // Ajouter la date à la liste des dates
+        $villes[$city_key]['dates'][] = [
+            'date' => $row['date'],
+            'location' => $row['location']
         ];
     }
 }
@@ -55,22 +74,6 @@ $json_villes = json_encode(array_values($villes));
 <?php include 'footer.php'; ?>
 
 <script>
-    // Fonction pour formater la date dans le style souhaité
-    function formatDate(dateStr) {
-        // Convertir la chaîne de date en objet Date
-        var dateObj = new Date(dateStr);
-
-        // Obtenir les parties de la date
-        var day = dateObj.getDate();
-        var month = dateObj.toLocaleString('fr-FR', { month: 'long' });  // Mois en français
-        var year = dateObj.getFullYear();
-        var hours = dateObj.getHours();
-        var minutes = dateObj.getMinutes().toString().padStart(2, '0');  // Ajoute un zéro si nécessaire
-
-        // Retourner la date formatée
-        return `Dernière analyse le ${day} ${month} ${year} à ${hours}h${minutes}`;
-    }
-
     // Initialiser la carte avec Leaflet
     var map = L.map('map').setView([46.603354, 1.888334], 6);
 
@@ -83,38 +86,55 @@ $json_villes = json_encode(array_values($villes));
     // Injecter les données PHP (JSON) dans JavaScript
     var villes = <?php echo $json_villes; ?>;
 
-    // Boucler à travers les villes et ajouter les marqueurs avec regroupement des polluants
+    // Variable pour stocker le dernier popup ouvert
+    var currentPopup = null;
+
+    // Fonction pour afficher les polluants dans une fenêtre pop-up
+    function displayPollutantVariation(pollutant, value) {
+        return `<li><strong>${pollutant} :</strong> ${value.toFixed(2)} µg/m³</li>`;
+    }
+
+    // Calculer la moyenne des valeurs de pollution
+    function calculateAverage(values) {
+        if (values.length === 0) return 0;
+        let sum = values.reduce((acc, val) => acc + parseFloat(val), 0);
+        return sum / values.length;
+    }
+
+    // Afficher les points sur la carte avec une fenêtre pop-up
     villes.forEach(function(ville) {
         var marker = L.marker([ville.lat, ville.lon]).addTo(map);
 
-        // Gérer l'événement 'click' pour chaque marqueur
+        // Créer le contenu du pop-up
+        var pollutantList = '';
+        for (var pollutant in ville.pollutants) {
+            let values = ville.pollutants[pollutant].map(data => data.value);
+            let average = calculateAverage(values);
+            pollutantList += displayPollutantVariation(pollutant, average);
+        }
+
+        var popupContent = `
+            <div class="popup-content">
+                <strong>Ville :</strong> ${ville.nom}<br>
+                ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
+                <ul>${pollutantList}</ul>
+                <a href="details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
+            </div>
+        `;
+
+        // Créer le pop-up associé au marqueur
+        marker.bindPopup(popupContent);
+
+        // Gérer l'événement de clic sur le marqueur pour ouvrir le pop-up
         marker.on('click', function() {
-            // Construction de la liste des polluants
-            var pollutantList = ville.pollutants.map(function(pollutant) {
-                return `<li><strong>${pollutant.pollutant} :</strong> ${pollutant.value} µg/m³</li>`;
-            }).join('');
+            // Fermer le pop-up précédent s'il y en a un
+            if (currentPopup) {
+                currentPopup._close();
+            }
 
-            // Ajouter la localisation uniquement si elle n'est pas "Inconnu"
-            var locationInfo = (ville.location !== "Inconnu") ? `<strong>Localisation :</strong> ${ville.location}<br>` : '';
-
-            // Formater la date dans le style souhaité
-            var formattedDate = formatDate(ville.date);
-
-            // Mise à jour des détails dans une fenêtre flottante
-            var popupContent = `
-                <div class="popup-content">
-                    <strong>Ville :</strong> ${ville.nom}<br>
-                    ${locationInfo}
-                    <strong>${formattedDate}</strong><br>
-                    <ul>${pollutantList}</ul>
-                </div>
-            `;
-
-            // Afficher la fenêtre flottante (popup) sur la carte
-            var popup = L.popup()
-                .setLatLng([ville.lat, ville.lon])
-                .setContent(popupContent)
-                .openOn(map);
+            // Ouvrir le nouveau pop-up et mettre à jour la variable currentPopup
+            currentPopup = marker.getPopup();
+            marker.openPopup();
         });
     });
 </script>
