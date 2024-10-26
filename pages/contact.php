@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
-    <script src="erreur_formulaire.js"></script>
+    <link rel="stylesheet" href="../styles/style.css">
+    <script src="../script/erreur_formulaire.js"></script>
 
 </head>
-<?php include 'header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <section id="contact">
     <h2>Contactez-nous</h2>
@@ -19,4 +19,4 @@
     </form>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

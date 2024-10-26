@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
     <title>Résultats de la recherche - PureOxy</title>
     <!-- Inclure Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
-<?php include 'header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 <section id="resultat_recherche">
     <h2>Résultats de la recherche</h2>

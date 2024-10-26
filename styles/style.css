@@ -45,6 +45,11 @@ header .container {
     text-decoration: none;
 }
 
+#logo img {
+    width: 350px;
+    height: auto;
+}
+
 nav ul {
     list-style: none;
     margin: 0;
@@ -225,4 +230,88 @@ form button {
 
 form button:hover {
     background-color: #3299c9;
+}
+/* Suggestions box */
+#suggestions {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    width: calc(100% - 20px);
+}
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background-color: #f0f0f0;
+}
+
+/* Formulaire de recherche */
+form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input#search {
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Style pour champ en erreur */
+input.error {
+    border-color: #e74c3c; /* Couleur rouge pour indiquer une erreur */
+    background-color: #fce4e4;
+}
+
+input:focus.error {
+    border-color: #e74c3c;
+    background-color: #fce4e4;
+}
+
+/* Style pour la liste des suggestions */
+#suggestions-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: #fff;
+    width: 300px;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestions-list li:hover {
+    background-color: #f0f0f0;
+}
+
+#search-bar {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
 }

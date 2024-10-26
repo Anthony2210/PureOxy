@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Respirez mieux, vivez mieux</title>
     <link rel="stylesheet" href="styles/style.css">
-    <script src="erreur_formulaire.js"></script>
+    <script src="script/erreur_formulaire.js"></script>
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'includes/header.php'; ?>
 
     <section id="introduction">
         <h2>Bienvenue sur PureOxy</h2>
@@ -31,9 +31,9 @@
 
     <section id="cta">
         <h2>Commencez dès maintenant</h2>
-        <a href="recherche.php" class="button">Rechercher une ville</a>
+        <a href="fonctionnalites/recherche.php" class="button">Rechercher une ville</a>
     </section>
 
-    <?php include 'footer.php'; ?>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

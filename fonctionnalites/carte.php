@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Carte interactive</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/carte.css" />
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/carte.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="erreur_formulaire.js"></script>
+    <script src="../script/erreur_formulaire.js"></script>
 
 </head>
 <body>
 
-<?php include 'header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <?php
-include 'bd/bd.php';  // Connexion à la base de données
+include '../bd/bd.php';  // Connexion à la base de données
 
 // Requête SQL pour récupérer les points de pollution
 $sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date
@@ -71,7 +71,7 @@ $json_villes = json_encode(array_values($villes));
     <div id="map"></div>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 
 <script>
     // Initialiser la carte avec Leaflet
@@ -118,7 +118,7 @@ $json_villes = json_encode(array_values($villes));
                 <strong>Ville :</strong> ${ville.nom}<br>
                 ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
                 <ul>${pollutantList}</ul>
-                <a href="details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
+                <a href="../fonctionnalites/details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
             </div>
         `;
 

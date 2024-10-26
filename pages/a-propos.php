@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
-<?php include 'header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <section id="apropos">
     <h2>À propos de PureOxy</h2>
@@ -16,4 +16,4 @@
     </p>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
