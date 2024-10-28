@@ -3,13 +3,13 @@
     height: 500px;
     width: 100%;
     margin: 20px auto;
-    border-radius: 10px;
+    border: 3px solid #2d6a4f; /* Bordure verte foncée autour de la carte */
+    border-radius: 12px; /* Bordure arrondie pour un effet plus moderne */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
-
 /* Style pour la fenêtre flottante (popup) */
 .popup-content {
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 1.6;
     padding: 10px;
     background-color: #fff;
@@ -19,7 +19,7 @@
 }
 
 .popup-content strong {
-    color: #007bff;
+    color: darkolivegreen;
 }
 
 .popup-content ul {
@@ -29,7 +29,7 @@
 }
 
 .popup-content li {
-    background-color: #f0f8ff;
+    background-color: #f9f9e9;
     padding: 8px;
     margin-bottom: 5px;
     border-radius: 5px;
@@ -37,7 +37,7 @@
 }
 
 .popup-content li strong {
-    color: #007bff;
+    color: darkolivegreen;
 }
 
 /* Ajustement des contrôles de la carte */
@@ -143,13 +143,23 @@ canvas {
 }
 
 #see-more:hover {
-    background-color: #0056b3;
+    background-color: darkolivegreen;
     color : white;
 }
 /* Lien voir plus */
 #see-more {
-    color: #007bff;
+    color: darkolivegreen;
     font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
+}
+/* Ajouter une ombre et une bordure aux marqueurs */
+.leaflet-marker-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3)); /* Ombre douce pour un effet 3D */
+    transition: transform 0.2s ease-in-out; /* Animation au survol */
+}
+
+.leaflet-marker-icon:hover {
+    transform: scale(1.1); /* Zoom léger au survol */
+
 }
