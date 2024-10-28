@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="../styles/carte.css" />
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="../script/erreur_formulaire.js"></script>
-
 </head>
 <body>
 
@@ -25,14 +23,11 @@ $sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollutio
         ORDER BY date";
 $result = $conn->query($sql);
 
-// Créer un tableau pour regrouper les polluants par nom de ville
 $villes = array();
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        // Utiliser le nom de la ville comme clé pour fusionner les points
         $city_key = $row['nom'];
 
-        // Si la ville n'existe pas encore, l'ajouter au tableau
         if (!isset($villes[$city_key])) {
             $villes[$city_key] = [
                 'nom' => $row['nom'],
@@ -44,7 +39,6 @@ if ($result->num_rows > 0) {
             ];
         }
 
-        // Ajouter les données spécifiques à chaque ville et polluant
         if (!isset($villes[$city_key]['pollutants'][$row['pollutant']])) {
             $villes[$city_key]['pollutants'][$row['pollutant']] = [];
         }
@@ -55,7 +49,6 @@ if ($result->num_rows > 0) {
             'location' => $row['location']
         ];
 
-        // Ajouter la date à la liste des dates
         $villes[$city_key]['dates'][] = [
             'date' => $row['date'],
             'location' => $row['location']
@@ -63,7 +56,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Encoder les résultats en JSON pour les utiliser dans JavaScript
 $json_villes = json_encode(array_values($villes));
 ?>
 
@@ -75,68 +67,64 @@ $json_villes = json_encode(array_values($villes));
 <?php include '../includes/footer.php'; ?>
 
 <script>
-    // Initialiser la carte avec Leaflet
     var map = L.map('map').setView([46.603354, 1.888334], 6);
 
-    // Ajouter les tuiles OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Injecter les données PHP (JSON) dans JavaScript
+    // Définir une icône verte personnalisée basée sur l'image fournie
+    var greenIcon = L.icon({
+        iconUrl: '../images/green-icon.png', // Assurez-vous que ce chemin correspond à l'emplacement réel de votre image
+        iconSize: [20, 20], // Réduisez la taille pour un meilleur rendu
+
+    });
+
     var villes = <?php echo $json_villes; ?>;
 
-    // Variable pour stocker le dernier popup ouvert
-    var currentPopup = null;
-
-    // Fonction pour afficher les polluants dans une fenêtre pop-up
     function displayPollutantVariation(pollutant, value) {
         return `<li><strong>${pollutant} :</strong> ${value.toFixed(2)} µg/m³</li>`;
     }
 
-    // Calculer la moyenne des valeurs de pollution
     function calculateAverage(values) {
         if (values.length === 0) return 0;
         let sum = values.reduce((acc, val) => acc + parseFloat(val), 0);
         return sum / values.length;
     }
 
-    // Afficher les points sur la carte avec une fenêtre pop-up
     villes.forEach(function(ville) {
-        var marker = L.marker([ville.lat, ville.lon]).addTo(map);
+        if (ville.lat && ville.lon) {
+            var marker = L.marker([ville.lat, ville.lon], { icon: greenIcon }).addTo(map);
 
-        // Créer le contenu du pop-up
-        var pollutantList = '';
-        for (var pollutant in ville.pollutants) {
-            let values = ville.pollutants[pollutant].map(data => data.value);
-            let average = calculateAverage(values);
-            pollutantList += displayPollutantVariation(pollutant, average);
-        }
-
-        var popupContent = `
-            <div class="popup-content">
-                <strong>Ville :</strong> ${ville.nom}<br>
-                ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
-                <ul>${pollutantList}</ul>
-                <a href="../fonctionnalites/details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
-            </div>
-        `;
-
-        // Créer le pop-up associé au marqueur
-        marker.bindPopup(popupContent);
-
-        // Gérer l'événement de clic sur le marqueur pour ouvrir le pop-up
-        marker.on('click', function() {
-            // Fermer le pop-up précédent s'il y en a un
-            if (currentPopup) {
-                currentPopup._close();
+            var pollutantList = '';
+            for (var pollutant in ville.pollutants) {
+                let values = ville.pollutants[pollutant].map(data => data.value);
+                let average = calculateAverage(values);
+                pollutantList += displayPollutantVariation(pollutant, average);
             }
 
-            // Ouvrir le nouveau pop-up et mettre à jour la variable currentPopup
-            currentPopup = marker.getPopup();
-            marker.openPopup();
-        });
+            var popupContent = `
+                <div class="popup-content">
+                    <strong>Ville :</strong> ${ville.nom}<br>
+                    ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
+                    <ul>${pollutantList}</ul>
+                    <a href="../fonctionnalites/details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+
+            marker.on('click', function() {
+                if (currentPopup) {
+                    currentPopup._close();
+                }
+                currentPopup = marker.getPopup();
+                marker.openPopup();
+            });
+        } else {
+            console.warn(`Coordonnées manquantes pour la ville : ${ville.nom}`);
+        }
     });
 </script>
 
