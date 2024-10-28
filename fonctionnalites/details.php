@@ -113,6 +113,7 @@ if ($ville) {
     <title>PureOxy - Données détaillées de <?php echo htmlspecialchars($ville); ?></title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/details.css">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="../script/erreur_formulaire.js"></script>
 
 </head>

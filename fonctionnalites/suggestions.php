@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+
 <?php
 include 'bd/bd.php'; // Connexion à la base de données
 

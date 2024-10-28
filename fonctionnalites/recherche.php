@@ -9,12 +9,12 @@ require_once('../bd/bd.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche de Villes</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-<header>
-    <!-- Inclusion du fichier header.php -->
     <?php include('../includes/header.php'); ?>
-</header>
+
 
 <main>
     <h1>Recherche de Villes</h1>
