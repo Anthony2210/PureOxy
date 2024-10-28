@@ -9,13 +9,13 @@
 
 /* Style pour la fenêtre flottante (popup) */
 .popup-content {
-    font-family: 'Arial', sans-serif;
-    font-size: 1.1em;
+    font-size: 1.2em;
     line-height: 1.6;
     padding: 10px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'League Spartan', sans-serif;
 }
 
 .popup-content strong {

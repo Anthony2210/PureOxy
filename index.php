@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Respirez mieux, vivez mieux</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="script/erreur_formulaire.js"></script>
 </head>
 <body>
@@ -31,7 +32,7 @@
 
     <section id="cta">
         <h2>Commencez dès maintenant</h2>
-        <a href="fonctionnalites/recherche.php" class="button">Rechercher une ville</a>
+        <a href="fonctionnalites/recherche.php" class="button">Cliquez ici pour rechercher une ville</a>
     </section>
 
     <?php include 'includes/footer.php'; ?>

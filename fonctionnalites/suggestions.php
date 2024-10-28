@@ -1,18 +1,39 @@
 <?php
-include 'bd/bd.php'; // Connexion à la base de données
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require_once('../bd/bd.php');
 
-if (isset($_GET['query'])) {
-    $search = $_GET['query'];
-    // Requête pour trouver les villes correspondant à la saisie
-    $stmt = $conn->prepare("SELECT ville, code_postal, region FROM table_villes WHERE ville LIKE ? LIMIT 5");
-    $stmt->execute(["%$search%"]);
+// Récupérer la requête de l'utilisateur
+$query = $_GET['query'] ?? '';
 
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Initialiser le tableau des résultats
+$results = [];
 
-    if ($result) {
-        echo json_encode($result);
-    } else {
-        echo json_encode([]); // Retourne un tableau vide si aucune ville trouvée
+// Si la requête n'est pas vide, lancer la recherche
+if (!empty($query)) {
+    // Préparer la requête SQL pour obtenir des villes uniques avec le premier code postal rencontré
+    $stmt = $conn->prepare("
+        SELECT City AS ville, MIN(Postal_Code) AS code_postal, Region AS region 
+        FROM pollution_villes 
+        WHERE City LIKE ? 
+        GROUP BY City, Region 
+        ORDER BY City 
+        LIMIT 10
+    ");
+    $search = $query . '%';
+    $stmt->bind_param("s", $search);
+    $stmt->execute();
+
+    // Obtenir les résultats
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $results[] = $row;
     }
+
+    $stmt->close();
 }
-?>
+
+// Retourner les résultats en format JSON
+header('Content-Type: application/json');
+echo json_encode($results);
