@@ -8,6 +8,21 @@ body {
     line-height: 1.6;
     font-size: 16px;
 }
+/* Conteneur principal qui englobe le contenu */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* S'assurer que le body et html prennent toute la hauteur de la page */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+/* Main prend l'espace disponible entre le header et le footer */
+main {
+    flex: 1;
+}
 
 /* Conteneur global */
 .container {
@@ -71,12 +86,17 @@ section {
 section h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    color: #2c3e50;
     text-align: center;
     font-weight: bold;
 }
 
-/* Introduction */
+h2{
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: darkolivegreen;
+    text-align: center;
+    font-weight: bold;
+}
 /* Introduction */
 #introduction {
     position: relative;
@@ -193,7 +213,6 @@ footer {
     color: white;
     text-align: center;
     padding: 20px 0;
-    margin-top: 40px;
     position: relative;
     bottom: 0;
     width: 100%;
@@ -225,122 +244,108 @@ footer nav ul li a {
 }
 
 footer nav ul li a:hover {
-    background-color: #3bafda;
-    color: white;
+    text-decoration: underline white;
 }
 
-/* Formulaires */
-form input, form textarea {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
-}
-
-form input:focus, form textarea:focus {
-    border-color: #3bafda;
-}
-
-form button {
-    background-color: #3bafda;
-    color: white;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-form button:hover {
-    background-color: #3299c9;
-}
-/* Suggestions box */
-#suggestions {
-    border: 1px solid #ccc;
-    background-color: #fff;
-    max-height: 150px;
-    overflow-y: auto;
-    position: absolute;
-    width: calc(100% - 20px);
-}
-
-.suggestion {
-    padding: 8px;
-    cursor: pointer;
-}
-
-.suggestion:hover {
-    background-color: #f0f0f0;
-}
-
-/* Formulaire de recherche */
-form {
-    position: relative;
+/* Conteneur principal pour la recherche */
+#search-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #556b2f;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    margin: 60px auto;
+    color: #f9f9e9;
+    text-align: center;
 }
 
-input#search {
-    padding: 8px;
+/* Style pour le titre */
+#search-container h1 {
+    font-size: 2.4em;
+    color: #f9f9e9;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+
+/* Barre de recherche */
+#search-bar {
     width: 100%;
-    margin-bottom: 10px;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    border: 2px solid #f9f9e9;
+    outline: none;
+    color: #333;
+    transition: box-shadow 0.3s ease;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
+#search-bar:focus {
+    box-shadow: 0 0 8px rgba(107, 142, 35, 0.5);
 }
 
-button:hover {
-    background-color: #45a049;
-}
-
-/* Style pour champ en erreur */
-input.error {
-    border-color: #e74c3c; /* Couleur rouge pour indiquer une erreur */
-    background-color: #fce4e4;
-}
-
-input:focus.error {
-    border-color: #e74c3c;
-    background-color: #fce4e4;
-}
-
-/* Style pour la liste des suggestions */
+/* Liste des suggestions avec animation */
 #suggestions-list {
     list-style-type: none;
     padding: 0;
-    margin: 0;
-    position: absolute;
+    margin: 8px 0 0 0;
     background-color: #fff;
-    width: 300px;
-    border: 1px solid #ccc;
-    max-height: 150px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
     overflow-y: auto;
-    z-index: 1000;
+    max-height: 150px;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#suggestions-list.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #suggestions-list li {
     padding: 10px;
     cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
 }
 
 #suggestions-list li:hover {
-    background-color: #f0f0f0;
+    background-color: #e3f2fd;
+    color: #6b8e23;
 }
 
-#search-bar {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
+#suggestions-list li:last-child {
+    border-bottom: none;
+}
+
+/* Bouton de recherche */
+#search-button {
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 12px 40px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+#search-button:hover {
+    background-color: #4e6920;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }
 
 /* style de la page compte */
