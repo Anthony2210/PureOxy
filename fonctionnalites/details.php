@@ -6,6 +6,24 @@ include '../bd/bd.php';
 $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
 
 if ($ville) {
+    // Enregistrement de la recherche si l'utilisateur est connecté
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+
+        // Vérifie si la recherche est déjà enregistrée récemment pour éviter les doublons
+        $check_stmt = $conn->prepare("SELECT * FROM search_history WHERE user_id = ? AND search_query = ? AND search_date > (NOW() - INTERVAL 1 HOUR)");
+        $check_stmt->bind_param("is", $user_id, $ville);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        // Si aucune recherche récente similaire n'est trouvée, on l'enregistre
+        if ($check_result->num_rows === 0) {
+            $insert_stmt = $conn->prepare("INSERT INTO search_history (user_id, search_query) VALUES (?, ?)");
+            $insert_stmt->bind_param("is", $user_id, $ville);
+            $insert_stmt->execute();
+        }
+    }
+
     // Requête SQL pour obtenir les données spécifiques à la ville
     $sql = "SELECT * FROM pollution_villes WHERE City = ? ORDER BY `LastUpdated`";
     $stmt = $conn->prepare($sql);
@@ -138,54 +156,6 @@ if ($ville) {
             }
         });
     });
-
-
-    // Pagination du tableau avec JS
-    var currentStart = 0;
-    var columnsToShow = 5;  // Nombre de colonnes (dates) à afficher à la fois
-
-    function updatePageInfo() {
-        var totalColumns = document.querySelectorAll("#details-table th:not(:first-child)").length;
-        var currentPage = Math.floor(currentStart / columnsToShow) + 1;
-        var totalPages = Math.ceil(totalColumns / columnsToShow);
-        document.getElementById("page-info").innerText = `Page ${currentPage} sur ${totalPages}`;
-
-        // Activer ou désactiver les boutons
-        document.getElementById("prev-button").disabled = currentStart <= 0;
-        document.getElementById("next-button").disabled = currentStart + columnsToShow >= totalColumns;
-    }
-
-    function paginateTable() {
-        var allColumns = document.querySelectorAll("#details-table th:not(:first-child), #details-table td:not(:first-child)");
-
-        allColumns.forEach(function(column, index) {
-            if (index % allColumns.length >= currentStart && index % allColumns.length < currentStart + columnsToShow) {
-                column.style.display = '';
-            } else {
-                column.style.display = 'none';
-            }
-        });
-
-        updatePageInfo();
-    }
-
-    document.getElementById("prev-button").addEventListener("click", function() {
-        if (currentStart > 0) {
-            currentStart -= columnsToShow;
-            paginateTable();
-        }
-    });
-
-    document.getElementById("next-button").addEventListener("click", function() {
-        var totalColumns = document.querySelectorAll("#details-table th:not(:first-child)").length;
-        if (currentStart + columnsToShow < totalColumns) {
-            currentStart += columnsToShow;
-            paginateTable();
-        }
-    });
-
-    // Initialiser la pagination au chargement de la page
-    paginateTable();
 </script>
 
 <?php include '../includes/footer.php'; ?>

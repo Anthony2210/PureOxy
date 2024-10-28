@@ -347,55 +347,351 @@ footer nav ul li a:hover {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
-
-/* style de la page compte */
+/* Conteneur principal */
 .compte-container {
-    max-width: 900px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
 }
 
-.compte-forms {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-    margin-top: 20px;
+/* Titre principal */
+.compte-container h1 {
+    font-size: 2.5em;
+    color: #4c5f2d;
+    margin-bottom: 30px;
 }
 
-.compte-form {
-    background-color: #f9f9e9; /* Couleur de fond douce */
-    padding: 20px;
-    border-radius: 8px;
-    width: 45%; /* Taille pour deux colonnes */
+/* Styles pour les onglets */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
+.tab-link {
+    color: #6b8e23;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    border-radius: 5px 5px 0 0;
+    margin: 0 5px;
+}
+
+.tab-link.active,
+.tab-link:hover {
+    background-color: #6b8e23;
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+    padding: 30px;
+    border-radius: 0 5px 5px 5px;
+    border-top: 2px solid #6b8e23;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Formulaires */
+.compte-form {
+    text-align: left;
 }
 
 .compte-form h2 {
-    margin-bottom: 15px;
-    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    color: #4c5f2d;
+    font-weight: bold;
 }
 
-.compte-form input {
-    display: block;
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    color: #6b8e23;
+}
+
+.input-group input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 15px 12px 40px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #6b8e23;
+    outline: none;
 }
 
 .compte-form button {
     width: 100%;
-    padding: 10px;
-    background-color: #6b8e23; /* Couleur de bouton vert foncé */
+    padding: 12px;
+    background-color: #6b8e23;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .compte-form button:hover {
-    background-color: #556b2f; /* Couleur au survol */
+    background-color: #556b2f;
+    transform: scale(1.02);
 }
+
+.compte-form button:active {
+    background-color: #455225;
+}
+
+/* Messages d'erreur et de succès */
+.error-message {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    color: #27ae60;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Style pour la section de l'utilisateur connecté */
+.compte-connecte {
+    background-color: #f9f9e9;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.compte-connecte h2 {
+    font-size: 2em;
+    color: #4c5f2d;
+    margin-bottom: 20px;
+}
+
+.historique-section {
+    margin-top: 30px;
+}
+
+.historique-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 15px;
+}
+
+.historique-liste {
+    list-style: none;
+    padding: 0;
+}
+
+.historique-liste li {
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.historique-liste li .search-query {
+    font-weight: bold;
+    color: #333;
+}
+
+.historique-liste li .search-date {
+    color: #777;
+    font-size: 0.9em;
+}
+
+.logout-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #6b8e23;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #556b2f;
+}
+
+/* Ajustements pour le conteneur principal */
+.compte-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Style pour le titre principal */
+.compte-container h1 {
+    font-size: 2.5em;
+    color: #4c5f2d;
+    margin-bottom: 30px;
+}
+/* Tableau de Bord */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Carte de Profil */
+.profile-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    font-size: 4em;
+    color: #6b8e23;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+}
+
+.profile-info p {
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Section Historique */
+.history-section {
+    width: 100%;
+    max-width: 600px;
+}
+
+.history-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.history-section h3 i {
+    margin-right: 10px;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.history-list li {
+    background-color: #f3f4ed;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.history-list li:hover {
+    background-color: #e1e4d7;
+}
+
+.history-list .search-query {
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.history-list .search-query i {
+    margin-right: 8px;
+    color: #6b8e23;
+}
+
+.history-list .search-date {
+    color: #777;
+    font-size: 0.9em;
+}
+
+/* Bouton Effacer l'Historique */
+.clear-history-form {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.clear-history-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+}
+
+.clear-history-button i {
+    margin-right: 5px;
+}
+
+.clear-history-button:hover {
+    background-color: #c0392b;
+}
+
+/* Bouton de Déconnexion */
+.logout-button {
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #6b8e23;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.logout-button i {
+    margin-right: 8px;
+}
+
+.logout-button:hover {
+    background-color: #556b2f;
+}
+
+

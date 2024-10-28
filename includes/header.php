@@ -1,4 +1,5 @@
 <?php
+session_start();
 $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
 ?>
 
@@ -14,7 +15,13 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                 <li><a href="<?php echo $baseUrl; ?>index.php">Accueil</a></li>
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/carte.php">Carte interactive</a></li>
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/recherche.php">Recherche</a></li>
-                <li><a href="<?php echo $baseUrl; ?>pages/compte.php">Compte</a></li>
+
+                <!-- Vérifie si l'utilisateur est connecté pour afficher son nom au lieu de "Compte" -->
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li><a href="<?php echo $baseUrl; ?>pages/compte.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
+                <?php else: ?>
+                    <li><a href="<?php echo $baseUrl; ?>pages/compte.php">Compte</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </div>
