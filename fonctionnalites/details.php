@@ -250,17 +250,27 @@ echo '</script>';
         <p>Région : <?php echo htmlspecialchars($region); ?></p>
     </section>
 
-    <?php if (in_array($ville, ['Paris', 'Lyon', 'Marseille'])): ?>
+    <h2>Concentrations de polluants atmosphériques</h2>
+    <?php if (in_array(strtolower($ville), ['paris', 'lyon', 'marseille'])): ?>
+
         <select id="arrondissement-select" class="form-control mb-4">
             <option value="all">Tous les arrondissements</option>
-            <?php foreach ($arrondissements as $arrondissement): ?>
-                <option value="<?php echo htmlspecialchars($arrondissement); ?>"><?php echo htmlspecialchars($arrondissement); ?></option>
+
+            <?php
+            // Trie les arrondissements en ordre numérique
+            sort($arrondissements, SORT_NUMERIC);
+
+            // Boucle pour afficher chaque arrondissement
+            foreach ($arrondissements as $arrondissement): ?>
+                <option value="<?php echo htmlspecialchars($arrondissement); ?>">
+                    <?php echo htmlspecialchars($arrondissement); ?>
+                </option>
             <?php endforeach; ?>
         </select>
     <?php endif; ?>
 
+
     <section id="polluants">
-        <h2>Concentrations de polluants atmosphériques</h2>
         <div class="table-responsive">
             <table id="details-table" class="table table-bordered table-hover">
                 <thead class="thead-dark">
@@ -296,80 +306,94 @@ echo '</script>';
     </section>
 
     <section id="depassements">
-        <h2>Dépassements des seuils réglementaires en 2023</h2>
-        <?php if ($result_seuils->num_rows > 0): ?>
+        <h2>Dépassements des seuils réglementaires</h2>
+        <?php if (isset($result_seuils) && $result_seuils->num_rows > 0): ?>
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th>Moyenne pour la ville</th>
                     <th>Polluant</th>
-                    <th>Nombre de dépassements</th>
-                    <th>Seuil réglementaire (µg/m³)</th>
+                    <th>Nombre de dépassements (Recommandation)</th>
+                    <th>Seuil de recommandation</th>
+                    <th>Nombre de dépassements (Alerte)</th>
+                    <th>Seuil d'alerte</th>
+                    <th>Valeur limite pour la santé humaine</th>
+                    <th>Description</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php while ($row_seuils = $result_seuils->fetch_assoc()): ?>
-                    <?php
-                    // Ajouter le seuil réglementaire pour chaque polluant
+                <?php
+                // Définition des normes pour chaque polluant
+                $seuils = [
+                    'NO2' => [
+                        'nom' => 'Dioxyde d’Azote (NO2)',
+                        'valeur_recommandation' => 200,
+                        'valeur_alerte' => 400,
+                        'valeur_limite' => 200,
+                        'unite' => 'µg/m³',
+                        'description' => 'Moyenne horaire, 18h/an pour la protection de la santé humaine'
+                    ],
+                    'PM10' => [
+                        'nom' => 'Particules PM10',
+                        'valeur_recommandation' => 50,
+                        'valeur_alerte' => 80,
+                        'valeur_limite' => 50,
+                        'unite' => 'µg/m³',
+                        'description' => 'Moyenne journalière, 35 jours/an pour la protection de la santé humaine'
+                    ],
+                    'PM2.5' => [
+                        'nom' => 'Particules PM2.5',
+                        'valeur_recommandation' => 20,
+                        'valeur_alerte' => 25,
+                        'valeur_limite' => 25,
+                        'unite' => 'µg/m³',
+                        'description' => 'Moyenne annuelle pour la protection de la santé humaine'
+                    ],
+                    'O3' => [
+                        'nom' => 'Ozone (O3)',
+                        'valeur_recommandation' => 180,
+                        'valeur_alerte' => 240,
+                        'valeur_limite' => 120,
+                        'unite' => 'µg/m³',
+                        'description' => 'Maximum journalier de la moyenne sur 8h'
+                    ],
+                ];
+
+                while ($row_seuils = $result_seuils->fetch_assoc()):
                     $polluant = $row_seuils['POLLUANT'];
-                    // Définir les seuils pour les principaux polluants
-                    $seuils = [
-                        'PM2.5' => 25,
-                        'PM10' => 50,
-                        'O3' => 120,
-                        'NO2' => 200,
-                        'SO2' => 350
-                    ];
-                    $seuil_reglementaire = isset($seuils[$polluant]) ? $seuils[$polluant] : 'N/A';
+                    $nb_dep_recommandation = $row_seuils['NB_ANNEE_DEP'] ?? 0;
+                    $nb_dep_alerte = $nb_dep_recommandation > 0 ? '' : 0;
+
+                    // Récupérer la moyenne pour la ville avec 2 décimales
+                    $moyenne_ville = isset($city_pollution_averages[$polluant]) ? round($city_pollution_averages[$polluant], 2) . ' µg/m³' : 'N/A';
+
+                    // Récupérer les informations de seuils
+                    $info_polluant = $seuils[$polluant] ?? null;
+                    $nom_polluant = $info_polluant['nom'] ?? htmlspecialchars($polluant);
+                    $valeur_recommandation = $info_polluant['valeur_recommandation'] ?? 'N/A';
+                    $valeur_alerte = $info_polluant['valeur_alerte'] ?? 'N/A';
+                    $valeur_limite = $info_polluant['valeur_limite'] ?? 'N/A';
+                    $description = $info_polluant['description'] ?? 'Informations non disponibles';
+
                     ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($polluant); ?></td>
-                        <td><?php echo htmlspecialchars($row_seuils['NB_ANNEE_DEP']); ?></td>
-                        <td><?php echo htmlspecialchars($seuil_reglementaire); ?></td>
+                        <td><?php echo htmlspecialchars($moyenne_ville); ?></td>
+                        <td><?php echo htmlspecialchars($nom_polluant); ?></td>
+                        <td><?php echo htmlspecialchars($nb_dep_recommandation); ?></td>
+                        <td><?php echo htmlspecialchars($valeur_recommandation) . ' µg/m³'; ?></td>
+                        <td><?php echo htmlspecialchars($nb_dep_alerte); ?></td>
+                        <td><?php echo htmlspecialchars($valeur_alerte) . ' µg/m³'; ?></td>
+                        <td><?php echo htmlspecialchars($valeur_limite) . ' µg/m³'; ?></td>
+                        <td><?php echo htmlspecialchars($description); ?></td>
                     </tr>
                 <?php endwhile; ?>
                 </tbody>
             </table>
+            <p><strong>Sources :</strong> UE/FR</p> <!-- Auteur déplacé en tant que source sous le tableau -->
         <?php else: ?>
-            <p>Aucun dépassement des seuils réglementaires enregistré en 2023.</p>
+            <p>Aucun dépassement des seuils réglementaires enregistré pour les données disponibles.</p>
         <?php endif; ?>
     </section>
-
-
-    <?php if ($isIDF && $iqa_data): ?>
-        <section id="iqa">
-            <h2>Indice de Qualité de l'Air</h2>
-            <p>Date : <?php echo htmlspecialchars($iqa_data['date_ech']); ?></p>
-            <p>Qualité de l'air : <?php echo htmlspecialchars($iqa_data['lib_qual']); ?></p>
-        </section>
-    <?php endif; ?>
-
-
-    <section id="comparaison-extended">
-        <h2>Comparaison des niveaux de pollution</h2>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Polluant</th>
-                <th>Moyenne pour <?php echo htmlspecialchars($ville); ?> (µg/m³)</th>
-                <th>Moyenne Départementale (µg/m³)</th>
-                <th>Moyenne Régionale (µg/m³)</th>
-                <th>Moyenne Nationale (µg/m³)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($comparisons_extended as $comparison): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($comparison['pollutant']); ?></td>
-                    <td><?php echo htmlspecialchars($comparison['city_avg']); ?></td>
-                    <td><?php echo htmlspecialchars($comparison['dep_avg']); ?></td>
-                    <td><?php echo htmlspecialchars($comparison['reg_avg']); ?></td>
-                    <td><?php echo htmlspecialchars($comparison['national_avg']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </section>
-
 
 
     <section id="graphiques">
