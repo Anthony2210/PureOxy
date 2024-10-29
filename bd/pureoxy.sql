@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 28 oct. 2024 à 18:52
+-- Généré le : mar. 29 oct. 2024 à 06:50
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -40362,8 +40362,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (132, 'FR', 'Épinal', 'Inconnu', '48.1727800002807', '6.45281099995298', 'PM10', 'EEA France', 'µg/m³', 17.30, '2019-08-09 13:00:00', 'France', 'Vosges', 'Grand Est', '88000'),
 (133, 'FR', 'Paris', '8e Arrondissement', '48.8688899999167', '2.3119439997973', 'PM2.5', 'EEA France', 'µg/m³', 16.00, '2024-03-11 10:00:00', 'France', 'Paris', 'Île-de-France', '75008'),
 (134, 'FR', 'Vitry-le-François', 'Inconnu', '48.7266000002082', '4.59478099976097', 'NO2', 'EEA France', 'µg/m³', 2.20, '2024-07-23 13:00:00', 'France', 'Marne', 'Grand Est', '51300'),
-(135, 'FR', 'Paris', '15e Arrondissement', '48.8303869997457', '2.26988899966535', 'NO2', 'EEA France', 'µg/m³', -1.00, '2024-03-11 08:00:00', 'France', 'Paris', 'Île-de-France', '75015'),
-(136, 'FR', 'Paris', '15e Arrondissement', '48.8303869997457', '2.26988899966535', 'PM10', 'EEA France', 'µg/m³', -1.00, '2024-03-11 08:00:00', 'France', 'Paris', 'Île-de-France', '75015'),
 (137, 'FR', 'Sotteville-lès-Rouen', 'Inconnu', '49.40052', '1.098825', 'NO2', 'EEA France', 'µg/m³', 30.20, '2024-03-04 08:00:00', 'France', 'Seine-Maritime', 'Normandie', '76300'),
 (138, 'FR', 'Lourdes', 'Inconnu', '43.096943', '-0.038889', 'NO', 'EEA France', 'µg/m³', 1.40, '2024-03-04 08:00:00', 'France', 'Hautes-Pyrénées', 'Occitanie', '65100'),
 (139, 'FR', 'Poitiers', 'Inconnu', '46.58389', '0.345556', 'NO', 'EEA France', 'µg/m³', 88.10, '2024-03-04 08:00:00', 'France', 'Vienne', 'Nouvelle-Aquitaine', '86000'),
@@ -40402,7 +40400,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (172, 'FR', 'Évreux', 'Inconnu', '49.0202023170884', '1.13871343730275', 'NO2', 'EEA France', 'µg/m³', 83.75, '2016-12-04 19:00:00', 'France', 'Eure', 'Normandie', '27000'),
 (173, 'FR', 'Strasbourg', 'Inconnu', '48.590429999772', '7.74498300033633', 'NO2', 'EEA France', 'µg/m³', 54.80, '2024-03-11 09:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67083'),
 (174, 'FR', 'Vesoul', 'Inconnu', '47.6200200000515', '6.15764199975499', 'NO2', 'EEA France', 'µg/m³', 15.10, '2024-09-16 08:00:00', 'France', 'Haute-Saône', 'Bourgogne-Franche-Comté', '70000'),
-(175, 'FR', 'Brive-la-Gaillarde', 'Inconnu', '45.1587370002402', '1.53725900002356', 'NO', 'EEA France', 'µg/m³', -0.70, '2024-09-18 23:00:00', 'France', 'Corrèze', 'Nouvelle-Aquitaine', '19100'),
 (176, 'FR', 'Lacq', 'Inconnu', '43.4112300000173', '-0.617727999921422', 'NO', 'EEA France', 'µg/m³', 0.30, '2024-09-18 23:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64170'),
 (177, 'FR', 'Val-de-Reuil', 'Inconnu', '49.3048700002814', '1.2143670002142', 'PM10', 'EEA France', 'µg/m³', 49.10, '2024-09-18 23:00:00', 'France', 'Eure', 'Normandie', '27100'),
 (178, 'FR', 'Romans-sur-Isère', 'Inconnu', '45.042500000017', '5.04429999992356', 'PM2.5', 'EEA France', 'µg/m³', 8.10, '2024-09-18 23:00:00', 'France', 'Drôme', 'Auvergne-Rhône-Alpes', '26100'),
@@ -40495,11 +40492,11 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (265, 'FR', 'Moulins', 'Inconnu', '46.5618635984186', '3.3310878208078', 'PM10', 'EEA France', 'µg/m³', 19.25, '2016-12-01 21:00:00', 'France', 'Allier', 'Auvergne-Rhône-Alpes', '3000'),
 (266, 'FR', 'Saillat-sur-Vienne', 'Inconnu', '45.87583500017', '0.823951000371826', 'NO', 'EEA France', 'µg/m³', 0.20, '2024-09-18 23:00:00', 'France', 'Haute-Vienne', 'Nouvelle-Aquitaine', '87720'),
 (267, 'FR', 'Sens', 'Inconnu', '48.2004359999738', '3.27730000020845', 'NO2', 'EEA France', 'µg/m³', 18.10, '2024-03-11 10:00:00', 'France', 'Yonne', 'Bourgogne-Franche-Comté', '89100'),
-(268, 'FR', 'Vesoul', 'Inconnu', '47.6200200000515', '6.15764199975499', 'O3', 'EEA France', 'µg/m³', 38.70, '2024-09-16 08:00:00', 'France', 'Haute-Saône', 'Bourgogne-Franche-Comté', '70000');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(268, 'FR', 'Vesoul', 'Inconnu', '47.6200200000515', '6.15764199975499', 'O3', 'EEA France', 'µg/m³', 38.70, '2024-09-16 08:00:00', 'France', 'Haute-Saône', 'Bourgogne-Franche-Comté', '70000'),
 (269, 'FR', 'Champforgeuil', 'Inconnu', '46.8210560001565', '4.83508299997113', 'PM10', 'EEA France', 'µg/m³', 15.90, '2024-09-16 08:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71530'),
 (270, 'FR', 'Jonville-en-Woëvre', 'Inconnu', '49.0658299999143', '5.78555600021588', 'O3', 'EEA France', 'µg/m³', 71.20, '2024-09-16 08:00:00', 'France', 'Meuse', 'Grand Est', '55160'),
-(271, 'FR', 'Quimper', 'Inconnu', '47.9866069997269', '-4.09765799995523', 'O3', 'EEA France', 'µg/m³', 87.20, '2024-09-18 23:00:00', 'France', 'Finistère', 'Bretagne', '29000'),
+(271, 'FR', 'Quimper', 'Inconnu', '47.9866069997269', '-4.09765799995523', 'O3', 'EEA France', 'µg/m³', 87.20, '2024-09-18 23:00:00', 'France', 'Finistère', 'Bretagne', '29000');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (272, 'FR', 'Mérignac', 'Inconnu', '44.8413730001661', '-0.65106799971438', 'NO2', 'EEA France', 'µg/m³', 59.60, '2024-09-16 08:00:00', 'France', 'Gironde', 'Nouvelle-Aquitaine', '33700'),
 (273, 'FR', 'Mâcon', 'Inconnu', '46.3161740002279', '4.83999399979789', 'O3', 'EEA France', 'µg/m³', 52.70, '2022-12-23 01:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71000'),
 (274, 'FR', 'Ternay', 'Inconnu', '45.6018999997678', '4.80220000011266', 'PM2.5', 'EEA France', 'µg/m³', 13.70, '2024-03-11 10:00:00', 'France', 'Rhône', 'Auvergne-Rhône-Alpes', '69360'),
@@ -40542,7 +40539,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (311, 'FR', 'Saint-Nazaire', 'Inconnu', '47.2641200000181', '-2.24985799984573', 'NO', 'EEA France', 'µg/m³', 1.00, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44600'),
 (312, 'FR', 'Toulouse', 'Inconnu', '43.643943999839', '1.46824399963817', 'PM10', 'EEA France', 'µg/m³', 10.90, '2024-03-11 08:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31200'),
 (313, 'FR', 'Toulouse', 'Inconnu', '43.643943999839', '1.46824399963817', 'NO2', 'EEA France', 'µg/m³', 20.40, '2024-03-11 08:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31200'),
-(314, 'FR', 'Grande-Synthe', 'Inconnu', '51.0244600002385', '2.30214999973289', 'CO', 'EEA France', 'µg/m³', -15.00, '2024-03-11 04:00:00', 'France', 'Nord', 'Hauts-de-France', '59760'),
 (315, 'FR', 'Donges', 'Inconnu', '47.3191570002322', '-2.06695300041656', 'PM10', 'EEA France', 'µg/m³', 6.10, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44480'),
 (316, 'FR', 'Cappelle-la-Grande', 'Inconnu', '50.9959400001875', '2.36627000018506', 'NO2', 'EEA France', 'µg/m³', 3.50, '2024-09-13 08:00:00', 'France', 'Nord', 'Hauts-de-France', '59180'),
 (317, 'FR', 'Le Monêtier-les-Bains', 'Inconnu', '44.9970000002859', '6.4693999996586', 'O3', 'EEA France', 'µg/m³', 97.80, '2024-09-16 23:00:00', 'France', 'Hautes-Alpes', 'Provence-Alpes-Côte d\'Azur', '5220'),
@@ -40727,7 +40723,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (496, 'FR', 'Dunkerque', 'Inconnu', '51.0513889994753', '2.423056', 'PM10', 'EEA France', 'µg/m³', 10.65, '2018-04-25 02:00:00', 'France', 'Nord', 'Hauts-de-France', '59240'),
 (497, 'FR', 'Douai', 'Inconnu', '50.3666639994728', '3.082778', 'PM2.5', 'EEA France', 'µg/m³', 1.30, '2018-04-25 02:00:00', 'France', 'Nord', 'Hauts-de-France', '59500'),
 (498, 'FR', 'Dunkerque', 'Inconnu', '51.0338297678657', '2.33519753052722', 'CO', 'EEA France', 'µg/m³', 597.50, '2017-03-07 12:00:00', 'France', 'Nord', 'Hauts-de-France', '59430'),
-(499, 'FR', 'Vienne', 'Inconnu', '45.5259808277432', '4.8754085751962', 'O3', 'EEA France', 'µg/m³', 0.00, '2016-12-05 02:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38200'),
 (500, 'FR', 'Vienne', 'Inconnu', '45.5259808277432', '4.8754085751962', 'NO2', 'EEA France', 'µg/m³', 27.50, '2016-12-05 02:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38200'),
 (501, 'FR', 'Moulins', 'Inconnu', '46.5618635984186', '3.3310878208078', 'NO2', 'EEA France', 'µg/m³', 29.00, '2016-12-01 21:00:00', 'France', 'Allier', 'Auvergne-Rhône-Alpes', '3000'),
 (502, 'FR', 'Mont-Saint-Martin', 'Inconnu', '45.271894982689', '5.6790270589692', 'PM10', 'EEA France', 'µg/m³', 1.99, '2024-09-19 10:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38120'),
@@ -40761,13 +40756,13 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (530, 'FR', 'Montlhéry', 'Inconnu', '48.6409299998147', '2.26872000042656', 'NO', 'EEA France', 'µg/m³', 95.40, '2024-09-18 23:00:00', 'France', 'Essonne', 'Île-de-France', '91310'),
 (531, 'FR', 'Mulhouse', 'Inconnu', '47.7374150002747', '7.30907500027088', 'PM10', 'EEA France', 'µg/m³', 25.60, '2024-03-11 09:00:00', 'France', 'Haut-Rhin', 'Grand Est', '68200'),
 (532, 'FR', 'Auxerre', 'Inconnu', '47.8005750002943', '3.57618900035478', 'PM2.5', 'EEA France', 'µg/m³', 13.50, '2024-09-18 23:00:00', 'France', 'Yonne', 'Bourgogne-Franche-Comté', '89000'),
-(533, 'FR', 'Vannes', 'Inconnu', '47.6489200000658', '-2.76399000037999', 'NO', 'EEA France', 'µg/m³', 4.90, '2024-09-18 23:00:00', 'France', 'Morbihan', 'Bretagne', '56000');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(533, 'FR', 'Vannes', 'Inconnu', '47.6489200000658', '-2.76399000037999', 'NO', 'EEA France', 'µg/m³', 4.90, '2024-09-18 23:00:00', 'France', 'Morbihan', 'Bretagne', '56000'),
 (534, 'FR', 'Tours', 'Inconnu', '47.3946379998604', '0.704860999999662', 'CO', 'EEA France', 'µg/m³', 35.00, '2024-03-11 10:00:00', 'France', 'Indre-et-Loire', 'Centre-Val de Loire', '37700'),
 (535, 'FR', 'Bourges', 'Inconnu', '47.0827800000004', '2.4053329995665', 'PM10', 'EEA France', 'µg/m³', 12.70, '2024-09-18 23:00:00', 'France', 'Cher', 'Centre-Val de Loire', '18000'),
 (536, 'FR', 'Le Mesnil-Esnard', 'Inconnu', '49.4061900002854', '1.15515000009118', 'O3', 'EEA France', 'µg/m³', 82.60, '2024-09-18 23:00:00', 'France', 'Seine-Maritime', 'Normandie', '76240'),
 (537, 'FR', 'Belleville-sur-Meuse', 'Inconnu', '49.1677799998708', '5.38746100010222', 'PM2.5', 'EEA France', 'µg/m³', 9.20, '2024-03-09 00:00:00', 'France', 'Meuse', 'Grand Est', '55430'),
-(538, 'FR', 'Les Ulis', 'Inconnu', '48.6794430002305', '2.16555599996121', 'O3', 'EEA France', 'µg/m³', 70.00, '2024-09-17 23:00:00', 'France', 'Essonne', 'Île-de-France', '91940'),
+(538, 'FR', 'Les Ulis', 'Inconnu', '48.6794430002305', '2.16555599996121', 'O3', 'EEA France', 'µg/m³', 70.00, '2024-09-17 23:00:00', 'France', 'Essonne', 'Île-de-France', '91940');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (539, 'FR', 'Gonesse', 'Inconnu', '48.9908300001307', '2.44472200025949', 'NO2', 'EEA France', 'µg/m³', 4.60, '2024-09-16 08:00:00', 'France', 'Val-d\'Oise', 'Île-de-France', '95500'),
 (540, 'FR', 'Haguenau', 'Inconnu', '48.8183500000267', '7.78640900010634', 'NO2', 'EEA France', 'µg/m³', 9.20, '2024-09-17 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67500'),
 (541, 'FR', 'Maubeuge', 'Inconnu', '50.2793599998152', '3.97690999972442', 'NO2', 'EEA France', 'µg/m³', 5.90, '2024-09-16 08:00:00', 'France', 'Nord', 'Hauts-de-France', '59600'),
@@ -40881,7 +40876,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (649, 'FR', 'Nevers', 'Inconnu', '46.9966666387206', '3.17083735727372', 'PM2.5', 'EEA France', 'µg/m³', 13.30, '2024-01-29 17:00:00', 'France', 'Nièvre', 'Bourgogne-Franche-Comté', '58000'),
 (650, 'FR', 'Arles', 'Inconnu', '43.6755544389705', '4.62861441719004', 'PM10', 'EEA France', 'µg/m³', 27.70, '2024-01-29 18:00:00', 'France', 'Bouches-du-Rhône', 'Provence-Alpes-Côte d\'Azur', '13200'),
 (651, 'FR', 'Montceau-les-Mines', 'Inconnu', '46.6666401423631', '4.36666568034079', 'PM2.5', 'EEA France', 'µg/m³', 8.10, '2024-01-29 18:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71300'),
-(652, 'FR', 'Chalon-sur-Saône', 'Inconnu', '46.7824722190452', '4.84726435734473', 'PM10', 'EEA France', 'µg/m³', -0.20, '2024-01-29 17:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71100'),
 (653, 'FR', 'Saint-Michel-l\'Observatoire', 'Inconnu', '43.9335199525261', '5.71170417210011', 'O3', 'EEA France', 'µg/m³', 85.80, '2024-01-26 09:00:00', 'France', 'Alpes-de-Haute-Provence', 'Provence-Alpes-Côte d\'Azur', '4870'),
 (654, 'FR', 'Rennes', 'Inconnu', '48.1086536280958', '-1.66576399764851', 'NO2', 'EEA France', 'µg/m³', 27.70, '2024-01-29 18:00:00', 'France', 'Ille-et-Vilaine', 'Bretagne', '35706'),
 (655, 'FR', 'Brest', 'Inconnu', '48.3996394541087', '-4.46723207639797', 'NO', 'EEA France', 'µg/m³', 7.40, '2024-01-29 16:00:00', 'France', 'Finistère', 'Bretagne', '29200'),
@@ -40890,7 +40884,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (658, 'FR', 'Mont-de-Marsan', 'Inconnu', '43.8960516305414', '-0.490616689052445', 'NO2', 'EEA France', 'µg/m³', 12.90, '2023-06-01 09:00:00', 'France', 'Landes', 'Nouvelle-Aquitaine', '40000'),
 (659, 'FR', 'Mont-de-Marsan', 'Inconnu', '43.8960516305414', '-0.490616689052445', 'PM2.5', 'EEA France', 'µg/m³', 3.00, '2023-06-01 09:00:00', 'France', 'Landes', 'Nouvelle-Aquitaine', '40000'),
 (660, 'FR', 'Moult-Chicheboville', 'Inconnu', '49.117192768241', '-0.169665706026938', 'PM10', 'EEA France', 'µg/m³', 15.70, '2022-12-12 10:00:00', 'France', 'Calvados', 'Normandie', '14370'),
-(661, 'FR', 'Saint-Julien-lès-Metz', 'Inconnu', '49.1311139994689', '6.207225', 'PM10', 'EEA France', 'µg/m³', 0.00, '2020-03-24 15:00:00', 'France', 'Moselle', 'Grand Est', '57070'),
 (662, 'FR', 'Salaise-sur-Sanne', 'Inconnu', '45.3531859994632', '4.804822', 'PM2.5', 'EEA France', 'µg/m³', 10.60, '2019-12-09 01:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38150'),
 (663, 'FR', 'Millau', 'Inconnu', '44.1061895923754', '3.07217538961888', 'O3', 'EEA France', 'µg/m³', 51.30, '2019-02-12 01:00:00', 'France', 'Aveyron', 'Occitanie', '12100'),
 (664, 'FR', 'Cambrai', 'Inconnu', '50.1724794592506', '3.23606403005364', 'PM2.5', 'EEA France', 'µg/m³', 4.60, '2018-12-10 10:00:00', 'France', 'Nord', 'Hauts-de-France', '59400'),
@@ -41003,7 +40996,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (771, 'FR', 'Lorient', 'Inconnu', '47.7589450001341', '-3.36938000009845', 'PM2.5', 'EEA France', 'µg/m³', 22.00, '2024-03-11 10:00:00', 'France', 'Morbihan', 'Bretagne', '56100'),
 (772, 'FR', 'Feyzin', 'Inconnu', '45.6638999998941', '4.84589999968447', 'NO2', 'EEA France', 'µg/m³', 62.10, '2024-09-16 08:00:00', 'France', 'Métropole de Lyon', 'Auvergne-Rhône-Alpes', '69320'),
 (773, 'FR', 'La Talaudière', 'Inconnu', '45.4817769997815', '4.42966699978649', 'O3', 'EEA France', 'µg/m³', 39.90, '2024-09-18 23:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42350'),
-(774, 'FR', 'Matoury', 'Inconnu', '4.84815999961769', '-52.3238000002777', 'PM10', 'EEA France', 'µg/m³', -1.00, '2024-03-11 08:00:00', 'France', 'Guyane', 'Guyane', '97351'),
 (775, 'FR', 'Quimper', 'Inconnu', '47.9866069997269', '-4.09765799995523', 'NO2', 'EEA France', 'µg/m³', 5.50, '2024-09-18 23:00:00', 'France', 'Finistère', 'Bretagne', '29000'),
 (776, 'FR', 'Belfort', 'Inconnu', '47.6406669998236', '6.85927800027395', 'PM10', 'EEA France', 'µg/m³', 16.00, '2024-03-11 10:00:00', 'France', 'Territoire-de-Belfort', 'Bourgogne-Franche-Comté', '90000'),
 (777, 'FR', 'Saint-Junien', 'Inconnu', '45.8848500001393', '0.89843099970453', 'NO2', 'EEA France', 'µg/m³', 2.90, '2024-09-18 23:00:00', 'France', 'Haute-Vienne', 'Nouvelle-Aquitaine', '87200'),
@@ -41027,8 +41019,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (795, 'FR', 'Gaillard', 'Inconnu', '46.1936899998302', '6.21485799988769', 'PM10', 'EEA France', 'µg/m³', 9.70, '2024-09-18 23:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74240'),
 (796, 'FR', 'Lucciana', 'Inconnu', '42.5358300001085', '9.47597199989833', 'NO2', 'EEA France', 'µg/m³', 4.20, '2024-03-11 09:00:00', 'France', 'Haute-Corse', 'Corse', '20290'),
 (797, 'FR', 'Dieppe', 'Inconnu', '49.9180069998654', '1.07397200030333', 'PM10', 'EEA France', 'µg/m³', 18.20, '2024-09-15 17:00:00', 'France', 'Seine-Maritime', 'Normandie', '76200'),
-(798, 'FR', 'Labastide-Cézéracq', 'Inconnu', '43.376278000024', '-0.538206000342397', 'O3', 'EEA France', 'µg/m³', 32.90, '2024-03-11 10:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64170');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(798, 'FR', 'Labastide-Cézéracq', 'Inconnu', '43.376278000024', '-0.538206000342397', 'O3', 'EEA France', 'µg/m³', 32.90, '2024-03-11 10:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64170'),
 (799, 'FR', 'Fréjus', 'Inconnu', '43.4378739998896', '6.76839000008727', 'PM10', 'EEA France', 'µg/m³', 1.90, '2024-09-17 23:00:00', 'France', 'Var', 'Provence-Alpes-Côte d\'Azur', '83700'),
 (800, 'FR', 'Strasbourg', 'Inconnu', '48.5728069998645', '7.76783299975578', 'PM10', 'EEA France', 'µg/m³', 36.50, '2024-03-11 09:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67085'),
 (801, 'FR', 'Aubervilliers', 'Inconnu', '48.9038999997566', '2.38470000004744', 'NO2', 'EEA France', 'µg/m³', 20.10, '2024-09-17 23:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93300'),
@@ -41036,7 +41027,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (803, 'FR', 'Sonchamp', 'Inconnu', '48.5819439998197', '1.88333300041171', 'NO', 'EEA France', 'µg/m³', 1.00, '2024-09-17 23:00:00', 'France', 'Yvelines', 'Île-de-France', '78120'),
 (804, 'FR', 'Pointe-à-Pitre', 'Inconnu', '16.2367399997', '-61.534099999799', 'PM2.5', 'EEA France', 'µg/m³', 9.70, '2024-09-17 23:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97110'),
 (805, 'FR', 'Argenteuil', 'Inconnu', '48.9513899998373', '2.22361099961982', 'NO2', 'EEA France', 'µg/m³', 8.20, '2024-09-17 23:00:00', 'France', 'Val-d\'Oise', 'Île-de-France', '95100'),
-(806, 'FR', 'Saint-Denis', 'Inconnu', '48.9252779998288', '2.35666699991635', 'CO', 'EEA France', 'µg/m³', 470.00, '2024-09-16 08:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93200'),
+(806, 'FR', 'Saint-Denis', 'Inconnu', '48.9252779998288', '2.35666699991635', 'CO', 'EEA France', 'µg/m³', 470.00, '2024-09-16 08:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93200');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (807, 'FR', 'Metz', 'Inconnu', '49.1194420002004', '6.18083299965629', 'PM10', 'EEA France', 'µg/m³', 15.20, '2024-03-11 10:00:00', 'France', 'Moselle', 'Grand Est', '57000'),
 (808, 'FR', 'Eybens', 'Inconnu', '45.154669999885', '5.74523000008768', 'NO', 'EEA France', 'µg/m³', 63.50, '2024-09-15 04:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38320'),
 (809, 'FR', 'Toulouse', 'Inconnu', '43.5873450000132', '1.44400300032376', 'O3', 'EEA France', 'µg/m³', 71.40, '2024-09-16 23:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31400'),
@@ -41151,8 +41143,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (918, 'FR', 'Lisieux', 'Inconnu', '49.1472239999556', '0.227221999667361', 'PM2.5', 'EEA France', 'µg/m³', 3.90, '2024-06-12 11:00:00', 'France', 'Calvados', 'Normandie', '14100'),
 (919, 'FR', 'Lisieux', 'Inconnu', '49.1472239999556', '0.227221999667361', 'PM10', 'EEA France', 'µg/m³', 7.20, '2024-06-12 11:00:00', 'France', 'Calvados', 'Normandie', '14100'),
 (920, 'FR', 'Lisieux', 'Inconnu', '49.1472239999556', '0.227221999667361', 'O3', 'EEA France', 'µg/m³', 12.80, '2024-06-12 11:00:00', 'France', 'Calvados', 'Normandie', '14100'),
-(921, 'FR', 'Cayenne', 'Inconnu', '4.9208329998628', '-52.3219449998772', 'NO2', 'EEA France', 'µg/m³', -1.00, '2024-05-12 05:00:00', 'France', 'Guyane', 'Guyane', '97300'),
-(922, 'FR', 'Montpellier', 'Inconnu', '43.6051000000284', '3.87463999993488', 'NO2', 'EEA France', 'µg/m³', -1.00, '2024-04-11 00:00:00', 'France', 'Hérault', 'Occitanie', '34062'),
 (923, 'FR', 'Tarbes', 'Inconnu', '43.230278', '0.062222', 'NO', 'EEA France', 'µg/m³', 1.80, '2024-03-04 07:00:00', 'France', 'Hautes-Pyrénées', 'Occitanie', '65000'),
 (924, 'FR', 'Talence', 'Inconnu', '44.800556', '-0.588056', 'NO', 'EEA France', 'µg/m³', 0.50, '2024-03-01 20:00:00', 'France', 'Gironde', 'Nouvelle-Aquitaine', '33400'),
 (925, 'FR', 'Strasbourg', 'Inconnu', '48.575985', '7.727478', 'NO2', 'EEA France', 'µg/m³', 29.60, '2024-02-05 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67200'),
@@ -41201,7 +41191,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (968, 'FR', 'Nancy', 'Inconnu', '48.6970800001459', '6.15419399979321', 'NO2', 'EEA France', 'µg/m³', 3.40, '2024-09-18 23:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54100'),
 (969, 'FR', 'Baie-Mahault', 'Inconnu', '16.2573069997402', '-61.5917240003607', 'O3', 'EEA France', 'µg/m³', 7.80, '2024-03-11 10:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97122'),
 (970, 'FR', 'Bourgoin-Jallieu', 'Inconnu', '45.6082199999151', '5.27087200021089', 'PM10', 'EEA France', 'µg/m³', 5.20, '2024-09-18 23:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38300'),
-(971, 'FR', 'Cayenne', 'Inconnu', '4.93784670012282', '-52.3209299997259', 'NO2', 'EEA France', 'µg/m³', -1.00, '2024-09-18 23:00:00', 'France', 'Guyane', 'Guyane', '97300'),
 (972, 'FR', 'Lorient', 'Inconnu', '47.7424999999031', '-3.395009999658', 'PM10', 'EEA France', 'µg/m³', 38.70, '2024-09-18 23:00:00', 'France', 'Morbihan', 'Bretagne', '56100'),
 (973, 'FR', 'Caen', 'Inconnu', '49.1922200000328', '-0.391111000326555', 'PM10', 'EEA France', 'µg/m³', 43.90, '2024-09-18 23:00:00', 'France', 'Calvados', 'Normandie', '14000'),
 (974, 'FR', 'Puteaux', 'Inconnu', '48.8913880002415', '2.24055599987591', 'PM2.5', 'EEA France', 'µg/m³', 22.40, '2020-12-31 14:00:00', 'France', 'Hauts-de-Seine', 'Île-de-France', '92800'),
@@ -41295,8 +41284,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1062, 'FR', 'Dreux', 'Inconnu', '48.7296940002108', '1.35847200002767', 'O3', 'EEA France', 'µg/m³', 84.60, '2024-09-18 23:00:00', 'France', 'Eure-et-Loir', 'Centre-Val de Loire', '28100'),
 (1063, 'FR', 'Geispolsheim', 'Inconnu', '48.5157000002352', '7.68781900008216', 'O3', 'EEA France', 'µg/m³', 76.60, '2024-09-18 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67118'),
 (1064, 'FR', 'Annecy', 'Inconnu', '45.9096999999883', '6.11824999958726', 'PM10', 'EEA France', 'µg/m³', 11.10, '2024-09-15 04:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74000'),
-(1065, 'FR', 'Lucciana', 'Inconnu', '42.5358300001085', '9.47597199989833', 'PM10', 'EEA France', 'µg/m³', 3.50, '2024-03-11 09:00:00', 'France', 'Haute-Corse', 'Corse', '20290');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(1065, 'FR', 'Lucciana', 'Inconnu', '42.5358300001085', '9.47597199989833', 'PM10', 'EEA France', 'µg/m³', 3.50, '2024-03-11 09:00:00', 'France', 'Haute-Corse', 'Corse', '20290'),
 (1066, 'FR', 'Aytré', 'Inconnu', '46.1351360000773', '-1.11708600006922', 'NO', 'EEA France', 'µg/m³', 1.40, '2024-09-16 08:00:00', 'France', 'Charente-Maritime', 'Nouvelle-Aquitaine', '17440'),
 (1067, 'FR', 'Labastide-Cézéracq', 'Inconnu', '43.376278000024', '-0.538206000342397', 'NO2', 'EEA France', 'µg/m³', 7.00, '2024-03-11 10:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64170'),
 (1068, 'FR', 'Saint-Étienne', 'Inconnu', '45.4200899997254', '4.39542200034538', 'NO2', 'EEA France', 'µg/m³', 16.10, '2024-03-11 10:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42100'),
@@ -41306,7 +41294,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1072, 'FR', 'Cartignies', 'Inconnu', '50.0922500001161', '3.85002999965121', 'PM10', 'EEA France', 'µg/m³', 22.10, '2024-09-17 23:00:00', 'France', 'Nord', 'Hauts-de-France', '59244'),
 (1073, 'FR', 'Thionville', 'Inconnu', '49.3583370001585', '6.15694200014625', 'PM2.5', 'EEA France', 'µg/m³', 9.80, '2024-09-17 23:00:00', 'France', 'Moselle', 'Grand Est', '57100'),
 (1074, 'FR', 'Saint-Denis', 'Inconnu', '48.9372200002586', '2.36166700032988', 'NO', 'EEA France', 'µg/m³', 18.10, '2024-03-11 08:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93200'),
-(1075, 'FR', 'Sangatte', 'Inconnu', '50.9498899997613', '1.76916999975983', 'O3', 'EEA France', 'µg/m³', 62.80, '2024-09-16 23:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62231'),
+(1075, 'FR', 'Sangatte', 'Inconnu', '50.9498899997613', '1.76916999975983', 'O3', 'EEA France', 'µg/m³', 62.80, '2024-09-16 23:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62231');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (1076, 'FR', 'Sangatte', 'Inconnu', '50.9498899997613', '1.76916999975983', 'PM10', 'EEA France', 'µg/m³', 17.20, '2024-09-16 23:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62231'),
 (1077, 'FR', 'Nantes', 'Inconnu', '47.252776999898', '-1.57333299992586', 'NO2', 'EEA France', 'µg/m³', 6.60, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44300'),
 (1078, 'FR', 'Beauvais', 'Inconnu', '49.4359320000813', '2.08429199995963', 'PM10', 'EEA France', 'µg/m³', 8.90, '2024-09-16 23:00:00', 'France', 'Oise', 'Hauts-de-France', '60000'),
@@ -41375,7 +41364,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1141, 'FR', 'Lyon', '7e Arrondissement', '45.749694999927', '4.84438900013892', 'NO', 'EEA France', 'µg/m³', 26.50, '2024-09-18 23:00:00', 'France', 'Rhône', 'Auvergne-Rhône-Alpes', '69007'),
 (1142, 'FR', 'Biarritz', 'Inconnu', '43.4702379999568', '-1.55387600021659', 'O3', 'EEA France', 'µg/m³', 49.20, '2024-09-16 08:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64200'),
 (1143, 'FR', 'Cannes', 'Inconnu', '43.5583879998064', '7.00591899983004', 'O3', 'EEA France', 'µg/m³', 31.90, '2024-09-18 23:00:00', 'France', 'Alpes-Maritimes', 'Provence-Alpes-Côte d\'Azur', '6400'),
-(1144, 'FR', 'Cayenne', 'Inconnu', '4.93784670012282', '-52.3209299997259', 'O3', 'EEA France', 'µg/m³', -1.00, '2024-09-18 23:00:00', 'France', 'Guyane', 'Guyane', '97300'),
 (1145, 'FR', 'Villers-lès-Nancy', 'Inconnu', '48.6569440000801', '6.1360219996737', 'NO', 'EEA France', 'µg/m³', 3.30, '2024-03-11 09:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54600'),
 (1146, 'FR', 'Bassens', 'Inconnu', '44.9002950000358', '-0.515834999700427', 'PM2.5', 'EEA France', 'µg/m³', 14.70, '2024-09-18 23:00:00', 'France', 'Gironde', 'Nouvelle-Aquitaine', '33530'),
 (1147, 'FR', 'Bourg-lès-Valence', 'Inconnu', '44.9491999999497', '4.89013300025707', 'NO', 'EEA France', 'µg/m³', 45.40, '2024-09-18 23:00:00', 'France', 'Drôme', 'Auvergne-Rhône-Alpes', '26500'),
@@ -41397,7 +41385,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1163, 'FR', 'Saint-Dizier', 'Inconnu', '48.6458359997777', '4.96611099961485', 'O3', 'EEA France', 'µg/m³', 67.20, '2024-09-16 23:00:00', 'France', 'Haute-Marne', 'Grand Est', '52100'),
 (1164, 'FR', 'Toulouse', 'Inconnu', '43.5756949998691', '1.41806400006942', 'NO', 'EEA France', 'µg/m³', 1.20, '2024-09-16 23:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31100'),
 (1165, 'FR', 'Wattignies', 'Inconnu', '50.5977400001888', '3.0494600000498', 'O3', 'EEA France', 'µg/m³', 58.90, '2024-09-16 23:00:00', 'France', 'Nord', 'Hauts-de-France', '59139'),
-(1166, 'FR', 'Laval', 'Inconnu', '48.0694300001585', '-0.767691999765811', 'PM10', 'EEA France', 'µg/m³', -1.00, '2024-03-11 07:00:00', 'France', 'Mayenne', 'Pays de la Loire', '53000'),
 (1167, 'FR', 'Saint-Quentin', 'Inconnu', '49.8513340002108', '3.28400000031342', 'O3', 'EEA France', 'µg/m³', 56.80, '2024-09-16 23:00:00', 'France', 'Aisne', 'Hauts-de-France', '2100'),
 (1168, 'FR', 'Bétheny', 'Inconnu', '49.2822199998627', '4.05111100029618', 'NO2', 'EEA France', 'µg/m³', 6.90, '2024-09-16 23:00:00', 'France', 'Marne', 'Grand Est', '51450'),
 (1169, 'FR', 'Terval', 'Inconnu', '46.6566850000422', '-0.743680999706857', 'NO2', 'EEA France', 'µg/m³', 3.30, '2024-09-16 23:00:00', 'France', 'Vendée', 'Pays de la Loire', '85120'),
@@ -41456,7 +41443,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1222, 'FR', 'Arles', 'Inconnu', '43.6751139999298', '4.62921000022341', 'PM2.5', 'EEA France', 'µg/m³', 10.00, '2024-09-18 23:00:00', 'France', 'Bouches-du-Rhône', 'Provence-Alpes-Côte d\'Azur', '13200'),
 (1223, 'FR', 'Sotteville-lès-Rouen', 'Inconnu', '49.4005000001846', '1.09904199999622', 'O3', 'EEA France', 'µg/m³', 85.70, '2024-03-11 10:00:00', 'France', 'Seine-Maritime', 'Normandie', '76300'),
 (1224, 'FR', 'Saint-Germain-sur-Rhône', 'Inconnu', '46.0722240002064', '5.82083300042506', 'PM10', 'EEA France', 'µg/m³', 4.80, '2024-09-18 23:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74910'),
-(1225, 'FR', 'Macouria', 'Inconnu', '5.03460199976914', '-52.5637929997931', 'NO2', 'EEA France', 'µg/m³', 0.00, '2024-09-18 23:00:00', 'France', 'Guyane', 'Guyane', '97355'),
 (1226, 'FR', 'Bourges', 'Inconnu', '47.07504299984', '2.40718299994408', 'PM10', 'EEA France', 'µg/m³', 10.10, '2024-09-16 08:00:00', 'France', 'Cher', 'Centre-Val de Loire', '18000'),
 (1227, 'FR', 'Rennes', 'Inconnu', '48.1086099999368', '-1.66585999970461', 'NO2', 'EEA France', 'µg/m³', 7.50, '2024-09-18 23:00:00', 'France', 'Ille-et-Vilaine', 'Bretagne', '35706'),
 (1228, 'FR', 'Saint-Brieuc', 'Inconnu', '48.5135100002817', '-2.74952999981289', 'NO', 'EEA France', 'µg/m³', 3.70, '2024-09-16 08:00:00', 'France', 'Côtes-d\'Armor', 'Bretagne', '22000'),
@@ -41488,7 +41474,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1254, 'FR', 'Saint-Martin-du-Tertre', 'Inconnu', '49.1002769998272', '2.34388900039566', 'PM2.5', 'EEA France', 'µg/m³', 9.30, '2024-09-17 23:00:00', 'France', 'Val-d\'Oise', 'Île-de-France', '95270'),
 (1255, 'FR', 'Vitry-sur-Seine', 'Inconnu', '48.7758980000422', '2.37578800006495', 'NO2', 'EEA France', 'µg/m³', 10.10, '2024-03-11 10:00:00', 'France', 'Val-de-Marne', 'Île-de-France', '94400'),
 (1256, 'FR', 'Neuilly-sur-Seine', 'Inconnu', '48.8813900000285', '2.27805599983326', 'O3', 'EEA France', 'µg/m³', 64.00, '2024-03-11 10:00:00', 'France', 'Hauts-de-Seine', 'Île-de-France', '92200'),
-(1257, 'FR', 'Pointe-à-Pitre', 'Inconnu', '16.2367399997', '-61.534099999799', 'NO', 'EEA France', 'µg/m³', -0.10, '2024-09-17 23:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97110'),
 (1258, 'FR', 'Pointe-à-Pitre', 'Inconnu', '16.2367399997', '-61.534099999799', 'NO2', 'EEA France', 'µg/m³', 16.10, '2024-09-17 23:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97110'),
 (1259, 'FR', 'Metz', 'Inconnu', '49.1102830002213', '6.22333600040022', 'PM2.5', 'EEA France', 'µg/m³', 0.90, '2024-09-17 23:00:00', 'France', 'Moselle', 'Grand Est', '57070'),
 (1260, 'FR', 'Saint-Denis', 'Inconnu', '48.9252779998288', '2.35666699991635', 'NO2', 'EEA France', 'µg/m³', 31.00, '2024-09-16 08:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93200'),
@@ -41505,7 +41490,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1271, 'FR', 'Tarbes', 'Inconnu', '43.230296999729', '0.062338999671559', 'NO2', 'EEA France', 'µg/m³', 12.50, '2024-09-16 23:00:00', 'France', 'Hautes-Pyrénées', 'Occitanie', '65000'),
 (1272, 'FR', 'Tarbes', 'Inconnu', '43.230296999729', '0.062338999671559', 'NO', 'EEA France', 'µg/m³', 0.60, '2024-09-16 23:00:00', 'France', 'Hautes-Pyrénées', 'Occitanie', '65000'),
 (1273, 'FR', 'Saint-Parres-aux-Tertres', 'Inconnu', '48.2991679999448', '4.11722199979461', 'O3', 'EEA France', 'µg/m³', 63.60, '2024-09-16 23:00:00', 'France', 'Aube', 'Grand Est', '10410'),
-(1274, 'FR', 'Saint-Michel-de-Maurienne', 'Inconnu', '45.209365999758', '6.4803260000502', 'NO', 'EEA France', 'µg/m³', -1.50, '2024-03-11 10:00:00', 'France', 'Savoie', 'Auvergne-Rhône-Alpes', '73140'),
 (1275, 'FR', 'Montpellier', 'Inconnu', '43.6095999998392', '3.89877999986526', 'PM10', 'EEA France', 'µg/m³', 12.30, '2024-09-16 14:00:00', 'France', 'Hérault', 'Occitanie', '34006'),
 (1276, 'FR', 'Le Havre', 'Inconnu', '49.5146869998804', '0.100645000441171', 'PM2.5', 'EEA France', 'µg/m³', 2.30, '2024-09-16 14:00:00', 'France', 'Seine-Maritime', 'Normandie', '76620'),
 (1277, 'FR', 'Le Havre', 'Inconnu', '49.5146869998804', '0.100645000441171', 'NO', 'EEA France', 'µg/m³', 0.50, '2024-09-16 14:00:00', 'France', 'Seine-Maritime', 'Normandie', '76620'),
@@ -41562,8 +41546,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1328, 'FR', 'Jonville-en-Woëvre', 'Inconnu', '49.0658299999143', '5.78555600021588', 'NO', 'EEA France', 'µg/m³', 1.90, '2024-09-16 08:00:00', 'France', 'Meuse', 'Grand Est', '55160'),
 (1329, 'FR', 'Pau', 'Inconnu', '43.3110920001214', '-0.352115999818861', 'NO2', 'EEA France', 'µg/m³', 23.60, '2024-03-11 10:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64000'),
 (1330, 'FR', 'Nancy', 'Inconnu', '48.6858560002873', '6.17511099989272', 'NO', 'EEA France', 'µg/m³', 20.70, '2024-03-11 09:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54000'),
-(1331, 'FR', 'Forbach', 'Inconnu', '49.1874199998884', '6.91086700017932', 'NO2', 'EEA France', 'µg/m³', 21.30, '2024-09-18 23:00:00', 'France', 'Moselle', 'Grand Est', '57600');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(1331, 'FR', 'Forbach', 'Inconnu', '49.1874199998884', '6.91086700017932', 'NO2', 'EEA France', 'µg/m³', 21.30, '2024-09-18 23:00:00', 'France', 'Moselle', 'Grand Est', '57600'),
 (1332, 'FR', 'Chalon-sur-Saône', 'Inconnu', '46.7823099997673', '4.84732200043988', 'PM2.5', 'EEA France', 'µg/m³', 6.40, '2024-09-18 23:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71100'),
 (1333, 'FR', 'Montargis', 'Inconnu', '48.0014499999424', '2.72617999990292', 'NO', 'EEA France', 'µg/m³', 1.80, '2024-09-18 23:00:00', 'France', 'Loiret', 'Centre-Val de Loire', '45200'),
 (1334, 'FR', 'Nice', 'Inconnu', '43.7020760000666', '7.28625599991525', 'O3', 'EEA France', 'µg/m³', 8.40, '2024-09-18 23:00:00', 'France', 'Alpes-Maritimes', 'Provence-Alpes-Côte d\'Azur', '6300'),
@@ -41578,7 +41561,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1343, 'FR', 'Lunéville', 'Inconnu', '48.5848240000138', '6.48390000040868', 'NO', 'EEA France', 'µg/m³', 15.80, '2024-09-18 23:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54300'),
 (1344, 'FR', 'Angoulême', 'Inconnu', '45.6474269998404', '0.16716199982047', 'PM2.5', 'EEA France', 'µg/m³', 7.40, '2024-09-16 14:00:00', 'France', 'Charente', 'Nouvelle-Aquitaine', '16000'),
 (1345, 'FR', 'Anglet', 'Inconnu', '43.4940400001703', '-1.52875299992194', 'NO2', 'EEA France', 'µg/m³', 21.20, '2024-09-18 23:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64600'),
-(1346, 'FR', 'Xonrupt-Longemer', 'Inconnu', '48.0511169998905', '7.01111400023723', 'NO2', 'EEA France', 'µg/m³', 0.50, '2024-09-18 23:00:00', 'France', 'Vosges', 'Grand Est', '88400'),
+(1346, 'FR', 'Xonrupt-Longemer', 'Inconnu', '48.0511169998905', '7.01111400023723', 'NO2', 'EEA France', 'µg/m³', 0.50, '2024-09-18 23:00:00', 'France', 'Vosges', 'Grand Est', '88400');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (1347, 'FR', 'Talence', 'Inconnu', '44.8004599997874', '-0.589397999689418', 'PM2.5', 'EEA France', 'µg/m³', 8.70, '2024-09-18 23:00:00', 'France', 'Gironde', 'Nouvelle-Aquitaine', '33400'),
 (1348, 'FR', 'Coulommiers', 'Inconnu', '48.8058999999097', '3.08415800012575', 'PM10', 'EEA France', 'µg/m³', 57.40, '2024-09-18 23:00:00', 'France', 'Seine-et-Marne', 'Île-de-France', '77120'),
 (1349, 'FR', 'Bourgoin-Jallieu', 'Inconnu', '45.6082199999151', '5.27087200021089', 'PM2.5', 'EEA France', 'µg/m³', 5.60, '2024-09-18 23:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38300'),
@@ -41808,7 +41792,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1573, 'FR', 'Verneuil', 'Inconnu', '46.8146930000512', '2.61006899986248', 'PM2.5', 'EEA France', 'µg/m³', 3.80, '2024-09-18 23:00:00', 'France', 'Cher', 'Centre-Val de Loire', '18210'),
 (1574, 'FR', 'Annecy', 'Inconnu', '45.8952799999222', '6.11833300032625', 'PM10', 'EEA France', 'µg/m³', 11.50, '2024-09-16 08:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74000'),
 (1575, 'FR', 'Kourou', 'Inconnu', '5.16424799969236', '-52.6464900004207', 'O3', 'EEA France', 'µg/m³', 47.50, '2024-09-18 23:00:00', 'France', 'Guyane', 'Guyane', '97310'),
-(1576, 'FR', 'Mourenx', 'Inconnu', '43.3771930000606', '-0.610277999979003', 'NO', 'EEA France', 'µg/m³', -0.30, '2024-03-11 10:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64150'),
 (1577, 'FR', 'Merléac', 'Inconnu', '48.261963000266', '-2.9436309999704', 'NO2', 'EEA France', 'µg/m³', 3.40, '2024-09-18 23:00:00', 'France', 'Côtes-d\'Armor', 'Bretagne', '22460'),
 (1578, 'FR', 'Lyon', '7e Arrondissement', '45.7352900001264', '4.8297939998526', 'NO', 'EEA France', 'µg/m³', 15.60, '2024-09-18 23:00:00', 'France', 'Rhône', 'Auvergne-Rhône-Alpes', '69007'),
 (1579, 'FR', 'Lons-le-Saunier', 'Inconnu', '46.6713200001368', '5.55661999971506', 'PM2.5', 'EEA France', 'µg/m³', 5.10, '2024-09-16 08:00:00', 'France', 'Jura', 'Bourgogne-Franche-Comté', '39000'),
@@ -41827,8 +41810,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1592, 'FR', 'Gap', 'Inconnu', '44.5551950001672', '6.07301500018045', 'O3', 'EEA France', 'µg/m³', 56.90, '2024-09-18 23:00:00', 'France', 'Hautes-Alpes', 'Provence-Alpes-Côte d\'Azur', '5000'),
 (1593, 'FR', 'Saint-Jean-de-Maurienne', 'Inconnu', '45.2747230002974', '6.3497219998307', 'PM10', 'EEA France', 'µg/m³', 6.60, '2024-09-18 23:00:00', 'France', 'Savoie', 'Auvergne-Rhône-Alpes', '73300'),
 (1594, 'FR', 'Belfort', 'Inconnu', '47.6307559997415', '6.85894400036311', 'O3', 'EEA France', 'µg/m³', 33.80, '2024-09-18 23:00:00', 'France', 'Territoire-de-Belfort', 'Bourgogne-Franche-Comté', '90000'),
-(1595, 'FR', 'Portes-lès-Valence', 'Inconnu', '44.8702430002505', '4.87628899963312', 'NO2', 'EEA France', 'µg/m³', 22.50, '2024-03-11 10:00:00', 'France', 'Drôme', 'Auvergne-Rhône-Alpes', '26800');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(1595, 'FR', 'Portes-lès-Valence', 'Inconnu', '44.8702430002505', '4.87628899963312', 'NO2', 'EEA France', 'µg/m³', 22.50, '2024-03-11 10:00:00', 'France', 'Drôme', 'Auvergne-Rhône-Alpes', '26800'),
 (1596, 'FR', 'Perpignan', 'Inconnu', '42.6955000001482', '2.90052999972499', 'PM2.5', 'EEA France', 'µg/m³', 6.00, '2024-09-18 23:00:00', 'France', 'Pyrénées-Orientales', 'Occitanie', '66000'),
 (1597, 'FR', 'Perpignan', 'Inconnu', '42.6955000001482', '2.90052999972499', 'PM10', 'EEA France', 'µg/m³', 15.90, '2024-09-18 23:00:00', 'France', 'Pyrénées-Orientales', 'Occitanie', '66000'),
 (1598, 'FR', 'Saint-Brisson', 'Inconnu', '47.2747599997626', '4.09947599964745', 'PM2.5', 'EEA France', 'µg/m³', 5.00, '2024-09-16 08:00:00', 'France', 'Nièvre', 'Bourgogne-Franche-Comté', '58230'),
@@ -41844,10 +41826,10 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1608, 'FR', 'Valenciennes', 'Inconnu', '50.3585300000656', '3.50804000015779', 'NO2', 'EEA France', 'µg/m³', 16.00, '2024-09-16 08:00:00', 'France', 'Nord', 'Hauts-de-France', '59300'),
 (1609, 'FR', 'Valenciennes', 'Inconnu', '50.3585300000656', '3.50804000015779', 'NO', 'EEA France', 'µg/m³', 9.40, '2024-09-16 08:00:00', 'France', 'Nord', 'Hauts-de-France', '59300'),
 (1610, 'FR', 'Metz', 'Inconnu', '49.1194420002004', '6.18083299965629', 'NO2', 'EEA France', 'µg/m³', 9.00, '2024-03-11 10:00:00', 'France', 'Moselle', 'Grand Est', '57000'),
-(1611, 'FR', 'Eybens', 'Inconnu', '45.154669999885', '5.74523000008768', 'PM2.5', 'EEA France', 'µg/m³', 2.70, '2024-09-15 04:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38320'),
+(1611, 'FR', 'Eybens', 'Inconnu', '45.154669999885', '5.74523000008768', 'PM2.5', 'EEA France', 'µg/m³', 2.70, '2024-09-15 04:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38320');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (1612, 'FR', 'Sangatte', 'Inconnu', '50.9498899997613', '1.76916999975983', 'NO', 'EEA France', 'µg/m³', 4.60, '2024-09-16 23:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62231'),
 (1613, 'FR', 'Troyes', 'Inconnu', '48.3016660002666', '4.07694400024531', 'PM10', 'EEA France', 'µg/m³', 6.10, '2023-01-09 14:00:00', 'France', 'Aube', 'Grand Est', '10000'),
-(1614, 'FR', 'Halluin', 'Inconnu', '50.7754819998265', '3.12568000015524', 'NO', 'EEA France', 'µg/m³', -0.10, '2024-03-11 01:00:00', 'France', 'Nord', 'Hauts-de-France', '59250'),
 (1615, 'FR', 'Neuilly-Saint-Front', 'Inconnu', '49.1749299998364', '3.26081899955954', 'NO2', 'EEA France', 'µg/m³', 2.40, '2024-09-16 23:00:00', 'France', 'Aisne', 'Hauts-de-France', '2470'),
 (1616, 'FR', 'Reims', 'Inconnu', '49.2241669997297', '4.02055599976787', 'O3', 'EEA France', 'µg/m³', 56.90, '2024-09-16 23:00:00', 'France', 'Marne', 'Grand Est', '51100'),
 (1617, 'FR', 'Sainte-Savine', 'Inconnu', '48.2950020002667', '4.05027799971974', 'NO', 'EEA France', 'µg/m³', 21.30, '2024-09-16 08:00:00', 'France', 'Aube', 'Grand Est', '10300'),
@@ -41871,7 +41853,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1635, 'FR', 'Donges', 'Inconnu', '47.3240969999791', '-2.08156700007113', 'NO2', 'EEA France', 'µg/m³', 6.60, '2021-03-23 03:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44480'),
 (1636, 'FR', 'Saint-Gilles-les-Bains', 'Inconnu', '-21.032138999678', '55.2325630002928', 'NO2', 'EEA France', 'µg/m³', 13.80, '2024-09-09 08:00:00', 'France', 'La Réunion', 'La Réunion', '97434'),
 (1637, 'FR', 'Vitry-le-François', 'Inconnu', '48.7266000002082', '4.59478099976097', 'NO', 'EEA France', 'µg/m³', 0.10, '2024-07-23 13:00:00', 'France', 'Marne', 'Grand Est', '51300'),
-(1638, 'FR', 'Cayenne', 'Inconnu', '4.9208329998628', '-52.3219449998772', 'PM10', 'EEA France', 'µg/m³', -1.00, '2024-05-12 05:00:00', 'France', 'Guyane', 'Guyane', '97300'),
 (1639, 'FR', 'La Rochelle', 'Inconnu', '46.162556', '-1.153603', 'PM2.5', 'EEA France', 'µg/m³', 3.40, '2024-03-04 07:00:00', 'France', 'Charente-Maritime', 'Nouvelle-Aquitaine', '17000'),
 (1640, 'FR', 'Poitiers', 'Inconnu', '46.58389', '0.345556', 'NO2', 'EEA France', 'µg/m³', 36.20, '2024-03-04 08:00:00', 'France', 'Vienne', 'Nouvelle-Aquitaine', '86000'),
 (1641, 'FR', 'Castres', 'Inconnu', '43.610558', '2.23', 'PM2.5', 'EEA France', 'µg/m³', 5.40, '2024-03-04 08:00:00', 'France', 'Tarn', 'Occitanie', '81100'),
@@ -41884,7 +41865,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1648, 'FR', 'Coulommiers', 'Inconnu', '48.8055412818308', '3.08444637639995', 'PM2.5', 'EEA France', 'µg/m³', 11.80, '2024-01-29 18:00:00', 'France', 'Seine-et-Marne', 'Île-de-France', '77120'),
 (1649, 'FR', 'Montceau-les-Mines', 'Inconnu', '46.6666401423631', '4.36666568034079', 'O3', 'EEA France', 'µg/m³', 14.50, '2024-01-29 18:00:00', 'France', 'Saône-et-Loire', 'Bourgogne-Franche-Comté', '71300'),
 (1650, 'FR', 'Sarrola-Carcopino', 'Inconnu', '41.964411839407', '8.8202792970315', 'NO', 'EEA France', 'µg/m³', 0.30, '2018-02-03 19:00:00', 'France', 'Corse-du-Sud', 'Corse', '20167'),
-(1651, 'FR', 'Nancy', 'Inconnu', '48.6963231696882', '6.14612046034746', 'CO', 'EEA France', 'µg/m³', -183.00, '2024-01-29 18:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54000'),
 (1652, 'FR', 'Cannes', 'Inconnu', '43.5625273554356', '7.00721854224592', 'PM10', 'EEA France', 'µg/m³', 16.40, '2024-01-29 18:00:00', 'France', 'Alpes-Maritimes', 'Provence-Alpes-Côte d\'Azur', '6110'),
 (1653, 'FR', 'Vaulx-en-Velin', 'Inconnu', '45.7789106049275', '4.92469913483583', 'NO', 'EEA France', 'µg/m³', 40.90, '2024-01-04 09:00:00', 'France', 'Métropole de Lyon', 'Auvergne-Rhône-Alpes', '69120'),
 (1654, 'FR', 'Encamp', 'Inconnu', '42.534882999465', '1.716986', 'O3', 'EEA France', 'µg/m³', 45.80, '2023-04-18 16:00:00', 'France', 'Inconnu', 'Inconnu', 'AD200'),
@@ -41919,7 +41899,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1683, 'FR', 'Saint-Jean-de-Maurienne', 'Inconnu', '45.2747230002974', '6.3497219998307', 'NO2', 'EEA France', 'µg/m³', 3.30, '2024-09-18 23:00:00', 'France', 'Savoie', 'Auvergne-Rhône-Alpes', '73300'),
 (1684, 'FR', 'Grandfontaine', 'Inconnu', '48.4929920001705', '7.12980000037835', 'PM2.5', 'EEA France', 'µg/m³', 13.70, '2024-09-18 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67130'),
 (1685, 'FR', 'Perpignan', 'Inconnu', '42.6955000001482', '2.90052999972499', 'O3', 'EEA France', 'µg/m³', 79.90, '2024-09-18 23:00:00', 'France', 'Pyrénées-Orientales', 'Occitanie', '66000'),
-(1686, 'FR', 'Baie-Mahault', 'Inconnu', '16.2573069997402', '-61.5917240003607', 'PM10', 'EEA France', 'µg/m³', 0.00, '2024-03-11 10:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97122'),
 (1687, 'FR', 'Montlhéry', 'Inconnu', '48.6409299998147', '2.26872000042656', 'NO2', 'EEA France', 'µg/m³', 38.80, '2024-09-18 23:00:00', 'France', 'Essonne', 'Île-de-France', '91310'),
 (1688, 'FR', 'Bourgoin-Jallieu', 'Inconnu', '45.6082199999151', '5.27087200021089', 'NO2', 'EEA France', 'µg/m³', 5.80, '2024-09-18 23:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38300'),
 (1689, 'FR', 'Biarritz', 'Inconnu', '43.4702379999568', '-1.55387600021659', 'NO', 'EEA France', 'µg/m³', 1.20, '2024-09-16 08:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64200'),
@@ -41956,7 +41935,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1720, 'FR', 'Clermont-Ferrand', 'Inconnu', '45.7972800002671', '3.11383300022196', 'PM10', 'EEA France', 'µg/m³', 9.10, '2024-03-11 10:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63100'),
 (1721, 'FR', 'Saint-Gilles-les-Bains', 'Inconnu', '-20.9985769999371', '55.2806199996725', 'PM10', 'EEA France', 'µg/m³', 27.60, '2024-09-16 08:00:00', 'France', 'La Réunion', 'La Réunion', '97434'),
 (1722, 'FR', 'Pont-à-Mousson', 'Inconnu', '48.9149999999374', '6.05833600022855', 'PM10', 'EEA France', 'µg/m³', 11.30, '2024-09-16 08:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54700'),
-(1723, 'FR', 'Sainte-Suzanne', 'Inconnu', '-20.9105850003572', '55.6189770001546', 'NO', 'EEA France', 'µg/m³', -0.40, '2018-08-22 20:00:00', 'France', 'La Réunion', 'La Réunion', '97441'),
 (1724, 'FR', 'Sainte-Suzanne', 'Inconnu', '-20.9105850003572', '55.6189770001546', 'NO2', 'EEA France', 'µg/m³', 13.10, '2018-08-22 20:00:00', 'France', 'La Réunion', 'La Réunion', '97441'),
 (1725, 'FR', 'Roussillon', 'Inconnu', '45.3678200001453', '4.80514699975902', 'PM10', 'EEA France', 'µg/m³', 0.10, '2024-03-11 10:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38150'),
 (1726, 'FR', 'Billère', 'Inconnu', '43.310833', '-0.391111', 'PM10', 'EEA France', 'µg/m³', 4.80, '2024-03-04 08:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64140'),
@@ -42057,7 +42035,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1821, 'FR', 'Sarrola-Carcopino', 'Inconnu', '41.964411839407', '8.8202792970315', 'PM10', 'EEA France', 'µg/m³', 14.20, '2018-02-03 19:00:00', 'France', 'Corse-du-Sud', 'Corse', '20167'),
 (1822, 'FR', 'Blois', 'Inconnu', '47.5945165359368', '1.30173969506476', 'PM2.5', 'EEA France', 'µg/m³', 6.00, '2024-01-29 18:00:00', 'France', 'Loir-et-Cher', 'Centre-Val de Loire', '41000'),
 (1823, 'FR', 'Toulouse', 'Inconnu', '43.5608348885067', '1.39500278786205', 'PM10', 'EEA France', 'µg/m³', 19.30, '2024-01-29 17:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31100'),
-(1824, 'FR', 'Vaulx-en-Velin', 'Inconnu', '45.7789106049275', '4.92469913483583', 'O3', 'EEA France', 'µg/m³', -0.80, '2024-01-04 09:00:00', 'France', 'Métropole de Lyon', 'Auvergne-Rhône-Alpes', '69120'),
 (1825, 'FR', 'Rive-de-Gier', 'Inconnu', '45.533406631012', '4.62394317771262', 'NO2', 'EEA France', 'µg/m³', 48.50, '2024-01-02 10:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42800'),
 (1826, 'FR', 'Clermont-Ferrand', 'Inconnu', '45.7757153069085', '3.09625023923328', 'NO2', 'EEA France', 'µg/m³', 46.80, '2023-12-20 13:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63000'),
 (1827, 'FR', 'Mont-de-Marsan', 'Inconnu', '43.8960516305414', '-0.490616689052445', 'PM10', 'EEA France', 'µg/m³', 18.50, '2023-06-01 09:00:00', 'France', 'Landes', 'Nouvelle-Aquitaine', '40000'),
@@ -42089,13 +42066,11 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1853, 'FR', 'Chartres', 'Inconnu', '48.4491579997343', '1.49246899995736', 'PM2.5', 'EEA France', 'µg/m³', 4.30, '2024-09-18 23:00:00', 'France', 'Eure-et-Loir', 'Centre-Val de Loire', '28000'),
 (1854, 'FR', 'Bayonne', 'Inconnu', '43.4798199999506', '-1.48915700043803', 'PM10', 'EEA France', 'µg/m³', 4.90, '2024-09-16 08:00:00', 'France', 'Pyrénées-Atlantiques', 'Nouvelle-Aquitaine', '64100'),
 (1855, 'FR', 'Rouen', 'Inconnu', '49.4423560001848', '1.0937889998627', 'O3', 'EEA France', 'µg/m³', 76.20, '2024-09-18 23:00:00', 'France', 'Seine-Maritime', 'Normandie', '76000'),
-(1856, 'FR', 'Saint-Chamond', 'Inconnu', '45.4753270000971', '4.51500300008891', 'PM10', 'EEA France', 'µg/m³', -1.00, '2023-01-25 13:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42400'),
 (1857, 'FR', 'Saint-Chamond', 'Inconnu', '45.4753270000971', '4.51500300008891', 'NO2', 'EEA France', 'µg/m³', 14.90, '2023-01-25 13:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42400'),
 (1858, 'FR', 'Cherbourg-en-Cotentin', 'Inconnu', '49.6338900002764', '-1.62472220013899', 'PM2.5', 'EEA France', 'µg/m³', 3.70, '2024-09-16 08:00:00', 'France', 'Manche', 'Normandie', '50100'),
 (1859, 'FR', 'Saint-Laurent-Blangy', 'Inconnu', '50.3088599999415', '2.80736899956143', 'NO', 'EEA France', 'µg/m³', 5.30, '2024-09-16 08:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62223'),
 (1860, 'FR', 'La Coulonche', 'Inconnu', '48.6450000001438', '-0.458333000235777', 'PM10', 'EEA France', 'µg/m³', 39.70, '2024-09-18 23:00:00', 'France', 'Orne', 'Normandie', '61220'),
-(1861, 'FR', 'Xonrupt-Longemer', 'Inconnu', '48.0511169998905', '7.01111400023723', 'O3', 'EEA France', 'µg/m³', 73.80, '2024-09-18 23:00:00', 'France', 'Vosges', 'Grand Est', '88400');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(1861, 'FR', 'Xonrupt-Longemer', 'Inconnu', '48.0511169998905', '7.01111400023723', 'O3', 'EEA France', 'µg/m³', 73.80, '2024-09-18 23:00:00', 'France', 'Vosges', 'Grand Est', '88400'),
 (1862, 'FR', 'Grandfontaine', 'Inconnu', '48.4929920001705', '7.12980000037835', 'NO', 'EEA France', 'µg/m³', 0.80, '2024-09-18 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67130'),
 (1863, 'FR', 'Portes-lès-Valence', 'Inconnu', '44.8702430002505', '4.87628899963312', 'O3', 'EEA France', 'µg/m³', 62.00, '2024-03-11 10:00:00', 'France', 'Drôme', 'Auvergne-Rhône-Alpes', '26800'),
 (1864, 'FR', 'Melun', 'Inconnu', '48.5280570001283', '2.65361100014886', 'PM2.5', 'EEA France', 'µg/m³', 11.60, '2024-09-18 23:00:00', 'France', 'Seine-et-Marne', 'Île-de-France', '77000'),
@@ -42118,7 +42093,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1881, 'FR', 'Voiron', 'Inconnu', '45.3601760000397', '5.58941899990794', 'PM10', 'EEA France', 'µg/m³', 3.70, '2024-09-16 08:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38500'),
 (1882, 'FR', 'Calais', 'Inconnu', '50.9577999999066', '1.89008000037235', 'NO2', 'EEA France', 'µg/m³', 4.40, '2024-09-13 12:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62100'),
 (1883, 'FR', 'Calais', 'Inconnu', '50.9577999999066', '1.89008000037235', 'PM10', 'EEA France', 'µg/m³', 5.10, '2024-09-13 12:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62100'),
-(1884, 'FR', 'Nantes', 'Inconnu', '47.252776999898', '-1.57333299992586', 'PM10', 'EEA France', 'µg/m³', 7.70, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44300'),
+(1884, 'FR', 'Nantes', 'Inconnu', '47.252776999898', '-1.57333299992586', 'PM10', 'EEA France', 'µg/m³', 7.70, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44300');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (1885, 'FR', 'Neuilly-Saint-Front', 'Inconnu', '49.1749299998364', '3.26081899955954', 'PM2.5', 'EEA France', 'µg/m³', 4.20, '2024-09-16 23:00:00', 'France', 'Aisne', 'Hauts-de-France', '2470'),
 (1886, 'FR', 'Vif', 'Inconnu', '45.0577999998536', '5.67670000012418', 'NO', 'EEA France', 'µg/m³', 2.00, '2024-09-16 23:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38450'),
 (1887, 'FR', 'Nantes', 'Inconnu', '47.2224999999634', '-1.53750000004799', 'PM10', 'EEA France', 'µg/m³', 8.90, '2024-09-16 23:00:00', 'France', 'Loire-Atlantique', 'Pays de la Loire', '44000'),
@@ -42188,7 +42164,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (1951, 'FR', 'Mulhouse', 'Inconnu', '47.747684000262', '7.32136400007003', 'PM10', 'EEA France', 'µg/m³', 10.80, '2024-09-16 08:00:00', 'France', 'Haut-Rhin', 'Grand Est', '68200'),
 (1952, 'FR', 'Colmar', 'Inconnu', '48.0744440002721', '7.35055540021787', 'NO2', 'EEA France', 'µg/m³', 21.80, '2024-09-16 08:00:00', 'France', 'Haut-Rhin', 'Grand Est', '68000'),
 (1953, 'FR', 'Fort-de-France', 'Inconnu', '14.61411100042', '-61.0530800003504', 'NO', 'EEA France', 'µg/m³', 0.10, '2024-09-09 23:00:00', 'France', 'Martinique', 'Martinique', '97200'),
-(1954, 'FR', 'Périgueux', 'Inconnu', '45.1898229998141', '0.72718400006274', 'NO', 'EEA France', 'µg/m³', 0.00, '2024-09-18 23:00:00', 'France', 'Dordogne', 'Nouvelle-Aquitaine', '24000'),
 (1955, 'FR', 'Nancy', 'Inconnu', '48.6881700000945', '6.19043099990213', 'NO', 'EEA France', 'µg/m³', 26.90, '2024-09-18 23:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54100'),
 (1956, 'FR', 'Bastia', 'Inconnu', '42.7028300002127', '9.44638899986363', 'NO2', 'EEA France', 'µg/m³', 12.90, '2024-09-18 23:00:00', 'France', 'Haute-Corse', 'Corse', '20200'),
 (1957, 'FR', 'Melun', 'Inconnu', '48.5280570001283', '2.65361100014886', 'NO2', 'EEA France', 'µg/m³', 56.50, '2024-09-18 23:00:00', 'France', 'Seine-et-Marne', 'Île-de-France', '77000'),
@@ -42287,7 +42262,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2050, 'FR', 'Cartignies', 'Inconnu', '50.0922500001161', '3.85002999965121', 'O3', 'EEA France', 'µg/m³', 67.60, '2024-09-17 23:00:00', 'France', 'Nord', 'Hauts-de-France', '59244'),
 (2051, 'FR', 'Cartignies', 'Inconnu', '50.0922500001161', '3.85002999965121', 'PM2.5', 'EEA France', 'µg/m³', 12.50, '2024-09-17 23:00:00', 'France', 'Nord', 'Hauts-de-France', '59244'),
 (2052, 'FR', 'Tremblay-en-France', 'Inconnu', '48.9555499999541', '2.57527799990011', 'NO2', 'EEA France', 'µg/m³', 9.20, '2024-09-17 23:00:00', 'France', 'Seine-Saint-Denis', 'Île-de-France', '93290'),
-(2053, 'FR', 'Marseille', '4e Arrondissement', '43.3052859999273', '5.39471600005097', 'NO', 'EEA France', 'µg/m³', -0.90, '2024-03-10 02:00:00', 'France', 'Bouches-du-Rhône', 'Provence-Alpes-Côte d\'Azur', '13004'),
 (2054, 'FR', 'Mantes-la-Jolie', 'Inconnu', '48.9963999999874', '1.70330000028582', 'NO', 'EEA France', 'µg/m³', 8.60, '2024-03-11 10:00:00', 'France', 'Yvelines', 'Île-de-France', '78200'),
 (2055, 'FR', 'Versailles', 'Inconnu', '48.7991680000162', '2.13055599976146', 'O3', 'EEA France', 'µg/m³', 55.80, '2024-09-17 23:00:00', 'France', 'Yvelines', 'Île-de-France', '78000'),
 (2056, 'FR', 'Roubaix', 'Inconnu', '50.7065350000372', '3.18066000012097', 'PM10', 'EEA France', 'µg/m³', 9.70, '2024-09-16 23:00:00', 'France', 'Nord', 'Hauts-de-France', '59100'),
@@ -42320,7 +42294,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2083, 'FR', 'Nevers', 'Inconnu', '46.9966666387206', '3.17083735727372', 'NO', 'EEA France', 'µg/m³', 2.20, '2024-01-29 17:00:00', 'France', 'Nièvre', 'Bourgogne-Franche-Comté', '58000'),
 (2084, 'FR', 'Brest', 'Inconnu', '48.3863972226844', '-4.48681534959177', 'NO2', 'EEA France', 'µg/m³', 10.40, '2024-01-29 18:00:00', 'France', 'Finistère', 'Bretagne', '29200'),
 (2085, 'FR', 'Verneuil', 'Inconnu', '46.8148188300394', '2.61008200746779', 'NO', 'EEA France', 'µg/m³', 0.20, '2024-01-29 18:00:00', 'France', 'Cher', 'Centre-Val de Loire', '18210'),
-(2086, 'FR', 'Sablons', 'Inconnu', '45.3196184389656', '4.77286588551395', 'NO', 'EEA France', 'µg/m³', -0.10, '2024-01-29 18:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38550'),
 (2087, 'FR', 'Cannes', 'Inconnu', '43.5625273554356', '7.00721854224592', 'NO2', 'EEA France', 'µg/m³', 33.20, '2024-01-29 18:00:00', 'France', 'Alpes-Maritimes', 'Provence-Alpes-Côte d\'Azur', '6110'),
 (2088, 'FR', 'Clermont-Ferrand', 'Inconnu', '45.7757153069085', '3.09625023923328', 'PM10', 'EEA France', 'µg/m³', 6.10, '2023-12-20 13:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63000'),
 (2089, 'FR', 'Paris', '12e Arrondissement', '48.8379529715682', '2.40805988322215', 'NO2', 'EEA France', 'µg/m³', 25.40, '2023-04-13 21:00:00', 'France', 'Paris', 'Île-de-France', '75012'),
@@ -42360,8 +42333,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2123, 'FR', 'Lunéville', 'Inconnu', '48.5848240000138', '6.48390000040868', 'NO2', 'EEA France', 'µg/m³', 6.70, '2024-09-18 23:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54300'),
 (2124, 'FR', 'Angoulême', 'Inconnu', '45.6474269998404', '0.16716199982047', 'PM10', 'EEA France', 'µg/m³', 12.00, '2024-09-16 14:00:00', 'France', 'Charente', 'Nouvelle-Aquitaine', '16000'),
 (2125, 'FR', 'Angoulême', 'Inconnu', '45.6474269998404', '0.16716199982047', 'O3', 'EEA France', 'µg/m³', 82.10, '2024-09-16 14:00:00', 'France', 'Charente', 'Nouvelle-Aquitaine', '16000'),
-(2126, 'FR', 'Chamonix-Mont-Blanc', 'Inconnu', '45.9224999998724', '6.86999999955273', 'O3', 'EEA France', 'µg/m³', 9.60, '2024-09-18 23:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74400');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(2126, 'FR', 'Chamonix-Mont-Blanc', 'Inconnu', '45.9224999998724', '6.86999999955273', 'O3', 'EEA France', 'µg/m³', 9.60, '2024-09-18 23:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74400'),
 (2127, 'FR', 'Bourg-en-Bresse', 'Inconnu', '46.2116659998982', '5.22638900029136', 'O3', 'EEA France', 'µg/m³', 12.00, '2024-09-18 23:00:00', 'France', 'Ain', 'Auvergne-Rhône-Alpes', '1000'),
 (2128, 'FR', 'Roanne', 'Inconnu', '46.0411100002979', '4.07465600019981', 'NO2', 'EEA France', 'µg/m³', 20.10, '2024-09-18 23:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42300'),
 (2129, 'FR', 'Annemasse', 'Inconnu', '46.1958299999168', '6.24055600011761', 'O3', 'EEA France', 'µg/m³', 21.90, '2024-09-18 23:00:00', 'France', 'Haute-Savoie', 'Auvergne-Rhône-Alpes', '74100'),
@@ -42388,7 +42360,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2150, 'FR', 'Saint-Étienne', 'Inconnu', '45.4211999994632', '4.411978', 'NO2', 'EEA France', 'µg/m³', 65.63, '2018-02-01 09:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42100'),
 (2151, 'FR', 'Issoire', 'Inconnu', '45.5449339994633', '3.247649', 'PM10', 'EEA France', 'µg/m³', 22.50, '2017-12-20 10:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63500'),
 (2152, 'FR', 'Villefranche-sur-Saône', 'Inconnu', '45.9863829994635', '4.719281', 'O3', 'EEA France', 'µg/m³', 14.05, '2017-12-18 22:00:00', 'France', 'Rhône', 'Auvergne-Rhône-Alpes', '69400'),
-(2153, 'FR', 'Clermont-Ferrand', 'Inconnu', '45.7972800002671', '3.11383300022196', 'O3', 'EEA France', 'µg/m³', 77.70, '2024-03-11 10:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63100'),
+(2153, 'FR', 'Clermont-Ferrand', 'Inconnu', '45.7972800002671', '3.11383300022196', 'O3', 'EEA France', 'µg/m³', 77.70, '2024-03-11 10:00:00', 'France', 'Puy-de-Dôme', 'Auvergne-Rhône-Alpes', '63100');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (2154, 'FR', 'Fay-sur-Lignon', 'Inconnu', '44.9837699997223', '4.22600599991629', 'O3', 'EEA France', 'µg/m³', 90.50, '2024-09-16 14:00:00', 'France', 'Haute-Loire', 'Auvergne-Rhône-Alpes', '43430'),
 (2155, 'FR', 'Airvault', 'Inconnu', '46.8237950001734', '-0.135633999871946', 'NO', 'EEA France', 'µg/m³', 0.40, '2024-09-16 14:00:00', 'France', 'Deux-Sèvres', 'Nouvelle-Aquitaine', '79600'),
 (2156, 'FR', 'La Rochelle', 'Inconnu', '46.162556', '-1.153603', 'PM10', 'EEA France', 'µg/m³', 11.60, '2024-03-04 07:00:00', 'France', 'Charente-Maritime', 'Nouvelle-Aquitaine', '17000'),
@@ -42456,7 +42429,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2218, 'FR', 'Grande-Synthe', 'Inconnu', '51.0244600002385', '2.30214999973289', 'NO2', 'EEA France', 'µg/m³', 1.70, '2024-03-11 04:00:00', 'France', 'Nord', 'Hauts-de-France', '59760'),
 (2219, 'FR', 'Saint-Denis-d\'Anjou', 'Inconnu', '47.7877299999136', '-0.444044000271216', 'PM10', 'EEA France', 'µg/m³', 5.30, '2024-09-16 23:00:00', 'France', 'Mayenne', 'Pays de la Loire', '53290'),
 (2220, 'FR', 'Amiens', 'Inconnu', '49.8772200002389', '2.28249999967978', 'PM2.5', 'EEA France', 'µg/m³', 3.80, '2024-09-16 23:00:00', 'France', 'Somme', 'Hauts-de-France', '80000'),
-(2221, 'FR', 'Saint-Louis', 'Inconnu', '-21.2770749999343', '55.40306500012', 'NO', 'EEA France', 'µg/m³', -0.20, '2024-09-16 14:00:00', 'France', 'La Réunion', 'La Réunion', '97450'),
 (2222, 'FR', 'Paray-le-Frésil', 'Inconnu', '46.6526679998459', '3.60066700039397', 'PM10', 'EEA France', 'µg/m³', 7.20, '2024-09-16 14:00:00', 'France', 'Allier', 'Auvergne-Rhône-Alpes', '3230'),
 (2223, 'FR', 'Paray-le-Frésil', 'Inconnu', '46.6526679998459', '3.60066700039397', 'O3', 'EEA France', 'µg/m³', 82.20, '2024-09-16 14:00:00', 'France', 'Allier', 'Auvergne-Rhône-Alpes', '3230'),
 (2224, 'FR', 'Avignon', 'Inconnu', '43.9496729999063', '4.80434099984507', 'NO', 'EEA France', 'µg/m³', 14.30, '2024-03-11 08:00:00', 'France', 'Vaucluse', 'Provence-Alpes-Côte d\'Azur', '84000'),
@@ -42541,7 +42513,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2303, 'FR', 'Aubagne', 'Inconnu', '43.2931370001245', '5.57418400028735', 'NO', 'EEA France', 'µg/m³', 4.20, '2024-03-11 10:00:00', 'France', 'Bouches-du-Rhône', 'Provence-Alpes-Côte d\'Azur', '13400'),
 (2304, 'FR', 'Évry', 'Inconnu', '48.6272199998676', '2.42916700007345', 'NO', 'EEA France', 'µg/m³', 13.40, '2024-03-11 10:00:00', 'France', 'Essonne', 'Île-de-France', '91000'),
 (2305, 'FR', 'Metz', 'Inconnu', '49.1250800001021', '6.18121900034399', 'CO', 'EEA France', 'µg/m³', 218.00, '2019-04-11 10:00:00', 'France', 'Moselle', 'Grand Est', '57014'),
-(2306, 'FR', 'Les Mazures', 'Inconnu', '49.9077799999888', '4.63000000024383', 'NO', 'EEA France', 'µg/m³', 0.00, '2024-03-11 09:00:00', 'France', 'Ardennes', 'Grand Est', '8500'),
 (2307, 'FR', 'Crolles', 'Inconnu', '45.2796999998768', '5.882199999603', 'O3', 'EEA France', 'µg/m³', 107.20, '2024-09-16 23:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38920'),
 (2308, 'FR', 'Reims', 'Inconnu', '49.2241669997297', '4.02055599976787', 'PM10', 'EEA France', 'µg/m³', 12.80, '2024-09-16 23:00:00', 'France', 'Marne', 'Grand Est', '51100'),
 (2309, 'FR', 'Campagne-lès-Boulonnais', 'Inconnu', '50.6104799998165', '1.9914499996383', 'PM2.5', 'EEA France', 'µg/m³', 5.50, '2024-09-16 23:00:00', 'France', 'Pas-de-Calais', 'Hauts-de-France', '62650'),
@@ -42587,7 +42558,6 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2349, 'FR', 'Rennes', 'Inconnu', '48.1087559994665', '-1.665861', 'NO2', 'EEA France', 'µg/m³', 39.35, '2018-04-25 18:00:00', 'France', 'Ille-et-Vilaine', 'Bretagne', '35000'),
 (2350, 'FR', 'Cambrai', 'Inconnu', '50.1752779994721', '3.234167', 'PM2.5', 'EEA France', 'µg/m³', 4.70, '2018-04-25 02:00:00', 'France', 'Nord', 'Hauts-de-France', '59400'),
 (2351, 'FR', 'Marignane', 'Inconnu', '43.4197376712764', '5.21277986330012', 'NO2', 'EEA France', 'µg/m³', 21.50, '2017-07-18 22:00:00', 'France', 'Bouches-du-Rhône', 'Provence-Alpes-Côte d\'Azur', '13700'),
-(2352, 'FR', 'Rouen', 'Inconnu', '49.4414447487293', '1.08265856357369', 'CO', 'EEA France', 'µg/m³', 0.00, '2016-12-05 18:00:00', 'France', 'Seine-Maritime', 'Normandie', '76000'),
 (2353, 'FR', 'Vienne', 'Inconnu', '45.5259808277432', '4.8754085751962', 'PM10', 'EEA France', 'µg/m³', 53.75, '2016-12-05 02:00:00', 'France', 'Isère', 'Auvergne-Rhône-Alpes', '38200'),
 (2354, 'FR', 'Armentières', 'Inconnu', '50.6872089262531', '2.88004371665139', 'NO2', 'EEA France', 'µg/m³', 44.35, '2016-12-05 02:00:00', 'France', 'Nord', 'Hauts-de-France', '59280'),
 (2355, 'FR', 'Roisey', 'Inconnu', '45.3895622059041', '4.61581342439134', 'NO2', 'EEA France', 'µg/m³', 4.50, '2016-11-29 02:00:00', 'France', 'Loire', 'Auvergne-Rhône-Alpes', '42520'),
@@ -42627,8 +42597,7 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2389, 'FR', 'Atton', 'Inconnu', '48.8863869997662', '6.09361099988959', 'NO', 'EEA France', 'µg/m³', 1.50, '2023-09-18 13:00:00', 'France', 'Meurthe-et-Moselle', 'Grand Est', '54700'),
 (2390, 'FR', 'Bois-Herpin', 'Inconnu', '48.3641660000587', '2.2369439998826', 'PM2.5', 'EEA France', 'µg/m³', 15.50, '2024-09-17 23:00:00', 'France', 'Essonne', 'Île-de-France', '91150'),
 (2391, 'FR', 'Bois-Herpin', 'Inconnu', '48.3641660000587', '2.2369439998826', 'PM10', 'EEA France', 'µg/m³', 24.50, '2024-09-17 23:00:00', 'France', 'Essonne', 'Île-de-France', '91150'),
-(2392, 'FR', 'Cergy', 'Inconnu', '49.0463900000834', '2.04305600016042', 'O3', 'EEA France', 'µg/m³', 74.80, '2024-09-17 23:00:00', 'France', 'Val-d\'Oise', 'Île-de-France', '95800');
-INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
+(2392, 'FR', 'Cergy', 'Inconnu', '49.0463900000834', '2.04305600016042', 'O3', 'EEA France', 'µg/m³', 74.80, '2024-09-17 23:00:00', 'France', 'Val-d\'Oise', 'Île-de-France', '95800'),
 (2393, 'FR', 'Metz', 'Inconnu', '49.1102830002213', '6.22333600040022', 'NO2', 'EEA France', 'µg/m³', 15.40, '2024-09-17 23:00:00', 'France', 'Moselle', 'Grand Est', '57070'),
 (2394, 'FR', 'Haguenau', 'Inconnu', '48.8183500000267', '7.78640900010634', 'O3', 'EEA France', 'µg/m³', 69.70, '2024-09-17 23:00:00', 'France', 'Bas-Rhin', 'Grand Est', '67500'),
 (2395, 'FR', 'Thionville', 'Inconnu', '49.3944439997271', '6.20139199955551', 'O3', 'EEA France', 'µg/m³', 73.50, '2024-09-17 23:00:00', 'France', 'Moselle', 'Grand Est', '57100'),
@@ -42658,8 +42627,8 @@ INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Locatio
 (2419, 'FR', 'Marmande', 'Inconnu', '44.508656', '0.142503', 'NO', 'EEA France', 'µg/m³', 4.50, '2024-03-04 08:00:00', 'France', 'Lot-et-Garonne', 'Nouvelle-Aquitaine', '47200'),
 (2420, 'FR', 'Le Temple', 'Inconnu', '44.865555', '-0.939444', 'NO2', 'EEA France', 'µg/m³', 2.60, '2024-03-04 08:00:00', 'France', 'Gironde', 'Nouvelle-Aquitaine', '33680'),
 (2421, 'FR', 'Montgiscard', 'Inconnu', '43.457497', '1.571111', 'O3', 'EEA France', 'µg/m³', 45.50, '2024-03-04 08:00:00', 'France', 'Haute-Garonne', 'Occitanie', '31450'),
-(2422, 'FR', 'Nîmes', 'Inconnu', '43.834404', '4.374219', 'NO', 'EEA France', 'µg/m³', 3.30, '2024-03-04 08:00:00', 'France', 'Gard', 'Occitanie', '30011'),
-(2423, 'FR', 'Baie-Mahault', 'Inconnu', '16.256102565157', '-61.5902925098026', 'NO', 'EEA France', 'µg/m³', 0.00, '2024-01-29 18:00:00', 'France', 'Guadeloupe', 'Guadeloupe', '97122'),
+(2422, 'FR', 'Nîmes', 'Inconnu', '43.834404', '4.374219', 'NO', 'EEA France', 'µg/m³', 3.30, '2024-03-04 08:00:00', 'France', 'Gard', 'Occitanie', '30011');
+INSERT INTO `pollution_villes` (`Id_pollution`, `Country.Code`, `City`, `Location`, `Latitude`, `Longitude`, `Pollutant`, `Source.Name`, `Unit`, `value`, `LastUpdated`, `Country.Label`, `Department`, `Region`, `Postal_Code`) VALUES
 (2424, 'FR', 'La Valette-du-Var', 'Inconnu', '43.1322279826256', '5.99220311956643', 'PM2.5', 'EEA France', 'µg/m³', 6.40, '2024-01-29 17:00:00', 'France', 'Var', 'Provence-Alpes-Côte d\'Azur', '83160'),
 (2425, 'FR', 'Avignon', 'Inconnu', '43.9497553662994', '4.80507947160248', 'NO', 'EEA France', 'µg/m³', 1.20, '2024-01-29 18:00:00', 'France', 'Vaucluse', 'Provence-Alpes-Côte d\'Azur', '84000'),
 (2426, 'FR', 'Sens', 'Inconnu', '48.2005841475738', '3.277224836372', 'NO2', 'EEA France', 'µg/m³', 55.30, '2024-01-29 18:00:00', 'France', 'Yonne', 'Bourgogne-Franche-Comté', '89100'),
@@ -42821,15 +42790,16 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
 --
 
 INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VALUES
-(1, 2, 'Paris', '2024-10-28 17:43:05'),
-(2, 2, 'Mondeville', '2024-10-28 17:43:22');
+(3, 2, 'Saint-Parres-aux-Tertres', '2024-10-29 06:43:01'),
+(4, 2, 'Pamiers', '2024-10-29 06:43:08'),
+(5, 2, 'Montpellier', '2024-10-29 06:44:56');
 
 -- --------------------------------------------------------
 

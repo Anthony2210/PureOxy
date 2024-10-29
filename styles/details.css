@@ -1,110 +1,200 @@
-body{
+/* details.css */
+
+/* Styles généraux */
+#details-page {
     font-family: 'League Spartan', sans-serif;
-}
-/* Centrer le tableau */
-.table-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-/* Style pour le tableau */
-#details-table {
-    width: auto;
-    border-collapse: collapse;
-    margin: 20px 0;
-    table-layout: fixed;
-    display: block;
-    overflow-x: auto;  /* Ajout d'un défilement horizontal */
-    white-space: nowrap;  /* Empêche les cellules de se compacter */
-    background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Style pour le tableau */
-#details-table th, #details-table td {
-    border: 1px solid #e0e0e0;
-    padding: 10px;
-    text-align: center;
-    font-size: 1em;
+    background-color: #F9F9E9; /* Beige clair */
     color: #333;
-    transition: background-color 0.3s ease;
+    margin: 0;
+    padding: 0;
 }
 
-#details-table tr:hover {
-    background-color: #f1f1f1; /* Couleur au survol */
+/* Titres */
+#details-page h1, #details-page h2 {
+    color: #6B8E23; /* Vert olive */
+    margin-bottom: 20px;
 }
 
-#details-table th {
-    background-color: #4e6920;
-    color: white;
-    font-weight: bold;
-    position: sticky;
-    top: 0;
-    padding: 8px;
+#details-page h1 {
+    font-size: 2.5em;
     text-align: center;
+}
+
+#details-page h2 {
+    font-size: 2em;
+    margin-top: 40px;
+}
+
+/* Conteneur principal */
+#details-page.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Section d'introduction */
+#details-page #intro {
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 40px;
+    border: 2px solid #2d6a4f;
+}
+
+#details-page #intro p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+/* Sélecteur d'arrondissement */
+#details-page #arrondissement-select {
+    width: 300px;
+    margin: 0 auto 30px;
+    display: block;
+    padding: 10px;
+    font-size: 1em;
+    background-color: #fff;
+    border: 1px solid #6B8E23; /* Vert olive */
+    border-radius: 4px;
+    color: #333;
+}
+
+/* Tableau des polluants */
+#details-page #polluants .table-responsive {
+    overflow-x: auto;
+}
+
+#details-page #details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+#details-page #details-table th, #details-page #details-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
     border: 1px solid #ddd;
 }
 
-#details-table td {
+#details-page #details-table th {
+    background-color: #6B8E23; /* Vert olive */
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#details-page #details-table td {
+    background-color: #fff;
+}
+
+#details-page #details-table tr:nth-child(even) td {
     background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
 }
 
-
-/* Pagination */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-    font-size: 1.1em;
+#details-page #details-table tr:hover td {
+    background-color: #e1e1e1;
 }
 
-#page-info {
-    margin-right: 20px;
-}
-
-.page-button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.page-button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-.page-button:active {
-    transform: scale(0.95); /* Effet de clic */
-}
-
-.page-button {
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#arrondissement-select {
-    width: 250px;
-    padding: 10px;
-    font-size: 1em;
-    background-color: #f0f0f0;
-    border: 2px solid #4e6920;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    color: #333;
-    margin: 20px auto;
-    display: block;
-}
-
-.centered-title {
-    text-align: center;
-    font-size: 2em;
+/* Section des dépassements */
+#details-page #depassements h2 {
+    color: #6B8E23; /* Vert olive */
     margin-bottom: 20px;
-    color: darkolivegreen;
-    text-decoration: underline;
+}
 
+#details-page #depassements table {
+    margin-top: 20px;
+}
+
+#details-page #depassements table th {
+    background-color: #6B8E23; /* Vert olive */
+    color: #fff;
+}
+
+#details-page #depassements table td, #details-page #depassements table th {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+/* Section des graphiques */
+#details-page #graphiques h2 {
+    color: #6B8E23; /* Vert olive */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#details-page #graphiques canvas {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Section de comparaison étendue */
+#details-page #comparaison-extended h2 {
+    color: #6B8E23;
+    margin-bottom: 20px;
+}
+
+#details-page #comparaison-extended table {
+    margin-top: 20px;
+}
+
+#details-page #comparaison-extended table th {
+    background-color: #6B8E23;
+    color: #fff;
+}
+
+#details-page #comparaison-extended table td, #details-page #comparaison-extended table th {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+
+/* Section des effets */
+
+#details-page #effets h2 {
+    color: #6B8E23; /* Vert olive */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#details-page #effets p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-top: 10px;
+    color: #555;
+}
+
+/* Autres styles spécifiques à la page des détails */
+#details-page section {
+    margin-bottom: 40px;
+}
+
+#details-page p {
+    color: #333;
+}
+
+/* Ajustements pour les liens */
+#details-page a {
+    color: #6B8E23; /* Vert olive */
+    text-decoration: none;
+}
+
+#details-page a:hover {
+    text-decoration: underline;
+}
+/* Section de l'IQA */
+#details-page #iqa h2 {
+    color: #6B8E23;
+    margin-bottom: 20px;
+}
+
+#details-page #iqa p {
+    font-size: 1.2em;
 }
