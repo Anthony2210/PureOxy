@@ -3,7 +3,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
 ?>
 
 <footer>
-    <div class="container">
+    <div id="footer" class="container">
         <p>© 2024 PureOxy. Tous droits réservés.</p>
         <nav>
             <ul>

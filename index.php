@@ -6,6 +6,7 @@
     <title>PureOxy - Respirez mieux, vivez mieux</title>
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/includes.css">
     <script src="script/erreur_formulaire.js"></script>
 </head>
 <body>

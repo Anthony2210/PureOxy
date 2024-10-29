@@ -1,0 +1,80 @@
+/* En-tête (header) */
+header {
+    background-color: #f9f9e9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    top: 0;
+    border-bottom: 10px solid #6b8e23; /* Couleur verte et épaisseur de la bordure */
+
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #556b2f;
+}
+
+/* Liens du header */
+header nav ul li a {
+    color: #6b8e23;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #6b8e23;
+    text-decoration: underline;
+}
+
+/* Pied de page (footer) */
+footer {
+    background-color:#556b2f;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer nav ul li {
+    display: inline;
+}
+
+footer nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+footer nav ul li a:hover {
+    color: white;
+    text-decoration: underline white;
+}
+
+/* Pour que le footer soit en bas même si le contenu est insuffisant */
+body, html {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}

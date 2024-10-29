@@ -112,7 +112,8 @@ if (isset($_SESSION['user_id'])) {
     <!-- Lien Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="../styles/style.css">
-    />
+    <link rel="stylesheet" href="../styles/includes.css">
+
 </head>
 <body>
 

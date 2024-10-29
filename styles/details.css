@@ -38,7 +38,7 @@
     border-radius: 8px;
     text-align: center;
     margin-bottom: 40px;
-    border: 2px solid #2d6a4f;
+    border: 1px solid #2d6a4f;
 }
 
 #details-page #intro p {
@@ -171,24 +171,7 @@
     color: #555;
 }
 
-/* Autres styles spécifiques à la page des détails */
-#details-page section {
-    margin-bottom: 40px;
-}
 
-#details-page p {
-    color: #333;
-}
-
-/* Ajustements pour les liens */
-#details-page a {
-    color: #6B8E23; /* Vert olive */
-    text-decoration: none;
-}
-
-#details-page a:hover {
-    text-decoration: underline;
-}
 /* Section de l'IQA */
 #details-page #iqa h2 {
     color: #6B8E23;

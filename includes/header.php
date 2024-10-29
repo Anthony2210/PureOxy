@@ -4,7 +4,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
 ?>
 
 <header>
-    <div class="container">
+    <div id="header" class="container">
         <div id="logo">
             <a href="<?php echo $baseUrl; ?>index.php">
                 <img src="<?php echo $baseUrl; ?>images/logo.png" alt="PureOxy Logo">

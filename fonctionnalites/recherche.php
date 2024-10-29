@@ -11,6 +11,7 @@ require_once('../bd/bd.php');
     <title>Recherche de Villes</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/includes.css">
 
 </head>
 <body>

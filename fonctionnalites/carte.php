@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/carte.css" />
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/includes.css">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
