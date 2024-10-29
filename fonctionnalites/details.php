@@ -350,7 +350,7 @@ echo '</script>';
             <thead>
             <tr>
                 <th>Polluant</th>
-                <th>Moyenne dans <?php echo htmlspecialchars($ville); ?> (µg/m³)</th>
+                <th>Moyenne pour <?php echo htmlspecialchars($ville); ?> (µg/m³)</th>
                 <th>Moyenne Départementale (µg/m³)</th>
                 <th>Moyenne Régionale (µg/m³)</th>
                 <th>Moyenne Nationale (µg/m³)</th>
