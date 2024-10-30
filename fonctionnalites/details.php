@@ -233,10 +233,10 @@ echo '</script>';
     <title>PureOxy - Données détaillées de <?php echo htmlspecialchars($ville); ?></title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/details.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/includes.css">
+    <link rel="stylesheet" href="../styles/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -405,7 +405,13 @@ echo '</script>';
         <h2>Effets de la pollution atmosphérique</h2>
         <p>La pollution atmosphérique a des effets néfastes sur la santé humaine, notamment des problèmes respiratoires, cardiovasculaires et des allergies. Elle impacte également l'environnement en contribuant au changement climatique et en affectant les écosystèmes.</p>
     </section>
-    </div>
+
+</div>
+<section id="cta">
+    <h2>Nos articles</h2>
+    <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
+    <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
+</section>
     <!-- Vos scripts JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <!-- Bootstrap JS -->
