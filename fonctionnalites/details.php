@@ -91,9 +91,32 @@ if ($ville) {
         $date = $row['LastUpdated'];
         $location = $row['Location'];
 
-        // Formater la date en "Mois AAAA"
-        $formattedDate = date('F Y', strtotime($date));
+        // Tableau des noms de mois en français
+        $mois_francais = [
+            '01' => 'Janvier',
+            '02' => 'Février',
+            '03' => 'Mars',
+            '04' => 'Avril',
+            '05' => 'Mai',
+            '06' => 'Juin',
+            '07' => 'Juillet',
+            '08' => 'Août',
+            '09' => 'Septembre',
+            '10' => 'Octobre',
+            '11' => 'Novembre',
+            '12' => 'Décembre'
+        ];
 
+        // Extraire le numéro du mois et l'année
+        $timestamp = strtotime($date);
+        $num_mois = date('m', $timestamp);
+        $annee = date('Y', $timestamp);
+
+        // Obtenir le nom du mois en français
+        $nom_mois = $mois_francais[$num_mois];
+
+        // Assembler la date formatée
+        $formattedDate = $nom_mois . ' ' . $annee;
         // Ajouter l'arrondissement dans le tableau s'il n'est pas encore présent (pour Paris, Lyon, Marseille)
         if (in_array($ville, ['Paris', 'Lyon', 'Marseille']) && !in_array($location, $arrondissements)) {
             $arrondissements[] = $location;
@@ -219,11 +242,7 @@ if ($ville) {
     echo "<h1>Erreur : Ville non spécifiée</h1>";
     exit; // Arrêter l'exécution si la ville n'est pas spécifiée
 }
-// Affichage des données pour le débogage
-echo '<script>';
-echo 'console.log(' . json_encode($years) . ');';
-echo 'console.log(' . json_encode($values) . ');';
-echo '</script>';
+
 ?>
 
 <!DOCTYPE html>
@@ -251,6 +270,8 @@ echo '</script>';
     </section>
 
     <h2>Concentrations de polluants atmosphériques</h2>
+    <p>Le tableau ci-dessous présente les concentrations des différents polluants atmosphériques mesurées dans la ville aux dates et emplacements spécifiés.</p>
+
     <?php if (in_array(strtolower($ville), ['paris', 'lyon', 'marseille'])): ?>
 
         <select id="arrondissement-select" class="form-control mb-4">
@@ -303,95 +324,131 @@ echo '</script>';
                 </tbody>
             </table>
         </div>
+        <p><strong>Sources : </strong><a href="https://www.eea.europa.eu/fr" target="_blank">EEA France.</a></p>
+
     </section>
 
     <section id="depassements">
         <h2>Dépassements des seuils réglementaires</h2>
-        <?php if (isset($result_seuils) && $result_seuils->num_rows > 0): ?>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Moyenne pour la ville</th>
-                    <th>Polluant</th>
-                    <th>Nombre de dépassements (Recommandation)</th>
-                    <th>Seuil de recommandation</th>
-                    <th>Nombre de dépassements (Alerte)</th>
-                    <th>Seuil d'alerte</th>
-                    <th>Valeur limite pour la santé humaine</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                // Définition des normes pour chaque polluant
-                $seuils = [
-                    'NO2' => [
-                        'nom' => 'Dioxyde d’Azote (NO2)',
-                        'valeur_recommandation' => 200,
-                        'valeur_alerte' => 400,
-                        'valeur_limite' => 200,
-                        'unite' => 'µg/m³',
-                        'description' => 'Moyenne horaire, 18h/an pour la protection de la santé humaine'
-                    ],
-                    'PM10' => [
-                        'nom' => 'Particules PM10',
-                        'valeur_recommandation' => 50,
-                        'valeur_alerte' => 80,
-                        'valeur_limite' => 50,
-                        'unite' => 'µg/m³',
-                        'description' => 'Moyenne journalière, 35 jours/an pour la protection de la santé humaine'
-                    ],
-                    'PM2.5' => [
-                        'nom' => 'Particules PM2.5',
-                        'valeur_recommandation' => 20,
-                        'valeur_alerte' => 25,
-                        'valeur_limite' => 25,
-                        'unite' => 'µg/m³',
-                        'description' => 'Moyenne annuelle pour la protection de la santé humaine'
-                    ],
-                    'O3' => [
-                        'nom' => 'Ozone (O3)',
-                        'valeur_recommandation' => 180,
-                        'valeur_alerte' => 240,
-                        'valeur_limite' => 120,
-                        'unite' => 'µg/m³',
-                        'description' => 'Maximum journalier de la moyenne sur 8h'
-                    ],
-                ];
-
-                while ($row_seuils = $result_seuils->fetch_assoc()):
-                    $polluant = $row_seuils['POLLUANT'];
-                    $nb_dep_recommandation = $row_seuils['NB_ANNEE_DEP'] ?? 0;
-                    $nb_dep_alerte = $nb_dep_recommandation > 0 ? '' : 0;
-
-                    // Récupérer la moyenne pour la ville avec 2 décimales
-                    $moyenne_ville = isset($city_pollution_averages[$polluant]) ? round($city_pollution_averages[$polluant], 2) . ' µg/m³' : 'N/A';
-
-                    // Récupérer les informations de seuils
-                    $info_polluant = $seuils[$polluant] ?? null;
-                    $nom_polluant = $info_polluant['nom'] ?? htmlspecialchars($polluant);
-                    $valeur_recommandation = $info_polluant['valeur_recommandation'] ?? 'N/A';
-                    $valeur_alerte = $info_polluant['valeur_alerte'] ?? 'N/A';
-                    $valeur_limite = $info_polluant['valeur_limite'] ?? 'N/A';
-                    $description = $info_polluant['description'] ?? 'Informations non disponibles';
-
-                    ?>
+        <?php
+        // Vérifier s'il y a des données de pollution pour la ville
+        if (!empty($pollutants_data)):
+            // Définition des normes pour chaque polluant
+            $seuils = [
+                'NO2' => [
+                    'nom' => 'Dioxyde d’Azote (NO₂)',
+                    'valeur_recommandation' => 200,  // Seuil d'information et de recommandation
+                    'valeur_alerte' => 400,          // Seuil d'alerte
+                    'valeur_limite' => 200,          // Valeur limite en moyenne horaire
+                    'unite' => 'µg/m³',
+                    'description' => 'Moyenne horaire, 18h/an pour la protection de la santé humaine'
+                ],
+                'PM10' => [
+                    'nom' => 'Particules PM₁₀',
+                    'valeur_recommandation' => 50,   // Seuil d'information et de recommandation
+                    'valeur_alerte' => 80,           // Seuil d'alerte
+                    'valeur_limite' => 50,           // Valeur limite en moyenne journalière
+                    'unite' => 'µg/m³',
+                    'description' => 'Moyenne journalière, 35 jours/an pour la protection de la santé humaine'
+                ],
+                'PM2.5' => [
+                    'nom' => 'Particules PM₂.₅',
+                    'valeur_recommandation' => 25,   // Valeur cible pour la protection de la santé humaine
+                    'valeur_alerte' => 50,           // Seuil d'alerte (pas spécifié, on peut utiliser le double du seuil de recommandation)
+                    'valeur_limite' => 25,           // Valeur limite en moyenne annuelle
+                    'unite' => 'µg/m³',
+                    'description' => 'Moyenne annuelle pour la protection de la santé humaine'
+                ],
+                'O3' => [
+                    'nom' => 'Ozone (O₃)',
+                    'valeur_recommandation' => 180,  // Seuil d'information et de recommandation
+                    'valeur_alerte' => 240,          // Seuil d'alerte
+                    'valeur_limite' => 120,          // Objectif de qualité pour la protection de la santé humaine
+                    'unite' => 'µg/m³',
+                    'description' => 'Maximum journalier de la moyenne sur 8h'
+                ],
+                'SO2' => [
+                    'nom' => 'Dioxyde de Soufre (SO₂)',
+                    'valeur_recommandation' => 300,  // Seuil d'information et de recommandation
+                    'valeur_alerte' => 500,          // Seuil d'alerte
+                    'valeur_limite' => 125,          // Valeur limite en moyenne journalière
+                    'unite' => 'µg/m³',
+                    'description' => 'Moyenne journalière, 3 jours/an pour la protection de la santé humaine'
+                ],
+                'CO' => [
+                    'nom' => 'Monoxyde de Carbone (CO)',
+                    'valeur_recommandation' => 10000, // Valeur limite pour la protection de la santé humaine
+                    'valeur_alerte' => 20000,         // Hypothèse pour le seuil d'alerte
+                    'valeur_limite' => 10000,         // Valeur limite en moyenne glissante sur 8h
+                    'unite' => 'µg/m³',
+                    'description' => 'Maximum journalier de la moyenne glissante sur 8h'
+                ],
+            ];
+            ?>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
                     <tr>
-                        <td><?php echo htmlspecialchars($moyenne_ville); ?></td>
-                        <td><?php echo htmlspecialchars($nom_polluant); ?></td>
-                        <td><?php echo htmlspecialchars($nb_dep_recommandation); ?></td>
-                        <td><?php echo htmlspecialchars($valeur_recommandation) . ' µg/m³'; ?></td>
-                        <td><?php echo htmlspecialchars($nb_dep_alerte); ?></td>
-                        <td><?php echo htmlspecialchars($valeur_alerte) . ' µg/m³'; ?></td>
-                        <td><?php echo htmlspecialchars($valeur_limite) . ' µg/m³'; ?></td>
-                        <td><?php echo htmlspecialchars($description); ?></td>
+                        <th>Polluant</th>
+                        <th>Moyenne pour la ville</th>
+                        <th>Seuil de recommandation</th>
+                        <th>Nombre de dépassements du seuil de recommandation</th>
+                        <th>Seuil d'alerte</th>
+                        <th>Nombre de dépassements du seuil d'alerte</th>
+                        <th>Valeur limite pour la santé humaine</th>
+                        <th>Description</th>
                     </tr>
-                <?php endwhile; ?>
-                </tbody>
-            </table>
-            <p><strong>Sources :</strong> UE/FR</p> <!-- Auteur déplacé en tant que source sous le tableau -->
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($pollutants_data as $pollutant => $data):
+                        // Vérifier si le polluant a des seuils définis
+                        if (isset($seuils[$pollutant])):
+                            $info_polluant = $seuils[$pollutant];
+                            $nom_polluant = $info_polluant['nom'];
+                            $valeur_recommandation = $info_polluant['valeur_recommandation'];
+                            $valeur_alerte = $info_polluant['valeur_alerte'];
+                            $valeur_limite = $info_polluant['valeur_limite'];
+                            $description = $info_polluant['description'];
+
+                            // Initialiser les compteurs de dépassements
+                            $nb_dep_recommandation = 0;
+                            $nb_dep_alerte = 0;
+
+                            // Parcourir chaque mesure du polluant
+                            foreach ($data as $value):
+                                if ($value > $valeur_recommandation) {
+                                    $nb_dep_recommandation++;
+                                }
+                                if ($value > $valeur_alerte) {
+                                    $nb_dep_alerte++;
+                                }
+                            endforeach;
+
+                            // Récupérer la moyenne pour la ville avec 2 décimales
+                            $moyenne_ville = isset($city_pollution_averages[$pollutant]) ? round($city_pollution_averages[$pollutant], 2) . ' µg/m³' : 'N/A';
+                            ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($nom_polluant); ?></td>
+                                <td><?php echo htmlspecialchars($moyenne_ville); ?></td>
+                                <td><?php echo htmlspecialchars($valeur_recommandation) . ' µg/m³'; ?></td>
+                                <td><?php echo htmlspecialchars($nb_dep_recommandation); ?></td>
+                                <td><?php echo htmlspecialchars($valeur_alerte) . ' µg/m³'; ?></td>
+                                <td><?php echo htmlspecialchars($nb_dep_alerte); ?></td>
+                                <td><?php echo htmlspecialchars($valeur_limite) . ' µg/m³'; ?></td>
+                                <td><?php echo htmlspecialchars($description); ?></td>
+                            </tr>
+                        <?php
+                        endif;
+                    endforeach;
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Interprétation des résultats :</strong> Ce tableau présente la moyenne des concentrations pour chaque polluant mesuré dans la ville, ainsi que le nombre de fois où les seuils recommandés et d'alerte ont été dépassés. Un nombre élevé de dépassements peut indiquer une pollution atmosphérique significative, ce qui peut avoir des impacts sur la santé humaine et l'environnement.</p>
+            <p><strong>Sources : </strong><a href="../bd/pdf/Tableau-Normes-Seuils réglementaires.pdf" target="_blank">Données officielles des organismes de surveillance de la qualité de l'air.</a></p>
         <?php else: ?>
-            <p>Aucun dépassement des seuils réglementaires enregistré pour les données disponibles.</p>
+            <p>Aucune donnée de pollution disponible pour cette ville.</p>
         <?php endif; ?>
     </section>
 

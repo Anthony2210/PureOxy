@@ -62,6 +62,15 @@ nav ul li a:hover {
     text-decoration: underline #6b8e23;
 }
 
+a{
+    color : #2d6a4f;
+}
+
+a:hover{
+    text-decoration: underline;
+    color : darkolivegreen;
+}
+
 /* Sections */
 section {
     padding: 40px;
