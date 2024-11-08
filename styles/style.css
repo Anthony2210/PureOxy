@@ -490,6 +490,7 @@ h2{
 
 .logout-button:hover {
     background-color: #556b2f;
+    color: white;
 }
 
 /* Ajustements pour le conteneur principal */
