@@ -324,7 +324,7 @@ if ($ville) {
                 </tbody>
             </table>
         </div>
-        <p><strong>Sources : </strong><a href="https://www.eea.europa.eu/fr" target="_blank">EEA France.</a></p>
+        <p><strong>Sources : </strong><a href="https://www.eea.europa.eu/fr" target="_blank">EEA France (Agence Européenne de l'Environnement).</a></p>
 
     </section>
 
