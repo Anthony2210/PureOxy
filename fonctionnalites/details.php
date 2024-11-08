@@ -2,6 +2,7 @@
 include '../includes/header.php';
 include '../bd/bd.php';
 
+
 // Récupérer le nom de la ville depuis l'URL
 $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
 
@@ -236,6 +237,69 @@ if ($ville) {
             'national_avg' => round($national_avg, 2)
         ];
     }
+    // Vérifier si l'utilisateur est connecté et récupérer ses favoris
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+
+        // Récupérer les villes favorites de l'utilisateur
+        $stmt = $conn->prepare("SELECT city_name FROM favorite_cities WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $favorites_result = $stmt->get_result();
+
+        $favorite_cities = [];
+        while ($row = $favorites_result->fetch_assoc()) {
+            $favorite_cities[] = $row['city_name'];
+        }
+
+        // Vérifier si la ville actuelle est dans les favoris
+        $is_favorite = in_array($ville, $favorite_cities);
+    } else {
+        $is_favorite = false; // L'utilisateur n'est pas connecté, donc pas de favoris
+    }
+    // Ajouter la ville aux favoris
+    if (isset($_POST['add_favorite']) && isset($_SESSION['user_id'])) {
+        $city_name = $_POST['city_name'];
+        $user_id = $_SESSION['user_id'];
+
+        // Vérifier que l'utilisateur n'a pas déjà 5 villes favorites
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $count_result = $stmt->get_result();
+        $count_row = $count_result->fetch_assoc();
+
+        if ($count_row['count'] < 5) {
+            // Ajouter la ville aux favoris
+            $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+            $stmt->bind_param("is", $user_id, $city_name);
+            $stmt->execute();
+        } else {
+            // L'utilisateur a déjà 5 villes favorites
+            $error_message = "Vous avez atteint le nombre maximum de 5 villes favorites.";
+        }
+
+        // Rafraîchir la page pour mettre à jour l'affichage
+        header("Location: details.php?ville=" . urlencode($ville));
+        exit;
+    }
+
+// Retirer la ville des favoris
+    if (isset($_POST['remove_favorite']) && isset($_SESSION['user_id'])) {
+        $city_name = $_POST['city_name'];
+        $user_id = $_SESSION['user_id'];
+
+        // Retirer la ville des favoris
+        $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+        $stmt->bind_param("is", $user_id, $city_name);
+        $stmt->execute();
+
+        // Rafraîchir la page pour mettre à jour l'affichage
+        header("Location: details.php?ville=" . urlencode($ville));
+        exit;
+    }
+
+
 
 
 } else {
@@ -256,6 +320,8 @@ if ($ville) {
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/includes.css">
     <link rel="stylesheet" href="../styles/style.css">
+    <!-- Lien Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -264,7 +330,26 @@ if ($ville) {
 <div id="details-page" class="container">
     <!-- Introduction -->
     <section id="intro">
-        <h1 class="text-center mb-4"><?php echo htmlspecialchars($ville); ?></h1>
+        <h1 class="text-center mb-4">
+            <?php echo htmlspecialchars($ville); ?>
+
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <form method="post" style="display: inline;">
+                    <input type="hidden" name="city_name" value="<?php echo htmlspecialchars($ville); ?>">
+                    <?php if ($is_favorite): ?>
+                        <!-- Bouton pour retirer des favoris -->
+                        <button type="submit" name="remove_favorite" class="favorite-icon">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    <?php else: ?>
+                        <!-- Bouton pour ajouter aux favoris -->
+                        <button type="submit" name="add_favorite" class="favorite-icon">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    <?php endif; ?>
+                </form>
+            <?php endif; ?>
+        </h1>
         <p>Département : <?php echo htmlspecialchars($departement), '  (', number_format($population, 0, ',', ' '), ' habitants)'; ?></p>
         <p>Région : <?php echo htmlspecialchars($region); ?></p>
     </section>

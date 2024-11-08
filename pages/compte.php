@@ -72,6 +72,13 @@ if (isset($_SESSION['user_id'])) {
     $stmt->execute();
     $result = $stmt->get_result();
     $search_history = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Récupérer les villes favorites
+    $stmt = $conn->prepare("SELECT city_name FROM favorite_cities WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $cities_result = $stmt->get_result();
+    $favorite_cities = $cities_result->fetch_all(MYSQLI_ASSOC);
 }
 // Effacer l'historique des recherches
 if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
@@ -101,6 +108,78 @@ if (isset($_SESSION['user_id'])) {
     $history_result = $stmt->get_result();
     $search_history = $history_result->fetch_all(MYSQLI_ASSOC);
 }
+// Ajout d'une ville favorite
+if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
+    $city_name = trim($_POST['city_name']);
+    $user_id = $_SESSION['user_id'];
+
+    // Vérifier que le nom de la ville n'est pas vide
+    if (!empty($city_name)) {
+        // Vérifier que la ville existe dans la base de données
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM pollution_villes WHERE City = ?");
+        $stmt->bind_param("s", $city_name);
+        $stmt->execute();
+        $city_exists_result = $stmt->get_result();
+        $city_exists_row = $city_exists_result->fetch_assoc();
+
+        if ($city_exists_row['count'] > 0) {
+            // Vérifier que la ville n'est pas déjà dans les favoris de l'utilisateur
+            $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+            $stmt->bind_param("is", $user_id, $city_name);
+            $stmt->execute();
+            $city_favorite_result = $stmt->get_result();
+            $city_favorite_row = $city_favorite_result->fetch_assoc();
+
+            if ($city_favorite_row['count'] == 0) {
+                // Vérifier le nombre actuel de villes favorites
+                $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $count_result = $stmt->get_result();
+                $count_row = $count_result->fetch_assoc();
+
+                if ($count_row['count'] < 5) {
+                    // Insérer la nouvelle ville favorite
+                    $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+                    $stmt->bind_param("is", $user_id, $city_name);
+                    if ($stmt->execute()) {
+                        $success_message_favorite = "Ville favorite ajoutée avec succès.";
+                    } else {
+                        $error_message_favorite = "Une erreur s'est produite lors de l'ajout de la ville.";
+                    }
+                } else {
+                    $error_message_favorite = "Vous avez atteint le nombre maximum de 5 villes favorites.";
+                }
+            } else {
+                $error_message_favorite = "Cette ville est déjà dans vos favoris.";
+            }
+        } else {
+            $error_message_favorite = "La ville sélectionnée n'est pas valide.";
+        }
+    } else {
+        $error_message_favorite = "Veuillez sélectionner une ville valide.";
+    }
+
+    // Rafraîchir la page pour mettre à jour l'affichage
+    header("Location: compte.php");
+    exit;
+}
+
+// Suppression d'une ville favorite
+if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
+    $city_name = $_POST['city_name'];
+    $user_id = $_SESSION['user_id'];
+
+    // Supprimer la ville favorite
+    $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+    $stmt->bind_param("is", $user_id, $city_name);
+    $stmt->execute();
+
+    // Rafraîchir la page pour mettre à jour l'affichage
+    header("Location: compte.php");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +216,47 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </div>
 
+            <!-- Section Villes Favorites -->
+            <div class="favorite-cities-section">
+                <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
+                <?php if (isset($error_message_favorite)): ?>
+                    <p class="error-message"><?= htmlspecialchars($error_message_favorite) ?></p>
+                <?php endif; ?>
+                <?php if (isset($success_message_favorite)): ?>
+                    <p class="success-message"><?= htmlspecialchars($success_message_favorite) ?></p>
+                <?php endif; ?>
+
+
+                <?php if (!empty($favorite_cities)): ?>
+                    <ul class="favorite-cities-list">
+                        <?php foreach ($favorite_cities as $city): ?>
+                            <li>
+                                <span><?= htmlspecialchars($city['city_name']) ?></span>
+                                <!-- Formulaire pour supprimer la ville favorite -->
+                                <form method="post" class="delete-city-form">
+                                    <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name']) ?>">
+                                    <button type="submit" name="delete_favorite_city"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>Vous n'avez pas encore ajouté de villes favorites.</p>
+                <?php endif; ?>
+
+                <!-- Formulaire pour ajouter une nouvelle ville favorite -->
+                <form method="post" class="favorite-city-form" id="favorite-city-form">
+                    <input type="text" id="favorite-city-input" placeholder="Entrez le nom d'une ville" autocomplete="off" required>
+                    <!-- Champ caché pour stocker la ville sélectionnée -->
+                    <input type="hidden" name="city_name" id="city_name_hidden">
+                    <!-- Liste déroulante pour les suggestions -->
+                    <ul id="suggestions-list"></ul>
+                    <button type="submit" name="add_favorite_city" id="add-favorite-button" disabled><i class="fas fa-plus"></i> Ajouter</button>
+                </form>
+
+
+            </div>
+
             <!-- Section Historique des Recherches -->
             <div class="history-section">
                 <h3><i class="fas fa-history"></i> Historique des dernières recherches</h3>
@@ -144,9 +264,9 @@ if (isset($_SESSION['user_id'])) {
                     <ul class="history-list">
                         <?php foreach ($search_history as $search): ?>
                             <li>
-                                <span class="search-query">
+                                <a href="../fonctionnalites/details.php?ville=<?= urlencode($search['search_query']) ?>" class="search-query">
                                     <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query']) ?>
-                                </span>
+                                </a>
                                 <span class="search-date"><?= date('d/m/Y H:i', strtotime($search['search_date'])) ?></span>
                             </li>
                         <?php endforeach; ?>
@@ -247,6 +367,20 @@ if (isset($_SESSION['user_id'])) {
 
     // Par défaut, afficher l'onglet de connexion
     document.getElementById("connexion").style.display = "block";
+</script>
+<script src="../script/suggestions.js"></script>
+<script>
+    // Initialiser les suggestions pour le champ de ville favorite
+    initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
+</script>
+<script>
+    document.getElementById('favorite-city-form').addEventListener('submit', function(event) {
+        const hiddenInput = document.getElementById('city_name_hidden');
+        if (!hiddenInput.value) {
+            event.preventDefault();
+            alert("Veuillez sélectionner une ville valide dans les suggestions.");
+        }
+    });
 </script>
 
 </body>

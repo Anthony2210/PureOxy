@@ -244,20 +244,25 @@ h2{
 }
 
 /* Liste des suggestions avec animation */
+
 #suggestions-list {
     list-style-type: none;
     padding: 0;
-    margin: 8px 0 0 0;
+    margin: 0; /* Ajuster la marge pour aligner parfaitement sous l'input */
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%; /* La liste prend la même largeur que le conteneur parent */
     max-width: 100%;
-    overflow-y: auto;
     max-height: 150px;
-    width: 100%;
+    overflow-y: auto;
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute; /* Positionner absolument par rapport au parent */
+    top: 100%; /* Placer juste en dessous de l'input */
+    left: 0;
+    z-index: 1000;
 }
 
 #suggestions-list.show {
@@ -270,7 +275,19 @@ h2{
     cursor: pointer;
     color: #333;
     border-bottom: 1px solid #eee;
+    background-color: #fff;
     transition: background-color 0.2s;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInUp 0.3s forwards;
+    animation-delay: calc(0.05s * var(--i));
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #suggestions-list li:hover {
@@ -474,6 +491,24 @@ h2{
     color: #777;
     font-size: 0.9em;
 }
+.history-list .search-query {
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Supprime le soulignement par défaut des liens */
+}
+
+.history-list .search-query:hover {
+    text-decoration: underline; /* Ajoute un soulignement au survol pour indiquer que c'est cliquable */
+    color: #6b8e23; /* Change la couleur au survol */
+}
+
+.history-list .search-query i {
+    margin-right: 8px;
+    color: #6b8e23;
+}
+
 
 .logout-button {
     display: inline-block;
@@ -691,6 +726,101 @@ h2{
     width: 80%;
     height: auto;
     border-radius: 8px;
+}
+/* Section Villes Favorites */
+.favorite-cities-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.favorite-cities-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-cities-section h3 i {
+    margin-right: 10px;
+}
+
+.favorite-cities-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.favorite-cities-list li {
+    background-color: #f3f4ed;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favorite-cities-list li span {
+    font-size: 1.1em;
+    color: #333;
+}
+
+.delete-city-form {
+    margin: 0;
+}
+
+.delete-city-form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.delete-city-form button:hover {
+    color: #c0392b;
+}
+
+.favorite-city-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.favorite-city-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.favorite-city-form button {
+    padding: 10px 15px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-city-form button i {
+    margin-right: 5px;
+}
+
+.favorite-city-form button:hover {
+    background-color: #556b2f;
 }
 
 

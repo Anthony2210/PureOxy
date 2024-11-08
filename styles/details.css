@@ -181,3 +181,35 @@
 #details-page #iqa p {
     font-size: 1.2em;
 }
+
+.favorite-icon {
+    font-size: 0.8em;
+    margin-left: 5px;
+    vertical-align: middle;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.favorite-icon .fas.fa-heart {
+    color: #6b8e23; /* Couleur verte pour le cœur plein */
+}
+
+.favorite-icon .far.fa-heart {
+    color: grey; /* Couleur grise pour le cœur vide */
+}
+
+.favorite-icon:hover .fas.fa-heart {
+    color: #556b2f; /* Couleur plus foncée au survol pour le cœur plein */
+}
+
+.favorite-icon:hover .far.fa-heart {
+    color: #888888; /* Couleur plus foncée au survol pour le cœur vide */
+}
+.error-message {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 15px;
+}
