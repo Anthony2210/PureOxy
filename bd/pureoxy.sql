@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : dim. 10 nov. 2024 à 16:53
+-- Généré le : dim. 10 nov. 2024 à 18:21
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -858,14 +858,14 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `favorite_cities`
 --
 
 INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
-(26, 4, 'Montpellier'),
+(28, 4, 'Montpellier'),
 (15, 4, 'Cachan'),
 (22, 4, 'Paris'),
 (23, 4, 'Montauban'),
@@ -42816,7 +42816,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
@@ -42831,7 +42831,68 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (18, 2, 'Pamiers', '2024-10-29 13:36:13'),
 (17, 2, 'Charleville-Mézières', '2024-10-29 13:21:56'),
 (16, 2, 'Brest', '2024-10-29 13:14:27'),
-(24, 1, 'Mondeville', '2024-10-30 11:56:35');
+(24, 1, 'Mondeville', '2024-10-30 11:56:35'),
+(42, 4, 'Montpellier', '2024-11-10 17:39:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `seuils_normes`
+--
+
+DROP TABLE IF EXISTS `seuils_normes`;
+CREATE TABLE IF NOT EXISTS `seuils_normes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `polluant` varchar(50) NOT NULL,
+  `type_norme` varchar(100) NOT NULL,
+  `valeur` float NOT NULL,
+  `unite` varchar(10) NOT NULL,
+  `periode` varchar(100) DEFAULT NULL,
+  `origine` varchar(10) DEFAULT NULL,
+  `details` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `seuils_normes`
+--
+
+INSERT INTO `seuils_normes` (`id`, `polluant`, `type_norme`, `valeur`, `unite`, `periode`, `origine`, `details`) VALUES
+(1, 'Dioxyde d\'azote (NO2)', 'Objectif de qualité', 40, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(2, 'Dioxyde d\'azote (NO2)', 'Valeur limite pour la protection de la santé humaine', 200, 'µg/m³', 'moyenne horaire', 'UE', 'À ne pas dépasser plus de 18 heures par an'),
+(3, 'Dioxyde d\'azote (NO2)', 'Valeur limite pour la protection de la santé humaine', 40, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
+(4, 'Oxydes d\'azote (NOx)', 'Niveau critique pour la protection de la végétation', 30, 'µg/m³', 'moyenne annuelle', 'UE', 'D\'oxydes d\'azote'),
+(5, 'Dioxyde d\'azote (NO2)', 'Seuil d\'information et de recommandation', 200, 'µg/m³', 'moyenne horaire', 'FR', NULL),
+(6, 'Dioxyde d\'azote (NO2)', 'Seuil d\'alerte', 400, 'µg/m³', 'moyenne horaire pendant 3 heures consécutives', 'UE', '200 µg/m³ moyenne horaire à J-1 et à J et prévision de 200 µg/m³ à J+1 (FR)'),
+(7, 'Particules (PM10)', 'Objectif de qualité', 30, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(8, 'Particules (PM10)', 'Valeur limite pour la protection de la santé humaine', 50, 'µg/m³', 'moyenne journalière', 'UE', 'À ne pas dépasser plus de 35 jours par an'),
+(9, 'Particules (PM10)', 'Valeur limite pour la protection de la santé humaine', 40, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
+(10, 'Particules (PM10)', 'Seuil d\'information et de recommandation', 50, 'µg/m³', 'moyenne sur 24 heures', 'FR', NULL),
+(11, 'Particules (PM10)', 'Seuil d\'alerte', 80, 'µg/m³', 'moyenne sur 24 heures', 'FR', NULL),
+(12, 'Particules (PM2.5)', 'Objectif de qualité', 10, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(13, 'Particules (PM2.5)', 'Valeur cible pour la protection de la santé humaine', 20, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(14, 'Particules (PM2.5)', 'Valeur limite pour la protection de la santé humaine', 25, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
+(15, 'Dioxyde de soufre (SO2)', 'Objectif de qualité', 50, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(16, 'Dioxyde de soufre (SO2)', 'Valeur limite pour la protection de la santé humaine', 350, 'µg/m³', 'moyenne horaire', 'UE', 'À ne pas dépasser plus de 24 heures par an'),
+(17, 'Dioxyde de soufre (SO2)', 'Valeur limite pour la protection de la santé humaine', 125, 'µg/m³', 'moyenne journalière', 'UE', 'À ne pas dépasser plus de 3 jours par an'),
+(18, 'Dioxyde de soufre (SO2)', 'Niveau critique pour la protection des écosystèmes', 20, 'µg/m³', 'moyenne annuelle et sur la période du 1er octobre au 31 mars', 'UE', NULL),
+(19, 'Dioxyde de soufre (SO2)', 'Seuil d\'information et de recommandation', 300, 'µg/m³', 'moyenne horaire', 'FR', NULL),
+(20, 'Dioxyde de soufre (SO2)', 'Seuil d\'alerte', 500, 'µg/m³', 'moyenne horaire pendant 3 heures consécutives', 'FR', NULL),
+(21, 'Ozone (O3)', 'Objectif de qualité pour la santé humaine', 120, 'µg/m³', 'maximum journalier de la moyenne sur 8 heures', 'FR', NULL),
+(22, 'Ozone (O3)', 'Objectif de qualité pour la protection de la végétation', 6000, 'µg/m³.h', 'AOT40 calculée sur 1 heure de mai à juillet entre 8h et 20h', 'FR', NULL),
+(23, 'Ozone (O3)', 'Valeur cible pour la protection de la santé humaine', 120, 'µg/m³', 'maximum journalier de la moyenne sur 8 heures, pas plus de 25 jours par an (moyenne sur 3 ans)', 'UE', NULL),
+(24, 'Ozone (O3)', 'Valeur cible pour la protection de la végétation', 18000, 'µg/m³.h', 'AOT40 calculée sur 1 heure de mai à juillet entre 8h et 20h (moyenne sur 5 ans)', 'UE', NULL),
+(25, 'Ozone (O3)', 'Seuil d\'information et de recommandation', 180, 'µg/m³', 'moyenne horaire', 'FR', NULL),
+(26, 'Ozone (O3)', 'Seuil d\'alerte pour la protection sanitaire', 240, 'µg/m³', 'moyenne horaire', 'FR', '1er seuil: 240 µg/m³ pendant 3 heures consécutives; 2ème seuil: 300 µg/m³ pendant 3 heures consécutives; 3ème seuil: 360 µg/m³ moyenne horaire'),
+(27, 'Monoxyde de carbone (CO)', 'Valeur limite pour la protection de la santé humaine', 10, 'mg/m³', 'maximum journalier de la moyenne glissante sur 8 heures', 'FR', 'Soit 10 000 µg/m³'),
+(28, 'Benzène (C6H6)', 'Objectif de qualité', 2, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(29, 'Benzène (C6H6)', 'Valeur limite pour la protection de la santé humaine', 5, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
+(30, 'Plomb (Pb)', 'Objectif de qualité', 0.25, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
+(31, 'Plomb (Pb)', 'Valeur limite pour la protection de la santé humaine', 0.5, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
+(32, 'Arsenic (As)', 'Valeur cible', 6, 'ng/m³', 'moyenne annuelle', 'UE', 'Fraction PM10'),
+(33, 'Cadmium (Cd)', 'Valeur cible', 5, 'ng/m³', 'moyenne annuelle', 'UE', NULL),
+(34, 'Nickel (Ni)', 'Valeur cible', 20, 'ng/m³', 'moyenne annuelle', 'UE', NULL),
+(35, 'Benzo(a)pyrène (B[a]P)', 'Valeur cible', 1, 'ng/m³', 'moyenne annuelle', 'UE', 'Fraction PM10');
 
 -- --------------------------------------------------------
 
