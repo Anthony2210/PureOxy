@@ -1,5 +1,3 @@
-<?php include '../includes/header.php'; ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,6 +9,7 @@
     <link rel="stylesheet" href="../styles/includes.css">
 </head>
 <body>
+<?php include '../includes/header.php'; ?>
 
 <div class="content-wrapper">
     <main>
