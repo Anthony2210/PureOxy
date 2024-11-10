@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 29 oct. 2024 à 06:50
+-- Généré le : dim. 10 nov. 2024 à 16:53
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -844,6 +844,32 @@ INSERT INTO `depassements_seuils_reglementaires2023` (`id_seuil`, `POLLUANT`, `C
 (798, 'PM2_5', '9C401', 'Kourou', 0, NULL),
 (799, 'PM2_5', '67501', 'Haguenau', 0, NULL),
 (800, 'PM2_5', '9F601', 'Mamoudzou', 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `favorite_cities`
+--
+
+DROP TABLE IF EXISTS `favorite_cities`;
+CREATE TABLE IF NOT EXISTS `favorite_cities` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `city_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `favorite_cities`
+--
+
+INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
+(26, 4, 'Montpellier'),
+(15, 4, 'Cachan'),
+(22, 4, 'Paris'),
+(23, 4, 'Montauban'),
+(27, 4, 'Mondeville');
 
 -- --------------------------------------------------------
 
@@ -42790,16 +42816,22 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
 --
 
 INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VALUES
-(3, 2, 'Saint-Parres-aux-Tertres', '2024-10-29 06:43:01'),
-(4, 2, 'Pamiers', '2024-10-29 06:43:08'),
-(5, 2, 'Montpellier', '2024-10-29 06:44:56');
+(23, 1, 'Mont-de-Marsan', '2024-10-30 11:54:28'),
+(22, 1, 'Montpellier', '2024-10-30 11:49:31'),
+(21, 1, 'Mont-Saint-Martin', '2024-10-30 11:47:56'),
+(20, 1, 'Cherbourg-en-Cotentin', '2024-10-30 11:12:40'),
+(19, 2, 'Vitry-sur-Seine', '2024-10-29 13:50:48'),
+(18, 2, 'Pamiers', '2024-10-29 13:36:13'),
+(17, 2, 'Charleville-Mézières', '2024-10-29 13:21:56'),
+(16, 2, 'Brest', '2024-10-29 13:14:27'),
+(24, 1, 'Mondeville', '2024-10-30 11:56:35');
 
 -- --------------------------------------------------------
 
@@ -42816,7 +42848,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '../images/user.png',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -42825,7 +42857,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_picture`) VALUES
 (1, 'Anthony', '$2y$10$lYbOQp561SE9NHb0w03euenYEIT5yd7sLbG25iR8QITaJH7xgiywa', '2024-10-28 16:36:03', 'user.png'),
 (2, 'Maja', '$2y$10$2u5KtRH/jtDm96DV/ieDpu6zKBh749gkDS0R269C/ijvHjpLupnU6', '2024-10-28 17:26:47', 'user.png'),
-(3, 'a', '$2y$10$c2s8Alj9LAApyQcJpPGo4.FGnWMLkC8EZ5M52b7GmPkxa/mOogZrS', '2024-10-28 18:43:38', 'user.png');
+(3, 'a', '$2y$10$c2s8Alj9LAApyQcJpPGo4.FGnWMLkC8EZ5M52b7GmPkxa/mOogZrS', '2024-10-28 18:43:38', 'user.png'),
+(4, 'antho_ca', '$2y$10$WfR9whCreeapQnaxd4gPouGpXH2udKIfGFIqDIkqHlptMq/iEVUYq', '2024-11-08 10:00:01', 'user.png');
 
 --
 -- Contraintes pour les tables déchargées
