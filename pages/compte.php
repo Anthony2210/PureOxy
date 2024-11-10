@@ -1,6 +1,6 @@
 <?php
+session_start();
 require '../bd/bd.php'; // Connexion à la base de données
-include '../includes/header.php'; // Assure-toi que `session_start()` est au tout début de header.php
 
 // Gestion de la connexion
 if (isset($_POST['login'])) {
@@ -190,13 +190,13 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <title>Espace Compte - PureOxy</title>
     <!-- Lien Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="../styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/includes.css">
 
 </head>
 <body>
-
+<?php include '../includes/header.php'; ?>
 <div class="compte-container">
     <h1>L’espace Compte</h1>
 
@@ -285,17 +285,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         </div>
     <?php else: ?>
         <!-- Conteneur des onglets -->
-        <div class="tabs">
-            <button class="tab-link active" onclick="openTab(event, 'connexion')">
+        <div class="compte-tabs">
+            <button class="compte-tab-link active" onclick="openTab(event, 'connexion')">
                 <i class="fas fa-sign-in-alt"></i> Connexion
             </button>
-            <button class="tab-link" onclick="openTab(event, 'inscription')">
+            <button class="compte-tab-link" onclick="openTab(event, 'inscription')">
                 <i class="fas fa-user-plus"></i> Inscription
             </button>
         </div>
 
         <!-- Formulaire de connexion -->
-        <div id="connexion" class="tab-content active">
+        <div id="connexion" class="compte-tab-content active">
             <form class="compte-form" method="POST">
                 <h2>Connexion à votre compte</h2>
                 <?php if (isset($login_error)): ?>
@@ -314,7 +314,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         </div>
 
         <!-- Formulaire d'inscription -->
-        <div id="inscription" class="tab-content">
+        <div id="inscription" class="compte-tab-content">
             <form class="compte-form" method="POST">
                 <h2>Création d'un nouveau compte</h2>
                 <?php if (isset($register_success)): ?>
@@ -339,22 +339,24 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         </div>
     <?php endif; ?>
 </div>
-
+<main>
+</main>
 <?php include '../includes/footer.php'; ?>
+
 <!-- Script pour les onglets -->
 <script>
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
 
-        // Récupérer tous les éléments avec la classe "tab-content" et les cacher
-        tabcontent = document.getElementsByClassName("tab-content");
+        // Récupérer tous les éléments avec la classe "compte-tab-content" et les cacher
+        tabcontent = document.getElementsByClassName("compte-tab-content");
         for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
             tabcontent[i].classList.remove("active");
         }
 
-        // Récupérer tous les éléments avec la classe "tab-link" et enlever la classe "active"
-        tablinks = document.getElementsByClassName("tab-link");
+        // Récupérer tous les éléments avec la classe "compte-tab-link" et enlever la classe "active"
+        tablinks = document.getElementsByClassName("compte-tab-link");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].classList.remove("active");
         }
@@ -368,7 +370,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     // Par défaut, afficher l'onglet de connexion
     document.getElementById("connexion").style.display = "block";
 </script>
-<script src="../script/suggestions.js"></script>
 <script>
     // Initialiser les suggestions pour le champ de ville favorite
     initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
@@ -384,5 +385,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 </script>
 
 </body>
+
 </html>
 

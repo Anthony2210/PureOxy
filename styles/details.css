@@ -33,7 +33,7 @@
 }
 
 /* Section d'introduction */
-#details-page #intro {
+#intro {
     padding: 30px;
     border-radius: 8px;
     text-align: center;
@@ -41,13 +41,13 @@
     border: 1px solid #2d6a4f;
 }
 
-#details-page #intro p {
+#intro p {
     font-size: 1.2em;
     margin: 10px 0;
 }
 
 /* Sélecteur d'arrondissement */
-#details-page #arrondissement-select {
+#arrondissement-select {
     width: 300px;
     margin: 0 auto 30px;
     display: block;
@@ -59,75 +59,51 @@
     color: #333;
 }
 
-/* Tableau des polluants */
-#details-page #polluants .table-responsive {
-    overflow-x: auto;
-}
-
-#details-page #details-table {
+/* Styles pour les tableaux */
+.table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#details-page #details-table th, #details-page #details-table td {
-    text-align: center;
-    vertical-align: middle;
-    padding: 12px;
-    border: 1px solid #ddd;
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
 }
 
-#details-page #details-table th {
-    background-color: #6B8E23; /* Vert olive */
-    color: #fff;
+.table th {
+    background-color: darkolivegreen;
+    color: white;
+    font-weight: bold;
     position: sticky;
-    top: 0;
-    z-index: 1;
+    top: 0; /* Garde l'en-tête visible lors du défilement */
 }
 
-#details-page #details-table td {
-    background-color: #fff;
+.table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond pour les lignes paires */
 }
 
-#details-page #details-table tr:nth-child(even) td {
-    background-color: #f9f9f9;
+.table tr:hover {
+    background-color: #f1f1f1; /* Couleur au survol */
 }
 
-#details-page #details-table tr:hover td {
-    background-color: #e1e1e1;
-}
-
-/* Section des dépassements */
-#details-page #depassements h2 {
-    color: #6B8E23; /* Vert olive */
-    margin-bottom: 20px;
-}
-
-#details-page #depassements table {
-    margin-top: 20px;
-}
-
-#details-page #depassements table th {
-    background-color: #6B8E23; /* Vert olive */
-    color: #fff;
-}
-
-#details-page #depassements table td, #details-page #depassements table th {
-    padding: 12px;
-    border: 1px solid #ddd;
+.table caption {
+    caption-side: top;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: darkolivegreen;
+    font-weight: bold;
 }
 
 /* Section des graphiques */
-#details-page #graphiques h2 {
-    color: #6B8E23; /* Vert olive */
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#details-page #graphiques canvas {
+#emissionsChart {
     max-width: 100%;
     height: auto;
-    margin: 0 auto;
+    margin: 40px auto;
     display: block;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -135,39 +111,50 @@
     border-radius: 8px;
 }
 
-/* Section de comparaison étendue */
-#details-page #comparaison-extended h2 {
-    color: #6B8E23;
-    margin-bottom: 20px;
-}
 
-#details-page #comparaison-extended table {
-    margin-top: 20px;
-}
-
-#details-page #comparaison-extended table th {
-    background-color: #6B8E23;
-    color: #fff;
-}
-
-#details-page #comparaison-extended table td, #details-page #comparaison-extended table th {
-    padding: 12px;
-    border: 1px solid #ddd;
-}
-
-
-/* Section des effets */
-
-#details-page #effets h2 {
-    color: #6B8E23; /* Vert olive */
-    margin-bottom: 20px;
+/* Boutons d'appel à l'action */
+#cta {
     text-align: center;
+    background-color: #556b2f;
+    padding: 40px 0;
+    color: #f9f9e9;
 }
 
-#details-page #effets p {
+#cta h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#cta .button {
+    background-color: #f9f9e9;
+    color: #6b8e23;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px;
+}
+
+#cta .button:hover {
+    background-color: #e3e3d9;
+    transform: translateY(-3px);
+}
+
+/* Effets */
+#effets {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#effets p {
     font-size: 1.1em;
     line-height: 1.6;
-    margin-top: 10px;
     color: #555;
 }
 
@@ -182,34 +169,39 @@
     font-size: 1.2em;
 }
 
+/* Icône de favori */
 .favorite-icon {
-    font-size: 0.8em;
-    margin-left: 5px;
-    vertical-align: middle;
+    font-size: 1.2em;
+    margin-left: 10px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
-    transition: color 0.3s ease;
+    color: #e74c3c;
 }
 
 .favorite-icon .fas.fa-heart {
-    color: #6b8e23; /* Couleur verte pour le cœur plein */
+    color: #e74c3c;
 }
 
 .favorite-icon .far.fa-heart {
-    color: grey; /* Couleur grise pour le cœur vide */
+    color: #ccc;
 }
 
-.favorite-icon:hover .fas.fa-heart {
-    color: #556b2f; /* Couleur plus foncée au survol pour le cœur plein */
-}
-
-.favorite-icon:hover .far.fa-heart {
-    color: #888888; /* Couleur plus foncée au survol pour le cœur vide */
+.favorite-icon:hover {
+    opacity: 0.7;
 }
 .error-message {
     color: #e74c3c;
     font-weight: bold;
     margin-top: 15px;
+}
+
+.nav-tabs .nav-link {
+    color: #6b8e23;
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #6b8e23;
+    color: #fff;
 }

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once('../bd/bd.php');
 ?>
 
@@ -12,9 +12,10 @@ require_once('../bd/bd.php');
     <link rel="stylesheet" href="../styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/includes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 </head>
-<body>
+<body id="recherche-page">
 <div class="content-wrapper">
     <?php include('../includes/header.php'); ?>
 
@@ -22,18 +23,25 @@ require_once('../bd/bd.php');
         <div id="search-container">
             <h1>Rechercher une ville</h1>
 
-            <!-- Barre de recherche -->
-            <input type="text" id="search-bar" placeholder="Entrez le nom d'une ville">
+            <!-- Nouveau conteneur pour l'input et les suggestions -->
+            <div class="search-input-wrapper">
+                <!-- Barre de recherche -->
+                <input type="text" id="search-bar" placeholder="Entrez le nom d'une ville" autocomplete="off">
+                <!-- Message d'avertissement -->
+                <p class="avertissement">Veuillez noter que notre base de données couvre actuellement 443 villes.</p>
 
-            <!-- Liste déroulante pour les suggestions -->
-            <ul id="suggestions-list"></ul>
+                <!-- Liste déroulante pour les suggestions -->
+                <ul id="suggestions-list"></ul>
+            </div>
 
             <!-- Bouton de recherche -->
-            <button id="search-button">Rechercher</button>
+            <button id="search-button"><i class="fas fa-search"></i> Rechercher</button>
+
         </div>
 
         <!-- Zone de résultats de la recherche -->
         <div id="search-results"></div>
+
     </main>
     <!-- Inclusion du fichier footer.php -->
     <?php include('../includes/footer.php'); ?>
@@ -63,7 +71,7 @@ require_once('../bd/bd.php');
         }
 
         // Chemin corrigé vers suggestions.php
-        fetch(`../suggestions.php?query=${encodeURIComponent(query)}`)
+        fetch(`suggestions.php?query=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(results => {
                 cache[query] = results;
@@ -90,7 +98,7 @@ require_once('../bd/bd.php');
     }
 
     function selectCity(city) {
-        window.location.href = `../details.php?ville=${encodeURIComponent(city)}`;
+        window.location.href = `/PUREOXY/fonctionnalites/details.php?ville=${encodeURIComponent(city)}`;
     }
 
     // Gérer les clics en dehors des suggestions pour les masquer
