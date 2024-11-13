@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 require '../bd/bd.php'; // Connexion à la base de données
 
 // Gestion de la connexion
@@ -66,12 +68,17 @@ if (isset($_POST['register'])) {
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
-    // Récupère l'historique des recherches de l'utilisateur
-    $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10");
+    // Récupérer les 7 dernières recherches
+    $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $search_history = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Supprimer les recherches plus anciennes
+    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_date NOT IN (SELECT search_date FROM (SELECT search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7) AS sub)");
+    $stmt->bind_param("ii", $user_id, $user_id);
+    $stmt->execute();
 
     // Récupérer les villes favorites
     $stmt = $conn->prepare("SELECT city_name FROM favorite_cities WHERE user_id = ?");
@@ -79,16 +86,6 @@ if (isset($_SESSION['user_id'])) {
     $stmt->execute();
     $cities_result = $stmt->get_result();
     $favorite_cities = $cities_result->fetch_all(MYSQLI_ASSOC);
-}
-// Effacer l'historique des recherches
-if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    // Rafraîchir la page pour mettre à jour l'affichage
-    header("Location: compte.php");
-    exit;
 }
 
 // Récupérer les informations de l'utilisateur pour afficher la date d'inscription
@@ -143,27 +140,161 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                     $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
                     $stmt->bind_param("is", $user_id, $city_name);
                     if ($stmt->execute()) {
-                        $success_message_favorite = "Ville favorite ajoutée avec succès.";
+                        $response = [
+                            'success' => true,
+                            'message' => "Ville favorite ajoutée avec succès.",
+                            'city_name' => $city_name
+                        ];
                     } else {
-                        $error_message_favorite = "Une erreur s'est produite lors de l'ajout de la ville.";
+                        $response = [
+                            'success' => false,
+                            'message' => "Une erreur s'est produite lors de l'ajout de la ville."
+                        ];
                     }
                 } else {
-                    $error_message_favorite = "Vous avez atteint le nombre maximum de 5 villes favorites.";
+                    $response = [
+                        'success' => false,
+                        'message' => "Vous avez atteint le nombre maximum de 5 villes favorites."
+                    ];
                 }
             } else {
-                $error_message_favorite = "Cette ville est déjà dans vos favoris.";
+                $response = [
+                    'success' => false,
+                    'message' => "Cette ville est déjà dans vos favoris."
+                ];
             }
         } else {
-            $error_message_favorite = "La ville sélectionnée n'est pas valide.";
+            $response = [
+                'success' => false,
+                'message' => "La ville sélectionnée n'est pas valide."
+            ];
         }
     } else {
-        $error_message_favorite = "Veuillez sélectionner une ville valide.";
+        $response = [
+            'success' => false,
+            'message' => "Veuillez sélectionner une ville valide."
+        ];
     }
 
-    // Rafraîchir la page pour mettre à jour l'affichage
-    header("Location: compte.php");
-    exit;
+    // Vérifier si la requête est une requête AJAX
+    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
+        ini_set('display_errors', 0);
+        error_reporting(0);
+        if (ob_get_length()) {
+            ob_end_clean(); // Nettoyer et fermer le buffer de sortie
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+    else {
+        // Si ce n'est pas une requête AJAX, rediriger normalement
+        if ($response['success']) {
+            $success_message_favorite = $response['message'];
+        } else {
+            $error_message_favorite = $response['message'];
+        }
+    }
 }
+// Suppression d'une recherche individuelle
+if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
+    $search_query = $_POST['search_query'];
+    $user_id = $_SESSION['user_id'];
+
+    // Supprimer la recherche
+    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_query = ?");
+    $stmt->bind_param("is", $user_id, $search_query);
+    if ($stmt->execute()) {
+        $response = [
+            'success' => true,
+            'message' => "Recherche supprimée avec succès.",
+            'search_query' => $search_query
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => "Une erreur s'est produite lors de la suppression de la recherche."
+        ];
+    }
+
+    // Vérifier si la requête est une requête AJAX
+    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    } else {
+        // Si ce n'est pas une requête AJAX, rediriger normalement
+        header("Location: compte.php");
+        exit;
+    }
+}
+// Effacer l'historique des recherches
+if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    if ($stmt->execute()) {
+        $response = [
+            'success' => true,
+            'message' => "Historique effacé avec succès."
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => "Une erreur s'est produite lors de l'effacement de l'historique."
+        ];
+    }
+
+    // Vérifier si la requête est une requête AJAX
+    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    } else {
+        // Si ce n'est pas une requête AJAX, rediriger normalement
+        header("Location: compte.php");
+        exit;
+    }
+}
+// Effacer l'historique des recherches
+if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    if ($stmt->execute()) {
+        $response = [
+            'success' => true,
+            'message' => "Historique effacé avec succès."
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => "Une erreur s'est produite lors de l'effacement de l'historique."
+        ];
+    }
+
+    // Vérifier si la requête est une requête AJAX
+    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    } else {
+        // Si ce n'est pas une requête AJAX, rediriger normalement
+        header("Location: compte.php");
+        exit;
+    }
+}
+
+
 
 // Suppression d'une ville favorite
 if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
@@ -173,12 +304,35 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     // Supprimer la ville favorite
     $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
     $stmt->bind_param("is", $user_id, $city_name);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        $response = [
+            'success' => true,
+            'message' => "Ville favorite supprimée avec succès.",
+            'city_name' => $city_name
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => "Une erreur s'est produite lors de la suppression de la ville."
+        ];
+    }
 
-    // Rafraîchir la page pour mettre à jour l'affichage
-    header("Location: compte.php");
-    exit;
+    // Vérifier si la requête est une requête AJAX
+    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
+        if (ob_get_length()) {
+            ob_clean(); // Nettoyer le buffer de sortie
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    } else {
+        // Si ce n'est pas une requête AJAX, rediriger normalement
+        header("Location: compte.php");
+        exit;
+    }
+
 }
+
 
 ?>
 
@@ -231,7 +385,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                     <ul class="favorite-cities-list">
                         <?php foreach ($favorite_cities as $city): ?>
                             <li>
-                                <span><?= htmlspecialchars($city['city_name']) ?></span>
+                                <a href="../fonctionnalites/details.php?ville=<?= urlencode($city['city_name']) ?>" class="favorite-link">
+                                    <?= htmlspecialchars($city['city_name']) ?>
+                                </a>
                                 <!-- Formulaire pour supprimer la ville favorite -->
                                 <form method="post" class="delete-city-form">
                                     <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name']) ?>">
@@ -268,11 +424,16 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                                     <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query']) ?>
                                 </a>
                                 <span class="search-date"><?= date('d/m/Y H:i', strtotime($search['search_date'])) ?></span>
+                                <!-- Formulaire pour supprimer une recherche individuelle -->
+                                <form method="post" class="delete-search-form">
+                                    <input type="hidden" name="search_query" value="<?= htmlspecialchars($search['search_query']) ?>">
+                                    <button type="submit" name="delete_search"><i class="fas fa-trash-alt"></i></button>
+                                </form>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                     <!-- Bouton pour effacer l'historique -->
-                    <form method="post" class="clear-history-form">
+                    <form method="post" class="clear-history-form" id="clear-history-form">
                         <button type="submit" name="clear_history" class="clear-history-button"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
                     </form>
                 <?php else: ?>
@@ -343,6 +504,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 </main>
 <?php include '../includes/footer.php'; ?>
 
+<script src="../script/suggestions.js"></script>
+<script src="../script/favoritesAndMessages.js"></script>
 <!-- Script pour les onglets -->
 <script>
     function openTab(evt, tabName) {
@@ -368,7 +531,10 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     }
 
     // Par défaut, afficher l'onglet de connexion
-    document.getElementById("connexion").style.display = "block";
+    var connexionTab = document.getElementById("connexion");
+    if (connexionTab) {
+        connexionTab.style.display = "block";
+    }
 </script>
 <script>
     // Initialiser les suggestions pour le champ de ville favorite
@@ -384,7 +550,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     });
 </script>
 
+
 </body>
 
 </html>
-
