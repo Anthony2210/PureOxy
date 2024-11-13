@@ -163,40 +163,59 @@
         } else {
             $is_favorite = false; // L'utilisateur n'est pas connecté, donc pas de favoris
         }
-    
-        // Ajouter la ville aux favoris
-        if (isset($_POST['add_favorite']) && isset($_SESSION['user_id'])) {
+
+        // Ajouter ou retirer la ville des favoris
+        if (isset($_POST['favorite_action']) && isset($_SESSION['user_id'])) {
             $city_name = $_POST['city_name'];
             $user_id = $_SESSION['user_id'];
+            $action = $_POST['favorite_action'];
 
-            // Vérifier que l'utilisateur n'a pas déjà 5 villes favorites
-            $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-            $count_result = $stmt->get_result();
-            $count_row = $count_result->fetch_assoc();
+            if ($action == 'add_favorite') {
+                // Vérifier que l'utilisateur n'a pas déjà 5 villes favorites
+                $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $count_result = $stmt->get_result();
+                $count_row = $count_result->fetch_assoc();
 
-            if ($count_row['count'] < 5) {
-                // Ajouter la ville aux favoris
-                $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+                if ($count_row['count'] < 5) {
+                    // Ajouter la ville aux favoris
+                    $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+                    $stmt->bind_param("is", $user_id, $city_name);
+                    if ($stmt->execute()) {
+                        $response = [
+                            'success' => true,
+                            'message' => 'Ville ajoutée aux favoris.',
+                            'action' => 'added'
+                        ];
+                    } else {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Une erreur s\'est produite lors de l\'ajout de la ville.'
+                        ];
+                    }
+                } else {
+                    $response = [
+                        'success' => false,
+                        'message' => 'Vous avez atteint le nombre maximum de 5 villes favorites.'
+                    ];
+                }
+            } elseif ($action == 'remove_favorite') {
+                // Retirer la ville des favoris
+                $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
                 $stmt->bind_param("is", $user_id, $city_name);
                 if ($stmt->execute()) {
                     $response = [
                         'success' => true,
-                        'message' => 'Ville ajoutée aux favoris.',
-                        'action' => 'added'
+                        'message' => 'Ville retirée des favoris.',
+                        'action' => 'removed'
                     ];
                 } else {
                     $response = [
                         'success' => false,
-                        'message' => 'Une erreur s\'est produite lors de l\'ajout de la ville.'
+                        'message' => 'Une erreur s\'est produite lors de la suppression de la ville.'
                     ];
                 }
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Vous avez atteint le nombre maximum de 5 villes favorites.'
-                ];
             }
 
             // Vérifier si la requête est une requête AJAX
@@ -214,48 +233,9 @@
                 header("Location: details.php?ville=" . urlencode($ville));
                 exit; // Arrêter le script
             }
-
         }
 
-        // Retirer la ville des favoris
-        if (isset($_POST['remove_favorite']) && isset($_SESSION['user_id'])) {
-            $city_name = $_POST['city_name'];
-            $user_id = $_SESSION['user_id'];
 
-            // Retirer la ville des favoris
-            $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
-            $stmt->bind_param("is", $user_id, $city_name);
-            if ($stmt->execute()) {
-                $response = [
-                    'success' => true,
-                    'message' => 'Ville retirée des favoris.',
-                    'action' => 'removed'
-                ];
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Une erreur s\'est produite lors de la suppression de la ville.'
-                ];
-            }
-
-            // Vérifier si la requête est une requête AJAX
-            if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
-                ini_set('display_errors', 0);
-                error_reporting(0);
-                if (ob_get_length()) {
-                    ob_end_clean(); // Nettoyer et fermer le buffer de sortie
-                }
-                header('Content-Type: application/json');
-                echo json_encode($response);
-                exit; // Arrêter le script
-            } else {
-                // Si ce n'est pas une requête AJAX, rediriger normalement
-                header("Location: details.php?ville=" . urlencode($ville));
-                exit; // Arrêter le script
-            }
-
-        }
-    
         // Récupérer les seuils depuis la table seuils_normes
         $sql_seuils_normes = "SELECT * FROM seuils_normes";
         $result_seuils_normes = $conn->query($sql_seuils_normes);
@@ -336,17 +316,11 @@
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <form id="favorite-form" method="post" style="display: inline;">
                         <input type="hidden" name="city_name" value="<?php echo htmlspecialchars($ville); ?>">
-                        <?php if ($is_favorite): ?>
-                            <!-- Bouton pour retirer des favoris -->
-                            <button type="submit" name="remove_favorite" class="favorite-icon">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                        <?php else: ?>
-                            <!-- Bouton pour ajouter aux favoris -->
-                            <button type="submit" name="add_favorite" class="favorite-icon">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        <?php endif; ?>
+                        <!-- Champ caché pour l'action -->
+                        <input type="hidden" name="favorite_action" id="favorite_action" value="">
+                        <button type="submit" class="favorite-icon" data-action="<?php echo $is_favorite ? 'remove_favorite' : 'add_favorite'; ?>">
+                            <i class="<?php echo $is_favorite ? 'fas' : 'far'; ?> fa-heart"></i>
+                        </button>
                     </form>
 
                 <?php endif; ?>

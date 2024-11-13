@@ -140,20 +140,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const favoriteForm = document.getElementById('favorite-form');
 
     if (favoriteForm) {
-        console.log('Le formulaire des favoris a été trouvé et l\'événement va être attaché.');
+        const favoriteActionInput = document.getElementById('favorite_action');
+        const favoriteButton = favoriteForm.querySelector('.favorite-icon');
+
+        favoriteButton.addEventListener('click', function() {
+            const action = favoriteButton.getAttribute('data-action');
+            favoriteActionInput.value = action;
+        });
 
         favoriteForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            console.log('Événement de soumission intercepté.');
 
             const formData = new FormData(favoriteForm);
             formData.append('ajax', '1');
-
-            // Obtenir le nom du bouton soumis
-            const submitButton = favoriteForm.querySelector('button[name]');
-            if (submitButton && submitButton.name) {
-                formData.append(submitButton.name, '');
-            }
 
             console.log('Données envoyées (favoris depuis details.php):', Array.from(formData.entries()));
 
@@ -173,9 +172,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (data.action === 'added') {
                                 icon.classList.remove('far');
                                 icon.classList.add('fas');
+                                favoriteButton.setAttribute('data-action', 'remove_favorite');
                             } else if (data.action === 'removed') {
                                 icon.classList.remove('fas');
                                 icon.classList.add('far');
+                                favoriteButton.setAttribute('data-action', 'add_favorite');
                             }
                             displayMessage(data.message, 'success');
                         } else {
