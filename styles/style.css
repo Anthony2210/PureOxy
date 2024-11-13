@@ -495,43 +495,7 @@ h2{
     margin-bottom: 20px;
 }
 
-.historique-section {
-    margin-top: 30px;
-}
-
-.historique-section h3 {
-    font-size: 1.5em;
-    color: #6b8e23;
-    margin-bottom: 15px;
-}
-
-.historique-liste {
-    list-style: none;
-    padding: 0;
-}
-
-.historique-liste li {
-    background-color: #ffffff;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.historique-liste li .search-query {
-    font-weight: bold;
-    color: #333;
-}
-
-.historique-liste li .search-date {
-    color: #777;
-    font-size: 0.9em;
-}
 .history-list .search-query {
-    font-weight: bold;
     color: #333;
     display: flex;
     align-items: center;
@@ -584,28 +548,33 @@ h2{
 /* Tableau de Bord */
 .dashboard {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start; /* Aligne les éléments en haut */
     margin-top: 30px;
+    gap :30px;
+}
+.dashboard-content {
+    width: 65%; /* Ajustez la largeur pour que le contenu soit à droite */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 /* Carte de Profil */
 .profile-card {
     background-color: #ffffff;
-    width: 100%;
-    max-width: 600px;
+    flex: 0 0 30%;
+    max-width: 300px;
     padding: 20px;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
 }
 
 .profile-avatar {
     font-size: 4em;
     color: #6b8e23;
     margin-right: 20px;
+    text-align: center;
 }
 
 .profile-info h2 {
@@ -620,50 +589,6 @@ h2{
 }
 
 /* Section Historique */
-.history-section {
-    width: 100%;
-    max-width: 600px;
-}
-
-.history-section h3 {
-    font-size: 1.5em;
-    color: #6b8e23;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.history-section h3 i {
-    margin-right: 10px;
-}
-
-.history-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.history-list li {
-    background-color: #f3f4ed;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s;
-}
-
-.history-list li:hover {
-    background-color: #e1e4d7;
-}
-
-.history-list .search-query {
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-}
 
 .history-list .search-query i {
     margin-right: 8px;
@@ -767,7 +692,7 @@ h2{
     border-radius: 8px;
 }
 /* Section Villes Favorites */
-.favorite-cities-section {
+.favorite-cities-section, .history-section {
     width: 100%;
     max-width: 600px;
     background-color: #ffffff;
@@ -778,7 +703,7 @@ h2{
     text-align: left;
 }
 
-.favorite-cities-section h3 {
+.favorite-cities-section h3, .history-section h3 {
     font-size: 1.5em;
     color: #6b8e23;
     margin-bottom: 15px;
@@ -786,17 +711,17 @@ h2{
     align-items: center;
 }
 
-.favorite-cities-section h3 i {
+.favorite-cities-section h3 i, .history-section h3 i {
     margin-right: 10px;
 }
 
-.favorite-cities-list {
+.favorite-cities-list , .history-list{
     list-style: none;
     padding: 0;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
-.favorite-cities-list li {
+.favorite-cities-list li, .history-list li {
     background-color: #f3f4ed;
     padding: 10px 15px;
     margin-bottom: 10px;
@@ -806,16 +731,16 @@ h2{
     align-items: center;
 }
 
-.favorite-cities-list li span {
+.favorite-cities-list li span , .history-list li span{
     font-size: 1.1em;
     color: #333;
 }
 
-.delete-city-form {
+.delete-city-form , .delete-search-form{
     margin: 0;
 }
 
-.delete-city-form button {
+.delete-city-form button, .delete-search-form button {
     background: none;
     border: none;
     color: #e74c3c;
@@ -823,11 +748,11 @@ h2{
     font-size: 1.2em;
 }
 
-.delete-city-form button:hover {
+.delete-city-form button:hover, .delete-search-form button:hover {
     color: #c0392b;
 }
 
-.favorite-city-form {
+.favorite-city-form, .history-city-form {
     display: flex;
     align-items: center;
     gap: 10px;

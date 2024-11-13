@@ -357,7 +357,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <?php if (isset($_SESSION['user_id'])): ?>
         <!-- Tableau de bord de l'utilisateur -->
         <div class="dashboard">
-
             <!-- Carte de Profil -->
             <div class="profile-card">
                 <div class="profile-avatar">
@@ -365,84 +364,83 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 </div>
                 <div class="profile-info">
                     <h2><?= htmlspecialchars($_SESSION['username']) ?></h2>
-                    <!-- Afficher la date d'inscription si disponible -->
                     <p>Membre depuis <?= isset($user['created_at']) ? date('d/m/Y', strtotime($user['created_at'])) : 'Date inconnue' ?></p>
+                    <!-- Bouton de déconnexion -->
+                    <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
             </div>
-
-            <!-- Section Villes Favorites -->
-            <div class="favorite-cities-section">
-                <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
-                <?php if (isset($error_message_favorite)): ?>
-                    <p class="error-message"><?= htmlspecialchars($error_message_favorite) ?></p>
-                <?php endif; ?>
-                <?php if (isset($success_message_favorite)): ?>
-                    <p class="success-message"><?= htmlspecialchars($success_message_favorite) ?></p>
-                <?php endif; ?>
-
-
-                <?php if (!empty($favorite_cities)): ?>
-                    <ul class="favorite-cities-list">
-                        <?php foreach ($favorite_cities as $city): ?>
-                            <li>
-                                <a href="../fonctionnalites/details.php?ville=<?= urlencode($city['city_name']) ?>" class="favorite-link">
-                                    <?= htmlspecialchars($city['city_name']) ?>
-                                </a>
-                                <!-- Formulaire pour supprimer la ville favorite -->
-                                <form method="post" class="delete-city-form">
-                                    <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name']) ?>">
-                                    <button type="submit" name="delete_favorite_city"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else: ?>
-                    <p>Vous n'avez pas encore ajouté de villes favorites.</p>
-                <?php endif; ?>
-
-                <!-- Formulaire pour ajouter une nouvelle ville favorite -->
-                <form method="post" class="favorite-city-form" id="favorite-city-form">
-                    <input type="text" id="favorite-city-input" placeholder="Entrez le nom d'une ville" autocomplete="off" required>
-                    <!-- Champ caché pour stocker la ville sélectionnée -->
-                    <input type="hidden" name="city_name" id="city_name_hidden">
-                    <!-- Liste déroulante pour les suggestions -->
-                    <ul id="suggestions-list"></ul>
-                    <button type="submit" name="add_favorite_city" id="add-favorite-button" disabled><i class="fas fa-plus"></i> Ajouter</button>
-                </form>
+            <!-- Contenu à droite : Favoris et Historique -->
+            <div class="dashboard-content">
+                <!-- Section Villes Favorites -->
+                <div class="favorite-cities-section">
+                    <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
+                    <!-- Contenu de la section Favoris -->
+                    <?php if (isset($error_message_favorite)): ?>
+                        <p class="error-message"><?= htmlspecialchars($error_message_favorite) ?></p>
+                    <?php endif; ?>
+                    <?php if (isset($success_message_favorite)): ?>
+                        <p class="success-message"><?= htmlspecialchars($success_message_favorite) ?></p>
+                    <?php endif; ?>
 
 
-            </div>
+                    <?php if (!empty($favorite_cities)): ?>
+                        <ul class="favorite-cities-list">
+                            <?php foreach ($favorite_cities as $city): ?>
+                                <li>
+                                    <a href="../fonctionnalites/details.php?ville=<?= urlencode($city['city_name']) ?>" class="favorite-link">
+                                        <?= htmlspecialchars($city['city_name']) ?>
+                                    </a>
+                                    <!-- Formulaire pour supprimer la ville favorite -->
+                                    <form method="post" class="delete-city-form">
+                                        <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name']) ?>">
+                                        <button type="submit" name="delete_favorite_city"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p>Vous n'avez pas encore ajouté de villes favorites.</p>
+                    <?php endif; ?>
 
-            <!-- Section Historique des Recherches -->
-            <div class="history-section">
-                <h3><i class="fas fa-history"></i> Historique des dernières recherches</h3>
-                <?php if (!empty($search_history)): ?>
-                    <ul class="history-list">
-                        <?php foreach ($search_history as $search): ?>
-                            <li>
-                                <a href="../fonctionnalites/details.php?ville=<?= urlencode($search['search_query']) ?>" class="search-query">
-                                    <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query']) ?>
-                                </a>
-                                <span class="search-date"><?= date('d/m/Y H:i', strtotime($search['search_date'])) ?></span>
-                                <!-- Formulaire pour supprimer une recherche individuelle -->
-                                <form method="post" class="delete-search-form">
-                                    <input type="hidden" name="search_query" value="<?= htmlspecialchars($search['search_query']) ?>">
-                                    <button type="submit" name="delete_search"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <!-- Bouton pour effacer l'historique -->
-                    <form method="post" class="clear-history-form" id="clear-history-form">
-                        <button type="submit" name="clear_history" class="clear-history-button"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
+                    <!-- Formulaire pour ajouter une nouvelle ville favorite -->
+                    <form method="post" class="favorite-city-form" id="favorite-city-form">
+                        <input type="text" id="favorite-city-input" placeholder="Entrez le nom d'une ville" autocomplete="off" required>
+                        <!-- Champ caché pour stocker la ville sélectionnée -->
+                        <input type="hidden" name="city_name" id="city_name_hidden">
+                        <!-- Liste déroulante pour les suggestions -->
+                        <ul id="suggestions-list"></ul>
+                        <button type="submit" name="add_favorite_city" id="add-favorite-button" disabled><i class="fas fa-plus"></i> Ajouter</button>
                     </form>
-                <?php else: ?>
-                    <p>Vous n'avez pas encore effectué de recherches.</p>
-                <?php endif; ?>
+                </div>
+                <!-- Section Historique des Recherches -->
+                <div class="history-section">
+                    <h3><i class="fas fa-history"></i> Historique des dernières recherches</h3>
+                    <!-- Contenu de la section Historique -->
+                    <?php if (!empty($search_history)): ?>
+                        <ul class="history-list">
+                            <?php foreach ($search_history as $search): ?>
+                                <li>
+                                    <a href="../fonctionnalites/details.php?ville=<?= urlencode($search['search_query']) ?>" class="search-query">
+                                        <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query']) ?>
+                                    </a>
+                                    <span class="search-date"><?= date('d/m/Y H:i', strtotime($search['search_date'])) ?></span>
+                                    <!-- Formulaire pour supprimer une recherche individuelle -->
+                                    <form method="post" class="delete-search-form">
+                                        <input type="hidden" name="search_query" value="<?= htmlspecialchars($search['search_query']) ?>">
+                                        <button type="submit" name="delete_search"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <!-- Bouton pour effacer l'historique -->
+                        <form method="post" class="clear-history-form" id="clear-history-form">
+                            <button type="submit" name="clear_history" class="clear-history-button"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
+                        </form>
+                    <?php else: ?>
+                        <p>Vous n'avez pas encore effectué de recherches.</p>
+                    <?php endif; ?>
+                </div>
             </div>
-
-            <!-- Bouton de déconnexion -->
-            <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
         </div>
     <?php else: ?>
         <!-- Conteneur des onglets -->
