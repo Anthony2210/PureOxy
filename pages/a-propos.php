@@ -15,5 +15,11 @@
         Nous fournissons des informations en temps réel sur les niveaux de pollution atmosphérique et proposons des solutions pour aider à améliorer la qualité de l'air.
     </p>
 </section>
+<!-- Appel à l'action -->
+<section id="cta" class="mt-5">
+    <h2>Nos articles</h2>
+    <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
+    <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
+</section>
 
 <?php include '../includes/footer.php'; ?>
