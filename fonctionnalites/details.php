@@ -38,9 +38,9 @@
         $result = $stmt->get_result();
     
         if ($result->num_rows === 0) {
-            echo "<h1>Aucune donnée disponible pour la ville de " . htmlspecialchars($ville) . ".</h1>";
-            exit;
-        }
+            $cityNotFound = true;
+        } else {
+            $cityNotFound = false;
     
         // Récupérer les informations de la première ligne pour le département et la région
         $row = $result->fetch_assoc();
@@ -276,7 +276,7 @@
             'SO2' => "Dioxyde de soufre (SO2)",
             'CO' => "Monoxyde de carbone (CO)",
             'C6H6' => "Benzène (C6H6)",
-        ];
+        ];}
     
     } else {
         echo "<h1>Erreur : Ville non spécifiée</h1>";
@@ -308,7 +308,19 @@
     ?>
     
     <div id="details-page" class="container">
-        <!-- Introduction améliorée -->
+        <?php if ($cityNotFound): ?>
+            <section id="city-not-found" class="text-center">
+                <h1>Oups ! Aucune donnée disponible pour la ville de "<?php echo htmlspecialchars($ville); ?>"</h1>
+                <p>Il semble que nous n'ayons pas de données pour cette ville.</p>
+                <p>Pour trouver une ville proche de la vôtre, vous pouvez :</p>
+                <ul>
+                    <li>Taper la région ou le début du code postal dans la <a href="../fonctionnalites/recherche.php">barre de recherche</a>.</li>
+                    <li>Rechercher une ville proche géographiquement avec notre <a href="../pages/carte.php">carte interactive</a>.</li>
+                    <li>Nous envoyer une demande pour ajouter votre ville via notre <a href="../pages/contact.php">formulaire de contact</a>.</li>
+                </ul>
+            </section>
+        <?php else: ?>
+        <!-- Introduction -->
         <section id="intro">
             <h1 class="text-center mb-4">
                 <?php echo htmlspecialchars($ville); ?>
@@ -477,6 +489,7 @@
                 <?php else: ?>
                     <p>Aucune donnée de pollution disponible pour cette ville.</p>
                 <?php endif; ?>
+                <?php endif; ?>
             </div>
     
             <!-- Onglet Émissions -->
@@ -492,12 +505,7 @@
             <p>La pollution atmosphérique a des effets néfastes sur la santé humaine, notamment des problèmes respiratoires, cardiovasculaires et des allergies. Elle impacte également l'environnement en contribuant au changement climatique et en affectant les écosystèmes.</p>
         </section>
     
-        <!-- Appel à l'action -->
-        <section id="cta" class="mt-5">
-            <h2>Nos articles</h2>
-            <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
-            <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
-        </section>
+
     </div>
     
     <!-- Vos scripts JavaScript -->
@@ -688,5 +696,6 @@
         });
     </script>
     <?php include '../includes/footer.php'; ?>
+
     </body>
     </html>

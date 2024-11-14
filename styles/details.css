@@ -205,3 +205,54 @@
     background-color: #6b8e23;
     color: #fff;
 }
+#city-not-found {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+#city-not-found h1 {
+    font-size: 2em;
+    color: #e74c3c; /* Couleur rouge pour indiquer une erreur */
+    margin-bottom: 20px;
+}
+
+#city-not-found p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+#city-not-found .button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #6b8e23;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+#city-not-found .button:hover {
+    background-color: #556b2f;
+}
+#city-not-found ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#city-not-found li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+#city-not-found a {
+    color: darkolivegreen;
+    text-decoration: none;
+}
+
+#city-not-found a:hover {
+    text-decoration: underline;
+}
+

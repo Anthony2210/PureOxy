@@ -513,23 +513,6 @@ h2{
 }
 
 
-.logout-button {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 25px;
-    background-color: #6b8e23;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.1em;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.logout-button:hover {
-    background-color: #556b2f;
-    color: white;
-}
 
 /* Ajustements pour le conteneur principal */
 .compte-container {
@@ -568,13 +551,19 @@ h2{
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+.profile-card img {
+    border-radius: 100px;
+    border : black solid 1px;
 }
 
 .profile-avatar {
     font-size: 4em;
     color: #6b8e23;
-    margin-right: 20px;
     text-align: center;
+
+
 }
 
 .profile-info h2 {
@@ -607,13 +596,14 @@ h2{
 }
 
 .clear-history-button {
+    font-family: "League Spartan", sans-serif;
     background-color: #e74c3c;
     color: #fff;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1em;
     display: flex;
     align-items: center;
 }
@@ -630,7 +620,7 @@ h2{
 .logout-button {
     margin-top: 30px;
     padding: 12px 25px;
-    background-color: #6b8e23;
+    background-color: #e74c3c;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -646,7 +636,9 @@ h2{
 }
 
 .logout-button:hover {
-    background-color: #556b2f;
+    background-color: #c0392b;
+    color: white;
+    text-decoration: underline;
 }
 
 #main-content .content-section {
@@ -687,7 +679,7 @@ h2{
 }
 
 #main-content .image-wrapper img {
-    width: 80%;
+    width: 40%;
     height: auto;
     border-radius: 8px;
 }
@@ -768,6 +760,7 @@ h2{
 }
 
 .favorite-city-form button {
+    font-family: "League Spartan", sans-serif;
     padding: 10px 15px;
     background-color: #6b8e23;
     color: #fff;
@@ -811,6 +804,135 @@ h2{
     text-weight: bold;
     text-decoration: underline;
     color: darkolivegreen;
+}
+/* Le modal (fenêtre) */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed; /* Rester en place */
+    z-index: 1; /* Au-dessus */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur totale */
+    height: 100%; /* Hauteur totale */
+    overflow: auto; /* Activer le scroll si nécessaire */
+    background-color: rgba(0,0,0,0.5); /* Couleur de fond */
+}
 
+/* Contenu du modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% du haut, centré horizontalement */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largeur */
+    max-width: 600px;
+}
 
+/* Bouton pour fermer */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Styles pour la section de contact */
+#contact {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    border-radius: 8px;
+}
+
+#contact h2 {
+    text-align: center;
+    color: #6b8e23;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#contact .input-group {
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#contact .input-group textarea {
+    resize: none;
+    min-height: 150px;
+}
+
+#contact .input-group input,
+#contact .input-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: 'League Spartan', sans-serif;
+    color: #4c5f2d;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+#contact .input-group input:focus,
+#contact .input-group textarea:focus {
+    border-color: #6b8e23;
+    outline: none;
+    background-color: #fff;
+}
+
+#contact .input-group input::placeholder,
+#contact .input-group textarea::placeholder {
+    color: #a0a0a0;
+}
+
+#contact button[type="submit"] {
+    padding: 15px 30px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+#contact button[type="submit"]:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+#view-requests-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+}
+
+#view-requests-button:hover{
+    background-color: #4c5f2d;
+    text-decoration: underline;
 }
