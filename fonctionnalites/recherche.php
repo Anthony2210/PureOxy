@@ -47,69 +47,7 @@ require_once('../bd/bd.php');
     <?php include('../includes/footer.php'); ?>
 </div>
 
-
-<script>
-    let lastQuery = "";
-    let cache = {};
-
-    document.getElementById("search-bar").addEventListener("input", function() {
-        const query = this.value.trim();
-        const suggestionsList = document.getElementById("suggestions-list");
-
-        if (query === "") {
-            suggestionsList.innerHTML = "";
-            suggestionsList.classList.remove("show");
-            return;
-        }
-
-        if (query === lastQuery) return;
-        lastQuery = query;
-
-        if (cache[query]) {
-            displaySuggestions(cache[query]);
-            return;
-        }
-
-        // Chemin corrigé vers suggestions.php
-        fetch(`suggestions.php?query=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(results => {
-                cache[query] = results;
-                displaySuggestions(results);
-            })
-            .catch(error => console.error("Erreur de récupération des suggestions :", error));
-    });
-
-    function displaySuggestions(results) {
-        const suggestionsList = document.getElementById("suggestions-list");
-        let suggestionsHtml = "";
-
-        if (results.length > 0) {
-            results.forEach(function(result, index) {
-                suggestionsHtml += `<li onclick="selectCity('${result.ville}')">${result.ville} (${result.code_postal}, ${result.region})</li>`;
-            });
-            suggestionsList.classList.add("show");
-        } else {
-            suggestionsHtml = `<li>Aucune ville trouvée</li>`;
-            suggestionsList.classList.remove("show");
-        }
-
-        suggestionsList.innerHTML = suggestionsHtml;
-    }
-
-    function selectCity(city) {
-        window.location.href = `/PUREOXY/fonctionnalites/details.php?ville=${encodeURIComponent(city)}`;
-    }
-
-    // Gérer les clics en dehors des suggestions pour les masquer
-    document.addEventListener("click", function(e) {
-        if (!e.target.closest('#suggestions-list') && !e.target.closest('#search-bar')) {
-            document.getElementById("suggestions-list").innerHTML = "";
-            document.getElementById("suggestions-list").classList.remove("show");
-        }
-    });
-</script>
-
+<script src="../script/suggestions.js"></script>
 
 </body>
 </html>
