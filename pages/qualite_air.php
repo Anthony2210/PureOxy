@@ -39,6 +39,11 @@
                 </div>
             </section>
         </div>
+        <section id="cta" class="mt-5">
+            <h2>À lire aussi </h2>
+            <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
+        </section>
+
     </main>
     <?php include '../includes/footer.php'; ?>
 </div>
