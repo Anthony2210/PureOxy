@@ -6,42 +6,56 @@ require '../bd/bd.php'; // Connexion à la base de données
 
 // Gestion de la connexion
 if (isset($_POST['login'])) {
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    // Préparation de la requête pour vérifier les informations de connexion
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-
-    // Vérifie si l'utilisateur existe et si le mot de passe est correct
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        header("Location: ../index.php"); // Redirige vers la page index.php
-        exit;
+    if (empty($username) || empty($password)) {
+        $login_error = "Veuillez remplir tous les champs.";
     } else {
-        $login_error = "Nom d'utilisateur ou mot de passe incorrect.";
-    }
-}
-// Gestion de l'inscription
-if (isset($_POST['register'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    // Vérifie que les mots de passe correspondent
-    if ($password === $confirm_password) {
-        // Vérifie si le nom d'utilisateur est déjà pris
+        // Préparation de la requête pour vérifier les informations de connexion
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        // Vérifie si l'utilisateur existe et si le mot de passe est correct
+        if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true); // Sécurité supplémentaire
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            header("Location: ../index.php"); // Redirige vers la page index.php
+            exit;
+        } else {
+            $login_error = "Nom d'utilisateur ou mot de passe incorrect.";
+        }
+    }
+}
+
+// Gestion de l'inscription
+if (isset($_POST['register'])) {
+    // Récupérer et sécuriser les données du formulaire
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+
+    // Validation des données
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+        $register_error = "Tous les champs sont requis.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $register_error = "Adresse email invalide.";
+    } elseif ($password !== $confirm_password) {
+        $register_error = "Les mots de passe ne correspondent pas.";
+    } else {
+        // Vérifier si le nom d'utilisateur ou l'email est déjà pris
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $register_error = "Ce nom d'utilisateur est déjà pris.";
+            $register_error = "Ce nom d'utilisateur ou email est déjà pris.";
         } else {
             // Hashage du mot de passe
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -50,8 +64,8 @@ if (isset($_POST['register'])) {
             $profile_picture = 'user.png';
 
             // Insertion du nouvel utilisateur dans la base de données
-            $stmt = $conn->prepare("INSERT INTO users (username, password, profile_picture) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $hashed_password, $profile_picture);
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password, profile_picture) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_picture);
 
             if ($stmt->execute()) {
                 $register_success = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
@@ -59,8 +73,6 @@ if (isset($_POST['register'])) {
                 $register_error = "Une erreur s'est produite lors de la création du compte.";
             }
         }
-    } else {
-        $register_error = "Les mots de passe ne correspondent pas.";
     }
 }
 
@@ -365,6 +377,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 <div class="profile-info">
                     <h2><?= htmlspecialchars($_SESSION['username']) ?></h2>
                     <p>Membre depuis <?= isset($user['created_at']) ? date('d/m/Y', strtotime($user['created_at'])) : 'Date inconnue' ?></p>
+                    <button id="view-requests-button">Demandes envoyées</button>
+
                     <!-- Bouton de déconnexion -->
                     <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
@@ -477,13 +491,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             <form class="compte-form" method="POST">
                 <h2>Création d'un nouveau compte</h2>
                 <?php if (isset($register_success)): ?>
-                    <p class="success-message"><?= $register_success ?></p>
+                    <p class="success-message"><?= htmlspecialchars($register_success) ?></p>
                 <?php elseif (isset($register_error)): ?>
-                    <p class="error-message"><?= $register_error ?></p>
+                    <p class="error-message"><?= htmlspecialchars($register_error) ?></p>
                 <?php endif; ?>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
@@ -498,6 +516,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         </div>
     <?php endif; ?>
 </div>
+<!-- Fenêtre modale pour les demandes -->
+<div id="requests-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Vos demandes</h2>
+        <div id="requests-list">
+            <!-- Les demandes seront chargées ici -->
+        </div>
+    </div>
+</div>
+
 <main>
 </main>
 <?php include '../includes/footer.php'; ?>
@@ -547,7 +576,43 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         }
     });
 </script>
+<script>
+    // Obtenir les éléments
+    var modal = document.getElementById("requests-modal");
+    var btn = document.getElementById("view-requests-button");
+    var span = document.getElementsByClassName("close-button")[0];
 
+    // Quand l'utilisateur clique sur le bouton, ouvrir la modale
+    btn.onclick = function() {
+        modal.style.display = "block";
+        loadRequests(); // Charger les demandes
+    }
+
+    // Quand l'utilisateur clique sur le x, fermer la modale
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Quand l'utilisateur clique en dehors de la modale, la fermer
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Fonction pour charger les demandes via AJAX
+    function loadRequests() {
+        fetch('load_requests.php')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('requests-list').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des demandes:', error);
+                document.getElementById('requests-list').innerHTML = '<p>Une erreur est survenue.</p>';
+            });
+    }
+</script>
 
 </body>
 

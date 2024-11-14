@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : dim. 10 nov. 2024 à 18:21
+-- Généré le : jeu. 14 nov. 2024 à 09:20
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -858,18 +858,20 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `favorite_cities`
 --
 
 INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
-(28, 4, 'Montpellier'),
-(15, 4, 'Cachan'),
-(22, 4, 'Paris'),
-(23, 4, 'Montauban'),
-(27, 4, 'Mondeville');
+(77, 4, 'Mâcon'),
+(70, 4, 'Agde'),
+(69, 4, 'Pamiers'),
+(76, 4, 'Mont-de-Marsan'),
+(68, 4, 'Mondeville'),
+(78, 5, 'Montpellier'),
+(79, 5, 'Paris');
 
 -- --------------------------------------------------------
 
@@ -40226,6 +40228,32 @@ INSERT INTO `indices_qa_commune_idf_filtree_id` (`id_qualité`, `date`, `ninsee`
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `messages_contact`
+--
+
+DROP TABLE IF EXISTS `messages_contact`;
+CREATE TABLE IF NOT EXISTS `messages_contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `nom` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `sujet` varchar(100) NOT NULL,
+  `message` text,
+  `date_demande` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `messages_contact`
+--
+
+INSERT INTO `messages_contact` (`id`, `user_id`, `nom`, `email`, `sujet`, `message`, `date_demande`) VALUES
+(1, 5, 'antho', 'antho@antho.com', 'Salut', 'je test', '2024-11-14 08:03:57');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `pollution_villes`
 --
 
@@ -42816,7 +42844,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
@@ -42832,7 +42860,16 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (17, 2, 'Charleville-Mézières', '2024-10-29 13:21:56'),
 (16, 2, 'Brest', '2024-10-29 13:14:27'),
 (24, 1, 'Mondeville', '2024-10-30 11:56:35'),
-(42, 4, 'Montpellier', '2024-11-10 17:39:37');
+(70, 5, 'Hefisopfs', '2024-11-14 09:16:09'),
+(67, 4, 'Caca', '2024-11-13 18:59:50'),
+(66, 4, 'Paris', '2024-11-13 18:17:16'),
+(65, 4, 'mooee', '2024-11-13 17:45:05'),
+(64, 4, 'Mont-de-Marsan', '2024-11-13 17:44:58'),
+(63, 4, 'Pamiers', '2024-11-13 17:25:29'),
+(62, 4, 'Agen', '2024-11-13 17:21:38'),
+(61, 4, 'Montpellier', '2024-11-13 17:10:27'),
+(69, 5, 'Paris', '2024-11-14 09:16:00'),
+(68, 5, 'Montpellier', '2024-11-14 08:40:01');
 
 -- --------------------------------------------------------
 
@@ -42907,19 +42944,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '../images/user.png',
+  `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_picture`) VALUES
-(1, 'Anthony', '$2y$10$lYbOQp561SE9NHb0w03euenYEIT5yd7sLbG25iR8QITaJH7xgiywa', '2024-10-28 16:36:03', 'user.png'),
-(2, 'Maja', '$2y$10$2u5KtRH/jtDm96DV/ieDpu6zKBh749gkDS0R269C/ijvHjpLupnU6', '2024-10-28 17:26:47', 'user.png'),
-(3, 'a', '$2y$10$c2s8Alj9LAApyQcJpPGo4.FGnWMLkC8EZ5M52b7GmPkxa/mOogZrS', '2024-10-28 18:43:38', 'user.png'),
-(4, 'antho_ca', '$2y$10$WfR9whCreeapQnaxd4gPouGpXH2udKIfGFIqDIkqHlptMq/iEVUYq', '2024-11-08 10:00:01', 'user.png');
+INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_picture`, `email`) VALUES
+(1, 'Anthony', '$2y$10$lYbOQp561SE9NHb0w03euenYEIT5yd7sLbG25iR8QITaJH7xgiywa', '2024-10-28 16:36:03', 'user.png', ''),
+(2, 'Maja', '$2y$10$2u5KtRH/jtDm96DV/ieDpu6zKBh749gkDS0R269C/ijvHjpLupnU6', '2024-10-28 17:26:47', 'user.png', ''),
+(3, 'a', '$2y$10$c2s8Alj9LAApyQcJpPGo4.FGnWMLkC8EZ5M52b7GmPkxa/mOogZrS', '2024-10-28 18:43:38', 'user.png', ''),
+(4, 'antho_ca', '$2y$10$WfR9whCreeapQnaxd4gPouGpXH2udKIfGFIqDIkqHlptMq/iEVUYq', '2024-11-08 10:00:01', 'user.png', ''),
+(5, 'antho', '$2y$10$6Ih55G9bJThS.tYixhqi9O.G8FWwP18GL8MQnow4w/1m5VG0eHtGa', '2024-11-14 07:42:43', 'user.png', 'antho@antho.com');
 
 --
 -- Contraintes pour les tables déchargées
