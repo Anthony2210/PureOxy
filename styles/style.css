@@ -809,7 +809,7 @@ h2{
 .modal {
     display: none; /* Caché par défaut */
     position: fixed; /* Rester en place */
-    z-index: 1; /* Au-dessus */
+    z-index: 1001; /* Au-dessus */
     left: 0;
     top: 0;
     width: 100%; /* Largeur totale */
@@ -842,6 +842,21 @@ h2{
     text-decoration: none;
     cursor: pointer;
 }
+
+.close-button-comments {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button-comments:hover,
+.close-button-comments:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /* Styles pour la section de contact */
 #contact {
     max-width: 600px;
@@ -934,5 +949,89 @@ h2{
 
 #view-requests-button:hover{
     background-color: #4c5f2d;
+    text-decoration: underline;
+}
+/* Styles pour la section des commentaires */
+.comment-section {
+    margin-top: 40px;
+    background-color: #f9f9e9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.comment-section h3 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #6b8e23;
+}
+
+.comments, .replies {
+    list-style: none;
+    padding: 0;
+}
+
+.comments li, .replies li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.replies {
+    margin-left: 20px;
+    border-left: 2px solid #6b8e23;
+    padding-left: 10px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1em;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.comment-form button {
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.comment-form button:hover {
+    background-color: #556b2f;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.like-form button {
+    background: none;
+    border: none;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.like-form button:hover {
+    text-decoration: underline;
+}
+
+.reply-button {
+    background: none;
+    border: none;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.reply-button:hover {
     text-decoration: underline;
 }

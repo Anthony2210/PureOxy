@@ -1,3 +1,10 @@
+<?php
+session_start();
+ob_start();
+
+require '../bd/bd.php'; // Connexion à la base de données
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -41,11 +48,14 @@
         </div>
         <section id="cta" class="mt-5">
             <h2>À lire aussi </h2>
-            <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
+            <a href="lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>
         </section>
 
     </main>
-    <?php include '../includes/footer.php'; ?>
+    <?php
+    include '../fonctionnalites/commentaires.php';
+    include '../includes/footer.php';
+    ?>
 </div>
 </body>
 </html>

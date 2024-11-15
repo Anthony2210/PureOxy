@@ -695,7 +695,11 @@
             });
         });
     </script>
-    <?php include '../includes/footer.php'; ?>
+    <?php
+    // Inclure le fichier de gestion des commentaires et le footer
+    include 'commentaires.php';
+    include '../includes/footer.php';
+    ?>
 
     </body>
     </html>

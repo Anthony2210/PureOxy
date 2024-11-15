@@ -377,8 +377,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 <div class="profile-info">
                     <h2><?= htmlspecialchars($_SESSION['username']) ?></h2>
                     <p>Membre depuis <?= isset($user['created_at']) ? date('d/m/Y', strtotime($user['created_at'])) : 'Date inconnue' ?></p>
+                    <button id="view-comments-button">Voir ces commentaires</button>
                     <button id="view-requests-button">Demandes envoyées</button>
-
                     <!-- Bouton de déconnexion -->
                     <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
@@ -527,12 +527,62 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     </div>
 </div>
 
+<!-- Fenêtre modale pour les commentaires -->
+<div id="comments-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button-comments">&times;</span>
+        <h2>Vos commentaires</h2>
+        <div id="user-comments-list">
+            <!-- Les commentaires seront chargés ici -->
+        </div>
+    </div>
+</div>
+
+
 <main>
 </main>
 <?php include '../includes/footer.php'; ?>
 
 <script src="../script/suggestions.js"></script>
 <script src="../script/favoritesAndMessages.js"></script>
+<script>
+    // Obtenir les éléments
+    var commentsModal = document.getElementById("comments-modal");
+    var commentsBtn = document.getElementById("view-comments-button");
+    var closeCommentsBtn = document.getElementsByClassName("close-button-comments")[0];
+
+    // Quand l'utilisateur clique sur le bouton, ouvrir la modale
+    commentsBtn.onclick = function() {
+        commentsModal.style.display = "block";
+        loadUserComments(); // Charger les commentaires
+    }
+
+    // Quand l'utilisateur clique sur le x, fermer la modale
+    closeCommentsBtn.onclick = function() {
+        commentsModal.style.display = "none";
+    }
+
+    // Quand l'utilisateur clique en dehors de la modale, la fermer
+    window.onclick = function(event) {
+        if (event.target == commentsModal) {
+            commentsModal.style.display = "none";
+        }
+    }
+
+    // Fonction pour charger les commentaires via AJAX
+    function loadUserComments() {
+        fetch('load_user_comments.php')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('user-comments-list').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des commentaires:', error);
+                document.getElementById('user-comments-list').innerHTML = '<p>Une erreur est survenue.</p>';
+            });
+    }
+</script>
+
 <!-- Script pour les onglets -->
 <script>
     function openTab(evt, tabName) {

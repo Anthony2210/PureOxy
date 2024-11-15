@@ -19,7 +19,7 @@
 <section id="cta" class="mt-5">
     <h2>Nos articles</h2>
     <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
-    <a href="../pages/lutte-pollution.php" class="button">Lutte contre la pollution de l'air</a>
+    <a href="lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>
 </section>
 
 <?php include '../includes/footer.php'; ?>

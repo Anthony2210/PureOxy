@@ -1,3 +1,9 @@
+<?php
+session_start();
+ob_start();
+
+require '../bd/bd.php'; // Connexion à la base de données
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -68,7 +74,9 @@
             <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
         </section>
     </main>
-    <?php include '../includes/footer.php'; ?>
+    <?php
+    include '../fonctionnalites/commentaires.php';
+    include '../includes/footer.php'; ?>
 </div>
 </body>
 </html>
