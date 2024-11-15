@@ -858,11 +858,8 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-<<<<<<< HEAD
 ) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> origin/master
+
 
 --
 -- Déchargement des données de la table `favorite_cities`
@@ -40246,11 +40243,8 @@ CREATE TABLE IF NOT EXISTS `messages_contact` (
   `date_demande` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-<<<<<<< HEAD
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> origin/master
+
 
 --
 -- Déchargement des données de la table `messages_contact`
@@ -42852,11 +42846,8 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-<<<<<<< HEAD
 ) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> origin/master
+
 
 --
 -- Déchargement des données de la table `search_history`
@@ -42900,11 +42891,8 @@ CREATE TABLE IF NOT EXISTS `seuils_normes` (
   `origine` varchar(10) DEFAULT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-<<<<<<< HEAD
 ) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> origin/master
+
 
 --
 -- Déchargement des données de la table `seuils_normes`
@@ -42959,19 +42947,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-<<<<<<< HEAD
   `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '../images/user.png',
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '../images/user.png',
-  `email` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> origin/master
+
 
 --
 -- Déchargement des données de la table `users`

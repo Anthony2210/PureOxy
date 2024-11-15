@@ -12,10 +12,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         <nav>
             <ul>
                 <li><a href="<?php echo $baseUrl; ?>index.php">Accueil</a></li>
-<<<<<<< HEAD
                 <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li> 
-=======
->>>>>>> origin/master
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/carte.php">Carte interactive</a></li>
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/recherche.php">Recherche</a></li>
 
