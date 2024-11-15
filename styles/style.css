@@ -1,0 +1,938 @@
+/* Styles de base */
+body {
+    font-family: 'League Spartan', sans-serif;
+    background-color: #f9f9e9;
+    color: #7A8B6B;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    font-size: 16px;
+}
+/* Conteneur principal qui englobe le contenu */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* S'assurer que le body et html prennent toute la hauteur de la page */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+/* Main prend l'espace disponible entre le header et le footer */
+main {
+    flex: 1;
+}
+
+/* Conteneur global */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+#logo img {
+    width: 300px;!important;
+    height: auto;!important;
+    margin-right: 20px;!important;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: #6b8e23;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    text-decoration: underline #6b8e23;
+}
+
+a{
+    color : #2d6a4f;
+}
+
+a:hover{
+    text-decoration: underline;
+    color : darkolivegreen;
+}
+
+/* Sections */
+section {
+    padding: 40px;
+}
+
+section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+h2{
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: darkolivegreen;
+    text-align: center;
+    font-weight: bold;
+}
+/* Introduction */
+#introduction {
+    position: relative;
+    text-align: center;
+    background-image: url('../images/vancouver-in-fall.png');
+    background-size: cover;
+    background-position: center;
+    padding: 80px 20px; /* Ajoutez plus de padding pour l'espacement vertical */
+    color: white;
+}
+
+#introduction::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur sombre avec transparence */
+    z-index: 1;
+}
+
+#introduction h2, #introduction p {
+    position: relative;
+    z-index: 2; /* Assure que le texte reste au-dessus de la superposition */
+}
+
+/* Style du titre */
+#introduction h2 {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff; /* Assure que le titre est en blanc */
+}
+
+/* Style du paragraphe */
+#introduction p {
+    font-size: 1.3em;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+    color: #f0f0f0;
+}
+
+/* Fonctionnalités */
+#features ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#features li {
+    background-color: #f9f9e9; /* Couleur de fond douce */
+    padding: 20px;
+    margin: 10px 0;
+    border: 2px solid #6b8e23; /* Bordure verte */
+    border-radius: 8px;
+    font-weight: bold;
+    color: #556b2f;
+    text-align: center;
+    box-shadow: none; /* Retire l'ombre pour un style plus épuré */
+    transition: transform 0.2s ease;
+}
+
+#features li:hover {
+    transform: translateY(-5px); /* Animation au survol */
+}
+
+#features strong {
+    color: #6b8e23; /* Texte vert pour les titres des fonctionnalités */
+    font-size: 1.2em;
+}
+#features h2{
+    color: #6b8e23;
+    text-decoration: underline;
+}
+
+
+/* Appel à l'action */
+#cta {
+    text-align: center;
+    background-color: #556b2f; /* Couleur verte pour le fond */
+    padding: 40px 0;
+    border-radius: 0; /* Pas de bordure arrondie pour la section */
+    color: #f9f9e9; /* Couleur claire pour le texte */
+}
+
+#cta h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #f9f9e9; /* Couleur du texte en blanc cassé */
+}
+
+#cta .button {
+    background-color: #f9f9e9; /* Couleur de fond du bouton */
+    color: #6b8e23; /* Texte du bouton en vert foncé */
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 30px; /* Bouton très arrondi */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#cta .button:hover {
+    background-color: #e3e3d9; /* Couleur légèrement plus foncée au survol */
+    transform: translateY(-3px);
+}
+
+#search-container {
+    background-color: transparent; /* Laisser transparent pour voir la couleur de fond de la page */
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 700px;
+    margin: 80px auto;
+    text-align: center;
+}
+
+#search-container h1 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    color: #f9f9e9;
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+#search-bar {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.2em;
+}
+
+#search-bar:focus {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+#search-button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    background-color: transparent;
+    color: #fff;
+    border: solid white 2px;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+
+#search-button:hover {
+    background-color: #4e6920;
+    color:white;
+    text-decoration: underline;
+}
+
+/* Conteneur pour l'input et les suggestions */
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Liste des suggestions avec animation */
+#suggestions-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    opacity: 0;
+    list-style-type: none;
+    padding: initial;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+#suggestions-list.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#suggestions-list li {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#suggestions-list li:hover {
+    background-color: #f0f0f0;
+    color: #6b8e23;
+}
+
+#suggestions-list li:last-child {
+    border-bottom: none;
+}
+
+#suggestions-list li + li {
+    border-top: 1px solid #eee;
+}
+
+/* Conteneur principal */
+.compte-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Titre principal */
+.compte-container h1 {
+    font-size: 2.5em;
+    color: #4c5f2d;
+    margin-bottom: 30px;
+}
+
+/* Styles pour les onglets personnalisés */
+.compte-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ffffff;
+}
+
+.compte-tab-link {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: color 0.3s, border-bottom 0.3s;
+    margin-bottom: -1px;
+}
+
+.compte-tab-link.active {
+    color: darkolivegreen;
+    border-bottom: 3px solid darkolivegreen;
+}
+
+.compte-tab-link:hover {
+    color: darkolivegreen;
+}
+
+.compte-tab-content {
+    display: none;
+
+}
+
+.compte-tab-content.active {
+    display: block;
+}
+
+/* Formulaires */
+.compte-form {
+    text-align: left;
+}
+
+.compte-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    color: #4c5f2d;
+    font-weight: bold;
+
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #6b8e23;
+}
+
+.input-group input {
+    width: 75%;
+    padding: 12px 40px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1.1em;
+    transition: border-color 0.3s;
+    color : #4c5f2d;
+    font-family: 'League Spartan', sans-serif;
+
+}
+
+.input-group input:focus {
+    border-color: #6b8e23;
+    outline: none;
+}
+.input-group input::placeholder {
+    color : darkolivegreen;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.compte-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.compte-form button:hover {
+    text-decoration: underline;
+    color : white;
+}
+
+.compte-form button:active {
+    background-color: #455225;
+}
+
+/* Messages d'erreur et de succès */
+.success-message, .error-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 300px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1em;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+/* Styles spécifiques pour le message de succès */
+.success-message {
+    background-color: #28a745; /* Vert */
+}
+
+/* Styles spécifiques pour le message d'erreur */
+.error-message {
+    background-color: #dc3545; /* Rouge */
+}
+/* Animation pour faire apparaître le message */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Conteneur des messages */
+#message-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Style pour la section de l'utilisateur connecté */
+.compte-connecte {
+    background-color: #f9f9e9;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.compte-connecte h2 {
+    font-size: 2em;
+    color: #4c5f2d;
+    margin-bottom: 20px;
+}
+
+.history-list .search-query {
+    color: #333;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Supprime le soulignement par défaut des liens */
+}
+
+.history-list .search-query:hover {
+    text-decoration: underline; /* Ajoute un soulignement au survol pour indiquer que c'est cliquable */
+    color: #6b8e23; /* Change la couleur au survol */
+}
+
+.history-list .search-query i {
+    margin-right: 8px;
+    color: #6b8e23;
+}
+
+
+
+/* Ajustements pour le conteneur principal */
+.compte-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Style pour le titre principal */
+.compte-container h1 {
+    font-size: 2.5em;
+    color: #4c5f2d;
+    margin-bottom: 30px;
+}
+/* Tableau de Bord */
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Aligne les éléments en haut */
+    margin-top: 30px;
+    gap :30px;
+}
+.dashboard-content {
+    width: 65%; /* Ajustez la largeur pour que le contenu soit à droite */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Carte de Profil */
+.profile-card {
+    background-color: #ffffff;
+    flex: 0 0 30%;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+.profile-card img {
+    border-radius: 100px;
+    border : black solid 1px;
+}
+
+.profile-avatar {
+    font-size: 4em;
+    color: #6b8e23;
+    text-align: center;
+
+
+}
+
+.profile-info h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+}
+
+.profile-info p {
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Section Historique */
+
+.history-list .search-query i {
+    margin-right: 8px;
+    color: #6b8e23;
+}
+
+.history-list .search-date {
+    color: #777;
+    font-size: 0.9em;
+}
+
+/* Bouton Effacer l'Historique */
+.clear-history-form {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.clear-history-button {
+    font-family: "League Spartan", sans-serif;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.clear-history-button i {
+    margin-right: 5px;
+}
+
+.clear-history-button:hover {
+    background-color: #c0392b;
+}
+
+/* Bouton de Déconnexion */
+.logout-button {
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.logout-button i {
+    margin-right: 8px;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+    color: white;
+    text-decoration: underline;
+}
+
+#main-content .content-section {
+    background-color: #f1f2e4;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+#main-content .content-section h2 {
+    border-bottom: 2px solid #6d8b41;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-align: left;
+    color: #6b8e23;
+}
+
+#main-content .content-section p, .content-section ul {
+    font-size: 1em;
+    color: #3d3c2e;
+}
+
+#main-content .content-section ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+#main-content .content-section ul li {
+    margin-bottom: 10px;
+}
+
+/* Image centering and styling */
+#main-content .image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#main-content .image-wrapper img {
+    width: 40%;
+    height: auto;
+    border-radius: 8px;
+}
+/* Section Villes Favorites */
+.favorite-cities-section, .history-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.favorite-cities-section h3, .history-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-cities-section h3 i, .history-section h3 i {
+    margin-right: 10px;
+}
+
+.favorite-cities-list , .history-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.favorite-cities-list li, .history-list li {
+    background-color: #f3f4ed;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favorite-cities-list li span , .history-list li span{
+    font-size: 1.1em;
+    color: #333;
+}
+
+.delete-city-form , .delete-search-form{
+    margin: 0;
+}
+
+.delete-city-form button, .delete-search-form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.delete-city-form button:hover, .delete-search-form button:hover {
+    color: #c0392b;
+}
+
+.favorite-city-form, .history-city-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.favorite-city-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.favorite-city-form button {
+    font-family: "League Spartan", sans-serif;
+    padding: 10px 15px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.favorite-city-form button i {
+    margin-right: 5px;
+}
+
+.favorite-city-form button:hover {
+    background-color: #556b2f;
+}
+
+/* Styles spécifiques à la page de recherche */
+#recherche-page {
+    background-color: #556b2f;
+}
+
+/* Si vous souhaitez changer la couleur du texte pour assurer une bonne lisibilité */
+#recherche-page, #recherche-page p, #recherche-page h1, #recherche-page h2, #recherche-page h3, #recherche-page h4, #recherche-page h5, #recherche-page h6 {
+    color: #f9f9e9; /* Couleur claire pour le texte */
+}
+
+.avertissement {
+    margin-top: 20px; /* Ajustez la valeur pour espacer davantage */
+    font-size: 0.9em; /* Taille de texte plus petite si nécessaire */
+    text-align: center;
+}
+.favorite-link {
+    color : black;
+    text-decoration: none;
+}
+
+.favorite-link:hover{
+    text-weight: bold;
+    text-decoration: underline;
+    color: darkolivegreen;
+}
+/* Le modal (fenêtre) */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed; /* Rester en place */
+    z-index: 1; /* Au-dessus */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur totale */
+    height: 100%; /* Hauteur totale */
+    overflow: auto; /* Activer le scroll si nécessaire */
+    background-color: rgba(0,0,0,0.5); /* Couleur de fond */
+}
+
+/* Contenu du modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% du haut, centré horizontalement */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largeur */
+    max-width: 600px;
+}
+
+/* Bouton pour fermer */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Styles pour la section de contact */
+#contact {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    border-radius: 8px;
+}
+
+#contact h2 {
+    text-align: center;
+    color: #6b8e23;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#contact .input-group {
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#contact .input-group textarea {
+    resize: none;
+    min-height: 150px;
+}
+
+#contact .input-group input,
+#contact .input-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: 'League Spartan', sans-serif;
+    color: #4c5f2d;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+#contact .input-group input:focus,
+#contact .input-group textarea:focus {
+    border-color: #6b8e23;
+    outline: none;
+    background-color: #fff;
+}
+
+#contact .input-group input::placeholder,
+#contact .input-group textarea::placeholder {
+    color: #a0a0a0;
+}
+
+#contact button[type="submit"] {
+    padding: 15px 30px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+#contact button[type="submit"]:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+#view-requests-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+}
+
+#view-requests-button:hover{
+    background-color: #4c5f2d;
+    text-decoration: underline;
+}

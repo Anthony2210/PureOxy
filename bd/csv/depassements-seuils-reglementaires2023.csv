@@ -1,0 +1,801 @@
+id_seuil,POLLUANT,CODE_AGGLOMERATION,NOM_AGGLOMERATION,NB_ANNEE_DEP
+1,NO2,54405,Longwy (partie française),0
+2,NO2,57601,Thionville,0
+3,NO2,57701,Metz,0
+4,NO2,54404,Pont-à-Mousson,0
+5,NO2,759,Marseille-Aix-en-Provence,21
+6,NO2,13501,Salon-de-Provence,0
+7,NO2,552,Arles,0
+8,NO2,757,Toulon,17
+9,NO2,754,Avignon,10
+10,NO2,851,Paris,23
+11,NO2,77405,Fontainebleau,0
+12,NO2,76701,Le Havre,10
+13,NO2,76118,Arelaune-en-Seine,0
+14,NO2,59701,Valenciennes (partie française),4
+15,NO2,756,Douai-Lens,4
+16,NO2,59601,Maubeuge (partie française),0
+17,NO2,59402,Saint-Amand-les-Eaux,0
+18,NO2,63701,Clermont-Ferrand,15
+19,NO2,3501,Montluçon,0
+20,NO2,15401,Aurillac,0
+21,NO2,43401,Le Puy-en-Velay,3
+22,NO2,63401,Riom,0
+23,NO2,63304,Issoire,0
+24,NO2,34701,Montpellier,19
+25,NO2,551,Lunel,0
+26,NO2,34401,Agde,0
+27,NO2,461,Beaucaire,0
+28,NO2,30601,Nîmes,12
+29,NO2,66701,Perpignan,5
+30,NO2,17601,La Rochelle,2
+31,NO2,86601,Poitiers,1
+32,NO2,16601,Angoulême,0
+33,NO2,16401,Cognac,0
+34,NO2,79501,Niort,1
+35,NO2,79109,Airvault,0
+36,NO2,59602,Dunkerque,0
+37,NO2,62503,Calais,2
+38,NO2,62501,Boulogne-sur-Mer,0
+39,NO2,556,Saint-Omer,0
+40,NO2,59702,Lille (partie française),8
+41,NO2,59501,Armentières (partie française),0
+42,NO2,752,Béthune,2
+43,NO2,758,Toulouse,19
+44,NO2,81502,Albi,0
+45,NO2,65302,Lourdes,0
+46,NO2,65501,Tarbes,0
+47,NO2,81501,Castres,0
+48,NO2,651,Montbéliard,0
+49,NO2,558,Belfort,0
+50,NO2,70401,Vesoul,0
+51,NO2,51701,Reims,10
+52,NO2,51501,Châlons-en-Champagne,0
+53,NO2,10601,Troyes,0
+54,NO2,460,Saint-Dizier,0
+55,NO2,8501,Charleville-Mézières,0
+56,NO2,38701,Grenoble,18
+57,NO2,38502,Voiron,0
+58,NO2,38302,Vif,0
+59,NO2,38304,Crolles,0
+60,NO2,67701,Strasbourg (partie française),21
+61,NO2,67116,Mothern,0
+62,NO2,68501,Colmar,0
+63,NO2,68701,Mulhouse,4
+64,NO2,68403,Bâle (SUI)-Saint-Louis (partie française),0
+65,NO2,25601,Besançon,10
+66,NO2,39201,Tavaux,0
+67,NO2,39401,Lons-le-Saunier,0
+68,NO2,60601,Creil,0
+69,NO2,80601,Amiens,8
+70,NO2,2501,Saint-Quentin,3
+71,NO2,2302,Chauny,0
+72,NO2,60501,Beauvais,0
+73,NO2,35701,Rennes,13
+74,NO2,29701,Brest,5
+75,NO2,56601,Lorient,0
+76,NO2,56501,Vannes,0
+77,NO2,29501,Quimper,0
+78,NO2,22501,Saint-Brieuc,0
+79,NO2,35402,Saint-Malo,0
+80,NO2,35401,Fougères,0
+81,NO2,760,Lyon,23
+82,NO2,69106,Pusignan,0
+83,NO2,14701,Caen,4
+84,NO2,14401,Lisieux,0
+85,NO2,464,Alençon,0
+86,NO2,50501,Cherbourg-en-Cotentin,0
+87,NO2,50401,Saint-Lô,0
+88,NO2,57501,Sarrebruck (ALL)-Forbach (partie française),0
+89,NO2,57402,Saint-Avold (partie française),5
+90,NO2,57115,Schœneck,0
+91,NO2,57401,Sarreguemines (partie française),0
+92,NO2,44601,Saint-Nazaire,1
+93,NO2,44217,Saint-Étienne-de-Montluc,0
+94,NO2,49501,Cholet,0
+95,NO2,72701,Le Mans,7
+96,NO2,44701,Nantes,7
+97,NO2,49701,Angers,3
+98,NO2,53501,Laval,2
+99,NO2,85128,La Châtaigneraie,0
+100,NO2,85501,La Roche-sur-Yon,0
+101,NO2,6701,Nice,18
+102,NO2,4401,Manosque,0
+103,NO2,5401,Gap,0
+104,NO2,755,Rouen,19
+105,NO2,27501,Évreux,0
+106,NO2,21701,Dijon,6
+107,NO2,89401,Sens,0
+108,NO2,58501,Nevers,0
+109,NO2,89402,Auxerre,0
+110,NO2,21204,Nuits-Saint-Georges,0
+111,NO2,559,Vienne,14
+112,NO2,160,Sablons,0
+113,NO2,38501,Bourgoin-Jallieu,0
+114,NO2,62502,Arras,0
+115,NO2,753,Saint-Étienne,15
+116,NO2,42502,Roanne,0
+117,NO2,42203,Pélussin,0
+118,NO2,54701,Nancy,5
+119,NO2,88401,Remiremont,0
+120,NO2,88501,Épinal,0
+121,NO2,55301,Bar-le-Duc,0
+122,NO2,54204,Ludres,0
+123,NO2,88206,Gérardmer,0
+124,NO2,54401,Dombasle-sur-Meurthe,0
+125,NO2,54402,Lunéville,0
+126,NO2,88201,Vittel,0
+127,NO2,54302,Neuves-Maisons,0
+128,NO2,33701,Bordeaux,8
+129,NO2,33114,Ambès,0
+130,NO2,64701,Pau,1
+131,NO2,751,Bayonne (partie française),0
+132,NO2,64302,Mourenx,0
+133,NO2,47501,Agen,0
+134,NO2,24501,Périgueux,0
+135,NO2,40501,Dax,0
+136,NO2,458,Marmande,0
+137,NO2,40401,Mont-de-Marsan,0
+138,NO2,71501,Chalon-sur-Saône,3
+139,NO2,71402,Montceau-les-Mines,0
+140,NO2,554,Mâcon,1
+141,NO2,71401,Le Creusot,0
+142,NO2,73601,Chambéry,0
+143,NO2,73204,Saint-Jean-de-Maurienne,0
+144,NO2,73101,Saint-Julien-Mont-Denis,0
+145,NO2,74301,Chamonix-Mont-Blanc,12
+146,NO2,73401,Albertville,0
+147,NO2,74601,Annecy,0
+148,NO2,653,Genève (SUI)-Annemasse (partie française),0
+149,NO2,465,Sallanches,0
+150,NO2,1501,Bourg-en-Bresse,0
+151,NO2,45701,Orléans,8
+152,NO2,45501,Montargis,0
+153,NO2,37701,Tours,8
+154,NO2,18501,Bourges,0
+155,NO2,18401,Vierzon,0
+156,NO2,28501,Chartres,0
+157,NO2,28401,Dreux,0
+158,NO2,356,Saint-Lubin-des-Joncherets-Nonancourt,0
+159,NO2,36501,Châteauroux,0
+160,NO2,41501,Blois,0
+161,NO2,87301,Saint-Junien,0
+162,NO2,87601,Limoges,2
+163,NO2,557,Brive-la-Gaillarde,0
+164,NO2,23301,Guéret,0
+165,NO2,19401,Tulle,0
+166,NO2,652,Valence,16
+167,NO2,26106,Dieulefit,0
+168,NO2,26501,Romans-sur-Isère,0
+169,NO2,9A701,Pointe-à-Pitre-Les Abymes,2
+170,NO2,9D603,Saint-Denis,0
+171,NO2,9D401,Sainte-Suzanne,0
+172,NO2,9D601,Saint-Pierre,0
+173,NO2,9B601,Fort-de-France,3
+174,NO2,9B402,Le Lamentin,0
+175,NO2,9B602,Le Robert,0
+176,NO2,2A501,Ajaccio,0
+177,NO2,2B501,Bastia,2
+178,NO2,2B401,Borgo,0
+179,NO2,55401,Verdun,0
+180,NO2,34303,Mèze,0
+181,NO2,30103,La Calmette,0
+182,NO2,51401,Épernay,0
+183,NO2,76403,Dieppe,1
+184,NO2,1402,Oyonnax,0
+185,NO2,9D501,Saint-Louis,0
+186,NO2,3401,Moulins,0
+187,NO2,17127,Marans,0
+188,NO2,51301,Vitry-le-François,0
+189,NO2,36301,Issoudun,0
+190,NO2,9D602,Saint-Paul,0
+191,NO2,9C601,Cayenne,0
+192,NO2,83502,Fréjus,0
+193,NO2,9D403,Saint-Leu,0
+194,NO2,9C401,Kourou,0
+195,NO2,76402,Lillebonne,0
+196,NO2,14210,Argences,0
+197,NO2,3502,Vichy,0
+198,NO2,35214,Guipry-Messac,0
+199,NO2,73103,Saint-Michel-de-Maurienne,0
+200,NO2,9A501,Basse-Terre,0
+201,NO2,39402,Dole,0
+202,NO2,12402,Rodez,0
+203,NO2,9F601,Mamoudzou,0
+204,NO2,82501,Montauban,0
+205,NO2,25201,Baume-les-Dames,0
+206,NO2,67501,Haguenau,0
+207,NO2,13305,Sausset-les-Pins-Carry-le-Rouet,0
+208,NO2,13304,Saint-Martin-de-Crau,0
+209,NO2,83101,Plan-d'Aups-Sainte-Baume,0
+210,NO2,59403,Cambrai,0
+211,NO2,38401,Vizille,0
+212,NO2,68204,Sainte-Marie-aux-Mines,0
+213,NO2,68402,Thann-Cernay,0
+214,NO2,68205,Altkirch,0
+215,NO2,60502,Compiègne,0
+216,NO2,29403,Morlaix,0
+217,NO2,14114,Ranville,0
+218,NO2,57121,Dieuze,0
+219,NO2,85136,L'Île-d'Yeu,0
+220,NO2,4203,Château-Arnoux-Saint-Auban,0
+221,NO2,42501,Saint-Just-Saint-Rambert,0
+222,NO2,33501,La Teste-de-Buch-Arcachon,0
+223,NO2,7401,Annonay,0
+224,NO2,2A102,Grosseto-Prugna,0
+225,O3,54405,Longwy (partie française),4
+226,O3,57601,Thionville,8
+227,O3,57701,Metz,10
+228,O3,54404,Pont-à-Mousson,4
+229,O3,759,Marseille-Aix-en-Provence,23
+230,O3,13501,Salon-de-Provence,20
+231,O3,13305,Sausset-les-Pins-Carry-le-Rouet,20
+232,O3,552,Arles,3
+233,O3,13302,Saint-Rémy-de-Provence,17
+234,O3,13101,Saintes-Maries-de-la-Mer,12
+235,O3,13304,Saint-Martin-de-Crau,7
+236,O3,83101,Plan-d'Aups-Sainte-Baume,23
+237,O3,757,Toulon,22
+238,O3,83401,Brignoles,21
+239,O3,754,Avignon,23
+240,O3,84303,Apt,21
+241,O3,851,Paris,6
+242,O3,95103,Saint-Martin-du-Tertre,5
+243,O3,77405,Fontainebleau,4
+244,O3,76203,Saint-Romain-de-Colbosc,0
+245,O3,76701,Le Havre,0
+246,O3,14402,Dives-sur-Mer,0
+247,O3,76402,Lillebonne,1
+248,O3,76118,Arelaune-en-Seine,0
+249,O3,59701,Valenciennes (partie française),4
+250,O3,756,Douai-Lens,4
+251,O3,59402,Saint-Amand-les-Eaux,4
+252,O3,59601,Maubeuge (partie française),2
+253,O3,59403,Cambrai,0
+254,O3,59211,Avesnes-sur-Helpe,3
+255,O3,59309,Caudry,0
+256,O3,63701,Clermont-Ferrand,7
+257,O3,43401,Le Puy-en-Velay,3
+258,O3,3501,Montluçon,3
+259,O3,15401,Aurillac,4
+260,O3,63304,Issoire,1
+261,O3,63401,Riom,0
+262,O3,34701,Montpellier,22
+263,O3,34401,Agde,11
+264,O3,461,Beaucaire,20
+265,O3,30601,Nîmes,20
+266,O3,30103,La Calmette,10
+267,O3,30501,Alès,8
+268,O3,66701,Perpignan,13
+269,O3,17601,La Rochelle,1
+270,O3,86601,Poitiers,3
+271,O3,16601,Angoulême,0
+272,O3,79109,Airvault,3
+273,O3,16401,Cognac,0
+274,O3,79501,Niort,1
+275,O3,59602,Dunkerque,0
+276,O3,62503,Calais,0
+277,O3,62501,Boulogne-sur-Mer,0
+278,O3,556,Saint-Omer,0
+279,O3,59702,Lille (partie française),2
+280,O3,59501,Armentières (partie française),1
+281,O3,752,Béthune,1
+282,O3,758,Toulouse,4
+283,O3,81502,Albi,2
+284,O3,65501,Tarbes,1
+285,O3,81501,Castres,3
+286,O3,31105,Montgiscard,3
+287,O3,65302,Lourdes,0
+288,O3,82501,Montauban,1
+289,O3,651,Montbéliard,7
+290,O3,558,Belfort,3
+291,O3,167,Châtenois-les-Forges,8
+292,O3,70401,Vesoul,4
+293,O3,51701,Reims,4
+294,O3,51501,Châlons-en-Champagne,2
+295,O3,10601,Troyes,3
+296,O3,460,Saint-Dizier,3
+297,O3,8501,Charleville-Mézières,0
+298,O3,38701,Grenoble,20
+299,O3,38502,Voiron,5
+300,O3,38302,Vif,10
+301,O3,38304,Crolles,5
+302,O3,67701,Strasbourg (partie française),16
+303,O3,67116,Mothern,17
+304,O3,68204,Sainte-Marie-aux-Mines,10
+305,O3,67210,Geispolsheim,14
+306,O3,68501,Colmar,22
+307,O3,68403,Bâle (SUI)-Saint-Louis (partie française),13
+308,O3,68701,Mulhouse,23
+309,O3,25601,Besançon,12
+310,O3,39201,Tavaux,6
+311,O3,39402,Dole,8
+312,O3,39401,Lons-le-Saunier,15
+313,O3,25401,Pontarlier,3
+314,O3,2501,Saint-Quentin,0
+315,O3,2302,Chauny,0
+316,O3,60601,Creil,3
+317,O3,80601,Amiens,0
+318,O3,60502,Compiègne,0
+319,O3,60501,Beauvais,0
+320,O3,80210,Albert,0
+321,O3,2401,Château-Thierry,0
+322,O3,2203,Hirson,2
+323,O3,80202,Roye,0
+324,O3,35701,Rennes,0
+325,O3,35214,Guipry-Messac,0
+326,O3,29701,Brest,0
+327,O3,56601,Lorient,0
+328,O3,56501,Vannes,0
+329,O3,29501,Quimper,0
+330,O3,22501,Saint-Brieuc,0
+331,O3,29403,Morlaix,0
+332,O3,35402,Saint-Malo,0
+333,O3,35401,Fougères,0
+334,O3,760,Lyon,20
+335,O3,69106,Pusignan,10
+336,O3,14701,Caen,0
+337,O3,14114,Ranville,0
+338,O3,14211,Ouistreham,0
+339,O3,14401,Lisieux,0
+340,O3,464,Alençon,0
+341,O3,50501,Cherbourg-en-Cotentin,0
+342,O3,50401,Saint-Lô,0
+343,O3,57402,Saint-Avold (partie française),6
+344,O3,57112,Porcelette,0
+345,O3,57501,Sarrebruck (ALL)-Forbach (partie française),12
+346,O3,57401,Sarreguemines (partie française),3
+347,O3,57121,Dieuze,5
+348,O3,57115,Schœneck,7
+349,O3,44701,Nantes,3
+350,O3,49501,Cholet,2
+351,O3,72701,Le Mans,4
+352,O3,49701,Angers,6
+353,O3,85501,La Roche-sur-Yon,1
+354,O3,44601,Saint-Nazaire,3
+355,O3,53501,Laval,0
+356,O3,85128,La Châtaigneraie,2
+357,O3,72110,Spay,1
+358,O3,85136,L'Île-d'Yeu,0
+359,O3,6701,Nice,23
+360,O3,4203,Château-Arnoux-Saint-Auban,12
+361,O3,4401,Manosque,21
+362,O3,5401,Gap,2
+363,O3,5301,Briançon,4
+364,O3,6501,Menton-Monaco (partie française),5
+365,O3,27402,Louviers,0
+366,O3,755,Rouen,0
+367,O3,27501,Évreux,1
+368,O3,76119,Hautot-sur-Mer,0
+369,O3,21701,Dijon,10
+370,O3,89401,Sens,0
+371,O3,58501,Nevers,0
+372,O3,89402,Auxerre,0
+373,O3,559,Vienne,16
+374,O3,160,Sablons,19
+375,O3,38104,Faramans,10
+376,O3,38501,Bourgoin-Jallieu,3
+377,O3,62502,Arras,3
+378,O3,753,Saint-Étienne,18
+379,O3,42502,Roanne,3
+380,O3,42501,Saint-Just-Saint-Rambert,8
+381,O3,54701,Nancy,6
+382,O3,88401,Remiremont,0
+383,O3,88501,Épinal,3
+384,O3,55301,Bar-le-Duc,0
+385,O3,54204,Ludres,3
+386,O3,88206,Gérardmer,19
+387,O3,54401,Dombasle-sur-Meurthe,2
+388,O3,54402,Lunéville,0
+389,O3,33701,Bordeaux,5
+390,O3,33114,Ambès,4
+391,O3,64701,Pau,2
+392,O3,751,Bayonne (partie française),0
+393,O3,47501,Agen,3
+394,O3,24501,Périgueux,4
+395,O3,33501,La Teste-de-Buch-Arcachon,0
+396,O3,40501,Dax,0
+397,O3,71501,Chalon-sur-Saône,4
+398,O3,554,Mâcon,13
+399,O3,71402,Montceau-les-Mines,3
+400,O3,71401,Le Creusot,5
+401,O3,73601,Chambéry,15
+402,O3,73204,Saint-Jean-de-Maurienne,5
+403,O3,74301,Chamonix-Mont-Blanc,4
+404,O3,73401,Albertville,8
+405,O3,74601,Annecy,12
+406,O3,653,Genève (SUI)-Annemasse (partie française),14
+407,O3,465,Sallanches,0
+408,O3,1501,Bourg-en-Bresse,8
+409,O3,45701,Orléans,6
+410,O3,45501,Montargis,2
+411,O3,37701,Tours,6
+412,O3,37103,Chanceaux-sur-Choisille,0
+413,O3,18501,Bourges,4
+414,O3,18401,Vierzon,0
+415,O3,28501,Chartres,4
+416,O3,28401,Dreux,0
+417,O3,36501,Châteauroux,3
+418,O3,41501,Blois,3
+419,O3,87301,Saint-Junien,0
+420,O3,87601,Limoges,0
+421,O3,557,Brive-la-Gaillarde,1
+422,O3,23301,Guéret,0
+423,O3,19401,Tulle,0
+424,O3,652,Valence,22
+425,O3,7401,Annonay,9
+426,O3,26106,Dieulefit,11
+427,O3,26501,Romans-sur-Isère,8
+428,O3,9A701,Pointe-à-Pitre-Les Abymes,0
+429,O3,9D603,Saint-Denis,0
+430,O3,9D601,Saint-Pierre,0
+431,O3,9B601,Fort-de-France,0
+432,O3,9C601,Cayenne,0
+433,O3,2A501,Ajaccio,1
+434,O3,2B501,Bastia,6
+435,O3,2B401,Borgo,3
+436,O3,76401,Fécamp,0
+437,O3,42203,Pélussin,4
+438,O3,9D401,Sainte-Suzanne,0
+439,O3,13210,Port-Saint-Louis-du-Rhône,1
+440,O3,51301,Vitry-le-François,0
+441,O3,78402,Rambouillet,1
+442,O3,3401,Moulins,1
+443,O3,12401,Millau,0
+444,O3,9401,Pamiers,0
+445,O3,9D602,Saint-Paul,0
+446,O3,9B402,Le Lamentin,0
+447,O3,83502,Fréjus,7
+448,O3,9B602,Le Robert,0
+449,O3,3502,Vichy,0
+450,O3,35216,Mordelles,0
+451,O3,9A501,Basse-Terre,0
+452,O3,12402,Rodez,0
+453,O3,454,Honfleur,0
+454,O3,76403,Dieppe,0
+455,O3,67501,Haguenau,1
+456,PM10,54405,Longwy (partie française),0
+457,PM10,57601,Thionville,2
+458,PM10,57701,Metz,0
+459,PM10,54404,Pont-à-Mousson,0
+460,PM10,759,Marseille-Aix-en-Provence,8
+461,PM10,13210,Port-Saint-Louis-du-Rhône,1
+462,PM10,13501,Salon-de-Provence,2
+463,PM10,552,Arles,1
+464,PM10,757,Toulon,6
+465,PM10,754,Avignon,5
+466,PM10,851,Paris,13
+467,PM10,77405,Fontainebleau,0
+468,PM10,76701,Le Havre,3
+469,PM10,76402,Lillebonne,0
+470,PM10,76118,Arelaune-en-Seine,0
+471,PM10,59701,Valenciennes (partie française),5
+472,PM10,756,Douai-Lens,4
+473,PM10,59402,Saint-Amand-les-Eaux,1
+474,PM10,59601,Maubeuge (partie française),1
+475,PM10,59403,Cambrai,1
+476,PM10,63701,Clermont-Ferrand,0
+477,PM10,3501,Montluçon,0
+478,PM10,15401,Aurillac,0
+479,PM10,43401,Le Puy-en-Velay,0
+480,PM10,63116,Saint-Georges-de-Mons,0
+481,PM10,34701,Montpellier,0
+482,PM10,551,Lunel,0
+483,PM10,30401,Bagnols-sur-Cèze,0
+484,PM10,30201,Saint-Laurent-des-Arbres,0
+485,PM10,30601,Nîmes,0
+486,PM10,66701,Perpignan,0
+487,PM10,17601,La Rochelle,0
+488,PM10,86601,Poitiers,0
+489,PM10,79109,Airvault,0
+490,PM10,16601,Angoulême,0
+491,PM10,16401,Cognac,0
+492,PM10,79501,Niort,0
+493,PM10,59602,Dunkerque,4
+494,PM10,62503,Calais,2
+495,PM10,62501,Boulogne-sur-Mer,2
+496,PM10,556,Saint-Omer,3
+497,PM10,59702,Lille (partie française),5
+498,PM10,59501,Armentières (partie française),2
+499,PM10,752,Béthune,2
+500,PM10,758,Toulouse,0
+501,PM10,81502,Albi,0
+502,PM10,65501,Tarbes,0
+503,PM10,81501,Castres,0
+504,PM10,65302,Lourdes,0
+505,PM10,31123,Bessières,0
+506,PM10,651,Montbéliard,2
+507,PM10,558,Belfort,1
+508,PM10,70401,Vesoul,0
+509,PM10,51701,Reims,2
+510,PM10,51501,Châlons-en-Champagne,0
+511,PM10,10601,Troyes,0
+512,PM10,460,Saint-Dizier,0
+513,PM10,8501,Charleville-Mézières,0
+514,PM10,38701,Grenoble,7
+515,PM10,38502,Voiron,0
+516,PM10,38302,Vif,0
+517,PM10,38304,Crolles,0
+518,PM10,67116,Mothern,0
+519,PM10,67701,Strasbourg (partie française),6
+520,PM10,68501,Colmar,1
+521,PM10,68701,Mulhouse,1
+522,PM10,68403,Bâle (SUI)-Saint-Louis (partie française),0
+523,PM10,25601,Besançon,0
+524,PM10,39402,Dole,0
+525,PM10,39401,Lons-le-Saunier,0
+526,PM10,60601,Creil,4
+527,PM10,60502,Compiègne,0
+528,PM10,80601,Amiens,1
+529,PM10,2501,Saint-Quentin,0
+530,PM10,2302,Chauny,0
+531,PM10,60501,Beauvais,0
+532,PM10,35701,Rennes,0
+533,PM10,35214,Guipry-Messac,0
+534,PM10,29701,Brest,0
+535,PM10,56601,Lorient,0
+536,PM10,29501,Quimper,0
+537,PM10,22501,Saint-Brieuc,0
+538,PM10,760,Lyon,8
+539,PM10,69106,Pusignan,0
+540,PM10,14701,Caen,0
+541,PM10,14401,Lisieux,0
+542,PM10,464,Alençon,0
+543,PM10,50501,Cherbourg-en-Cotentin,0
+544,PM10,50401,Saint-Lô,0
+545,PM10,57402,Saint-Avold (partie française),0
+546,PM10,57501,Sarrebruck (ALL)-Forbach (partie française),0
+547,PM10,57401,Sarreguemines (partie française),0
+548,PM10,57115,Schœneck,0
+549,PM10,44217,Saint-Étienne-de-Montluc,0
+550,PM10,49501,Cholet,0
+551,PM10,44701,Nantes,0
+552,PM10,44601,Saint-Nazaire,0
+553,PM10,49701,Angers,0
+554,PM10,53501,Laval,0
+555,PM10,85128,La Châtaigneraie,0
+556,PM10,85501,La Roche-sur-Yon,0
+557,PM10,72701,Le Mans,0
+558,PM10,6701,Nice,5
+559,PM10,5401,Gap,1
+560,PM10,755,Rouen,1
+561,PM10,27501,Évreux,0
+562,PM10,76119,Hautot-sur-Mer,0
+563,PM10,27402,Louviers,0
+564,PM10,21701,Dijon,1
+565,PM10,89401,Sens,0
+566,PM10,58501,Nevers,0
+567,PM10,89402,Auxerre,0
+568,PM10,21204,Nuits-Saint-Georges,0
+569,PM10,559,Vienne,2
+570,PM10,38501,Bourgoin-Jallieu,0
+571,PM10,62502,Arras,2
+572,PM10,753,Saint-Étienne,2
+573,PM10,42502,Roanne,0
+574,PM10,55301,Bar-le-Duc,0
+575,PM10,54204,Ludres,0
+576,PM10,88201,Vittel,0
+577,PM10,54302,Neuves-Maisons,1
+578,PM10,54701,Nancy,0
+579,PM10,33701,Bordeaux,3
+580,PM10,64701,Pau,0
+581,PM10,751,Bayonne (partie française),1
+582,PM10,40112,Tartas,0
+583,PM10,47501,Agen,0
+584,PM10,24501,Périgueux,0
+585,PM10,33501,La Teste-de-Buch-Arcachon,0
+586,PM10,40501,Dax,0
+587,PM10,71501,Chalon-sur-Saône,0
+588,PM10,71402,Montceau-les-Mines,0
+589,PM10,554,Mâcon,0
+590,PM10,71401,Le Creusot,0
+591,PM10,73601,Chambéry,0
+592,PM10,73204,Saint-Jean-de-Maurienne,0
+593,PM10,73101,Saint-Julien-Mont-Denis,0
+594,PM10,74301,Chamonix-Mont-Blanc,1
+595,PM10,73401,Albertville,0
+596,PM10,74601,Annecy,3
+597,PM10,653,Genève (SUI)-Annemasse (partie française),2
+598,PM10,465,Sallanches,10
+599,PM10,1501,Bourg-en-Bresse,0
+600,PM10,45701,Orléans,0
+601,PM10,45501,Montargis,0
+602,PM10,37701,Tours,0
+603,PM10,18501,Bourges,0
+604,PM10,18401,Vierzon,0
+605,PM10,28501,Chartres,0
+606,PM10,28401,Dreux,0
+607,PM10,36501,Châteauroux,0
+608,PM10,41501,Blois,0
+609,PM10,87601,Limoges,0
+610,PM10,87301,Saint-Junien,0
+611,PM10,557,Brive-la-Gaillarde,0
+612,PM10,23301,Guéret,0
+613,PM10,19401,Tulle,0
+614,PM10,652,Valence,2
+615,PM10,7401,Annonay,0
+616,PM10,26106,Dieulefit,0
+617,PM10,26501,Romans-sur-Isère,0
+618,PM10,9D603,Saint-Denis,1
+619,PM10,9D602,Saint-Paul,0
+620,PM10,9D601,Saint-Pierre,5
+621,PM10,9B601,Fort-de-France,11
+622,PM10,9B402,Le Lamentin,4
+623,PM10,2A501,Ajaccio,0
+624,PM10,2B501,Bastia,0
+625,PM10,2B401,Borgo,0
+626,PM10,42203,Pélussin,0
+627,PM10,88501,Épinal,0
+628,PM10,458,Marmande,0
+629,PM10,40401,Mont-de-Marsan,0
+630,PM10,356,Saint-Lubin-des-Joncherets-Nonancourt,0
+631,PM10,9D401,Sainte-Suzanne,0
+632,PM10,9D405,Saint-Joseph,0
+633,PM10,9B602,Le Robert,3
+634,PM10,77402,Coulommiers,0
+635,PM10,63304,Issoire,0
+636,PM10,34303,Mèze,0
+637,PM10,51401,Épernay,0
+638,PM10,56501,Vannes,0
+639,PM10,4401,Manosque,0
+640,PM10,76403,Dieppe,0
+641,PM10,1402,Oyonnax,0
+642,PM10,9D501,Saint-Louis,0
+643,PM10,78402,Rambouillet,0
+644,PM10,30103,La Calmette,0
+645,PM10,17127,Marans,0
+646,PM10,9A701,Pointe-à-Pitre-Les Abymes,2
+647,PM10,14210,Argences,0
+648,PM10,9D403,Saint-Leu,0
+649,PM10,9C601,Cayenne,2
+650,PM10,25201,Baume-les-Dames,0
+651,PM10,83401,Brignoles,0
+652,PM10,83502,Fréjus,0
+653,PM10,3401,Moulins,0
+654,PM10,3502,Vichy,0
+655,PM10,63401,Riom,0
+656,PM10,35402,Saint-Malo,0
+657,PM10,73103,Saint-Michel-de-Maurienne,0
+658,PM10,9A501,Basse-Terre,1
+659,PM10,9C401,Kourou,0
+660,PM10,454,Honfleur,0
+661,PM10,12402,Rodez,0
+662,PM10,9F601,Mamoudzou,2
+663,PM10,82501,Montauban,0
+664,PM2_5,57701,Metz,0
+665,PM2_5,57601,Thionville,0
+666,PM2_5,759,Marseille-Aix-en-Provence,1
+667,PM2_5,757,Toulon,0
+668,PM2_5,754,Avignon,0
+669,PM2_5,851,Paris,4
+670,PM2_5,76701,Le Havre,0
+671,PM2_5,76118,Arelaune-en-Seine,0
+672,PM2_5,59701,Valenciennes (partie française),0
+673,PM2_5,756,Douai-Lens,1
+674,PM2_5,59403,Cambrai,0
+675,PM2_5,63701,Clermont-Ferrand,0
+676,PM2_5,34701,Montpellier,0
+677,PM2_5,30201,Saint-Laurent-des-Arbres,0
+678,PM2_5,30601,Nîmes,0
+679,PM2_5,66701,Perpignan,0
+680,PM2_5,17601,La Rochelle,0
+681,PM2_5,86601,Poitiers,0
+682,PM2_5,79501,Niort,0
+683,PM2_5,16601,Angoulême,0
+684,PM2_5,59602,Dunkerque,0
+685,PM2_5,62503,Calais,0
+686,PM2_5,59702,Lille (partie française),0
+687,PM2_5,758,Toulouse,0
+688,PM2_5,65302,Lourdes,0
+689,PM2_5,651,Montbéliard,0
+690,PM2_5,51701,Reims,1
+691,PM2_5,10601,Troyes,0
+692,PM2_5,460,Saint-Dizier,0
+693,PM2_5,38701,Grenoble,0
+694,PM2_5,67701,Strasbourg (partie française),0
+695,PM2_5,68701,Mulhouse,0
+696,PM2_5,25601,Besançon,0
+697,PM2_5,39401,Lons-le-Saunier,0
+698,PM2_5,2501,Saint-Quentin,0
+699,PM2_5,60601,Creil,0
+700,PM2_5,80601,Amiens,0
+701,PM2_5,35701,Rennes,0
+702,PM2_5,35214,Guipry-Messac,0
+703,PM2_5,29701,Brest,0
+704,PM2_5,56601,Lorient,0
+705,PM2_5,760,Lyon,3
+706,PM2_5,14701,Caen,0
+707,PM2_5,57501,Sarrebruck (ALL)-Forbach (partie française),0
+708,PM2_5,44601,Saint-Nazaire,0
+709,PM2_5,49701,Angers,0
+710,PM2_5,85128,La Châtaigneraie,0
+711,PM2_5,44701,Nantes,0
+712,PM2_5,72701,Le Mans,0
+713,PM2_5,6701,Nice,0
+714,PM2_5,5401,Gap,0
+715,PM2_5,755,Rouen,0
+716,PM2_5,21701,Dijon,0
+717,PM2_5,559,Vienne,0
+718,PM2_5,752,Béthune,0
+719,PM2_5,753,Saint-Étienne,0
+720,PM2_5,54701,Nancy,0
+721,PM2_5,33701,Bordeaux,0
+722,PM2_5,64701,Pau,0
+723,PM2_5,751,Bayonne (partie française),0
+724,PM2_5,40501,Dax,0
+725,PM2_5,458,Marmande,0
+726,PM2_5,40401,Mont-de-Marsan,0
+727,PM2_5,71501,Chalon-sur-Saône,0
+728,PM2_5,73601,Chambéry,0
+729,PM2_5,74601,Annecy,0
+730,PM2_5,653,Genève (SUI)-Annemasse (partie française),0
+731,PM2_5,45701,Orléans,0
+732,PM2_5,37701,Tours,0
+733,PM2_5,28501,Chartres,0
+734,PM2_5,87601,Limoges,0
+735,PM2_5,652,Valence,0
+736,PM2_5,9D603,Saint-Denis,0
+737,PM2_5,9D405,Saint-Joseph,0
+738,PM2_5,9B601,Fort-de-France,0
+739,PM2_5,2B501,Bastia,0
+740,PM2_5,55401,Verdun,0
+741,PM2_5,95103,Saint-Martin-du-Tertre,0
+742,PM2_5,77405,Fontainebleau,0
+743,PM2_5,551,Lunel,0
+744,PM2_5,34303,Mèze,0
+745,PM2_5,60501,Beauvais,0
+746,PM2_5,4401,Manosque,0
+747,PM2_5,54402,Lunéville,0
+748,PM2_5,71401,Le Creusot,0
+749,PM2_5,18401,Vierzon,0
+750,PM2_5,19401,Tulle,0
+751,PM2_5,9D601,Saint-Pierre,0
+752,PM2_5,78402,Rambouillet,0
+753,PM2_5,81502,Albi,0
+754,PM2_5,51401,Épernay,0
+755,PM2_5,56501,Vannes,0
+756,PM2_5,76403,Dieppe,0
+757,PM2_5,27501,Évreux,0
+758,PM2_5,89402,Auxerre,0
+759,PM2_5,36301,Issoudun,0
+760,PM2_5,14210,Argences,0
+761,PM2_5,465,Sallanches,0
+762,PM2_5,9D602,Saint-Paul,0
+763,PM2_5,25201,Baume-les-Dames,0
+764,PM2_5,45501,Montargis,0
+765,PM2_5,83502,Fréjus,0
+766,PM2_5,15401,Aurillac,0
+767,PM2_5,62501,Boulogne-sur-Mer,0
+768,PM2_5,9A701,Pointe-à-Pitre-Les Abymes,0
+769,PM2_5,9B602,Le Robert,0
+770,PM2_5,24501,Périgueux,0
+771,PM2_5,73401,Albertville,0
+772,PM2_5,1501,Bourg-en-Bresse,0
+773,PM2_5,2A501,Ajaccio,0
+774,PM2_5,41501,Blois,0
+775,PM2_5,9B402,Le Lamentin,0
+776,PM2_5,9C601,Cayenne,0
+777,PM2_5,65501,Tarbes,0
+778,PM2_5,3401,Moulins,0
+779,PM2_5,3501,Montluçon,0
+780,PM2_5,38304,Crolles,0
+781,PM2_5,26501,Romans-sur-Isère,0
+782,PM2_5,13501,Salon-de-Provence,0
+783,PM2_5,12402,Rodez,0
+784,PM2_5,35402,Saint-Malo,0
+785,PM2_5,69106,Pusignan,0
+786,PM2_5,18501,Bourges,0
+787,PM2_5,28401,Dreux,0
+788,PM2_5,36501,Châteauroux,0
+789,PM2_5,82501,Montauban,0
+790,PM2_5,552,Arles,0
+791,PM2_5,77402,Coulommiers,0
+792,PM2_5,22501,Saint-Brieuc,0
+793,PM2_5,14401,Lisieux,0
+794,PM2_5,464,Alençon,0
+795,PM2_5,50501,Cherbourg-en-Cotentin,0
+796,PM2_5,71402,Montceau-les-Mines,0
+797,PM2_5,9D403,Saint-Leu,0
+798,PM2_5,9C401,Kourou,0
+799,PM2_5,67501,Haguenau,0
+800,PM2_5,9F601,Mamoudzou,0

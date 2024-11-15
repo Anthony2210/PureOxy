@@ -1,0 +1,165 @@
+/* Style général pour la carte */
+#map {
+    height: 500px;
+    width: 100%;
+    margin: 20px auto;
+    border: 3px solid #2d6a4f; /* Bordure verte foncée autour de la carte */
+    border-radius: 12px; /* Bordure arrondie pour un effet plus moderne */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+/* Style pour la fenêtre flottante (popup) */
+.popup-content {
+    font-size: 1.1em;
+    line-height: 1.6;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'League Spartan', sans-serif;
+}
+
+.popup-content strong {
+    color: darkolivegreen;
+}
+
+.popup-content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.popup-content li {
+    background-color: #f9f9e9;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content li strong {
+    color: darkolivegreen;
+}
+
+/* Ajustement des contrôles de la carte */
+.leaflet-control {
+    margin-right: 15px;
+    margin-top: 10px;
+}
+/* Panneau d'informations pour afficher les détails d'une ville */
+#info-panel {
+    position: absolute;
+    top: 60px; /* Ajustement de la position en fonction de la page */
+    right: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    z-index: 1000;
+    display: none; /* Par défaut, on masque le panneau */
+}
+
+#info-panel.visible {
+    display: block; /* Affichage du panneau lorsqu'il devient visible */
+}
+
+#info-panel h3 {
+    margin-top: 0;
+}
+
+#info-panel ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#info-panel li {
+    margin-bottom: 8px;
+}
+
+#info-panel canvas {
+    width: 100%;
+    height: 200px;
+}
+
+/* Style pour le sélecteur de date */
+#date-selector {
+    margin-top: 10px;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style pour l'indicateur de variation */
+.pollutant-variation {
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.pollutant-up {
+    color: green; /* Augmentation */
+}
+
+.pollutant-down {
+    color: red; /* Diminution */
+}
+#date-selector {
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#details-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#details-villes {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+canvas {
+    max-width: 100%;
+    height: 400px;
+}
+
+#see-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#see-more:hover {
+    background-color: darkolivegreen;
+    color : white;
+}
+/* Lien voir plus */
+#see-more {
+    color: darkolivegreen;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* Ajouter une ombre et une bordure aux marqueurs */
+.leaflet-marker-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3)); /* Ombre douce pour un effet 3D */
+    transition: transform 0.2s ease-in-out; /* Animation au survol */
+}
+
+.leaflet-marker-icon:hover {
+    transform: scale(1.1); /* Zoom léger au survol */
+
+}

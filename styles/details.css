@@ -1,0 +1,258 @@
+/* details.css */
+
+/* Styles généraux */
+#details-page {
+    font-family: 'League Spartan', sans-serif;
+    background-color: #F9F9E9; /* Beige clair */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Titres */
+#details-page h1, #details-page h2 {
+    color: #6B8E23; /* Vert olive */
+    margin-bottom: 20px;
+}
+
+#details-page h1 {
+    font-size: 2.5em;
+    text-align: center;
+}
+
+#details-page h2 {
+    font-size: 2em;
+    margin-top: 40px;
+}
+
+/* Conteneur principal */
+#details-page.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Section d'introduction */
+#intro {
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 40px;
+    border: 1px solid #2d6a4f;
+}
+
+#intro p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+/* Sélecteur d'arrondissement */
+#arrondissement-select {
+    width: 300px;
+    margin: 0 auto 30px;
+    display: block;
+    padding: 10px;
+    font-size: 1em;
+    background-color: #fff;
+    border: 1px solid #6B8E23; /* Vert olive */
+    border-radius: 4px;
+    color: #333;
+}
+
+/* Styles pour les tableaux */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table th {
+    background-color: darkolivegreen;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 0; /* Garde l'en-tête visible lors du défilement */
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond pour les lignes paires */
+}
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Couleur au survol */
+}
+
+.table caption {
+    caption-side: top;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: darkolivegreen;
+    font-weight: bold;
+}
+
+/* Section des graphiques */
+#emissionsChart {
+    max-width: 100%;
+    height: auto;
+    margin: 40px auto;
+    display: block;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+/* Boutons d'appel à l'action */
+#cta {
+    text-align: center;
+    background-color: #556b2f;
+    padding: 40px 0;
+    color: #f9f9e9;
+}
+
+#cta h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#cta .button {
+    background-color: #f9f9e9;
+    color: #6b8e23;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px;
+}
+
+#cta .button:hover {
+    background-color: #e3e3d9;
+    transform: translateY(-3px);
+}
+
+/* Effets */
+#effets {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#effets p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+}
+
+
+/* Section de l'IQA */
+#details-page #iqa h2 {
+    color: #6B8E23;
+    margin-bottom: 20px;
+}
+
+#details-page #iqa p {
+    font-size: 1.2em;
+}
+
+/* Icône de favori */
+.favorite-icon {
+    font-size: 1.2em;
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e74c3c;
+}
+
+.favorite-icon .fas.fa-heart {
+    color: #e74c3c;
+}
+
+.favorite-icon .far.fa-heart {
+    color: #ccc;
+}
+
+.favorite-icon:hover {
+    opacity: 0.7;
+}
+.error-message {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.nav-tabs .nav-link {
+    color: #6b8e23;
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #6b8e23;
+    color: #fff;
+}
+#city-not-found {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+#city-not-found h1 {
+    font-size: 2em;
+    color: #e74c3c; /* Couleur rouge pour indiquer une erreur */
+    margin-bottom: 20px;
+}
+
+#city-not-found p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+#city-not-found .button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #6b8e23;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+#city-not-found .button:hover {
+    background-color: #556b2f;
+}
+#city-not-found ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#city-not-found li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+#city-not-found a {
+    color: darkolivegreen;
+    text-decoration: none;
+}
+
+#city-not-found a:hover {
+    text-decoration: underline;
+}
+
