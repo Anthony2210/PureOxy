@@ -18,17 +18,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_comment'])) {
     if (isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
         $content = trim($_POST['content']);
-        $parent_id = isset($_POST['parent_id']) ? $_POST['parent_id'] : NULL;
+        // Si parent_id est défini (si c'est une réponse à un autre commentaire), on le récupère, sinon on le définit à NULL
+        $parent_id = isset($_POST['parent_id']) && $_POST['parent_id'] != '' ? $_POST['parent_id'] : NULL;
 
+        // Si le commentaire n'est pas vide
         if (!empty($content)) {
+            // Si parent_id est défini (c'est une réponse), vérifier si le parent existe
+            if ($parent_id) {
+                // Vérifier que le commentaire parent existe
+                $stmt_check_parent = $conn->prepare("SELECT id FROM commentaire WHERE id = ?");
+                $stmt_check_parent->bind_param("i", $parent_id);
+                $stmt_check_parent->execute();
+                $result = $stmt_check_parent->get_result();
+
+                // Si le parent n'existe pas
+                if ($result->num_rows == 0) {
+                    echo '<p>Erreur : le commentaire parent n\'existe pas.</p>';
+                    exit; // Arrêter l'exécution si le parent n'existe pas
+                }
+            }
+
+            // Insérer le commentaire (que ce soit un commentaire ou une réponse)
             $stmt = $conn->prepare("INSERT INTO commentaire (user_id, page, parent_id, content) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("isis", $user_id, $page, $parent_id, $content);
             $stmt->execute();
+
+            // Optionnel : Message de confirmation
+            echo '<p>Votre commentaire a été ajouté avec succès !</p>';
+        } else {
+            echo '<p>Le contenu du commentaire ne peut pas être vide.</p>';
         }
     } else {
         echo '<p>Vous devez être connecté pour poster un commentaire.</p>';
     }
 }
+
+
+
+
 
 // Traitement des likes
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['like_comment'])) {
