@@ -42987,6 +42987,36 @@ ALTER TABLE `indices_qa_commune_idf_filtree_id`
 --
 ALTER TABLE `population_francaise_par_departement_2018`
   ADD CONSTRAINT `fk_pollution_population` FOREIGN KEY (`id_pollution`) REFERENCES `pollution_villes` (`Id_pollution`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Structure de la table `commentaire`
+--
+
+CREATE TABLE `commentaire` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `page` varchar(255) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `content` text NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `likes` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `parent_id` (`parent_id`),
+  CONSTRAINT `commentaire_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `commentaire_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `commentaire` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `commentaire` (`user_id`, `page`, `parent_id`, `content`, `created_at`, `likes`) VALUES
+(6, 'details.php?ville=Montpellier', NULL, 'useful!', '2024-11-16 18:34:58', 0),
+(6, 'details.php?ville=Montpellier', 12, 'yea thanks', '2024-11-16 18:35:10', 0);
+
+--
+-- AUTO_INCREMENT pour la table `commentaire`
+--
+ALTER TABLE `commentaire`
+  AUTO_INCREMENT=14;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
