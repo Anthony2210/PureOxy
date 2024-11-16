@@ -76,6 +76,10 @@ if (!$articles_displayed) {
     </div>
 </div>
 </main>
+<!-- Bouton "Revenir vers le haut" -->
+<button id="backToTop">Revenir vers le haut</button>
+<script src="../script/backtotop.js"></script>
+
 <?php
 include '../includes/footer.php';
 ?>

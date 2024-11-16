@@ -1134,3 +1134,22 @@ h2{
 .back-button {
     margin-bottom: 20px; /* Un peu plus d'espace en bas */
 }
+/* Bouton "Revenir vers le haut" */
+#backToTop {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #425129;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#backToTop:hover {
+    background-color: #0056b3;
+}
