@@ -1,118 +1,70 @@
 /* ========================================================================
-   articles.css
-   Styles pour la grille des articles
+   Articles - Qualité de l'air et Lutte contre la pollution
    ======================================================================== */
 
-/**
- * @section Articles Styles
- * Styles pour la grille des articles et le détail des articles.
- */
-
-/**
- * Articles Grid
- */
-.articles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Trois colonnes */
-    gap: 20px; /* Espace entre les cartes */
-    padding: 20px;
-}
-
-.article-card {
-    background-color: #fff;
-    border: 1px solid #6b8e23;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.article-card:hover {
-    transform: translateY(-5px);
-}
-
-.article-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.article-content {
-    padding: 15px;
-}
-
-.article-content h3 {
-    font-size: 1.5em;
-    color: #4c5f2d;
-    margin-bottom: 10px;
-}
-
-.article-content p {
-    color: #6b8e23;
-    font-size: 1em;
-}
-/**
- * Detail Article Wrapper
- * Conteneur spécifique de l'article pour éviter les conflits avec les autres styles.
- */
-.detail-article-wrapper {
-    width: 100%;
+/* Wrapper principal */
+.content-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    line-height: 1.8;
-    font-family: 'Open Sans', sans-serif;
-}
-
-/**
- * Titre principal de l'article.
- */
-.detail-article-wrapper h2 {
-    font-size: 2.2em;
-    color: #4c5f2d;
-    text-align: center;
-    font-weight: 700;
-    text-decoration: underline;
-}
-
-/**
- * Image de l'article.
- */
-.detail-article-wrapper img {
-    display: block;
-    max-width: 90%;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/**
- * Detail Article Content
- * Contenu de l'article.
- */
-.detail-article-content {
-    font-size: 1.2em;
+    padding: 20px;
     color: #333;
-    text-align: justify;
-    line-height: 1.8;
+    border-radius: 8px;
+}
+
+/* Section principale */
+.content-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.content-section h2,
+.content-section h3 {
+    color: #4c5f2d;
+    margin-bottom: 15px;
+}
+
+.content-section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
     margin-bottom: 20px;
 }
 
-/**
- * Date de publication de l'article.
- */
-.detail-article-wrapper p em {
-    display: block;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    color: #6b8e23;
-    font-style: normal;
-    text-align: center;
+.content-section ul {
+    margin: 20px 0;
+    padding-left: 40px;
 }
 
+.content-section ul li {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Images */
+.image-wrapper {
+    text-align: center;
+    width: 75%;
+}
+
+.image-wrapper img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Appel à l'action */
+#cta {
+    text-align: center;
+    margin: 40px 0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#cta h2 {
+    font-size: 1.8em;
+    color: #4c5f2d;
+    margin-bottom: 20px;
+}

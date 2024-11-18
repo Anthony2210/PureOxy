@@ -1,0 +1,83 @@
+/* ========================================================================
+   contact.css
+   Styles pour la page de contact
+   ======================================================================== */
+
+/**
+ * Section principale
+ */
+#contact {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    color: #333;
+}
+
+#contact h2 {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #4c5f2d;
+}
+
+/**
+ * Messages de feedback (succès ou erreur)
+ */
+.success-message {
+    text-align: center;
+    color: #4caf50;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    text-align: center;
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/**
+ * Formulaire de contact
+ */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #6b8e23;
+}
+
+.input-group input,
+.input-group textarea {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: #6b8e23;
+    box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+}
+

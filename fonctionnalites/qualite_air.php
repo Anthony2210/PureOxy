@@ -30,7 +30,22 @@ require '../bd/bd.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Qualité de l'air et effets sur la santé</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap">
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lien Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Styles de Base -->
+    <link rel="stylesheet" href="../styles/base.css">
+    <!-- Styles pour l'En-tête -->
+    <link rel="stylesheet" href="../styles/includes.css">
+    <!-- Styles pour la page à propos -->
+    <link rel="stylesheet" href="../styles/articles.css">
+    <!-- Styles pour les commentaires -->
+    <link rel="stylesheet" href="../styles/commentaire.css">
+    <!-- Styles pour les Boutons -->
+    <link rel="stylesheet" href="../styles/boutons.css">
+    <!-- Script de validation de formulaire -->
+    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
 <?php

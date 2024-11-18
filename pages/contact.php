@@ -145,8 +145,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Contactez-nous</title>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
-</head>
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Styles de Base -->
+    <link rel="stylesheet" href="../styles/base.css">
+    <!-- Styles pour l'En-tête -->
+    <link rel="stylesheet" href="../styles/includes.css">
+    <!-- Styles pour la page contact     -->
+    <link rel="stylesheet" href="../styles/contact.css">
+    <!-- Styles pour les Boutons -->
+    <link rel="stylesheet" href="../styles/boutons.css">
+    <!-- Script de validation de formulaire -->
+    <script src="../script/erreur_formulaire.js"></script></head>
 <body>
 <?php include '../includes/header.php'; ?>
 
@@ -174,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="message">Votre message (500 caractères max)</label>
             <textarea id="message" name="message" placeholder="Votre message (500 caractères max)" maxlength="500" required><?php echo htmlspecialchars($message); ?></textarea>
         </div>
-        <button type="submit">Envoyer</button>
+        <button id=envoyer type="submit">Envoyer</button>
     </form>
 </section>
 

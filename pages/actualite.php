@@ -37,7 +37,7 @@ include '../includes/header.php';
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
     <!-- Styles pour la page d'actualité -->
-    <link rel="stylesheet" href="../styles/articles.css">
+    <link rel="stylesheet" href="../styles/actualites.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
     <!-- Script de validation de formulaire -->

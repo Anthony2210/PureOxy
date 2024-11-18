@@ -301,6 +301,8 @@
         <link rel="stylesheet" href="../styles/includes.css">
         <!-- Styles pour la page détails des villes -->
         <link rel="stylesheet" href="../styles/details.css">
+        <!-- Styles pour les commentaires -->
+        <link rel="stylesheet" href="../styles/commentaire.css">
         <!-- Styles pour les Boutons -->
         <link rel="stylesheet" href="../styles/boutons.css">
         <!-- Script de validation de formulaire -->

@@ -157,14 +157,14 @@ function displayComments($comments, $page_titles, $base_path = '/PUREOXY/fonctio
                     </p>
                 </section>
                 <footer class="comment-footer">
-                    <span class="comment-likes">
-                        <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+                    <section class="comment-likes">
+                        <p class="fas fa-thumbs-up" aria-hidden="true"></p>
                         <?php echo escape($comment['like_count']); ?> Like<?php echo ($comment['like_count'] > 1) ? 's' : ''; ?>
-                    </span>
-                    <span class="comment-replies">
-                        <i class="fas fa-reply" aria-hidden="true"></i>
+                    </section>
+                    <section class="comment-replies">
+                        <p class="fas fa-reply" aria-hidden="true"></p>
                         <?php echo escape($comment['reply_count']); ?> Réponse<?php echo ($comment['reply_count'] > 1) ? 's' : ''; ?>
-                    </span>
+                    </section>
                 </footer>
             </article>
         </li>

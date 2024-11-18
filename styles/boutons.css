@@ -444,3 +444,45 @@
     transform: translateY(0);
     background-color: #556b2f;
 }
+
+/**
+ * Contact
+ * Bouton Envoyer
+ */
+#envoyer {
+    background-color: #6b8e23;
+    color: #ffffff;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#envoyer:hover {
+    background-color: #4c5f2d;
+}
+
+/**
+ * A Propos
+ * Bouton qui renvoie vers les articles du site
+ */
+#cta .button {
+    display: inline-block;
+    background-color: #6b8e23;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#cta .button:hover {
+    background-color: #4c5f2d;
+    transform: translateY(-2px);
+}
