@@ -1,4 +1,17 @@
 <?php
+/**
+ * En-tête du Site
+ *
+ * Ce fichier contient le code HTML pour l'en-tête du site PureOxy.
+ * Il inclut le logo, le menu de navigation principal et gère l'affichage conditionnel du nom de l'utilisateur si connecté.
+ *
+ * @package PureOxy
+ * @subpackage Includes
+ * @version 1.0
+ * @since 2024-04-27
+ */
+
+// Définir l'URL de base du site
 $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
 ?>
 
@@ -12,7 +25,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         <nav>
             <ul>
                 <li><a href="<?php echo $baseUrl; ?>index.php">Accueil</a></li>
-                <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li> 
+                <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li>
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/carte.php">Carte interactive</a></li>
                 <li><a href="<?php echo $baseUrl; ?>fonctionnalites/recherche.php">Recherche</a></li>
 

@@ -1,4 +1,16 @@
 <?php
+/**
+ * Chargement des Commentaires de l'Utilisateur
+ *
+ * Ce script récupère et affiche les commentaires postés par l'utilisateur connecté.
+ * Il inclut des fonctions pour sécuriser les sorties, formater les dates, et générer des URLs.
+ *
+ * @package PureOxy
+ * @subpackage Commentaires
+ * @version 1.0
+ * @since 2024-04-27
+ */
+
 session_start();
 require '../bd/bd.php';
 
@@ -132,7 +144,7 @@ function displayComments($comments, $page_titles, $base_path = '/PUREOXY/fonctio
             <article class="comment-content">
                 <header class="comment-header">
                     <strong>Sur la page :</strong>
-                    <a href="<?php echo $comment_anchor_url; ?>" class="comment-page-link">
+                    <a href="<?php echo escape($comment_anchor_url); ?>" class="comment-page-link">
                         <?php echo escape($page_title); ?>
                     </a>
                     <time datetime="<?php echo escape($comment['created_at']); ?>" class="comment-date">
@@ -167,6 +179,9 @@ $page_titles = [
     'lutte_pollution.php' => 'Lutte contre la pollution',
 ];
 
+/**
+ * Vérifier si l'utilisateur est connecté et récupérer ses commentaires.
+ */
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $comments = getUserComments($conn, $user_id);
@@ -174,9 +189,15 @@ if (isset($_SESSION['user_id'])) {
     if ($comments && $comments->num_rows > 0) {
         displayComments($comments, $page_titles);
     } else {
+        /**
+         * Afficher un message si l'utilisateur n'a pas encore posté de commentaires.
+         */
         echo '<p class="no-comments">Vous n\'avez pas encore posté de commentaires.</p>';
     }
 } else {
+    /**
+     * Afficher un message si l'utilisateur n'est pas connecté.
+     */
     echo '<p class="not-logged-in">Vous devez être connecté pour voir vos commentaires.</p>';
 }
 ?>

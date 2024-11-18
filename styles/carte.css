@@ -1,3 +1,8 @@
+/* ========================================================================
+   carte.css
+   Styles spécifiques pour la carte interactive et ses composants
+   ======================================================================== */
+
 /* Style général pour la carte */
 #map {
     height: 500px;
@@ -7,6 +12,7 @@
     border-radius: 12px; /* Bordure arrondie pour un effet plus moderne */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
+
 /* Style pour la fenêtre flottante (popup) */
 .popup-content {
     font-size: 1.1em;
@@ -45,6 +51,7 @@
     margin-right: 15px;
     margin-top: 10px;
 }
+
 /* Panneau d'informations pour afficher les détails d'une ville */
 #info-panel {
     position: absolute;
@@ -103,16 +110,10 @@
 .pollutant-down {
     color: red; /* Diminution */
 }
-#date-selector {
-    margin-top: 10px;
-    padding: 5px;
-    width: 100%;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
 
+/* Redondance supprimée : #date-selector déjà défini précédemment */
+
+/* Section de détails supplémentaires */
 #details-section {
     margin-top: 20px;
     padding: 20px;
@@ -131,6 +132,7 @@ canvas {
     height: 400px;
 }
 
+/* Style pour le lien "Voir plus" */
 #see-more {
     display: inline-block;
     margin-top: 10px;
@@ -144,15 +146,17 @@ canvas {
 
 #see-more:hover {
     background-color: darkolivegreen;
-    color : white;
+    color: white;
 }
-/* Lien voir plus */
+
+/* Lien "Voir plus" ajusté */
 #see-more {
     color: darkolivegreen;
     font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
 }
+
 /* Ajouter une ombre et une bordure aux marqueurs */
 .leaflet-marker-icon {
     filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3)); /* Ombre douce pour un effet 3D */
@@ -161,5 +165,4 @@ canvas {
 
 .leaflet-marker-icon:hover {
     transform: scale(1.1); /* Zoom léger au survol */
-
 }

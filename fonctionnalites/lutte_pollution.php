@@ -1,8 +1,20 @@
 <?php
-session_start();
-ob_start();
+/**
+ * Lutte contre la Pollution de l'Air - PureOxy
+ *
+ * Cette page présente des informations détaillées sur les efforts de lutte contre la pollution de l'air.
+ * Elle aborde des sujets tels que le Plan National de Réduction des Emissions et la Pollution Industrielle.
+ * La page inclut également une section de commentaires pour permettre aux utilisateurs de discuter et d'interagir.
+ *
+ * @package PureOxy
+ * @subpackage PollutionControl
+ */
+
+session_start(); // Démarre une nouvelle session ou reprend une session existante
+ob_start();      // Démarre la temporisation de sortie
 
 require '../bd/bd.php'; // Connexion à la base de données
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,16 +22,28 @@ require '../bd/bd.php'; // Connexion à la base de données
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Lutte contre la pollution de l'air</title>
+    <!-- Inclusion des polices et styles CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap">
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/includes.css">
 </head>
 <body>
-<?php include '../includes/header.php'; ?>
+<?php
+/**
+ * Inclut l'en-tête de la page.
+ *
+ * L'en-tête contient généralement le logo, le menu de navigation, et d'autres éléments communs
+ * à toutes les pages du site.
+ *
+ * @see ../includes/header.php
+ */
+include '../includes/header.php';
+?>
+
 <div class="content-wrapper">
     <main>
         <div id="main-content" class="container">
-            <!-- Titre principal de la page -->
+            <!-- Section principale de contenu -->
             <section class="content-section">
                 <h2>Lutte contre la pollution de l’air</h2>
                 <p>
@@ -69,15 +93,34 @@ require '../bd/bd.php'; // Connexion à la base de données
                 </ul>
             </section>
         </div>
+
+        <!-- Appel à l'action -->
         <section id="cta" class="mt-5">
-            <h2>À lire aussi </h2>
+            <h2>À lire aussi</h2>
             <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
         </section>
     </main>
+
     <?php
+    /**
+     * Inclut la section des commentaires de la page.
+     *
+     * Permet aux utilisateurs de poster, liker, et interagir avec les commentaires relatifs à cette page.
+     *
+     * @see ../fonctionnalites/commentaires.php
+     */
     include '../fonctionnalites/commentaires.php';
-    include '../includes/footer.php'; ?>
+
+    /**
+     * Inclut le pied de page de la page.
+     *
+     * Le pied de page contient généralement des informations de contact, des liens vers les réseaux sociaux,
+     * et d'autres éléments communs à toutes les pages du site.
+     *
+     * @see ../includes/footer.php
+     */
+    include '../includes/footer.php';
+    ?>
 </div>
 </body>
 </html>
-

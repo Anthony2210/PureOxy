@@ -1,17 +1,33 @@
 <?php
+/**
+ * Gestion des Commentaires - PureOxy
+ *
+ * Ce script gère l'affichage, l'ajout, la suppression et l'interaction des commentaires sur une page spécifique.
+ * Il inclut des fonctionnalités telles que les likes, les réponses et la protection contre les attaques CSRF.
+ *
+ * @package PureOxy
+ */
+
 require '../bd/bd.php';
 
+/**
+ * Démarre une session si aucune n'est active.
+ */
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Générer un jeton CSRF si non déjà défini
+/**
+ * Génère un jeton CSRF si non déjà défini dans la session.
+ */
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 $csrf_token = $_SESSION['csrf_token'];
 
-// Récupérer le nom de la ville depuis les paramètres GET
+/**
+ * Récupère le nom de la ville depuis les paramètres GET et définit la page courante.
+ */
 if (isset($_GET['ville'])) {
     $ville = $_GET['ville'];
     $page = 'details.php?ville=' . $ville;
@@ -19,16 +35,50 @@ if (isset($_GET['ville'])) {
     $page = basename($_SERVER['PHP_SELF']);
 }
 
-// Définition de la classe Commentaire
+/**
+ * Classe représentant un commentaire.
+ */
 class Commentaire {
+    /**
+     * @var int Identifiant du commentaire.
+     */
     public $id;
+
+    /**
+     * @var int Identifiant de l'utilisateur qui a posté le commentaire.
+     */
     public $user_id;
+
+    /**
+     * @var string Nom d'utilisateur de l'auteur du commentaire.
+     */
     public $username;
+
+    /**
+     * @var string Contenu du commentaire.
+     */
     public $content;
+
+    /**
+     * @var int Nombre de likes sur le commentaire.
+     */
     public $likes;
+
+    /**
+     * @var string Date et heure de création du commentaire.
+     */
     public $created_at;
+
+    /**
+     * @var array Tableau des réponses au commentaire.
+     */
     public $replies = []; // Tableau des réponses
 
+    /**
+     * Constructeur de la classe Commentaire.
+     *
+     * @param array $data Données du commentaire provenant de la base de données.
+     */
     public function __construct($data) {
         $this->id = $data['id'];
         $this->user_id = $data['user_id'];
@@ -38,17 +88,32 @@ class Commentaire {
         $this->created_at = $data['created_at'];
     }
 
+    /**
+     * Ajoute une réponse au commentaire.
+     *
+     * @param Commentaire $reply Réponse à ajouter.
+     */
     public function addReply($reply) {
         $this->replies[] = $reply;
     }
 }
 
-// Fonction pour récupérer les commentaires et leurs réponses
+/**
+ * Récupère les commentaires et leurs réponses depuis la base de données.
+ *
+ * @param int|null $parent_id Identifiant du commentaire parent. NULL pour les commentaires principaux.
+ * @param string   $page      Page actuelle pour laquelle récupérer les commentaires.
+ *
+ * @return Commentaire[] Tableau d'objets Commentaire.
+ */
 function getComments($parent_id = null, $page) {
     global $conn;
     $comments = [];
 
-    $sql = "SELECT c.*, u.username FROM commentaire c INNER JOIN users u ON c.user_id = u.id WHERE c.page = ? AND ";
+    $sql = "SELECT c.*, u.username 
+            FROM commentaire c 
+            INNER JOIN users u ON c.user_id = u.id 
+            WHERE c.page = ? AND ";
     if (is_null($parent_id)) {
         $sql .= "c.parent_id IS NULL ";
     } else {
@@ -77,8 +142,13 @@ function getComments($parent_id = null, $page) {
     return $comments;
 }
 
-// Fonction pour afficher les commentaires
-// Fonction pour afficher les commentaires
+/**
+ * Affiche les commentaires et leurs réponses de manière récursive.
+ *
+ * @param Commentaire[] $comments Tableau d'objets Commentaire à afficher.
+ *
+ * @return void
+ */
 function displayComments($comments) {
     global $csrf_token, $conn; // Ajoutez $conn ici
     foreach ($comments as $comment) {
@@ -136,7 +206,6 @@ function displayComments($comments) {
         echo '</li>';
     }
 }
-
 ?>
 
 <!-- Partie HTML pour afficher les commentaires -->
@@ -144,6 +213,9 @@ function displayComments($comments) {
     <h3>Commentaires</h3>
 
     <?php
+    /**
+     * Récupère et affiche les commentaires principaux pour la page courante.
+     */
     // Récupérer les commentaires principaux
     $comments = getComments(null, $page);
 
@@ -155,7 +227,9 @@ function displayComments($comments) {
         echo '<p>Soyez le premier à commenter cette page !</p>';
     }
 
-    // Formulaire pour ajouter un commentaire
+    /**
+     * Affiche le formulaire pour ajouter un nouveau commentaire si l'utilisateur est connecté.
+     */
     if (isset($_SESSION['user_id'])) {
         echo '<form method="post" class="comment-form" id="comment-form">';
         echo '<textarea name="content" placeholder="Votre commentaire..." required></textarea>';
@@ -170,10 +244,17 @@ function displayComments($comments) {
 
 </div>
 
-<!-- JavaScript pour gérer les réponses et l'AJAX -->
+<!-- JavaScript pour gérer les réponses, les likes et les suppressions via AJAX -->
 <script>
+    /**
+     * @file commentaires.js
+     * @description Gestion des interactions des commentaires (likes, réponses, suppressions) via AJAX.
+     */
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Gestion des likes via AJAX
+        /**
+         * Gestion des formulaires de like et unlike.
+         */
         function handleLikeForms() {
             document.querySelectorAll('.like-form, .unlike-form').forEach(function(form) {
                 form.addEventListener('submit', function(event) {
@@ -224,7 +305,9 @@ function displayComments($comments) {
 
         handleLikeForms();
 
-        // Gestion des boutons "Répondre"
+        /**
+         * Gestion des boutons "Répondre".
+         */
         function handleReplyButtons() {
             document.querySelectorAll('.reply-button').forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -237,7 +320,9 @@ function displayComments($comments) {
 
         handleReplyButtons();
 
-        // Gestion de la soumission du formulaire de commentaire via AJAX
+        /**
+         * Gestion de la soumission du formulaire de commentaire via AJAX.
+         */
         document.getElementById('comment-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -305,7 +390,9 @@ function displayComments($comments) {
                 });
         });
 
-        // Gestion de la suppression des commentaires
+        /**
+         * Gestion de la suppression des commentaires via AJAX.
+         */
         function handleDeleteButtons() {
             document.querySelectorAll('.delete-comment-button').forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -352,7 +439,9 @@ function displayComments($comments) {
 
         handleDeleteButtons();
 
-        // Gestion de l'ancre pour faire défiler jusqu'au commentaire
+        /**
+         * Gestion de l'ancre pour faire défiler jusqu'au commentaire spécifié.
+         */
         var hash = window.location.hash;
         if (hash) {
             var element = document.querySelector(hash);

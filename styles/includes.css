@@ -1,10 +1,14 @@
+/* ========================================================================
+   includes.css
+   Styles supplémentaires pour les composants inclus (header et footer)
+   ======================================================================== */
+
 /* En-tête (header) */
 header {
     background-color: #f9f9e9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     top: 0;
     border-bottom: 10px solid #6b8e23; /* Couleur verte et épaisseur de la bordure */
-
 }
 
 header .container {
@@ -32,7 +36,7 @@ header nav ul li a:hover {
 
 /* Pied de page (footer) */
 footer {
-    background-color:#556b2f;
+    background-color: #556b2f;
     color: white;
     text-align: center;
     padding: 20px 0;

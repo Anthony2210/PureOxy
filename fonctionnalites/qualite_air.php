@@ -1,8 +1,27 @@
 <?php
+/**
+ * Page de Qualité de l'Air
+ *
+ * Cette page affiche des informations sur la qualité de l'air, les sources de pollution
+ * et leurs effets sur la santé. Elle inclut également des sections pour les commentaires
+ * des utilisateurs et le pied de page du site.
+ *
+ * @package PureOxy
+ * @subpackage Pages
+ * @author
+ * @version 1.0
+ * @since 2024-04-27
+ */
+
 session_start();
 ob_start();
 
-require '../bd/bd.php'; // Connexion à la base de données
+/**
+ * Inclusion du fichier de connexion à la base de données.
+ *
+ * Ce fichier établit une connexion à la base de données nécessaire pour le fonctionnement de la page.
+ */
+require '../bd/bd.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +35,15 @@ require '../bd/bd.php'; // Connexion à la base de données
     <link rel="stylesheet" href="../styles/includes.css">
 </head>
 <body>
-<?php include '../includes/header.php'; ?>
+<?php
+/**
+ * Inclusion de l'en-tête de la page.
+ *
+ * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
+ * le menu de navigation et éventuellement d'autres éléments récurrents.
+ */
+include '../includes/header.php';
+?>
 
 <div class="content-wrapper">
     <main>
@@ -53,7 +80,20 @@ require '../bd/bd.php'; // Connexion à la base de données
 
     </main>
     <?php
+    /**
+     * Inclusion de la section des commentaires.
+     *
+     * Le fichier commentaires.php gère l'affichage et la soumission des commentaires des utilisateurs,
+     * permettant ainsi l'interaction et le partage d'expériences concernant la qualité de l'air.
+     */
     include '../fonctionnalites/commentaires.php';
+
+    /**
+     * Inclusion du pied de page de la page.
+     *
+     * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
+     * des liens utiles, des informations de contact et d'autres éléments récurrents.
+     */
     include '../includes/footer.php';
     ?>
 </div>

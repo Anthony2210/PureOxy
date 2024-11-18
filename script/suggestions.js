@@ -1,22 +1,42 @@
-let lastQuery = "";
-let cache = {};
+/**
+ * suggestions.js
+ *
+ * Ce script gère les suggestions de villes en temps réel pour les champs de recherche.
+ * Il implémente un système de cache pour optimiser les performances et éviter les requêtes redondantes.
+ */
 
+/**
+ * Variables globales pour le suivi des requêtes et le cache des résultats.
+ */
+let lastQuery = ""; // Stocke la dernière requête effectuée
+let cache = {}; // Objet pour stocker les résultats des requêtes précédentes
+
+/**
+ * Initialise les suggestions pour un champ de recherche spécifique.
+ *
+ * @param {string} inputId - L'ID de l'élément input pour la saisie de la ville.
+ * @param {string} suggestionsListId - L'ID de l'élément ul pour afficher les suggestions.
+ * @param {string} hiddenInputId - L'ID de l'input caché pour stocker la ville sélectionnée.
+ * @param {string} addButtonId - L'ID du bouton "Ajouter" associé.
+ */
 function initializeSuggestions(inputId, suggestionsListId, hiddenInputId, addButtonId) {
     const inputElement = document.getElementById(inputId);
     const suggestionsList = document.getElementById(suggestionsListId);
     const hiddenInput = document.getElementById(hiddenInputId);
     const addButton = document.getElementById(addButtonId);
 
-    // Désactiver le bouton Ajouter par défaut
+    // Désactive le bouton Ajouter par défaut
     if (addButton) {
         addButton.disabled = true;
     }
 
+    /**
+     * Ajoute un écouteur d'événement pour détecter les entrées dans le champ de recherche.
+     */
     inputElement.addEventListener("input", function() {
-        const query = this.value.trim();
-        const suggestionsList = document.getElementById(suggestionsListId);
+        const query = this.value.trim(); // Récupère et nettoie la saisie de l'utilisateur
 
-        // Réinitialiser le champ caché et désactiver le bouton Ajouter
+        // Réinitialise le champ caché et désactive le bouton Ajouter
         if (hiddenInput) {
             hiddenInput.value = "";
         }
@@ -24,34 +44,36 @@ function initializeSuggestions(inputId, suggestionsListId, hiddenInputId, addBut
             addButton.disabled = true;
         }
 
-        // Si la saisie est vide, on cache les suggestions
+        // Si la saisie est vide, masque les suggestions
         if (query === "") {
             suggestionsList.innerHTML = "";
             suggestionsList.classList.remove("show");
             return;
         }
 
-        // Si la requête est la même que la précédente, ne rien faire
+        // Si la requête est identique à la précédente, ne fait rien
         if (query === lastQuery) return;
-        lastQuery = query;
+        lastQuery = query; // Met à jour la dernière requête
 
-        // Si la requête est déjà en cache, l'utiliser
+        // Si les résultats de la requête sont déjà en cache, les utilise
         if (cache[query]) {
             displaySuggestions(cache[query], suggestionsList, inputElement, inputId, suggestionsListId, hiddenInputId, addButtonId);
             return;
         }
 
-        // Envoyer la requête AJAX pour obtenir les suggestions
+        // Envoie une requête AJAX pour obtenir les suggestions
         fetch(`../fonctionnalites/suggestions.php?query=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(results => {
-                cache[query] = results; // Ajouter les résultats au cache
+                cache[query] = results; // Ajoute les résultats au cache
                 displaySuggestions(results, suggestionsList, inputElement, inputId, suggestionsListId, hiddenInputId, addButtonId);
             })
             .catch(error => console.error("Erreur de récupération des suggestions :", error));
     });
 
-    // Gérer les clics en dehors des suggestions pour les masquer
+    /**
+     * Ajoute un écouteur d'événement pour les clics en dehors des suggestions afin de les masquer.
+     */
     document.addEventListener("click", function(e) {
         if (!e.target.closest('#' + suggestionsListId) && !e.target.closest('#' + inputId)) {
             suggestionsList.innerHTML = "";
@@ -60,40 +82,59 @@ function initializeSuggestions(inputId, suggestionsListId, hiddenInputId, addBut
     });
 }
 
-// Fonction pour afficher les suggestions
+/**
+ * Affiche les suggestions dans la liste déroulante.
+ *
+ * @param {Array} results - Les résultats des suggestions.
+ * @param {HTMLElement} suggestionsList - L'élément ul pour afficher les suggestions.
+ * @param {HTMLElement} inputElement - L'élément input où la saisie est effectuée.
+ * @param {string} inputId - L'ID de l'input.
+ * @param {string} suggestionsListId - L'ID de la liste de suggestions.
+ * @param {string} hiddenInputId - L'ID de l'input caché.
+ * @param {string} addButtonId - L'ID du bouton Ajouter.
+ */
 function displaySuggestions(results, suggestionsList, inputElement, inputId, suggestionsListId, hiddenInputId, addButtonId) {
     let suggestionsHtml = "";
 
     if (results.length > 0) {
+        // Parcourt chaque résultat et crée un élément li pour chaque suggestion
         results.forEach(function(result, index) {
             suggestionsHtml += `<li style="--i: ${index}" onclick="selectCity('${result.ville}', '${inputId}', '${suggestionsListId}', '${hiddenInputId}', '${addButtonId}')">${result.ville} (${result.code_postal}, ${result.region})</li>`;
         });
-        suggestionsList.classList.add("show"); // Ajouter la classe pour l'animation
+        suggestionsList.classList.add("show"); // Ajoute la classe pour afficher les suggestions
     } else {
+        // Affiche un message si aucune suggestion n'est trouvée
         suggestionsHtml = `<li>Aucune ville trouvée</li>`;
         suggestionsList.classList.add("show");
     }
 
-    suggestionsList.innerHTML = suggestionsHtml;
+    suggestionsList.innerHTML = suggestionsHtml; // Met à jour le contenu de la liste de suggestions
 }
 
-// Fonction pour sélectionner une ville
+/**
+ * Sélectionne une ville à partir des suggestions et met à jour les champs correspondants.
+ *
+ * @param {string} city - Le nom de la ville sélectionnée.
+ * @param {string} inputId - L'ID de l'input.
+ * @param {string} suggestionsListId - L'ID de la liste de suggestions.
+ * @param {string} hiddenInputId - L'ID de l'input caché.
+ * @param {string} addButtonId - L'ID du bouton Ajouter.
+ */
 function selectCity(city, inputId, suggestionsListId, hiddenInputId, addButtonId) {
     const inputElement = document.getElementById(inputId);
     const suggestionsList = document.getElementById(suggestionsListId);
     const hiddenInput = document.getElementById(hiddenInputId);
     const addButton = document.getElementById(addButtonId);
 
-    inputElement.value = city;
+    inputElement.value = city; // Met à jour la valeur de l'input avec la ville sélectionnée
 
-    // Réinitialiser le cache pour forcer la recherche à jour
-    lastQuery = "";
+    lastQuery = ""; // Réinitialise la dernière requête
 
-    // Cacher les suggestions
+    // Masque les suggestions
     suggestionsList.innerHTML = "";
     suggestionsList.classList.remove("show");
 
-    // Mettre à jour le champ caché et activer le bouton Ajouter
+    // Met à jour le champ caché et active le bouton Ajouter
     if (hiddenInput) {
         hiddenInput.value = city;
     }
@@ -102,24 +143,30 @@ function selectCity(city, inputId, suggestionsListId, hiddenInputId, addButtonId
     }
 }
 
-// Initialiser les suggestions pour le champ de recherche
+/**
+ * Initialise les suggestions pour le champ de recherche lors du chargement du DOM.
+ */
 document.addEventListener('DOMContentLoaded', function() {
     initializeSuggestions('search-bar', 'suggestions-list');
 });
 
-// Ajouter l'écouteur pour le bouton de recherche
+// Sélectionne les éléments du bouton de recherche
 const searchBar = document.getElementById("search-bar");
 const searchButton = document.getElementById("search-button");
 
+/**
+ * Ajoute un écouteur d'événement au bouton de recherche pour rediriger vers la page de détails de la ville.
+ */
 searchButton.addEventListener("click", function() {
     let query = searchBar.value.trim();
     if (query !== "") {
-        // Mettre en majuscule la première lettre de chaque mot
+        // Met en majuscule la première lettre de chaque mot
         query = query.split(' ').map(function(word) {
             return word.charAt(0).toUpperCase() + word.slice(1);
         }).join(' ');
+        // Redirige vers la page de détails de la ville sélectionnée
         window.location.href = `/PUREOXY/fonctionnalites/details.php?ville=${encodeURIComponent(query)}`;
     } else {
-        alert("Veuillez entrer le nom d'une ville.");
+        alert("Veuillez entrer le nom d'une ville."); // Affiche une alerte si le champ est vide
     }
 });

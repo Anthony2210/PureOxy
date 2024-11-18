@@ -1,4 +1,17 @@
 <?php
+/**
+ * Pied de Page du Site
+ *
+ * Ce fichier contient le code HTML pour le pied de page du site PureOxy.
+ * Il inclut des liens vers les pages importantes telles que "À propos", "Politique de confidentialité" et "Contact".
+ *
+ * @package PureOxy
+ * @subpackage Includes
+ * @version 1.0
+ * @since 2024-04-27
+ */
+
+// Définir l'URL de base du site
 $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
 ?>
 

@@ -8,7 +8,15 @@
     <link rel="stylesheet" href="../styles/includes.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<?php include '../includes/header.php'; ?>
+<?php
+/**
+ * Inclusion de l'en-tête de la page.
+ *
+ * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
+ * le menu de navigation et éventuellement d'autres éléments récurrents.
+ */
+include '../includes/header.php';
+?>
 
 <section id="politique-confidentialite">
     <h2>Politique de confidentialité</h2>
@@ -82,7 +90,14 @@
         PureOxy<br>
         Adresse email : contact@pureoxy.fr
     </p>
-
 </section>
 
-<?php include '../includes/footer.php'; ?>
+<?php
+/**
+ * Inclusion du pied de page de la page.
+ *
+ * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
+ * des liens utiles, des informations de contact et d'autres éléments récurrents.
+ */
+include '../includes/footer.php';
+?>

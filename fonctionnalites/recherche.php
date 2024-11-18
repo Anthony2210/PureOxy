@@ -1,6 +1,20 @@
 <?php
+/**
+ * Page de Recherche de Villes
+ *
+ * Cette page permet aux utilisateurs de rechercher des villes en entrant le nom ou le code postal.
+ * Elle affiche des suggestions en temps réel et affiche les résultats de la recherche.
+ *
+ * @package PureOxy
+ * @subpackage Recherche
+ * @author
+ * @version 1.0
+ * @since 2024-04-27
+ */
+
 session_start();
-require_once('../bd/bd.php');
+
+require_once('../bd/bd.php'); // Connexion à la base de données
 ?>
 
 <!DOCTYPE html>
@@ -13,11 +27,18 @@ require_once('../bd/bd.php');
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/includes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
 </head>
 <body id="recherche-page">
 <div class="content-wrapper">
-    <?php include('../includes/header.php'); ?>
+    <?php
+    /**
+     * Inclusion de l'en-tête de la page.
+     *
+     * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
+     * le menu de navigation et éventuellement d'autres éléments récurrents.
+     */
+    include('../includes/header.php');
+    ?>
 
     <main>
         <div id="search-container">
@@ -43,10 +64,19 @@ require_once('../bd/bd.php');
         <div id="search-results"></div>
 
     </main>
-    <!-- Inclusion du fichier footer.php -->
-    <?php include('../includes/footer.php'); ?>
+
+    <?php
+    /**
+     * Inclusion du pied de page de la page.
+     *
+     * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
+     * des liens utiles, des informations de contact et d'autres éléments récurrents.
+     */
+    include('../includes/footer.php');
+    ?>
 </div>
 
+<!-- Inclusion du script JavaScript pour les suggestions -->
 <script src="../script/suggestions.js"></script>
 
 </body>

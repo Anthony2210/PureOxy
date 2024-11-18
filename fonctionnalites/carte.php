@@ -1,4 +1,15 @@
-<?php session_start();
+<?php
+/**
+ * Carte Interactive de la Qualité de l'Air - PureOxy
+ *
+ * Cette page affiche une carte interactive utilisant Leaflet pour visualiser les niveaux de pollution atmosphérique
+ * dans différentes villes de France. Les données sont récupérées depuis la base de données et affichées sous forme
+ * de marqueurs sur la carte, avec des informations détaillées dans des popups.
+ *
+ * @package PureOxy
+ */
+
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,51 +26,83 @@
 </head>
 <body>
 
-<?php include '../includes/header.php'; ?>
-
 <?php
-include '../bd/bd.php';  // Connexion à la base de données
+/**
+ * Inclut l'en-tête de la page.
+ *
+ * L'en-tête contient généralement le logo, le menu de navigation, et d'autres éléments communs
+ * à toutes les pages du site.
+ *
+ * @see ../includes/header.php
+ */
+include '../includes/header.php';
 
-// Requête SQL pour récupérer les points de pollution
-$sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date
-        FROM pollution_villes
-        ORDER BY date";
-$result = $conn->query($sql);
+/**
+ * Inclut le fichier de connexion à la base de données.
+ *
+ * @see ../bd/bd.php
+ */
+include '../bd/bd.php';
 
-$villes = array();
-if ($result && $result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $city_key = $row['nom'];
+/**
+ * Récupère les données de pollution des villes depuis la base de données.
+ *
+ * @param mysqli $conn Connexion à la base de données.
+ *
+ * @return string JSON encodé contenant les informations des villes et leurs niveaux de pollution.
+ */
+function getPollutionData($conn) {
+    $sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date
+            FROM pollution_villes
+            ORDER BY date";
+    $result = $conn->query($sql);
 
-        if (!isset($villes[$city_key])) {
-            $villes[$city_key] = [
-                'nom' => $row['nom'],
-                'lat' => $row['lat'],
-                'lon' => $row['lon'],
-                'location' => $row['location'],
-                'pollutants' => [],
-                'dates' => []
+    if (!$result) {
+        error_log("Erreur lors de l'exécution de la requête SQL : " . $conn->error);
+        exit('Une erreur est survenue lors du chargement des données.');
+    }
+
+    $villes = array();
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $city_key = $row['nom'];
+
+            if (!isset($villes[$city_key])) {
+                $villes[$city_key] = [
+                    'nom' => $row['nom'],
+                    'lat' => $row['lat'],
+                    'lon' => $row['lon'],
+                    'location' => $row['location'],
+                    'pollutants' => [],
+                    'dates' => []
+                ];
+            }
+
+            if (!isset($villes[$city_key]['pollutants'][$row['pollutant']])) {
+                $villes[$city_key]['pollutants'][$row['pollutant']] = [];
+            }
+
+            $villes[$city_key]['pollutants'][$row['pollutant']][] = [
+                'value' => $row['pollution'],
+                'date' => $row['date'],
+                'location' => $row['location']
+            ];
+
+            $villes[$city_key]['dates'][] = [
+                'date' => $row['date'],
+                'location' => $row['location']
             ];
         }
-
-        if (!isset($villes[$city_key]['pollutants'][$row['pollutant']])) {
-            $villes[$city_key]['pollutants'][$row['pollutant']] = [];
-        }
-
-        $villes[$city_key]['pollutants'][$row['pollutant']][] = [
-            'value' => $row['pollution'],
-            'date' => $row['date'],
-            'location' => $row['location']
-        ];
-
-        $villes[$city_key]['dates'][] = [
-            'date' => $row['date'],
-            'location' => $row['location']
-        ];
     }
+
+    return json_encode(array_values($villes));
 }
 
-$json_villes = json_encode(array_values($villes));
+// Récupérer les données de pollution au format JSON
+$json_villes = getPollutionData($conn);
+
+// Fermer la connexion à la base de données
+$conn->close();
 ?>
 
 <section id="carte-interactive">
@@ -67,35 +110,73 @@ $json_villes = json_encode(array_values($villes));
     <div id="map"></div>
 </section>
 
-<?php include '../includes/footer.php'; ?>
+<?php
+/**
+ * Inclut le pied de page de la page.
+ *
+ * Le pied de page contient généralement des informations de contact, des liens vers les réseaux sociaux,
+ * et d'autres éléments communs à toutes les pages du site.
+ *
+ * @see ../includes/footer.php
+ */
+include '../includes/footer.php';
+?>
 
 <script>
+    /**
+     * Initialise la carte Leaflet centrée sur la France.
+     */
     var map = L.map('map').setView([46.603354, 1.888334], 6);
 
+    /**
+     * Ajoute les tuiles OpenStreetMap à la carte.
+     */
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Définir une icône verte personnalisée basée sur l'image fournie
+    /**
+     * Définition d'une icône verte personnalisée pour les marqueurs.
+     */
     var greenIcon = L.icon({
         iconUrl: '../images/green-icon.png', // Assurez-vous que ce chemin correspond à l'emplacement réel de votre image
-        iconSize: [20, 20], // Réduisez la taille pour un meilleur rendu
-
+        iconSize: [20, 20], // Taille de l'icône
     });
 
+    /**
+     * Données des villes encodées en JSON depuis PHP.
+     *
+     * @type {Array<Object>}
+     */
     var villes = <?php echo $json_villes; ?>;
 
+    /**
+     * Génère une liste HTML des variations des polluants.
+     *
+     * @param {string} pollutant Le nom du polluant.
+     * @param {number} value La valeur moyenne du polluant.
+     * @returns {string} HTML de la liste.
+     */
     function displayPollutantVariation(pollutant, value) {
         return `<li><strong>${pollutant} :</strong> ${value.toFixed(2)} µg/m³</li>`;
     }
 
+    /**
+     * Calcule la moyenne d'un tableau de valeurs.
+     *
+     * @param {Array<number>} values Tableau des valeurs numériques.
+     * @returns {number} La moyenne des valeurs.
+     */
     function calculateAverage(values) {
         if (values.length === 0) return 0;
         let sum = values.reduce((acc, val) => acc + parseFloat(val), 0);
         return sum / values.length;
     }
 
+    /**
+     * Parcourt chaque ville et ajoute un marqueur sur la carte avec un popup détaillé.
+     */
     villes.forEach(function(ville) {
         if (ville.lat && ville.lon) {
             var marker = L.marker([ville.lat, ville.lon], { icon: greenIcon }).addTo(map);

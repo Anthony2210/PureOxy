@@ -1,4 +1,16 @@
 <?php
+/**
+ * Compte.php
+ *
+ * Gestion de la session utilisateur, connexion, inscription,
+ * gestion des villes favorites et historique des recherches.
+ */
+
+// Activer l'affichage des erreurs pour le débogage (à désactiver en production)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Définir les paramètres de cookie de session pour une sécurité accrue
 session_set_cookie_params([
     'lifetime' => 0,
@@ -10,7 +22,12 @@ session_set_cookie_params([
 ]);
 session_start();
 ob_start();
-// Générer un jeton CSRF si non déjà défini
+
+/**
+ * Génération d'un jeton CSRF si non déjà défini.
+ *
+ * @var string $csrf_token Jeton CSRF pour la protection contre les attaques CSRF.
+ */
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -18,9 +35,11 @@ $csrf_token = $_SESSION['csrf_token'];
 
 require '../bd/bd.php'; // Connexion à la base de données
 
-
-
-// Gestion de la connexion
+/**
+ * Gestion de la connexion de l'utilisateur.
+ *
+ * Vérifie les informations de connexion, authentifie l'utilisateur et redirige vers la page d'accueil.
+ */
 if (isset($_POST['login'])) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
@@ -30,121 +49,154 @@ if (isset($_POST['login'])) {
     } else {
         // Préparation de la requête pour vérifier les informations de connexion
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-
-        // Vérifie si l'utilisateur existe et si le mot de passe est correct
-        if ($user && password_verify($password, $user['password'])) {
-            session_regenerate_id(true); // Sécurité supplémentaire
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            header("Location: ../index.php"); // Redirige vers la page index.php
-            exit;
+        if (!$stmt) {
+            $login_error = "Préparation de la requête échouée: " . $conn->error;
         } else {
-            $login_error = "Nom d'utilisateur ou mot de passe incorrect.";
-        }
-    }
-}
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
 
-// Gestion de l'inscription
-if (isset($_POST['register'])) {
-    // Récupérer et sécuriser les données du formulaire
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    // Validation des données
-    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $register_error = "Tous les champs sont requis.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $register_error = "Adresse email invalide.";
-    } elseif ($password !== $confirm_password) {
-        $register_error = "Les mots de passe ne correspondent pas.";
-    } elseif (strlen($password) < 8) {
-        $register_error = "Le mot de passe doit contenir au moins 8 caractères.";
-    } elseif (!preg_match('/[A-Z]/', $password)) {
-        $register_error = "Le mot de passe doit contenir au moins une lettre majuscule.";
-    } elseif (!preg_match('/[a-z]/', $password)) {
-        $register_error = "Le mot de passe doit contenir au moins une lettre minuscule.";
-    } elseif (!preg_match('/[0-9]/', $password)) {
-        $register_error = "Le mot de passe doit contenir au moins un chiffre.";
-    } elseif (!preg_match('/[\W]/', $password)) {
-        $register_error = "Le mot de passe doit contenir au moins un caractère spécial.";
-    } else {
-        // Vérifier si le nom d'utilisateur ou l'email est déjà pris
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-        $stmt->bind_param("ss", $username, $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $register_error = "Ce nom d'utilisateur ou email est déjà pris.";
-        } else {
-            // Hashage du mot de passe
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // Photo de profil par défaut
-            $profile_picture = 'user.png';
-
-            // Insertion du nouvel utilisateur dans la base de données
-            $stmt = $conn->prepare("INSERT INTO users (username, email, password, profile_picture) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_picture);
-
-            if ($stmt->execute()) {
-                $register_success = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
+            // Vérifie si l'utilisateur existe et si le mot de passe est correct
+            if ($user && password_verify($password, $user['password'])) {
+                session_regenerate_id(true); // Sécurité supplémentaire
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                header("Location: ../index.php"); // Redirige vers la page index.php
+                exit;
             } else {
-                error_log('Erreur de base de données : ' . $stmt->error);
-                $register_error = "Une erreur s'est produite lors de la création du compte.";
+                $login_error = "Nom d'utilisateur ou mot de passe incorrect.";
             }
         }
     }
 }
 
-// Vérifie si l'utilisateur est connecté pour afficher l'historique des recherches
+/**
+ * Gestion de l'inscription de l'utilisateur.
+ *
+ * Valide les données du formulaire d'inscription, crée un nouvel utilisateur et ajoute à la base de données.
+ */
+if (isset($_POST['register'])) {
+    // Vérifier le jeton CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $register_error = "Jeton CSRF invalide.";
+    } else {
+        // Récupérer et sécuriser les données du formulaire
+        $username = trim($_POST['username']);
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        // Validation des données
+        if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+            $register_error = "Tous les champs sont requis.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $register_error = "Adresse email invalide.";
+        } elseif ($password !== $confirm_password) {
+            $register_error = "Les mots de passe ne correspondent pas.";
+        } elseif (strlen($password) < 8) {
+            $register_error = "Le mot de passe doit contenir au moins 8 caractères.";
+        } elseif (!preg_match('/[A-Z]/', $password)) {
+            $register_error = "Le mot de passe doit contenir au moins une lettre majuscule.";
+        } elseif (!preg_match('/[a-z]/', $password)) {
+            $register_error = "Le mot de passe doit contenir au moins une lettre minuscule.";
+        } elseif (!preg_match('/[0-9]/', $password)) {
+            $register_error = "Le mot de passe doit contenir au moins un chiffre.";
+        } elseif (!preg_match('/[\W]/', $password)) {
+            $register_error = "Le mot de passe doit contenir au moins un caractère spécial.";
+        } else {
+            // Vérifier si le nom d'utilisateur ou l'email est déjà pris
+            $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+            if (!$stmt) {
+                $register_error = "Préparation de la requête échouée: " . $conn->error;
+            } else {
+                $stmt->bind_param("ss", $username, $email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $register_error = "Ce nom d'utilisateur ou email est déjà pris.";
+                } else {
+                    // Hashage du mot de passe
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Photo de profil par défaut
+                    $profile_picture = 'user.png';
+
+                    // Insertion du nouvel utilisateur dans la base de données
+                    $stmt = $conn->prepare("INSERT INTO users (username, email, password, profile_picture) VALUES (?, ?, ?, ?)");
+                    if (!$stmt) {
+                        $register_error = "Préparation de la requête d'insertion échouée: " . $conn->error;
+                    } else {
+                        $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_picture);
+
+                        if ($stmt->execute()) {
+                            $register_success = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
+                        } else {
+                            $register_error = "Exécution de la requête d'insertion échouée: " . $stmt->error;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Vérifie si l'utilisateur est connecté et récupère l'historique des recherches et les villes favorites.
+ */
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Récupérer les 7 dernières recherches
     $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $search_history = $result->fetch_all(MYSQLI_ASSOC);
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $search_history = $result->fetch_all(MYSQLI_ASSOC);
 
-    // Supprimer les recherches plus anciennes
-    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_date NOT IN (SELECT search_date FROM (SELECT search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7) AS sub)");
-    $stmt->bind_param("ii", $user_id, $user_id);
-    $stmt->execute();
+        // Supprimer les recherches plus anciennes
+        $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_date NOT IN (SELECT search_date FROM (SELECT search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7) AS sub)");
+        if ($stmt) {
+            $stmt->bind_param("ii", $user_id, $user_id);
+            $stmt->execute();
+        }
+    }
 
     // Récupérer les villes favorites
     $stmt = $conn->prepare("SELECT city_name FROM favorite_cities WHERE user_id = ?");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $cities_result = $stmt->get_result();
-    $favorite_cities = $cities_result->fetch_all(MYSQLI_ASSOC);
-}
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $cities_result = $stmt->get_result();
+        $favorite_cities = $cities_result->fetch_all(MYSQLI_ASSOC);
+    }
 
-// Récupérer les informations de l'utilisateur pour afficher la date d'inscription
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
     // Récupérer les détails de l'utilisateur
     $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $user_result = $stmt->get_result();
-    $user = $user_result->fetch_assoc();
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $user_result = $stmt->get_result();
+        $user = $user_result->fetch_assoc();
+    }
 
-    // Récupérer l'historique des recherches
+    // Récupérer l'historique des recherches (10 dernières)
     $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $history_result = $stmt->get_result();
-    $search_history = $history_result->fetch_all(MYSQLI_ASSOC);
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $history_result = $stmt->get_result();
+        $search_history = $history_result->fetch_all(MYSQLI_ASSOC);
+    }
 }
-// Ajout d'une ville favorite
+
+/**
+ * Ajout d'une ville favorite pour l'utilisateur connecté.
+ *
+ * @return void
+ */
 if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
     $city_name = trim($_POST['city_name']);
     $user_id = $_SESSION['user_id'];
@@ -153,60 +205,88 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
     if (!empty($city_name)) {
         // Vérifier que la ville existe dans la base de données
         $stmt = $conn->prepare("SELECT COUNT(*) as count FROM pollution_villes WHERE City = ?");
-        $stmt->bind_param("s", $city_name);
-        $stmt->execute();
-        $city_exists_result = $stmt->get_result();
-        $city_exists_row = $city_exists_result->fetch_assoc();
-
-        if ($city_exists_row['count'] > 0) {
-            // Vérifier que la ville n'est pas déjà dans les favoris de l'utilisateur
-            $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ? AND city_name = ?");
-            $stmt->bind_param("is", $user_id, $city_name);
+        if (!$stmt) {
+            $response = [
+                'success' => false,
+                'message' => "Préparation de la requête échouée: " . $conn->error
+            ];
+        } else {
+            $stmt->bind_param("s", $city_name);
             $stmt->execute();
-            $city_favorite_result = $stmt->get_result();
-            $city_favorite_row = $city_favorite_result->fetch_assoc();
+            $city_exists_result = $stmt->get_result();
+            $city_exists_row = $city_exists_result->fetch_assoc();
 
-            if ($city_favorite_row['count'] == 0) {
-                // Vérifier le nombre actuel de villes favorites
-                $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
-                $stmt->bind_param("i", $user_id);
-                $stmt->execute();
-                $count_result = $stmt->get_result();
-                $count_row = $count_result->fetch_assoc();
-
-                if ($count_row['count'] < 5) {
-                    // Insérer la nouvelle ville favorite
-                    $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+            if ($city_exists_row['count'] > 0) {
+                // Vérifier que la ville n'est pas déjà dans les favoris de l'utilisateur
+                $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+                if (!$stmt) {
+                    $response = [
+                        'success' => false,
+                        'message' => "Préparation de la requête échouée: " . $conn->error
+                    ];
+                } else {
                     $stmt->bind_param("is", $user_id, $city_name);
-                    if ($stmt->execute()) {
-                        $response = [
-                            'success' => true,
-                            'message' => "Ville favorite ajoutée avec succès.",
-                            'city_name' => $city_name
-                        ];
+                    $stmt->execute();
+                    $city_favorite_result = $stmt->get_result();
+                    $city_favorite_row = $city_favorite_result->fetch_assoc();
+
+                    if ($city_favorite_row['count'] == 0) {
+                        // Vérifier le nombre actuel de villes favorites
+                        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
+                        if (!$stmt) {
+                            $response = [
+                                'success' => false,
+                                'message' => "Préparation de la requête échouée: " . $conn->error
+                            ];
+                        } else {
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $count_result = $stmt->get_result();
+                            $count_row = $count_result->fetch_assoc();
+
+                            if ($count_row['count'] < 5) {
+                                // Insérer la nouvelle ville favorite
+                                $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+                                if (!$stmt) {
+                                    $response = [
+                                        'success' => false,
+                                        'message' => "Préparation de la requête échouée: " . $conn->error
+                                    ];
+                                } else {
+                                    $stmt->bind_param("is", $user_id, $city_name);
+                                    if ($stmt->execute()) {
+                                        $response = [
+                                            'success' => true,
+                                            'message' => "Ville favorite ajoutée avec succès.",
+                                            'city_name' => $city_name
+                                        ];
+                                    } else {
+                                        $response = [
+                                            'success' => false,
+                                            'message' => "Une erreur s'est produite lors de l'ajout de la ville: " . $stmt->error
+                                        ];
+                                    }
+                                }
+                            } else {
+                                $response = [
+                                    'success' => false,
+                                    'message' => "Vous avez atteint le nombre maximum de 5 villes favorites."
+                                ];
+                            }
+                        }
                     } else {
                         $response = [
                             'success' => false,
-                            'message' => "Une erreur s'est produite lors de l'ajout de la ville."
+                            'message' => "Cette ville est déjà dans vos favoris."
                         ];
                     }
-                } else {
-                    $response = [
-                        'success' => false,
-                        'message' => "Vous avez atteint le nombre maximum de 5 villes favorites."
-                    ];
                 }
             } else {
                 $response = [
                     'success' => false,
-                    'message' => "Cette ville est déjà dans vos favoris."
+                    'message' => "La ville sélectionnée n'est pas valide."
                 ];
             }
-        } else {
-            $response = [
-                'success' => false,
-                'message' => "La ville sélectionnée n'est pas valide."
-            ];
         }
     } else {
         $response = [
@@ -235,25 +315,37 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
         }
     }
 }
-// Suppression d'une recherche individuelle
+
+/**
+ * Suppression d'une recherche individuelle dans l'historique de l'utilisateur.
+ *
+ * @return void
+ */
 if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
     $search_query = $_POST['search_query'];
     $user_id = $_SESSION['user_id'];
 
     // Supprimer la recherche
     $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_query = ?");
-    $stmt->bind_param("is", $user_id, $search_query);
-    if ($stmt->execute()) {
-        $response = [
-            'success' => true,
-            'message' => "Recherche supprimée avec succès.",
-            'search_query' => $search_query
-        ];
-    } else {
+    if (!$stmt) {
         $response = [
             'success' => false,
-            'message' => "Une erreur s'est produite lors de la suppression de la recherche."
+            'message' => "Préparation de la requête échouée: " . $conn->error
         ];
+    } else {
+        $stmt->bind_param("is", $user_id, $search_query);
+        if ($stmt->execute()) {
+            $response = [
+                'success' => true,
+                'message' => "Recherche supprimée avec succès.",
+                'search_query' => $search_query
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => "Une erreur s'est produite lors de la suppression de la recherche: " . $stmt->error
+            ];
+        }
     }
 
     // Vérifier si la requête est une requête AJAX
@@ -270,52 +362,33 @@ if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
         exit;
     }
 }
-// Effacer l'historique des recherches
+
+/**
+ * Efface l'historique des recherches de l'utilisateur.
+ *
+ * @return void
+ */
 if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
-    $stmt->bind_param("i", $user_id);
-    if ($stmt->execute()) {
-        $response = [
-            'success' => true,
-            'message' => "Historique effacé avec succès."
-        ];
-    } else {
+    if (!$stmt) {
         $response = [
             'success' => false,
-            'message' => "Une erreur s'est produite lors de l'effacement de l'historique."
+            'message' => "Préparation de la requête échouée: " . $conn->error
         ];
-    }
-
-    // Vérifier si la requête est une requête AJAX
-    if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
-        if (ob_get_length()) {
-            ob_clean();
+    } else {
+        $stmt->bind_param("i", $user_id);
+        if ($stmt->execute()) {
+            $response = [
+                'success' => true,
+                'message' => "Historique effacé avec succès."
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => "Une erreur s'est produite lors de l'effacement de l'historique: " . $stmt->error
+            ];
         }
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit;
-    } else {
-        // Si ce n'est pas une requête AJAX, rediriger normalement
-        header("Location: compte.php");
-        exit;
-    }
-}
-// Effacer l'historique des recherches
-if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
-    $stmt->bind_param("i", $user_id);
-    if ($stmt->execute()) {
-        $response = [
-            'success' => true,
-            'message' => "Historique effacé avec succès."
-        ];
-    } else {
-        $response = [
-            'success' => false,
-            'message' => "Une erreur s'est produite lors de l'effacement de l'historique."
-        ];
     }
 
     // Vérifier si la requête est une requête AJAX
@@ -333,27 +406,36 @@ if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
     }
 }
 
-
-
-// Suppression d'une ville favorite
+/**
+ * Suppression d'une ville favorite de l'utilisateur.
+ *
+ * @return void
+ */
 if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     $city_name = $_POST['city_name'];
     $user_id = $_SESSION['user_id'];
 
     // Supprimer la ville favorite
     $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
-    $stmt->bind_param("is", $user_id, $city_name);
-    if ($stmt->execute()) {
-        $response = [
-            'success' => true,
-            'message' => "Ville favorite supprimée avec succès.",
-            'city_name' => $city_name
-        ];
-    } else {
+    if (!$stmt) {
         $response = [
             'success' => false,
-            'message' => "Une erreur s'est produite lors de la suppression de la ville."
+            'message' => "Préparation de la requête échouée: " . $conn->error
         ];
+    } else {
+        $stmt->bind_param("is", $user_id, $city_name);
+        if ($stmt->execute()) {
+            $response = [
+                'success' => true,
+                'message' => "Ville favorite supprimée avec succès.",
+                'city_name' => $city_name
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => "Une erreur s'est produite lors de la suppression de la ville: " . $stmt->error
+            ];
+        }
     }
 
     // Vérifier si la requête est une requête AJAX
@@ -369,10 +451,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         header("Location: compte.php");
         exit;
     }
-
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -544,6 +623,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                     <i class="fas fa-lock"></i>
                     <input type="password" name="confirm_password" placeholder="Confirmez le mot de passe" required>
                 </div>
+                <!-- Jeton CSRF -->
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" name="register">S'inscrire</button>
             </form>
         </div>
@@ -579,7 +660,10 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 <script src="../script/suggestions.js"></script>
 <script src="../script/favoritesAndMessages.js"></script>
 <script>
-    // Modal des commentaires
+    /**
+     * Gestion de la fenêtre modale des commentaires.
+     */
+        // Modal des commentaires
     const commentsModal = document.getElementById("comments-modal");
     const commentsBtn = document.getElementById("view-comments-button");
     const closeCommentsBtn = document.querySelector(".close-button-comments");
@@ -599,6 +683,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         }
     });
 
+    /**
+     * Charge les commentaires de l'utilisateur via une requête AJAX.
+     */
     function loadUserComments() {
         fetch('load_user_comments.php')
             .then(response => response.text())
@@ -611,6 +698,12 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             });
     }
 
+    /**
+     * Fonction pour gérer l'ouverture des onglets (Connexion/Inscription).
+     *
+     * @param {Event} evt Événement de clic.
+     * @param {string} tabName Nom de l'onglet à ouvrir.
+     */
     // Script pour les onglets
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
@@ -640,6 +733,14 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         connexionTab.style.display = "block";
     }
 
+    /**
+     * Initialise les suggestions pour le champ de ville favorite.
+     *
+     * @param {string} inputId ID de l'input pour la ville favorite.
+     * @param {string} suggestionsListId ID de la liste des suggestions.
+     * @param {string} hiddenInputId ID de l'input caché pour stocker la ville sélectionnée.
+     * @param {string} buttonId ID du bouton d'ajout de la ville favorite.
+     */
     // Initialiser les suggestions pour le champ de ville favorite
     initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
 
@@ -651,7 +752,10 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         }
     });
 
-    // Obtenir les éléments
+    /**
+     * Gestion de la fenêtre modale des demandes.
+     */
+        // Obtenir les éléments
     var modal = document.getElementById("requests-modal");
     var btn = document.getElementById("view-requests-button");
     var span = document.getElementsByClassName("close-button")[0];
@@ -674,6 +778,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         }
     }
 
+    /**
+     * Charge les demandes de l'utilisateur via une requête AJAX.
+     */
     // Fonction pour charger les demandes via AJAX
     function loadRequests() {
         fetch('load_requests.php')
