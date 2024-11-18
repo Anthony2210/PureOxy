@@ -1,0 +1,46 @@
+/* ========================================================================
+   cta.css
+   Styles pour la section d'appel à l'action
+   ======================================================================== */
+
+/**
+ * @section Call to Action Styles
+ * Styles pour la section d'appel à l'action.
+ */
+
+/**
+ * CTA Section
+ */
+#cta {
+    text-align: center;
+    background-color: #556b2f; /* Couleur verte pour le fond */
+    padding: 40px 0;
+    border-radius: 0; /* Pas de bordure arrondie pour la section */
+    color: #f9f9e9; /* Couleur claire pour le texte */
+}
+
+#cta h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #f9f9e9; /* Couleur du texte en blanc cassé */
+}
+
+/**
+ * CTA Button
+ */
+#cta .button {
+    background-color: #f9f9e9; /* Couleur de fond du bouton */
+    color: #6b8e23; /* Texte du bouton en vert foncé */
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 30px; /* Bouton très arrondi */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#cta .button:hover {
+    background-color: #e3e3d9; /* Couleur légèrement plus foncée au survol */
+    transform: translateY(-3px);
+}

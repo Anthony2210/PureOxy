@@ -21,7 +21,20 @@ session_start();
     <title>PureOxy - Respirez mieux, vivez mieux</title>
     <link rel="stylesheet" href="styles/style.css"> <!-- CSS principal -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet"> <!-- Police utilisée -->
-    <link rel="stylesheet" href="styles/includes.css"> <!-- Styles supplémentaires pour les inclusions -->
+    <!-- Styles de Base -->
+    <link rel="stylesheet" href="styles/base.css">
+    <!-- Styles de Mise en Page -->
+    <link rel="stylesheet" href="styles/layout.css">
+    <!-- Styles pour l'En-tête -->
+    <link rel="stylesheet" href="styles/includes.css">
+    <!-- Styles pour l'Introduction -->
+    <link rel="stylesheet" href="styles/introduction.css">
+    <!-- Styles pour les Fonctionnalités -->
+    <link rel="stylesheet" href="styles/features.css">
+    <!-- Styles pour l'Appel à l'Action -->
+    <link rel="stylesheet" href="styles/cta.css">
+    <!-- Styles pour les Boutons -->
+    <link rel="stylesheet" href="styles/buttons.css">
     <script src="script/erreur_formulaire.js"></script> <!-- Script de validation de formulaire -->
 </head>
 <body>

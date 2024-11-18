@@ -463,8 +463,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <!-- Lien Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Inclusion des fichiers CSS -->
     <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/base.css">
+    <link rel="stylesheet" href="../styles/layout.css">
     <link rel="stylesheet" href="../styles/includes.css">
+    <link rel="stylesheet" href="../styles/account.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/search.css">
+    <link rel="stylesheet" href="../styles/comments.css">
+    <link rel="stylesheet" href="../styles/modal.css">
+    <link rel="stylesheet" href="../styles/buttons.css">
 </head>
 <body>
 <?php include '../includes/header.php'; ?>

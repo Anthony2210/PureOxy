@@ -6,7 +6,7 @@
 /* Style général pour la carte */
 #map {
     height: 500px;
-    width: 100%;
+    width: 85%;
     margin: 20px auto;
     border: 3px solid #2d6a4f; /* Bordure verte foncée autour de la carte */
     border-radius: 12px; /* Bordure arrondie pour un effet plus moderne */

@@ -1,0 +1,55 @@
+/* ========================================================================
+   base.css
+   Styles de base et globaux pour le site
+   ======================================================================== */
+
+/**
+ * @section Base Styles
+ * Styles généraux pour le corps de la page, les polices, les couleurs.
+ */
+
+/**
+ * Body Styles
+ */
+body {
+    font-family: 'League Spartan', sans-serif;
+    background-color: #f9f9e9;
+    color: #7A8B6B;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/**
+ * HTML and Body Full Height
+ */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+/* Main prend l'espace disponible entre le header et le footer */
+main {
+    flex: 1;
+}
+
+h2{
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+    color: darkolivegreen;
+    font-size: 2em;
+}
+
+ul, li {
+    list-style: none;
+}
+a{
+    color: green;
+}
+
+a:hover{
+    text-decoration: underline;
+    color : darkolivegreen;
+    transition-duration: 0.5s;
+}

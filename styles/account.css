@@ -1,0 +1,417 @@
+/* ========================================================================
+   account.css
+   Styles pour la gestion des comptes utilisateurs
+   ======================================================================== */
+
+/**
+ * @section Account Styles
+ * Styles pour la gestion des comptes utilisateurs.
+ */
+
+/**
+ * Account Container
+ */
+.compte-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/**
+ * Main Heading
+ */
+.compte-container h1 {
+    font-size: 2.5em;
+    color: #4c5f2d;
+    margin-bottom: 30px;
+}
+
+/**
+ * Custom Tabs
+ * Styles pour les onglets personnalisés.
+ */
+.compte-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ffffff;
+}
+
+.compte-tab-link {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: color 0.3s, border-bottom 0.3s;
+    margin-bottom: -1px;
+}
+
+.compte-tab-link.active {
+    color: darkolivegreen;
+    border-bottom: 3px solid darkolivegreen;
+}
+
+.compte-tab-link:hover {
+    color: darkolivegreen;
+}
+
+/**
+ * Tab Content
+ */
+.compte-tab-content {
+    display: none;
+}
+
+.compte-tab-content.active {
+    display: block;
+}
+
+/**
+ * Forms
+ * Styles pour les formulaires dans les comptes.
+ */
+.compte-form {
+    text-align: left;
+}
+
+.compte-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    color: #4c5f2d;
+    font-weight: bold;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #6b8e23;
+}
+
+.input-group input {
+    width: 75%;
+    padding: 12px 40px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    font-size: 1.1em;
+    transition: border-color 0.3s;
+    color: #4c5f2d;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.input-group input:focus {
+    border-color: #6b8e23;
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: darkolivegreen;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.compte-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.compte-form button:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+.compte-form button:active {
+    background-color: #455225;
+}
+
+/**
+ * @section Favorite Cities List Styles
+ * Styles pour la liste des villes favorites des utilisateurs.
+ */
+
+/**
+ * Favorite Cities Section
+ * Conteneur principal pour la section des villes favorites.
+ */
+.favorite-cities-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/**
+ * Favorite Cities Heading
+ * Titre de la section des villes favorites.
+ */
+.favorite-cities-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+/**
+ * Favorite Cities List
+ * Liste des villes favorites.
+ */
+.favorite-cities-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/**
+ * Favorite Cities List Item
+ * Élément individuel de la liste des favoris.
+ */
+.favorite-cities-list li {
+    background-color: #f3f4ed;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+    color : darkolivegreen;
+}
+
+.favorite-cities-list li:hover {
+    background-color: #e0e0d1;
+
+}
+
+/**
+ * Favorite City Name
+ * Nom de la ville favorite.
+ */
+.favorite-link {
+    font-size: 1.1em;
+    color: #333;
+    text-decoration: none;
+}
+.favorite-link:hover{
+    color : darkolivegreen;
+    text-decoration: underline;
+}
+
+/**
+ * Delete Favorite Button
+ * Bouton pour supprimer une ville des favoris.
+ */
+.favorite-cities-list li .delete-city-form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.favorite-cities-list li .delete-city-form button:hover {
+    color: #c0392b;
+}
+
+/**
+ * @section Suggestions List Styles
+ * Styles pour les listes de suggestions dans les formulaires.
+ */
+
+.favorite-city-form #suggestions-list, .history-city-form #suggestions-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    opacity: 0;
+    list-style-type: none;
+    padding: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.favorite-city-form #suggestions-list.show, .history-city-form #suggestions-list.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.favorite-city-form #suggestions-list li, .history-city-form #suggestions-list li {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    transition: background-color 0.2s ease;
+}
+
+.favorite-city-form #suggestions-list li:hover, .history-city-form #suggestions-list li:hover {
+    background-color: #f0f0f0;
+    color: #6b8e23;
+}
+
+.favorite-city-form #suggestions-list li:last-child, .history-city-form #suggestions-list li:last-child {
+    border-bottom: none;
+}
+
+.favorite-city-form #suggestions-list li + li, .history-city-form #suggestions-list li + li {
+    border-top: 1px solid #eee;
+}
+/**
+ * @section History List Styles
+ * Styles pour la liste de l'historique des recherches des utilisateurs.
+ */
+
+/**
+ * History Section
+ * Conteneur principal pour la section de l'historique des recherches.
+ */
+.history-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/**
+ * History Heading
+ * Titre de la section de l'historique.
+ */
+.history-section h3 {
+    font-size: 1.5em;
+    color: #6b8e23;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+/**
+ * History List
+ * Liste de l'historique des recherches.
+ */
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/**
+ * History List Item
+ * Élément individuel de la liste de l'historique.
+ */
+.history-list li {
+    background-color: #f3f4ed;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.history-list li:hover {
+    background-color: #e0e0d1;
+}
+
+/**
+ * History Search Query
+ * Requête de recherche dans l'historique.
+ */
+.history-list li .search-query {
+    font-size: 1.1em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Supprime le soulignement par défaut des liens */
+}
+
+.history-list li .search-query:hover {
+    text-decoration: underline; /* Ajoute un soulignement au survol pour indiquer que c'est cliquable */
+    color: #6b8e23; /* Change la couleur au survol */
+}
+
+.history-list li .search-query i {
+    margin-right: 8px;
+    color: #6b8e23;
+}
+
+/**
+ * Delete History Button
+ * Bouton pour supprimer une entrée de l'historique.
+ */
+.history-list li .delete-search-form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.history-list li .delete-search-form button:hover {
+    color: #c0392b;
+}
+
+/**
+ * Clear History Button
+ * Bouton pour effacer tout l'historique des recherches.
+ */
+.clear-history-button {
+    font-family: "League Spartan", sans-serif;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.clear-history-button i {
+    margin-right: 5px;
+}
+
+.clear-history-button:hover {
+    background-color: #c0392b;
+}

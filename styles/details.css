@@ -1,6 +1,13 @@
-/* details.css */
+/* ========================================================================
+   details.css
+   Styles spécifiques pour la page de détails
+   ======================================================================== */
 
-/* Styles généraux */
+/**
+ * Details Page General Styles
+ * ---------------------------------------
+ * Styles généraux pour la page de détails.
+ */
 #details-page {
     font-family: 'League Spartan', sans-serif;
     background-color: #F9F9E9; /* Beige clair */
@@ -9,7 +16,11 @@
     padding: 0;
 }
 
-/* Titres */
+/**
+ * Headers Styles
+ * ---------------------------------------
+ * Styles pour les titres principaux et secondaires.
+ */
 #details-page h1, #details-page h2 {
     color: #6B8E23; /* Vert olive */
     margin-bottom: 20px;
@@ -25,14 +36,22 @@
     margin-top: 40px;
 }
 
-/* Conteneur principal */
+/**
+ * Container Styles
+ * ---------------------------------------
+ * Styles pour le conteneur principal de la page de détails.
+ */
 #details-page.container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Section d'introduction */
+/**
+ * Introduction Section
+ * ---------------------------------------
+ * Styles pour la section d'introduction.
+ */
 #intro {
     padding: 30px;
     border-radius: 8px;
@@ -46,7 +65,11 @@
     margin: 10px 0;
 }
 
-/* Sélecteur d'arrondissement */
+/**
+ * Arrondissement Selector
+ * ---------------------------------------
+ * Styles pour le sélecteur d'arrondissement.
+ */
 #arrondissement-select {
     width: 300px;
     margin: 0 auto 30px;
@@ -59,7 +82,11 @@
     color: #333;
 }
 
-/* Styles pour les tableaux */
+/**
+ * Table Styles
+ * ---------------------------------------
+ * Styles pour les tableaux de données.
+ */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -99,7 +126,11 @@
     font-weight: bold;
 }
 
-/* Section des graphiques */
+/**
+ * Charts Section
+ * ---------------------------------------
+ * Styles pour la section des graphiques.
+ */
 #emissionsChart {
     max-width: 100%;
     height: auto;
@@ -111,8 +142,11 @@
     border-radius: 8px;
 }
 
-
-/* Boutons d'appel à l'action */
+/**
+ * Call to Action (CTA)
+ * ---------------------------------------
+ * Styles pour les boutons d'appel à l'action.
+ */
 #cta {
     text-align: center;
     background-color: #556b2f;
@@ -143,7 +177,11 @@
     transform: translateY(-3px);
 }
 
-/* Effets */
+/**
+ * Effects Section
+ * ---------------------------------------
+ * Styles pour la section des effets.
+ */
 #effets {
     background-color: #fff;
     padding: 30px;
@@ -158,8 +196,11 @@
     color: #555;
 }
 
-
-/* Section de l'IQA */
+/**
+ * IQA Section
+ * ---------------------------------------
+ * Styles pour la section de l'IQA.
+ */
 #details-page #iqa h2 {
     color: #6B8E23;
     margin-bottom: 20px;
@@ -169,7 +210,11 @@
     font-size: 1.2em;
 }
 
-/* Icône de favori */
+/**
+ * Favorite Icon
+ * ---------------------------------------
+ * Styles pour l'icône de favori.
+ */
 .favorite-icon {
     font-size: 1.2em;
     margin-left: 10px;
@@ -190,12 +235,23 @@
 .favorite-icon:hover {
     opacity: 0.7;
 }
+
+/**
+ * Error Messages
+ * ---------------------------------------
+ * Styles pour les messages d'erreur.
+ */
 .error-message {
     color: #e74c3c;
     font-weight: bold;
     margin-top: 15px;
 }
 
+/**
+ * Navigation Tabs
+ * ---------------------------------------
+ * Styles pour les onglets de navigation.
+ */
 .nav-tabs .nav-link {
     color: #6b8e23;
     font-weight: bold;
@@ -205,6 +261,12 @@
     background-color: #6b8e23;
     color: #fff;
 }
+
+/**
+ * City Not Found Page
+ * ---------------------------------------
+ * Styles pour la page indiquant qu'une ville n'a pas été trouvée.
+ */
 #city-not-found {
     padding: 50px 20px;
     text-align: center;
@@ -237,6 +299,7 @@
 #city-not-found .button:hover {
     background-color: #556b2f;
 }
+
 #city-not-found ul {
     list-style-type: none;
     padding: 0;
@@ -255,4 +318,3 @@
 #city-not-found a:hover {
     text-decoration: underline;
 }
-

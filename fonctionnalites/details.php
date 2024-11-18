@@ -296,9 +296,18 @@
         <!-- Lien Font Awesome pour les icônes -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
         <!-- Votre CSS personnalisé -->
-        <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/details.css">
+        <!-- Styles de Base -->
+        <link rel="stylesheet" href="../styles/base.css">
+        <!-- Styles de Mise en Page -->
+        <link rel="stylesheet" href="../styles/layout.css">
+        <!-- Styles pour l'En-tête -->
         <link rel="stylesheet" href="../styles/includes.css">
+        <!-- Styles pour les Détails -->
+        <link rel="stylesheet" href="../styles/details.css">
+        <!-- Styles pour les Commentaires -->
+        <link rel="stylesheet" href="../styles/comments.css">
+        <!-- Styles pour les Boutons -->
+        <link rel="stylesheet" href="../styles/buttons.css">
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>

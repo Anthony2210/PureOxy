@@ -1,0 +1,61 @@
+/* ========================================================================
+   dashboard.css
+   Styles pour le tableau de bord utilisateur
+   ======================================================================== */
+
+/**
+ * @section Dashboard Styles
+ * Styles pour le tableau de bord utilisateur.
+ */
+
+/**
+ * Dashboard Layout
+ */
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Aligne les éléments en haut */
+    margin-top: 30px;
+    gap: 30px;
+}
+
+.dashboard-content {
+    width: 65%; /* Ajustez la largeur pour que le contenu soit à droite */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/**
+ * Profile Card
+ */
+.profile-card {
+    background-color: #ffffff;
+    flex: 0 0 30%;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card img {
+    border-radius: 100px;
+    border: 1px solid black;
+}
+
+.profile-avatar {
+    font-size: 4em;
+    color: #6b8e23;
+    text-align: center;
+}
+
+.profile-info h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+}
+
+.profile-info p {
+    color: #777;
+    margin-top: 5px;
+}
