@@ -71,7 +71,7 @@ require '../bd/bd.php'; // Connexion à la base de données
         </div>
         <section id="cta" class="mt-5">
             <h2>À lire aussi </h2>
-            <a href="../pages/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
+            <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
         </section>
     </main>
     <?php

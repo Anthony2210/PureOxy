@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 14 nov. 2024 à 09:20
+-- Généré le : lun. 18 nov. 2024 à 09:08
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -20,6 +20,34 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `pureoxy`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `commentaire`
+--
+
+DROP TABLE IF EXISTS `commentaire`;
+CREATE TABLE IF NOT EXISTS `commentaire` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `page` varchar(255) NOT NULL,
+  `parent_id` int DEFAULT NULL,
+  `content` text NOT NULL,
+  `likes` int DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `commentaire`
+--
+
+INSERT INTO `commentaire` (`id`, `user_id`, `page`, `parent_id`, `content`, `likes`, `created_at`) VALUES
+(64, 6, 'details.php?ville=Paris', 63, 'c bien', 0, '2024-11-18 10:07:46'),
+(63, 6, 'details.php?ville=Paris', NULL, 'ok', 1, '2024-11-18 10:07:40');
 
 -- --------------------------------------------------------
 
@@ -858,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `favorite_cities`
@@ -871,7 +899,9 @@ INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
 (76, 4, 'Mont-de-Marsan'),
 (68, 4, 'Mondeville'),
 (78, 5, 'Montpellier'),
-(79, 5, 'Paris');
+(79, 5, 'Paris'),
+(80, 6, 'Paris'),
+(81, 6, 'Montpellier');
 
 -- --------------------------------------------------------
 
@@ -40228,6 +40258,41 @@ INSERT INTO `indices_qa_commune_idf_filtree_id` (`id_qualité`, `date`, `ninsee`
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `likes`
+--
+
+DROP TABLE IF EXISTS `likes`;
+CREATE TABLE IF NOT EXISTS `likes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `comment_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `comment_id` (`comment_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `likes`
+--
+
+INSERT INTO `likes` (`id`, `user_id`, `comment_id`) VALUES
+(8, 6, 15),
+(7, 6, 14),
+(9, 6, 16),
+(11, 6, 18),
+(12, 6, 27),
+(14, 6, 29),
+(15, 6, 28),
+(16, 6, 51),
+(17, 6, 54),
+(18, 6, 55),
+(21, 6, 56),
+(20, 6, 60),
+(22, 6, 63);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `messages_contact`
 --
 
@@ -40250,6 +40315,20 @@ CREATE TABLE IF NOT EXISTS `messages_contact` (
 
 INSERT INTO `messages_contact` (`id`, `user_id`, `nom`, `email`, `sujet`, `message`, `date_demande`) VALUES
 (1, 5, 'antho', 'antho@antho.com', 'Salut', 'je test', '2024-11-14 08:03:57');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `pages`
+--
+
+DROP TABLE IF EXISTS `pages`;
+CREATE TABLE IF NOT EXISTS `pages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -42844,7 +42923,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
@@ -42860,6 +42939,9 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (17, 2, 'Charleville-Mézières', '2024-10-29 13:21:56'),
 (16, 2, 'Brest', '2024-10-29 13:14:27'),
 (24, 1, 'Mondeville', '2024-10-30 11:56:35'),
+(81, 6, 'Paris', '2024-11-17 15:28:28'),
+(80, 6, 'Mantes-la-Jolie', '2024-11-17 15:05:08'),
+(79, 6, 'Vitry-sur-Seine', '2024-11-17 14:28:25'),
 (70, 5, 'Hefisopfs', '2024-11-14 09:16:09'),
 (67, 4, 'Caca', '2024-11-13 18:59:50'),
 (66, 4, 'Paris', '2024-11-13 18:17:16'),
@@ -42869,7 +42951,12 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (62, 4, 'Agen', '2024-11-13 17:21:38'),
 (61, 4, 'Montpellier', '2024-11-13 17:10:27'),
 (69, 5, 'Paris', '2024-11-14 09:16:00'),
-(68, 5, 'Montpellier', '2024-11-14 08:40:01');
+(68, 5, 'Montpellier', '2024-11-14 08:40:01'),
+(82, 6, 'Paris', '2024-11-17 16:32:44'),
+(83, 6, 'Montpellier', '2024-11-17 17:13:02'),
+(84, 6, 'Paris', '2024-11-18 07:50:40'),
+(85, 6, 'Montpellier', '2024-11-18 08:12:30'),
+(86, 6, 'Paris', '2024-11-18 09:07:36');
 
 -- --------------------------------------------------------
 
@@ -42947,7 +43034,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -42958,65 +43045,18 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_pictur
 (2, 'Maja', '$2y$10$2u5KtRH/jtDm96DV/ieDpu6zKBh749gkDS0R269C/ijvHjpLupnU6', '2024-10-28 17:26:47', 'user.png', ''),
 (3, 'a', '$2y$10$c2s8Alj9LAApyQcJpPGo4.FGnWMLkC8EZ5M52b7GmPkxa/mOogZrS', '2024-10-28 18:43:38', 'user.png', ''),
 (4, 'antho_ca', '$2y$10$WfR9whCreeapQnaxd4gPouGpXH2udKIfGFIqDIkqHlptMq/iEVUYq', '2024-11-08 10:00:01', 'user.png', ''),
-(5, 'antho', '$2y$10$6Ih55G9bJThS.tYixhqi9O.G8FWwP18GL8MQnow4w/1m5VG0eHtGa', '2024-11-14 07:42:43', 'user.png', 'antho@antho.com');
+(5, 'antho', '$2y$10$6Ih55G9bJThS.tYixhqi9O.G8FWwP18GL8MQnow4w/1m5VG0eHtGa', '2024-11-14 07:42:43', 'user.png', 'antho@antho.com'),
+(6, 'Anthonyy', '$2y$10$yXRKuI4gGlAjt5CtTZcsuugx6ygmna0hAK.Y/TbcAolfBfoyq25R.', '2024-11-14 16:19:45', 'user.png', 'antho@gmail.com');
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `depassements_seuils_reglementaires2023`
---
-ALTER TABLE `depassements_seuils_reglementaires2023`
-  ADD CONSTRAINT `fk_pollution_seuil` FOREIGN KEY (`id_pollution`) REFERENCES `pollution_villes` (`Id_pollution`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `historical_emissions`
---
-ALTER TABLE `historical_emissions`
-  ADD CONSTRAINT `fk_pollution_emission` FOREIGN KEY (`id_pollution`) REFERENCES `pollution_villes` (`Id_pollution`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `indices_qa_commune_idf_filtree_id`
---
-ALTER TABLE `indices_qa_commune_idf_filtree_id`
-  ADD CONSTRAINT `fk_pollution_qualite` FOREIGN KEY (`id_pollution`) REFERENCES `pollution_villes` (`Id_pollution`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Contraintes pour la table `population_francaise_par_departement_2018`
 --
 ALTER TABLE `population_francaise_par_departement_2018`
   ADD CONSTRAINT `fk_pollution_population` FOREIGN KEY (`id_pollution`) REFERENCES `pollution_villes` (`Id_pollution`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Structure de la table `commentaire`
---
-
-CREATE TABLE `commentaire` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `page` varchar(255) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `content` text NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `likes` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `parent_id` (`parent_id`),
-  CONSTRAINT `commentaire_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `commentaire_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `commentaire` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `commentaire` (`user_id`, `page`, `parent_id`, `content`, `created_at`, `likes`) VALUES
-(6, 'details.php?ville=Montpellier', NULL, 'useful!', '2024-11-16 18:34:58', 0),
-(6, 'details.php?ville=Montpellier', 12, 'yea thanks', '2024-11-16 18:35:10', 0);
-
---
--- AUTO_INCREMENT pour la table `commentaire`
---
-ALTER TABLE `commentaire`
-  AUTO_INCREMENT=14;
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

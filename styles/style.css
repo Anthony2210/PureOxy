@@ -805,57 +805,6 @@ h2{
     text-decoration: underline;
     color: darkolivegreen;
 }
-/* Le modal (fenêtre) */
-.modal {
-    display: none; /* Caché par défaut */
-    position: fixed; /* Rester en place */
-    z-index: 1001; /* Au-dessus */
-    left: 0;
-    top: 0;
-    width: 100%; /* Largeur totale */
-    height: 100%; /* Hauteur totale */
-    overflow: auto; /* Activer le scroll si nécessaire */
-    background-color: rgba(0,0,0,0.5); /* Couleur de fond */
-}
-
-/* Contenu du modal */
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 10% du haut, centré horizontalement */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Largeur */
-    max-width: 600px;
-}
-
-/* Bouton pour fermer */
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.close-button-comments {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button-comments:hover,
-.close-button-comments:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
 
 /* Styles pour la section de contact */
 #contact {
@@ -934,7 +883,7 @@ h2{
     transform: translateY(-3px);
 }
 
-#view-requests-button {
+#view-requests-button, #view-comments-button {
     width: 100%;
     padding: 12px;
     background-color: #6b8e23;
@@ -947,95 +896,10 @@ h2{
     font-family: 'League Spartan', sans-serif;
 }
 
-#view-requests-button:hover{
+#view-requests-button:hover, #view-comments-button:hover {
     background-color: #4c5f2d;
     text-decoration: underline;
 }
-/* Styles pour la section des commentaires */
-.comment-section {
-    margin-top: 40px;
-    background-color: #f9f9e9;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.comment-section h3 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    color: #6b8e23;
-}
-
-.comments, .replies {
-    list-style: none;
-    padding: 0;
-}
-
-.comments li, .replies li {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-}
-
-.replies {
-    margin-left: 20px;
-    border-left: 2px solid #6b8e23;
-    padding-left: 10px;
-}
-
-.comment-form textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-    border: 1px solid #c4c4c4;
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 1em;
-    font-family: 'League Spartan', sans-serif;
-}
-
-.comment-form button {
-    background-color: #6b8e23;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.comment-form button:hover {
-    background-color: #556b2f;
-}
-
-.comment-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.like-form button {
-    background: none;
-    border: none;
-    color: #6b8e23;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.like-form button:hover {
-    text-decoration: underline;
-}
-
-.reply-button {
-    background: none;
-    border: none;
-    color: #6b8e23;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.reply-button:hover {
-    text-decoration: underline;
-}
-
 
 .articles-grid {
     display: grid;
@@ -1152,4 +1016,318 @@ h2{
 
 #backToTop:hover {
     background-color: #0056b3;
+}
+
+#commentaires li:target {
+    background-color: #f0f8ff; /* Couleur de surbrillance */
+    border: 2px solid #3498db;
+    padding: 10px;
+    scroll-margin-top: 100px; /* Ajuste le décalage en cas de header fixe */
+}
+
+/* Section des commentaires */
+.comment-section {
+    font-family: "League Spartan", sans-serif;
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.comment-section h3 {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #2d6a4f;
+
+}
+
+.comments, .replies {
+    list-style: none;
+    padding: 0;
+}
+
+.comments li, .replies li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    position: relative;
+}
+
+.comments li:last-child, .replies li:last-child {
+    border-bottom: none;
+}
+
+.comment-content {
+    margin-left: 60px;
+}
+
+.comment-avatar {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #6b8e23;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+.comment-details {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.comment-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.comment-actions button:hover {
+    text-decoration: underline;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1em;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.comment-form button {
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.comment-form button:hover {
+    background-color: #556b2f;
+}
+
+.replies {
+    margin-left: 60px;
+    border-left: 2px solid #6b8e23;
+    padding-left: 20px;
+}
+
+.comments li:target, .replies li:target {
+    background-color: #e6ffe6;
+    border: 1px solid #2d6a4f;
+    padding: 15px;
+}
+
+.like-count {
+    margin-left: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.reply-button, .like-form button {
+    display: inline-flex;
+    align-items: center;
+}
+
+.reply-button i, .like-form button i {
+    margin-right: 5px;
+}
+
+/* Styles mis à jour pour la page de commentaires */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 5% auto;
+    padding: 25px;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #2d6a4f;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8em;
+}
+
+.close-button-comments {
+    color: #555;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button-comments:hover,
+.close-button-comments:focus {
+    color: #ff0000;
+}
+
+/* Liste des commentaires */
+.user-comments {
+    list-style: none;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Carte de commentaire */
+.user-comment {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.user-comment:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenu du commentaire */
+.comment-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* En-tête du commentaire */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+.comment-header strong {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.comment-page-link {
+    color: #2d6a4f;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+.comment-page-link:hover {
+    color: #1b4d30;
+    text-decoration: underline;
+}
+
+.comment-date {
+    font-size: 0.85em;
+    color: #777;
+}
+
+/* Corps du commentaire */
+.comment-body {
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+.comment-text {
+    font-size: 1em;
+    color: #444;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Pied de commentaire */
+.comment-footer {
+    padding: 10px 0;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.comment-footer span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.comment-footer span:hover {
+    color: #2d6a4f;
+}
+
+.comment-footer i {
+    font-size: 1.1em;
+    color: #2d6a4f;
+}
+
+.no-comments,
+.not-logged-in {
+    text-align: center;
+    font-size: 1.1em;
+    color: #777;
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Boutons améliorés */
+.profile-info button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2d6a4f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.profile-info button:hover {
+    background-color: #1b4d30;
 }

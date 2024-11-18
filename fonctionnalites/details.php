@@ -1,4 +1,5 @@
     <?php
+
     session_start();
     ob_start();
     ini_set('display_errors', 1);
@@ -695,6 +696,22 @@
             });
         });
     </script>
+    <script>
+        // Attendre que le contenu soit chargé
+        document.addEventListener("DOMContentLoaded", function() {
+            var hash = window.location.hash;
+            if (hash) {
+                // Attendre un court instant pour s'assurer que le contenu est disponible
+                setTimeout(function() {
+                    var element = document.querySelector(hash);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 500); // Ajustez le délai si nécessaire
+            }
+        });
+    </script>
+
     <?php
     // Inclure le fichier de gestion des commentaires et le footer
     include 'commentaires.php';

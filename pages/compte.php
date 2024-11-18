@@ -1,8 +1,24 @@
 <?php
+// Définir les paramètres de cookie de session pour une sécurité accrue
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => isset($_SERVER['HTTPS']), // True si vous utilisez HTTPS
+    'httponly' => true,
+    'samesite' => 'Strict', // ou 'Lax'
+]);
 session_start();
 ob_start();
+// Générer un jeton CSRF si non déjà défini
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_token'];
 
 require '../bd/bd.php'; // Connexion à la base de données
+
+
 
 // Gestion de la connexion
 if (isset($_POST['login'])) {
@@ -47,6 +63,16 @@ if (isset($_POST['register'])) {
         $register_error = "Adresse email invalide.";
     } elseif ($password !== $confirm_password) {
         $register_error = "Les mots de passe ne correspondent pas.";
+    } elseif (strlen($password) < 8) {
+        $register_error = "Le mot de passe doit contenir au moins 8 caractères.";
+    } elseif (!preg_match('/[A-Z]/', $password)) {
+        $register_error = "Le mot de passe doit contenir au moins une lettre majuscule.";
+    } elseif (!preg_match('/[a-z]/', $password)) {
+        $register_error = "Le mot de passe doit contenir au moins une lettre minuscule.";
+    } elseif (!preg_match('/[0-9]/', $password)) {
+        $register_error = "Le mot de passe doit contenir au moins un chiffre.";
+    } elseif (!preg_match('/[\W]/', $password)) {
+        $register_error = "Le mot de passe doit contenir au moins un caractère spécial.";
     } else {
         // Vérifier si le nom d'utilisateur ou l'email est déjà pris
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
@@ -70,6 +96,7 @@ if (isset($_POST['register'])) {
             if ($stmt->execute()) {
                 $register_success = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
             } else {
+                error_log('Erreur de base de données : ' . $stmt->error);
                 $register_error = "Une erreur s'est produite lors de la création du compte.";
             }
         }
@@ -359,7 +386,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/includes.css">
-
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
@@ -375,9 +401,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                     <img src="../images/user.png" alt="Photo de profil">
                 </div>
                 <div class="profile-info">
-                    <h2><?= htmlspecialchars($_SESSION['username']) ?></h2>
+                    <h2><?= htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8') ?></h2>
                     <p>Membre depuis <?= isset($user['created_at']) ? date('d/m/Y', strtotime($user['created_at'])) : 'Date inconnue' ?></p>
-                    <button id="view-comments-button">Voir ces commentaires</button>
+                    <button id="view-comments-button">Voir vos commentaires</button>
                     <button id="view-requests-button">Demandes envoyées</button>
                     <!-- Bouton de déconnexion -->
                     <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
@@ -390,23 +416,24 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                     <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
                     <!-- Contenu de la section Favoris -->
                     <?php if (isset($error_message_favorite)): ?>
-                        <p class="error-message"><?= htmlspecialchars($error_message_favorite) ?></p>
+                        <p class="error-message"><?= htmlspecialchars($error_message_favorite, ENT_QUOTES, 'UTF-8') ?></p>
                     <?php endif; ?>
                     <?php if (isset($success_message_favorite)): ?>
-                        <p class="success-message"><?= htmlspecialchars($success_message_favorite) ?></p>
+                        <p class="success-message"><?= htmlspecialchars($success_message_favorite, ENT_QUOTES, 'UTF-8') ?></p>
                     <?php endif; ?>
-
 
                     <?php if (!empty($favorite_cities)): ?>
                         <ul class="favorite-cities-list">
                             <?php foreach ($favorite_cities as $city): ?>
                                 <li>
                                     <a href="../fonctionnalites/details.php?ville=<?= urlencode($city['city_name']) ?>" class="favorite-link">
-                                        <?= htmlspecialchars($city['city_name']) ?>
+                                        <?= htmlspecialchars($city['city_name'], ENT_QUOTES, 'UTF-8') ?>
                                     </a>
                                     <!-- Formulaire pour supprimer la ville favorite -->
                                     <form method="post" class="delete-city-form">
-                                        <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name']) ?>">
+                                        <input type="hidden" name="city_name" value="<?= htmlspecialchars($city['city_name'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <!-- Jeton CSRF -->
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit" name="delete_favorite_city"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </li>
@@ -423,6 +450,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                         <input type="hidden" name="city_name" id="city_name_hidden">
                         <!-- Liste déroulante pour les suggestions -->
                         <ul id="suggestions-list"></ul>
+                        <!-- Jeton CSRF -->
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                         <button type="submit" name="add_favorite_city" id="add-favorite-button" disabled><i class="fas fa-plus"></i> Ajouter</button>
                     </form>
                 </div>
@@ -435,12 +464,14 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                             <?php foreach ($search_history as $search): ?>
                                 <li>
                                     <a href="../fonctionnalites/details.php?ville=<?= urlencode($search['search_query']) ?>" class="search-query">
-                                        <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query']) ?>
+                                        <i class="fas fa-search"></i> <?= htmlspecialchars($search['search_query'], ENT_QUOTES, 'UTF-8') ?>
                                     </a>
                                     <span class="search-date"><?= date('d/m/Y H:i', strtotime($search['search_date'])) ?></span>
                                     <!-- Formulaire pour supprimer une recherche individuelle -->
                                     <form method="post" class="delete-search-form">
-                                        <input type="hidden" name="search_query" value="<?= htmlspecialchars($search['search_query']) ?>">
+                                        <input type="hidden" name="search_query" value="<?= htmlspecialchars($search['search_query'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <!-- Jeton CSRF -->
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit" name="delete_search"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </li>
@@ -448,6 +479,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                         </ul>
                         <!-- Bouton pour effacer l'historique -->
                         <form method="post" class="clear-history-form" id="clear-history-form">
+                            <!-- Jeton CSRF -->
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                             <button type="submit" name="clear_history" class="clear-history-button"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
                         </form>
                     <?php else: ?>
@@ -472,7 +505,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             <form class="compte-form" method="POST">
                 <h2>Connexion à votre compte</h2>
                 <?php if (isset($login_error)): ?>
-                    <p class="error-message"><?= $login_error ?></p>
+                    <p class="error-message"><?= htmlspecialchars($login_error, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
@@ -491,9 +524,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             <form class="compte-form" method="POST">
                 <h2>Création d'un nouveau compte</h2>
                 <?php if (isset($register_success)): ?>
-                    <p class="success-message"><?= htmlspecialchars($register_success) ?></p>
+                    <p class="success-message"><?= htmlspecialchars($register_success, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php elseif (isset($register_error)): ?>
-                    <p class="error-message"><?= htmlspecialchars($register_error) ?></p>
+                    <p class="error-message"><?= htmlspecialchars($register_error, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
@@ -538,38 +571,34 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     </div>
 </div>
 
-
 <main>
 </main>
 <?php include '../includes/footer.php'; ?>
 
+<!-- Vos scripts JavaScript -->
 <script src="../script/suggestions.js"></script>
 <script src="../script/favoritesAndMessages.js"></script>
 <script>
-    // Obtenir les éléments
-    var commentsModal = document.getElementById("comments-modal");
-    var commentsBtn = document.getElementById("view-comments-button");
-    var closeCommentsBtn = document.getElementsByClassName("close-button-comments")[0];
+    // Modal des commentaires
+    const commentsModal = document.getElementById("comments-modal");
+    const commentsBtn = document.getElementById("view-comments-button");
+    const closeCommentsBtn = document.querySelector(".close-button-comments");
 
-    // Quand l'utilisateur clique sur le bouton, ouvrir la modale
-    commentsBtn.onclick = function() {
+    commentsBtn.addEventListener("click", () => {
         commentsModal.style.display = "block";
-        loadUserComments(); // Charger les commentaires
-    }
+        loadUserComments();
+    });
 
-    // Quand l'utilisateur clique sur le x, fermer la modale
-    closeCommentsBtn.onclick = function() {
+    closeCommentsBtn.addEventListener("click", () => {
         commentsModal.style.display = "none";
-    }
+    });
 
-    // Quand l'utilisateur clique en dehors de la modale, la fermer
-    window.onclick = function(event) {
+    window.addEventListener("click", (event) => {
         if (event.target == commentsModal) {
             commentsModal.style.display = "none";
         }
-    }
+    });
 
-    // Fonction pour charger les commentaires via AJAX
     function loadUserComments() {
         fetch('load_user_comments.php')
             .then(response => response.text())
@@ -581,10 +610,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 document.getElementById('user-comments-list').innerHTML = '<p>Une erreur est survenue.</p>';
             });
     }
-</script>
 
-<!-- Script pour les onglets -->
-<script>
+    // Script pour les onglets
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
 
@@ -612,12 +639,10 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     if (connexionTab) {
         connexionTab.style.display = "block";
     }
-</script>
-<script>
+
     // Initialiser les suggestions pour le champ de ville favorite
     initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
-</script>
-<script>
+
     document.getElementById('favorite-city-form').addEventListener('submit', function(event) {
         const hiddenInput = document.getElementById('city_name_hidden');
         if (!hiddenInput.value) {
@@ -625,8 +650,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             alert("Veuillez sélectionner une ville valide dans les suggestions.");
         }
     });
-</script>
-<script>
+
     // Obtenir les éléments
     var modal = document.getElementById("requests-modal");
     var btn = document.getElementById("view-requests-button");
