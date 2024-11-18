@@ -60,32 +60,36 @@
  */
 .detail-article-wrapper {
     width: 100%;
-    max-width: 1200px; /* Largeur similaire à celle des autres pages */
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+    font-family: 'Open Sans', sans-serif;
 }
 
 /**
- * Detail Article Heading
  * Titre principal de l'article.
  */
 .detail-article-wrapper h2 {
-    font-size: 2em;
+    font-size: 2.2em;
     color: #4c5f2d;
-    margin-bottom: 20px; /* Espacement plus grand */
+    text-align: center;
+    font-weight: 700;
+    text-decoration: underline;
 }
 
 /**
- * Detail Article Image
  * Image de l'article.
  */
 .detail-article-wrapper img {
-    width: 80%;
-    height: initial;
+    display: block;
+    max-width: 90%;
+    margin: 20px auto;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /**
@@ -93,9 +97,22 @@
  * Contenu de l'article.
  */
 .detail-article-content {
-    font-size: 1.1em;
+    font-size: 1.2em;
     color: #333;
-    line-height: 1.6;
+    text-align: justify;
+    line-height: 1.8;
     margin-bottom: 20px;
+}
+
+/**
+ * Date de publication de l'article.
+ */
+.detail-article-wrapper p em {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #6b8e23;
+    font-style: normal;
+    text-align: center;
 }
 

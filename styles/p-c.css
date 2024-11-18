@@ -1,0 +1,104 @@
+/* ========================================================================
+   Styles pour la page Politique de Confidentialité
+   ======================================================================== */
+
+/**
+ * Section principale contenant la politique de confidentialité.
+ * Définit la largeur maximale, les marges, le padding et les styles de fond.
+ */
+#politique-confidentialite {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/**
+ * Paragraphes dans la section Politique de Confidentialité.
+ * Définit l'espacement entre les paragraphes et la taille de la police.
+ */
+#politique-confidentialite p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+/**
+ * Listes non ordonnées dans la section Politique de Confidentialité.
+ * Supprime les styles par défaut des listes et définit les marges et le padding.
+ */
+#politique-confidentialite ul {
+    margin: 15px 0;
+    padding-left: 20px;
+    list-style: none;
+}
+
+/**
+ * Éléments de liste dans les listes non ordonnées.
+ * Ajoute un espacement entre les éléments de la liste.
+ */
+#politique-confidentialite ul li {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+/**
+ * Titres de niveau 3 dans la section Politique de Confidentialité.
+ * Met en valeur les sous-titres avec une bordure, une taille de police plus grande et un espacement vertical.
+ */
+#politique-confidentialite h3 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid darkolivegreen;
+    padding-bottom: 5px;
+}
+
+/**
+ * Liens hypertextes dans la section Politique de Confidentialité.
+ * Définit la couleur des liens et leur style de survol.
+ */
+#politique-confidentialite a {
+    color: green;
+    text-decoration: none;
+}
+
+#politique-confidentialite a:hover {
+    text-decoration: underline;
+    color: darkolivegreen;
+    transition-duration: 0.5s;
+}
+
+/**
+ * Tableaux dans la section Politique de Confidentialité.
+ * Définit la largeur, les marges et la taille de la police des tableaux.
+ */
+#politique-confidentialite table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9rem;
+}
+
+/**
+ * En-têtes et cellules des tableaux.
+ * Ajoute des bordures, du padding et aligne le texte à gauche.
+ */
+#politique-confidentialite table th,
+#politique-confidentialite table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+/**
+ * En-têtes des tableaux.
+ * Met en surbrillance l'arrière-plan et applique une police en gras.
+ */
+#politique-confidentialite table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}

@@ -460,16 +460,24 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Compte - PureOxy</title>
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <!-- Lien Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Inclusion des fichiers CSS -->
+    <!-- Styles de Base -->
     <link rel="stylesheet" href="../styles/base.css">
+    <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <link rel="stylesheet" href="../styles/compte.css">
-    <link rel="stylesheet" href="../styles/recherche.css">
+    <!-- Styles pour les commentaires -->
     <link rel="stylesheet" href="../styles/commentaire.css">
+    <!-- Styles pour les suggestions -->
+    <link rel="stylesheet" href="../styles/recherche.css">
+    <!-- Styles pour la page compte -->
+    <link rel="stylesheet" href="../styles/compte.css">
+    <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
+    <!-- Script de validation de formulaire -->
+    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
 <?php include '../includes/header.php'; ?>

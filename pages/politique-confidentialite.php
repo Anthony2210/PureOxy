@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../styles/base.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
+    <!-- Styles pour la page politique de confidentialité -->
+    <link rel="stylesheet" href="../styles/p-c.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
     <!-- Script de validation de formulaire -->

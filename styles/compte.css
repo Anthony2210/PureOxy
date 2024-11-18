@@ -104,6 +104,7 @@
     font-size: 1.8em;
     color: #333;
     margin: 0;
+    text-decoration: none;
 }
 
 .profile-info p {
@@ -249,58 +250,79 @@
     text-decoration: underline;
 }
 
-
 /**
  * @section Suggestions List Styles
- * Styles pour les listes de suggestions dans les formulaires.
+ * Styles pour la barre de recherche pour entrer une ville en favoris.
  */
 
-.favorite-city-form #suggestions-list, .history-city-form #suggestions-list {
-    position: absolute;
-    top: calc(100% + 5px);
-    left: 0;
-    width: 100%;
-    background-color: #fff;
+.favorite-city-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px 15px;
     border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.favorite-city-form input[type="text"] {
+    width: 100%;
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.1em;
+    flex: 1; /* S'étend pour occuper l'espace disponible */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.favorite-city-form input[type="text"]:focus {
+    border-color: #6b8e23;
+    box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
+    outline: none;
+}
+/**
+ * Styles pour les listes de suggestions dans les formulaires.
+ */
+.favorite-cities-section #suggestions-list {
+    top: calc(100% + 5px); /* Place les suggestions juste en dessous de l'input */
+    left: 0;
+    width: calc(100% - 30px); /* Ajuste la largeur pour qu'elle corresponde à l'input */
+    position: absolute;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     overflow-y: auto;
     z-index: 1000;
-    opacity: 0;
-    list-style-type: none;
+    list-style: none;
     padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.favorite-city-form #suggestions-list.show, .history-city-form #suggestions-list.show {
+.favorite-cities-section #suggestions-list.show {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
 }
 
-.favorite-city-form #suggestions-list li, .history-city-form #suggestions-list li {
+.favorite-cities-section #suggestions-list li {
     padding: 10px 15px;
     cursor: pointer;
     color: #333;
-    border-bottom: 1px solid #eee;
-    background-color: #fff;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.favorite-city-form #suggestions-list li:hover, .history-city-form #suggestions-list li:hover {
-    background-color: #f0f0f0;
+.favorite-cities-section #suggestions-list li:hover {
+    background-color: #f3f4ed;
     color: #6b8e23;
 }
 
-.favorite-city-form #suggestions-list li:last-child, .history-city-form #suggestions-list li:last-child {
-    border-bottom: none;
-}
-
-.favorite-city-form #suggestions-list li + li, .history-city-form #suggestions-list li + li {
-    border-top: 1px solid #eee;
-}
 /**
  * @section History List Styles
  * Styles pour la liste de l'historique des recherches des utilisateurs.
@@ -355,6 +377,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap : 20px;
     transition: background-color 0.2s;
 }
 
@@ -367,6 +390,7 @@
  * Requête de recherche dans l'historique.
  */
 .history-list li .search-query {
+    flex : 1    ;
     font-size: 1.1em;
     color: #333;
     display: flex;
@@ -382,4 +406,13 @@
 .history-list li .search-query i {
     margin-right: 8px;
     color: #6b8e23;
+}
+
+/**
+ * Compte
+ * Logo des titres h2
+ */
+.fa-solid, .fas {
+    font-weight: 900;
+    margin-right: 10px;
 }

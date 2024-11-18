@@ -30,16 +30,18 @@ include '../includes/header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Actualités sur la Qualité de l'Air</title>
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <!-- Styles de Base -->
     <link rel="stylesheet" href="../styles/base.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour l'Introduction -->
-    <link rel="stylesheet" href="../styles/index.css">
+    <!-- Styles pour la page d'actualité -->
+    <link rel="stylesheet" href="../styles/articles.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet"> <!-- Police utilisée -->
-</head>
+    <!-- Script de validation de formulaire -->
+    <script src="../script/erreur_formulaire.js"></script></head>
 <body>
 <main>
     <div class="content-wrapper">

@@ -29,8 +29,18 @@ include '../includes/header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail de l'Article</title>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet"> <!-- Lien vers la police League Spartan -->
-</head>
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Styles de Base -->
+    <link rel="stylesheet" href="../styles/base.css">
+    <!-- Styles pour l'En-tête -->
+    <link rel="stylesheet" href="../styles/includes.css">
+    <!-- Styles pour la page des articles de presses -->
+    <link rel="stylesheet" href="../styles/articles.css">
+    <!-- Styles pour les Boutons -->
+    <link rel="stylesheet" href="../styles/boutons.css">
+    <!-- Script de validation de formulaire -->
+    <script src="../script/erreur_formulaire.js"></script></head>
 <body>
 
 <div class="detail-article-wrapper">
