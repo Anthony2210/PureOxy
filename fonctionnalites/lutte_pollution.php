@@ -24,8 +24,6 @@ require '../bd/bd.php'; // Connexion à la base de données
     <title>PureOxy - Lutte contre la pollution de l'air</title>
     <!-- Inclusion des polices et styles CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap">
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/includes.css">
 </head>
 <body>
 <?php

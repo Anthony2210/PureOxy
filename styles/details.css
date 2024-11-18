@@ -143,41 +143,6 @@
 }
 
 /**
- * Call to Action (CTA)
- * ---------------------------------------
- * Styles pour les boutons d'appel à l'action.
- */
-#cta {
-    text-align: center;
-    background-color: #556b2f;
-    padding: 40px 0;
-    color: #f9f9e9;
-}
-
-#cta h2 {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-#cta .button {
-    background-color: #f9f9e9;
-    color: #6b8e23;
-    padding: 15px 30px;
-    text-decoration: none;
-    font-size: 1.2em;
-    border-radius: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 10px;
-}
-
-#cta .button:hover {
-    background-color: #e3e3d9;
-    transform: translateY(-3px);
-}
-
-/**
  * Effects Section
  * ---------------------------------------
  * Styles pour la section des effets.
@@ -263,8 +228,7 @@
 }
 
 /**
- * City Not Found Page
- * ---------------------------------------
+ * Details d'une ville non trouvée ou non existante
  * Styles pour la page indiquant qu'une ville n'a pas été trouvée.
  */
 #city-not-found {
@@ -281,23 +245,6 @@
 #city-not-found p {
     font-size: 1.2em;
     color: #333;
-}
-
-#city-not-found .button {
-    margin-top: 20px;
-    padding: 12px 25px;
-    background-color: #6b8e23;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1em;
-    font-weight: bold;
-    display: inline-block;
-    transition: background-color 0.3s;
-}
-
-#city-not-found .button:hover {
-    background-color: #556b2f;
 }
 
 #city-not-found ul {

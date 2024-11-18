@@ -23,18 +23,15 @@ require_once('../bd/bd.php'); // Connexion à la base de données
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche de Villes</title>
-    <link rel="stylesheet" href="../styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <!-- Styles de Base -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles de Mise en Page -->
-    <link rel="stylesheet" href="../styles/layout.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
     <!-- Styles pour la Recherche -->
-    <link rel="stylesheet" href="../styles/search.css">
+    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Styles pour les Boutons -->
-    <link rel="stylesheet" href="../styles/buttons.css">
+    <link rel="stylesheet" href="../styles/boutons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body id="recherche-page">

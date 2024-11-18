@@ -464,21 +464,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <!-- Inclusion des fichiers CSS -->
-    <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/base.css">
-    <link rel="stylesheet" href="../styles/layout.css">
     <link rel="stylesheet" href="../styles/includes.css">
-    <link rel="stylesheet" href="../styles/account.css">
-    <link rel="stylesheet" href="../styles/dashboard.css">
-    <link rel="stylesheet" href="../styles/search.css">
-    <link rel="stylesheet" href="../styles/comments.css">
-    <link rel="stylesheet" href="../styles/modal.css">
-    <link rel="stylesheet" href="../styles/buttons.css">
+    <link rel="stylesheet" href="../styles/compte.css">
+    <link rel="stylesheet" href="../styles/recherche.css">
+    <link rel="stylesheet" href="../styles/commentaire.css">
+    <link rel="stylesheet" href="../styles/boutons.css">
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
 <div class="compte-container">
-    <h1>L’espace Compte</h1>
+    <h2>L’espace Compte</h2>
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <!-- Tableau de bord de l'utilisateur -->
@@ -545,7 +541,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 </div>
                 <!-- Section Historique des Recherches -->
                 <div class="history-section">
-                    <h3><i class="fas fa-history"></i> Historique des dernières recherches</h3>
+                    <h3><i class="fas fa-history"></i>Historique des dernières recherches</h3>
                     <!-- Contenu de la section Historique -->
                     <?php if (!empty($search_history)): ?>
                         <ul class="history-list">

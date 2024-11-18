@@ -1,5 +1,5 @@
 /* ========================================================================
-   search.css
+   recherche.css
    Styles pour le conteneur de recherche et les suggestions
    ======================================================================== */
 
@@ -56,27 +56,6 @@
 
 #search-bar:focus {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-}
-
-/**
- * Search Button
- */
-#search-button {
-    margin-top: 20px;
-    padding: 12px 30px;
-    background-color: transparent;
-    color: #fff;
-    border: solid white 2px;
-    border-radius: 30px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#search-button:hover {
-    background-color: #4e6920;
-    color: white;
-    text-decoration: underline;
 }
 
 /**

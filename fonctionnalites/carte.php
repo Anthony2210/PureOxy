@@ -20,16 +20,14 @@ session_start();
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Styles de Base -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles de Mise en Page -->
-    <link rel="stylesheet" href="../styles/layout.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
     <!-- Styles pour la Carte -->
     <link rel="stylesheet" href="../styles/carte.css" />
     <!-- Styles pour les Commentaires -->
-    <link rel="stylesheet" href="../styles/comments.css">
+    <link rel="stylesheet" href="../styles/commentaire.css">
     <!-- Styles pour les Boutons -->
-    <link rel="stylesheet" href="../styles/buttons.css">
+    <link rel="stylesheet" href="../styles/boutons.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>

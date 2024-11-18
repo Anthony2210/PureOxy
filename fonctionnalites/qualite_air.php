@@ -31,8 +31,6 @@ require '../bd/bd.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Qualité de l'air et effets sur la santé</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap">
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/includes.css">
 </head>
 <body>
 <?php

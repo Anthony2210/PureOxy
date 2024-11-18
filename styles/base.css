@@ -28,9 +28,33 @@ html, body {
     height: 100%;
     margin: 0;
 }
-/* Main prend l'espace disponible entre le header et le footer */
+
+/**
+ * Content Wrapper
+ * Conteneur principal qui englobe tout le contenu de la page.
+ */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/**
+ * Main Content
+ * Zone principale de contenu entre le header et le footer.
+ */
 main {
     flex: 1;
+}
+
+/**
+ * Global Container
+ * Conteneur global avec largeur maximale et marges automatiques.
+ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 h2{

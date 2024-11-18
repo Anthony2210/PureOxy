@@ -1,0 +1,371 @@
+/* ========================================================================
+   boutons.css
+   Styles pour les boutons réutilisables
+   ======================================================================== */
+
+/**
+ * @section Buttons Styles
+ * Styles pour les boutons réutilisables dans le site.
+ */
+
+/**
+ * Index
+ * CTA Button
+ */
+#cta .button {
+    background-color: #f9f9e9; /* Couleur de fond du bouton */
+    color: #6b8e23; /* Texte du bouton en vert foncé */
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 30px; /* Bouton très arrondi */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#cta .button:hover {
+    background-color: #e3e3d9; /* Couleur légèrement plus foncée au survol */
+    transform: translateY(-3px);
+}
+
+/**
+ * Clear History Button
+ */
+.clear-history-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.clear-history-button i {
+    margin-right: 5px;
+}
+
+.clear-history-button:hover {
+    background-color: #c0392b;
+}
+
+/**
+ * Logout Button
+ */
+.logout-button {
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button i {
+    margin-right: 8px;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+    color: white;
+    text-decoration: underline;
+}
+
+/**
+ * View Buttons (Comments and Requests)
+ */
+#view-comments-button,
+#view-requests-button {
+    font-family: "League Spartan", sans-serif;
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Espacement entre les boutons */
+}
+
+#view-comments-button i,
+#view-requests-button i {
+    margin-right: 5px;
+}
+
+#view-comments-button:hover,
+#view-requests-button:hover {
+    background-color: #556b2f;
+}
+
+/**
+ * Add Favorite Button
+ */
+#add-favorite-button {
+    font-family: "League Spartan", sans-serif;
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+#add-favorite-button i {
+    margin-right: 5px;
+}
+
+#add-favorite-button:hover {
+    background-color: #556b2f;
+}
+
+/**
+ * Delete Buttons (for favorite cities and search history)
+ * Utilise une classe générale pour les boutons de suppression.
+ */
+.delete-button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.delete-button:hover {
+    color: #c0392b;
+}
+
+/**
+ * Detail Article Buttons
+ * Boutons "Retour" et "Lire la suite".
+ */
+.detail-article-wrapper .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6b8e23;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-bottom: 15px; /* Un peu d'espace sous les boutons */
+}
+
+.detail-article-wrapper .button:hover {
+    background-color: #4c5f2d;
+}
+
+/**
+ * Back Button
+ * Style pour les retours à la page précédente.
+ */
+.back-button {
+    margin-bottom: 20px; /* Un peu plus d'espace en bas */
+}
+
+/**
+ * Carte Fenêtre Flottante
+ * Style du bouton "Voir plus".
+ */
+/* Style pour le lien "Voir plus" */
+#see-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: darkolivegreen;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+#see-more:hover {
+    background-color: darkolivegreen;
+    color: white;
+    transition: none;
+    text-decoration: underline;
+}
+
+/**
+ * Commentaire
+ * Style des boutons d'interaction
+ */
+
+.comment-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    color: #6b8e23;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.comment-actions button:hover {
+    text-decoration: underline;
+}
+
+/**
+ * Reply and Like Buttons
+ */
+.reply-button, .like-form button {
+    display: inline-flex;
+    align-items: center;
+}
+
+.reply-button i, .like-form button i {
+    margin-right: 5px;
+}
+
+/**
+ * Style du bouton "Poster"
+ */
+
+.comment-form button {
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.comment-form button:hover {
+    background-color: #556b2f;
+}
+
+/**
+ * Modale des commentaires postés via compte.php
+ * Bouton en croix qui ferme la modale.
+ */
+
+.close-button-comments {
+    color: #555;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button-comments:hover,
+.close-button-comments:focus {
+    color: #ff0000;
+}
+
+/**
+ * Compte
+ * Styles pour les boutons des formulaires dans les comptes.
+ */
+
+.compte-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.compte-form button:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+.compte-form button:active {
+    background-color: #455225;
+}
+
+/**
+ * Delete Favorite Button
+ * Bouton pour supprimer une ville des favoris.
+ */
+.favorite-cities-list li .delete-city-form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.favorite-cities-list li .delete-city-form button:hover {
+    color: #c0392b;
+}
+
+/**
+ * Details d'une ville non trouvée ou non existante
+ * Styles pour les boutons qui redirigent vers d'autres pages.
+ */
+
+#city-not-found button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #6b8e23;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+#city-not-found button:hover {
+    background-color: #556b2f;
+}
+
+/**
+ * Recherche
+ * Search Button
+ */
+#search-button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    background-color: transparent;
+    color: #fff;
+    border: solid white 2px;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #4e6920;
+    color: white;
+    text-decoration: underline;
+}

@@ -1,0 +1,124 @@
+/* ========================================================================
+   index.css
+   Styles pour la section d'introduction
+   ======================================================================== */
+
+/**
+ * @section Index Styles
+ * Styles pour la page d'accueil.
+ */
+
+/**
+ * Introduction Section
+ */
+#introduction {
+    position: relative;
+    text-align: center;
+    background-image: url('../images/vancouver-in-fall.png');
+    background-size: cover;
+    background-position: center;
+    padding: 80px 20px; /* Plus de padding pour l'espacement vertical */
+    color: white;
+}
+
+#introduction::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur sombre avec transparence */
+    z-index: 1;
+}
+
+#introduction h2, #introduction p {
+    position: relative;
+    z-index: 2; /* Assure que le texte reste au-dessus de la superposition */
+}
+
+/**
+ * Introduction Heading
+ */
+#introduction h2 {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff; /* Titre en blanc */
+}
+
+/**
+ * Introduction Paragraph
+ */
+#introduction p {
+    font-size: 1.3em;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+    color: #f0f0f0;
+}
+
+/**
+ * Features List
+ */
+
+
+/**
+ * Feature Item
+ */
+
+#features ul {
+    list-style-type: none;
+    padding: 0;
+}
+#features li {
+    background-color: #f9f9e9; /* Couleur de fond douce */
+    padding: 20px;
+    margin: 10px 10px 10px 10px;
+    border: 2px solid #6b8e23; /* Bordure verte */
+    border-radius: 8px;
+    font-weight: bold;
+    color: #556b2f;
+    text-align: center;
+    box-shadow: none; /* Retire l'ombre pour un style plus épuré */
+    transition: transform 0.2s ease;
+}
+
+#features li:hover {
+    transform: translateY(-5px); /* Animation au survol */
+}
+
+/**
+ * Feature Title
+ */
+#features strong {
+    color: #6b8e23; /* Texte vert pour les titres des fonctionnalités */
+    font-size: 1.2em;
+}
+
+/**
+ * Features Heading
+ */
+#features h2 {
+    color: #6b8e23;
+    text-decoration: underline;
+    text-align: center;
+    font-size: 2.2em;
+}
+/**
+ * CTA Section
+ */
+#cta {
+    text-align: center;
+    background-color: #556b2f; /* Couleur verte pour le fond */
+    padding: 40px 0;
+    border-radius: 0; /* Pas de bordure arrondie pour la section */
+    color: #f9f9e9; /* Couleur claire pour le texte */
+}
+
+#cta h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #f9f9e9; /* Couleur du texte en blanc cassé */
+}

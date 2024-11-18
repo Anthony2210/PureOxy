@@ -5,7 +5,7 @@
 
 /**
  * @section Articles Styles
- * Styles pour la grille des articles.
+ * Styles pour la grille des articles et le détail des articles.
  */
 
 /**
@@ -54,3 +54,48 @@
     color: #6b8e23;
     font-size: 1em;
 }
+/**
+ * Detail Article Wrapper
+ * Conteneur spécifique de l'article pour éviter les conflits avec les autres styles.
+ */
+.detail-article-wrapper {
+    width: 100%;
+    max-width: 1200px; /* Largeur similaire à celle des autres pages */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/**
+ * Detail Article Heading
+ * Titre principal de l'article.
+ */
+.detail-article-wrapper h2 {
+    font-size: 2em;
+    color: #4c5f2d;
+    margin-bottom: 20px; /* Espacement plus grand */
+}
+
+/**
+ * Detail Article Image
+ * Image de l'article.
+ */
+.detail-article-wrapper img {
+    width: 80%;
+    height: initial;
+    border-radius: 8px;
+}
+
+/**
+ * Detail Article Content
+ * Contenu de l'article.
+ */
+.detail-article-content {
+    font-size: 1.1em;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+

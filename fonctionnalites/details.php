@@ -289,25 +289,22 @@
     <head>
         <meta charset="UTF-8">
         <title>PureOxy - Données détaillées de <?php echo htmlspecialchars($ville); ?></title>
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <!-- Polices Google -->
         <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-        <!-- Lien Font Awesome pour les icônes -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <!-- Votre CSS personnalisé -->
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+         <!-- Lien Font Awesome pour les icônes -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
         <!-- Styles de Base -->
         <link rel="stylesheet" href="../styles/base.css">
-        <!-- Styles de Mise en Page -->
-        <link rel="stylesheet" href="../styles/layout.css">
         <!-- Styles pour l'En-tête -->
         <link rel="stylesheet" href="../styles/includes.css">
-        <!-- Styles pour les Détails -->
+        <!-- Styles pour la page détails des villes -->
         <link rel="stylesheet" href="../styles/details.css">
-        <!-- Styles pour les Commentaires -->
-        <link rel="stylesheet" href="../styles/comments.css">
         <!-- Styles pour les Boutons -->
-        <link rel="stylesheet" href="../styles/buttons.css">
+        <link rel="stylesheet" href="../styles/boutons.css">
+        <!-- Script de validation de formulaire -->
+        <script src="../script/erreur_formulaire.js"></script>
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -324,9 +321,9 @@
                 <p>Il semble que nous n'ayons pas de données pour cette ville.</p>
                 <p>Pour trouver une ville proche de la vôtre, vous pouvez :</p>
                 <ul>
-                    <li>Taper la région ou le début du code postal dans la <a href="../fonctionnalites/recherche.php">barre de recherche</a>.</li>
-                    <li>Rechercher une ville proche géographiquement avec notre <a href="../pages/carte.php">carte interactive</a>.</li>
-                    <li>Nous envoyer une demande pour ajouter votre ville via notre <a href="../pages/contact.php">formulaire de contact</a>.</li>
+                    <li><button>Taper la région ou le début du code postal dans la <a href="../fonctionnalites/recherche.php">barre de recherche</a>.</button></li>
+                    <li><button>Rechercher une ville proche géographiquement avec notre <a href="../fonctionnalites/carte.php">carte interactive</a>.</button></li>
+                    <li><button>Nous envoyer une demande pour ajouter votre ville via notre <a href="../pages/contact.php">formulaire de contact</a>.</button></li>
                 </ul>
             </section>
         <?php else: ?>

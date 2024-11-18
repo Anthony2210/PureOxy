@@ -29,8 +29,6 @@ include '../includes/header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail de l'Article</title>
-    <link rel="stylesheet" href="../styles/style.css"> <!-- Lien vers votre fichier CSS principal -->
-    <link rel="stylesheet" href="../styles/includes.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet"> <!-- Lien vers la police League Spartan -->
 </head>
 <body>

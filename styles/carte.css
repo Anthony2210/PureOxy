@@ -111,8 +111,6 @@
     color: red; /* Diminution */
 }
 
-/* Redondance supprimée : #date-selector déjà défini précédemment */
-
 /* Section de détails supplémentaires */
 #details-section {
     margin-top: 20px;
@@ -132,30 +130,6 @@ canvas {
     height: 400px;
 }
 
-/* Style pour le lien "Voir plus" */
-#see-more {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #ffffff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-#see-more:hover {
-    background-color: darkolivegreen;
-    color: white;
-}
-
-/* Lien "Voir plus" ajusté */
-#see-more {
-    color: darkolivegreen;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-}
 
 /* Ajouter une ombre et une bordure aux marqueurs */
 .leaflet-marker-icon {
