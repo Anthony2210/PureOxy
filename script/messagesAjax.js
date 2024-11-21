@@ -1,5 +1,5 @@
 /**
- * favoritesAndMessages.js
+ * messagesAjax.js
  *
  * Ce script gère les fonctionnalités liées aux villes favorites et aux messages de l'utilisateur.
  * Il permet d'ajouter et de supprimer des villes favorites via des requêtes AJAX,
@@ -9,11 +9,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     /**
-     * Crée et ajoute un conteneur de messages dans le DOM.
+     * Vérifie si le conteneur de messages existe déjà dans le DOM.
+     * S'il n'existe pas, il le crée et l'ajoute au DOM.
      */
-    const messageContainer = document.createElement('div');
-    messageContainer.id = 'message-container';
-    document.body.appendChild(messageContainer);
+    let messageContainer = document.getElementById('message-container');
+    if (!messageContainer) {
+        messageContainer = document.createElement('div');
+        messageContainer.id = 'message-container';
+        document.body.appendChild(messageContainer);
+    }
 
     /**
      * Affiche un message utilisateur de type 'success' ou 'error'.
@@ -22,8 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {string} type - Le type de message ('success' ou 'error').
      */
     function displayMessage(message, type) {
+        type = type.trim().toLowerCase(); // Normalise le type
         const messageDiv = document.createElement('div');
-        messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+        messageDiv.classList.add(type === 'success' ? 'success-message' : 'error-message');
         messageDiv.textContent = message;
 
         // Ajoute le message au conteneur
@@ -103,14 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Attache les événements de suppression aux formulaires existants.
-     */
-    const deleteForms = document.querySelectorAll('.delete-city-form');
-    deleteForms.forEach(form => {
-        attachDeleteEvent(form);
-    });
-
-    /**
      * Fonction pour attacher l'événement de suppression à un formulaire.
      *
      * @param {HTMLFormElement} form - Le formulaire de suppression à attacher.
@@ -159,6 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+
+    /**
+     * Attache les événements de suppression aux formulaires existants.
+     */
+    const deleteForms = document.querySelectorAll('.delete-city-form');
+    deleteForms.forEach(form => {
+        attachDeleteEvent(form);
+    });
 
     /**
      * Gestion de l'ajout/suppression de favoris sur la page details.php.
@@ -224,14 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Attache les événements de suppression aux formulaires existants dans l'historique des recherches.
-     */
-    const deleteSearchForms = document.querySelectorAll('.delete-search-form');
-    deleteSearchForms.forEach(form => {
-        attachDeleteSearchEvent(form);
-    });
-
-    /**
      * Fonction pour attacher l'événement de suppression des recherches à un formulaire.
      *
      * @param {HTMLFormElement} form - Le formulaire de suppression de recherche à attacher.
@@ -276,57 +273,64 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayMessage('Une erreur s\'est produite.', 'error');
                 });
         });
+    }
 
-        /**
-         * Gestion de l'effacement total de l'historique des recherches.
-         */
-        const clearHistoryForm = document.getElementById('clear-history-form');
+    /**
+     * Attache les événements de suppression aux formulaires existants dans l'historique des recherches.
+     */
+    const deleteSearchForms = document.querySelectorAll('.delete-search-form');
+    deleteSearchForms.forEach(form => {
+        attachDeleteSearchEvent(form);
+    });
 
-        if (clearHistoryForm) {
-            clearHistoryForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+    /**
+     * Gestion de l'effacement total de l'historique des recherches.
+     */
+    const clearHistoryForm = document.getElementById('clear-history-form');
 
-                const formData = new FormData(clearHistoryForm);
-                formData.append('ajax', '1'); // Indique que la requête est AJAX
-                formData.append('clear_history', ''); // Paramètre supplémentaire pour l'action
+    if (clearHistoryForm) {
+        clearHistoryForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
 
-                console.log('Effacement de l\'historique (AJAX):', Array.from(formData.entries()));
+            const formData = new FormData(clearHistoryForm);
+            formData.append('ajax', '1'); // Indique que la requête est AJAX
+            formData.append('clear_history', ''); // Paramètre supplémentaire pour l'action
 
-                // Envoie la requête AJAX au serveur
-                fetch('compte.php', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+            console.log('Effacement de l\'historique (AJAX):', Array.from(formData.entries()));
+
+            // Envoie la requête AJAX au serveur
+            fetch('compte.php', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.text())
+                .then(dataText => {
+                    console.log('Contenu brut de la réponse (effacement historique):', dataText);
+                    try {
+                        const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
+                        console.log('Réponse JSON pour effacement historique:', data);
+                        if (data.success) {
+                            // Supprime tous les éléments de la liste d'historique
+                            const historyList = document.querySelector('.history-list');
+                            if (historyList) {
+                                historyList.innerHTML = '';
+                            }
+                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                        } else {
+                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                        }
+                    } catch (e) {
+                        console.error('Erreur lors du parsing JSON (effacement historique):', e);
+                        displayMessage("La réponse du serveur n'est pas au format JSON attendu.", 'error');
                     }
                 })
-                    .then(response => response.text())
-                    .then(dataText => {
-                        console.log('Contenu brut de la réponse (effacement historique):', dataText);
-                        try {
-                            const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
-                            console.log('Réponse JSON pour effacement historique:', data);
-                            if (data.success) {
-                                // Supprime tous les éléments de la liste d'historique
-                                const historyList = document.querySelector('.history-list');
-                                if (historyList) {
-                                    historyList.innerHTML = '';
-                                }
-                                displayMessage(data.message, 'success'); // Affiche un message de succès
-                            } else {
-                                displayMessage(data.message, 'error'); // Affiche un message d'erreur
-                            }
-                        } catch (e) {
-                            console.error('Erreur lors du parsing JSON (effacement historique):', e);
-                            displayMessage("La réponse du serveur n'est pas au format JSON attendu.", 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de l\'effacement de l\'historique:', error);
-                        displayMessage('Une erreur s\'est produite.', 'error');
-                    });
-            });
-        }
-    };
-
+                .catch(error => {
+                    console.error('Erreur lors de l\'effacement de l\'historique:', error);
+                    displayMessage('Une erreur s\'est produite.', 'error');
+                });
+        });
+    }
 });

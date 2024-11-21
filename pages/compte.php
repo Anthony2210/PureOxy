@@ -10,16 +10,6 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// Définir les paramètres de cookie de session pour une sécurité accrue
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => $_SERVER['HTTP_HOST'],
-    'secure' => isset($_SERVER['HTTPS']), // True si vous utilisez HTTPS
-    'httponly' => true,
-    'samesite' => 'Strict', // ou 'Lax'
-]);
 session_start();
 ob_start();
 
@@ -476,11 +466,41 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="../styles/compte.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
+    <!-- Styles pour les Messages -->
+    <link rel="stylesheet" href="../styles/messages.css">
     <!-- Script de validation de formulaire -->
     <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
+
+<!-- Conteneur pour les messages -->
+<div id="message-container">
+    <?php
+    // Messages de connexion
+    if (isset($login_error)) {
+        echo '<div class="error-message">' . htmlspecialchars($login_error, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+
+    // Messages d'inscription
+    if (isset($register_error)) {
+        echo '<div class="error-message">' . htmlspecialchars($register_error, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+    if (isset($register_success)) {
+        echo '<div class="success-message">' . htmlspecialchars($register_success, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+
+    // Messages pour les favoris
+    if (isset($success_message_favorite)) {
+        echo '<div class="success-message">' . htmlspecialchars($success_message_favorite, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+    if (isset($error_message_favorite)) {
+        echo '<div class="error-message">' . htmlspecialchars($error_message_favorite, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+    ?>
+</div>
+
+
 <div class="compte-container">
     <h2>L’espace Compte</h2>
 
@@ -507,14 +527,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 <div class="favorite-cities-section">
                     <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
                     <!-- Contenu de la section Favoris -->
-                    <?php if (isset($error_message_favorite)): ?>
-                        <p class="error-message"><?= htmlspecialchars($error_message_favorite, ENT_QUOTES, 'UTF-8') ?></p>
-                    <?php endif; ?>
-                    <?php if (isset($success_message_favorite)): ?>
-                        <p class="success-message"><?= htmlspecialchars($success_message_favorite, ENT_QUOTES, 'UTF-8') ?></p>
-                    <?php endif; ?>
-
-                    <?php if (!empty($favorite_cities)): ?>
+                   <?php if (!empty($favorite_cities)): ?>
                         <ul class="favorite-cities-list">
                             <?php foreach ($favorite_cities as $city): ?>
                                 <li>
@@ -596,9 +609,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         <div id="connexion" class="compte-tab-content active">
             <form class="compte-form" method="POST">
                 <h2>Connexion à votre compte</h2>
-                <?php if (isset($login_error)): ?>
-                    <p class="error-message"><?= htmlspecialchars($login_error, ENT_QUOTES, 'UTF-8') ?></p>
-                <?php endif; ?>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" name="username" placeholder="Nom d'utilisateur" required>
@@ -615,11 +625,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
         <div id="inscription" class="compte-tab-content">
             <form class="compte-form" method="POST">
                 <h2>Création d'un nouveau compte</h2>
-                <?php if (isset($register_success)): ?>
-                    <p class="success-message"><?= htmlspecialchars($register_success, ENT_QUOTES, 'UTF-8') ?></p>
-                <?php elseif (isset($register_error)): ?>
-                    <p class="error-message"><?= htmlspecialchars($register_error, ENT_QUOTES, 'UTF-8') ?></p>
-                <?php endif; ?>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" name="username" placeholder="Nom d'utilisateur" required>
@@ -671,7 +676,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 
 <!-- Vos scripts JavaScript -->
 <script src="../script/suggestions.js"></script>
-<script src="../script/favoritesAndMessages.js"></script>
+<script src="../script/messagesAjax.js"></script>
 <script>
     /**
      * Gestion de la fenêtre modale des commentaires.

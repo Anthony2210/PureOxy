@@ -212,6 +212,12 @@ function displayComments($comments) {
 <div class="comment-section">
     <h3>Commentaires</h3>
 
+    <!-- Conteneur pour les messages -->
+    <div id="message-container">
+        <?php
+        // Les messages d'erreur et de succès seront affichés ici
+        ?>
+    </div>
     <?php
     /**
      * Récupère et affiche les commentaires principaux pour la page courante.
@@ -292,12 +298,16 @@ function displayComments($comments) {
                                     form.classList.add('like-form');
                                     form.querySelector('button').innerHTML = '<i class="fas fa-thumbs-up"></i> J\'aime (<span class="like-count">' + data.likes + '</span>)';
                                 }
+                                // Afficher un message de succès
+                                var message = action === 'like' ? 'Vous avez aimé ce commentaire.' : 'Vous n\'aimez plus ce commentaire.';
+                                displayMessage(message, 'success');
                             } else {
-                                alert(data.message);
+                                displayMessage(data.message, 'error');
                             }
                         })
                         .catch(function(error) {
                             console.error('Erreur:', error);
+                            displayMessage('Une erreur s\'est produite lors de l\'action.', 'error');
                         });
                 });
             });
@@ -376,17 +386,21 @@ function displayComments($comments) {
                             }
                             commentsList.insertBefore(newComment, commentsList.firstChild);
                         }
+                        // Afficher un message de succès
+                        displayMessage('Commentaire ajouté avec succès.', 'success');
 
                         // Réinitialiser les gestionnaires d'événements
                         handleLikeForms();
                         handleReplyButtons();
                         handleDeleteButtons();
                     } else {
-                        alert(data.message);
+                        displayMessage(data.message, 'error');
                     }
                 })
                 .catch(function(error) {
                     console.error('Erreur:', error);
+                    displayMessage('Une erreur s\'est produite lors de l\'ajout du commentaire.', 'error');
+
                 });
         });
 
@@ -425,12 +439,16 @@ function displayComments($comments) {
                                         // Supprimer le bouton de suppression
                                         commentElement.querySelector('.delete-comment-button').remove();
                                     }
+                                    // Afficher un message de succès
+                                    displayMessage('Commentaire supprimé avec succès.', 'success');
                                 } else {
-                                    alert(data.message);
+                                    displayMessage(data.message, 'error');
                                 }
                             })
                             .catch(function(error) {
                                 console.error('Erreur:', error);
+                                displayMessage('Une erreur s\'est produite lors de la suppression du commentaire.', 'error');
+
                             });
                     }
                 });

@@ -1,5 +1,6 @@
 <?php
 /**
+ * submit_comment.php
  * Soumission de Commentaires
  *
  * Ce script gère la soumission des commentaires par les utilisateurs.

@@ -305,6 +305,8 @@
         <link rel="stylesheet" href="../styles/commentaire.css">
         <!-- Styles pour les Boutons -->
         <link rel="stylesheet" href="../styles/boutons.css">
+        <!-- Styles pour les Messages -->
+        <link rel="stylesheet" href="../styles/messages.css">
         <!-- Script de validation de formulaire -->
         <script src="../script/erreur_formulaire.js"></script>
         <!-- Chart.js -->
@@ -315,6 +317,17 @@
     <?php
     include '../includes/header.php';
     ?>
+
+    <!-- Conteneur pour les messages -->
+    <div id="message-container">
+        <?php
+        if (isset($response['success']) && $response['success'] === true) {
+            echo '<div class="success-message">' . htmlspecialchars($response['message'], ENT_QUOTES, 'UTF-8') . '</div>';
+        } elseif (isset($response['success']) && $response['success'] === false) {
+            echo '<div class="error-message">' . htmlspecialchars($response['message'], ENT_QUOTES, 'UTF-8') . '</div>';
+        }
+        ?>
+    </div>
     
     <div id="details-page" class="container">
         <?php if ($cityNotFound): ?>
@@ -527,7 +540,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script src="../script/favoritesAndMessages.js"></script>
+    <script src="../script/messagesAjax.js"></script>
 
 
     <script>
@@ -725,6 +738,5 @@
     include 'commentaires.php';
     include '../includes/footer.php';
     ?>
-
     </body>
     </html>
