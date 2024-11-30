@@ -7,7 +7,6 @@
  * La page inclut également une section de commentaires pour permettre aux utilisateurs de discuter et d'interagir.
  *
  * @package PureOxy
- * @subpackage PollutionControl
  */
 
 session_start(); // Démarre une nouvelle session ou reprend une session existante

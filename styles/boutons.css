@@ -301,6 +301,11 @@
     background-color: #455225;
 }
 
+/* Styles pour le bouton désactivé */
+.btn-register:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
 /**
  * Delete Favorite Button
  * Bouton pour supprimer une ville des favoris.

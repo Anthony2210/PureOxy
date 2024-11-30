@@ -129,6 +129,8 @@
  */
 .compte-form {
     text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .compte-form h2 {
@@ -152,14 +154,15 @@
 }
 
 .input-group input {
-    width: 75%;
-    padding: 12px 40px;
+    width: 100%;
+    padding: 12px 15px 12px 45px;
     border: 1px solid #c4c4c4;
     border-radius: 6px;
     font-size: 1.1em;
     transition: border-color 0.3s;
     color: #4c5f2d;
     font-family: 'League Spartan', sans-serif;
+    box-sizing: border-box;
 }
 
 .input-group input:focus {
@@ -172,7 +175,26 @@
     font-family: 'League Spartan', sans-serif;
 }
 
+/* Styles pour les champs valides et invalides */
+.input-field.valid {
+    border-color: green;
+}
 
+.input-field.invalid {
+    border-color: red;
+}
+
+/* Styles pour les messages d'erreur du formulaire d'inscription */
+.error-message-inscription {
+    display: block;
+    color: red;
+    font-size: 12px;
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    margin: 5px 0;
+}
 /**
  * @section Favorite Cities List Styles
  * Styles pour la liste des villes favorites des utilisateurs.
@@ -416,3 +438,4 @@
     font-weight: 900;
     margin-right: 10px;
 }
+

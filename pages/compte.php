@@ -470,6 +470,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="../styles/messages.css">
     <!-- Script de validation de formulaire -->
     <script src="../script/erreur_formulaire.js"></script>
+    <!-- Script de validation du formulaire avec jQuery et AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
@@ -623,29 +625,38 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 
         <!-- Formulaire d'inscription -->
         <div id="inscription" class="compte-tab-content">
-            <form class="compte-form" method="POST">
+            <form class="compte-form" id="registration-form">
                 <h2>Création d'un nouveau compte</h2>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                    <input type="text" name="username" id="username" class="input-field" placeholder="Nom d'utilisateur" required>
                 </div>
+                <span class="error-message-inscription" id="username-error"></span>
+
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="email" name="email" id="email" class="input-field" placeholder="Email" required>
                 </div>
+                <span class="error-message-inscription" id="email-error"></span>
+
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="Mot de passe" required>
+                    <input type="password" name="password" id="password" class="input-field" placeholder="Mot de passe" required>
                 </div>
+                <span class="error-message-inscription" id="password-error"></span>
+
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="confirm_password" placeholder="Confirmez le mot de passe" required>
+                    <input type="password" name="confirm_password" id="confirm_password" class="input-field" placeholder="Confirmez le mot de passe" required>
                 </div>
+                <span class="error-message-inscription" id="confirm-password-error"></span>
+
                 <!-- Jeton CSRF -->
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
-                <button type="submit" name="register">S'inscrire</button>
+                <button type="submit" name="register" class="btn-register" disabled>S'inscrire</button>
             </form>
         </div>
+
     <?php endif; ?>
 </div>
 <!-- Fenêtre modale pour les demandes -->
@@ -678,6 +689,198 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 <script src="../script/suggestions.js"></script>
 <script src="../script/messagesAjax.js"></script>
 <script>
+    $(document).ready(function() {
+        var validUsername = false;
+        var validEmail = false;
+        var validPassword = false;
+        var validConfirmPassword = false;
+
+        function checkFormValidity() {
+            if (validUsername && validEmail && validPassword && validConfirmPassword) {
+                $('.btn-register').prop('disabled', false);
+            } else {
+                $('.btn-register').prop('disabled', true);
+            }
+        }
+
+        // Validation du nom d'utilisateur avec vérification AJAX
+        $('#username').on('input', function() {
+            var username = $(this).val();
+            if (username.trim() === '') {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#username-error').text('Le nom d\'utilisateur ne peut pas être vide.');
+                validUsername = false;
+                checkFormValidity();
+            } else {
+                // Vérifier si le nom d'utilisateur existe déjà via AJAX
+                $.ajax({
+                    url: 'check_username.php',
+                    method: 'POST',
+                    data: { username: username },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#username').removeClass('valid').addClass('invalid');
+                            $('#username-error').text('Ce nom d\'utilisateur est déjà pris.');
+                            validUsername = false;
+                        } else {
+                            $('#username').removeClass('invalid').addClass('valid');
+                            $('#username-error').text('');
+                            validUsername = true;
+                        }
+                        checkFormValidity();
+                    },
+                    error: function() {
+                        $('#username').removeClass('valid').addClass('invalid');
+                        $('#username-error').text('Erreur lors de la vérification du nom d\'utilisateur.');
+                        validUsername = false;
+                        checkFormValidity();
+                    }
+                });
+            }
+        });
+
+        // Validation de l'email avec vérification AJAX
+        $('#email').on('input', function() {
+            var email = $(this).val();
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.trim() === '') {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#email-error').text('L\'email ne peut pas être vide.');
+                validEmail = false;
+                checkFormValidity();
+            } else if (!emailPattern.test(email)) {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#email-error').text('Format d\'email invalide.');
+                validEmail = false;
+                checkFormValidity();
+            } else {
+                // Vérifier si l'email existe déjà via AJAX
+                $.ajax({
+                    url: 'check_email.php',
+                    method: 'POST',
+                    data: { email: email },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#email').removeClass('valid').addClass('invalid');
+                            $('#email-error').text('Cet email est déjà utilisé.');
+                            validEmail = false;
+                        } else {
+                            $('#email').removeClass('invalid').addClass('valid');
+                            $('#email-error').text('');
+                            validEmail = true;
+                        }
+                        checkFormValidity();
+                    },
+                    error: function() {
+                        $('#email').removeClass('valid').addClass('invalid');
+                        $('#email-error').text('Erreur lors de la vérification de l\'email.');
+                        validEmail = false;
+                        checkFormValidity();
+                    }
+                });
+            }
+        });
+
+        // Validation du mot de passe
+        $('#password').on('input', function() {
+            var password = $(this).val();
+            // Doit contenir au moins une lettre majuscule, une minuscule, un chiffre et un caractère spécial, et au moins 8 caractères
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/;
+            if (password.trim() === '') {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#password-error').text('Le mot de passe ne peut pas être vide.');
+                validPassword = false;
+            } else if (!passwordPattern.test(password)) {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#password-error').text('Le mot de passe doit contenir au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.');
+                validPassword = false;
+            } else {
+                $(this).removeClass('invalid').addClass('valid');
+                $('#password-error').text('');
+                validPassword = true;
+            }
+
+            // Vérifier la confirmation du mot de passe
+            var confirmPassword = $('#confirm_password').val();
+            if (confirmPassword !== '') {
+                if (password !== confirmPassword) {
+                    $('#confirm_password').removeClass('valid').addClass('invalid');
+                    $('#confirm-password-error').text('Les mots de passe ne correspondent pas.');
+                    validConfirmPassword = false;
+                } else {
+                    $('#confirm_password').removeClass('invalid').addClass('valid');
+                    $('#confirm-password-error').text('');
+                    validConfirmPassword = true;
+                }
+            }
+            checkFormValidity();
+        });
+
+        // Validation de la confirmation du mot de passe
+        $('#confirm_password').on('input', function() {
+            var confirmPassword = $(this).val();
+            var password = $('#password').val();
+            if (confirmPassword.trim() === '') {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#confirm-password-error').text('Veuillez confirmer votre mot de passe.');
+                validConfirmPassword = false;
+            } else if (password !== confirmPassword) {
+                $(this).removeClass('valid').addClass('invalid');
+                $('#confirm-password-error').text('Les mots de passe ne correspondent pas.');
+                validConfirmPassword = false;
+            } else {
+                $(this).removeClass('invalid').addClass('valid');
+                $('#confirm-password-error').text('');
+                validConfirmPassword = true;
+            }
+            checkFormValidity();
+        });
+
+        // Soumission du formulaire via AJAX
+        $('#registration-form').on('submit', function(e) {
+            e.preventDefault();
+            if (validUsername && validEmail && validPassword && validConfirmPassword) {
+                // Récupérer les données du formulaire
+                var formData = {
+                    username: $('#username').val(),
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    confirm_password: $('#confirm_password').val(),
+                    csrf_token: $('input[name="csrf_token"]').val()
+                };
+                // Envoyer les données via AJAX
+                $.ajax({
+                    url: 'register_user.php',
+                    method: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#registration-form')[0].reset();
+                            $('.input-field').removeClass('valid');
+                            $('.btn-register').prop('disabled', true);
+                            $('#registration-form').hide();
+                            $('#message-container').html('<div class="success-message">' + response.message + '</div>');
+                            // Redirection après 1 seconde
+                            setTimeout(function() {
+                                window.location.href = '../index.php';
+                            }, 1000);
+                        } else {
+                            $('#message-container').html('<div class="error-message">' + response.message + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#message-container').html('<div class="error-message">Erreur lors de la création du compte.</div>');
+                    }
+                });
+            } else {
+                $('#message-container').html('<div class="error-message">Veuillez remplir correctement tous les champs.</div>');
+            }
+        });
+    });
+
     /**
      * Gestion de la fenêtre modale des commentaires.
      */

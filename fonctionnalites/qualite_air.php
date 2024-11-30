@@ -7,10 +7,6 @@
  * des utilisateurs et le pied de page du site.
  *
  * @package PureOxy
- * @subpackage Pages
- * @author
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
