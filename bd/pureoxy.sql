@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 25 nov. 2024 à 15:47
+-- Généré le : dim. 01 déc. 2024 à 15:22
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -39,17 +39,19 @@ CREATE TABLE IF NOT EXISTS `commentaire` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `commentaire`
 --
 
 INSERT INTO `commentaire` (`id`, `user_id`, `page`, `parent_id`, `content`, `likes`, `created_at`) VALUES
-(73, 6, 'details.php?ville=Sablons', NULL, 'salutuuut', 0, '2024-11-25 13:16:38'),
+(78, 9, 'details.php?ville=Montpellier', NULL, 'Salut', 0, '2024-12-01 12:03:33'),
 (72, 6, 'details.php?ville=Paris', NULL, 'salut', 0, '2024-11-21 19:11:05'),
 (74, 1, 'details.php?ville=Mondeville', NULL, 'salut', 1, '2024-11-25 16:45:04'),
 (75, 1, 'details.php?ville=Mondeville', 74, 'saluuuut', 0, '2024-11-25 16:45:15'),
+(79, 9, 'details.php?ville=Paris', 72, 'ok', 1, '2024-12-01 15:49:40'),
+(80, 9, 'details.php?ville=Paris', 79, 'daccord', 0, '2024-12-01 15:49:53'),
 (71, 6, 'details.php?ville=Pamiers', NULL, 'tg', 0, '2024-11-18 19:16:35'),
 (70, 6, 'qualite_air.php', NULL, 'salut', 0, '2024-11-18 18:52:24'),
 (69, 6, 'details.php?ville=Sablons', 68, 'salut', 0, '2024-11-18 18:52:07'),
@@ -72,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `favorite_cities`
@@ -87,11 +89,13 @@ INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
 (78, 5, 'Montpellier'),
 (79, 5, 'Paris'),
 (132, 6, 'Sablons'),
-(82, 6, 'Montpellier'),
+(142, 9, 'Montpellier'),
 (129, 6, 'Cachan'),
 (111, 7, 'Paris'),
 (130, 6, 'Nîmes'),
-(133, 1, 'Mondeville');
+(133, 1, 'Mondeville'),
+(141, 6, 'Venaco'),
+(154, 9, 'Paris');
 
 -- --------------------------------------------------------
 
@@ -159,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `comment_id` (`comment_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `likes`
@@ -178,8 +182,10 @@ INSERT INTO `likes` (`id`, `user_id`, `comment_id`) VALUES
 (18, 6, 55),
 (21, 6, 56),
 (20, 6, 60),
+(39, 6, 76),
 (37, 1, 74),
-(35, 6, 68);
+(35, 6, 68),
+(42, 9, 79);
 
 -- --------------------------------------------------------
 
@@ -2800,7 +2806,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `search_history`
@@ -2816,7 +2822,8 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (17, 2, 'Charleville-Mézières', '2024-10-29 13:21:56'),
 (16, 2, 'Brest', '2024-10-29 13:14:27'),
 (24, 1, 'Mondeville', '2024-10-30 11:56:35'),
-(96, 6, 'Caca', '2024-11-18 15:26:38'),
+(111, 6, 'Sablons', '2024-11-30 17:33:10'),
+(107, 6, 'Montauban', '2024-11-29 09:07:00'),
 (70, 5, 'Hefisopfs', '2024-11-14 09:16:09'),
 (67, 4, 'Caca', '2024-11-13 18:59:50'),
 (66, 4, 'Paris', '2024-11-13 18:17:16'),
@@ -2827,15 +2834,19 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (61, 4, 'Montpellier', '2024-11-13 17:10:27'),
 (69, 5, 'Paris', '2024-11-14 09:16:00'),
 (68, 5, 'Montpellier', '2024-11-14 08:40:01'),
-(103, 6, 'Paris', '2024-11-21 18:10:43'),
-(97, 6, 'Pamiers', '2024-11-18 15:31:53'),
-(104, 6, 'Sablons', '2024-11-25 12:16:27'),
+(110, 6, 'Montpellier', '2024-11-30 17:29:05'),
 (105, 6, 'Paray-le-Frésil', '2024-11-25 12:19:06'),
-(100, 6, 'Sablons', '2024-11-18 17:50:30'),
-(101, 6, 'Pamiers', '2024-11-18 18:15:56'),
+(109, 6, 'Paris', '2024-11-30 17:28:59'),
 (102, 7, 'Paris', '2024-11-21 14:51:38'),
-(99, 6, 'Lons-le-Saunier', '2024-11-18 17:03:56'),
-(106, 1, 'Mondeville', '2024-11-25 15:44:59');
+(122, 9, 'Montpellier', '2024-12-01 14:44:31'),
+(106, 1, 'Mondeville', '2024-11-25 15:44:59'),
+(108, 6, 'Venaco', '2024-11-29 09:16:10'),
+(116, 9, 'Rouen', '2024-12-01 11:50:10'),
+(117, 9, 'Fort-de-France', '2024-12-01 11:50:22'),
+(118, 9, 'Montpellier', '2024-12-01 13:34:56'),
+(119, 9, 'Paris', '2024-12-01 14:31:39'),
+(120, 9, 'Marseille', '2024-12-01 14:34:42'),
+(121, 9, 'Agen', '2024-12-01 14:35:00');
 
 -- --------------------------------------------------------
 
@@ -2882,20 +2893,13 @@ INSERT INTO `seuils_normes` (`id`, `polluant`, `type_norme`, `valeur`, `unite`, 
 (19, 'Dioxyde de soufre (SO2)', 'Seuil d\'information et de recommandation', 300, 'µg/m³', 'moyenne horaire', 'FR', NULL),
 (20, 'Dioxyde de soufre (SO2)', 'Seuil d\'alerte', 500, 'µg/m³', 'moyenne horaire pendant 3 heures consécutives', 'FR', NULL),
 (21, 'Ozone (O3)', 'Objectif de qualité pour la santé humaine', 120, 'µg/m³', 'maximum journalier de la moyenne sur 8 heures', 'FR', NULL),
-(22, 'Ozone (O3)', 'Objectif de qualité pour la protection de la végétation', 6000, 'µg/m³.h', 'AOT40 calculée sur 1 heure de mai à juillet entre 8h et 20h', 'FR', NULL),
 (23, 'Ozone (O3)', 'Valeur cible pour la protection de la santé humaine', 120, 'µg/m³', 'maximum journalier de la moyenne sur 8 heures, pas plus de 25 jours par an (moyenne sur 3 ans)', 'UE', NULL),
-(24, 'Ozone (O3)', 'Valeur cible pour la protection de la végétation', 18000, 'µg/m³.h', 'AOT40 calculée sur 1 heure de mai à juillet entre 8h et 20h (moyenne sur 5 ans)', 'UE', NULL),
 (25, 'Ozone (O3)', 'Seuil d\'information et de recommandation', 180, 'µg/m³', 'moyenne horaire', 'FR', NULL),
 (26, 'Ozone (O3)', 'Seuil d\'alerte pour la protection sanitaire', 240, 'µg/m³', 'moyenne horaire', 'FR', '1er seuil: 240 µg/m³ pendant 3 heures consécutives; 2ème seuil: 300 µg/m³ pendant 3 heures consécutives; 3ème seuil: 360 µg/m³ moyenne horaire'),
-(27, 'Monoxyde de carbone (CO)', 'Valeur limite pour la protection de la santé humaine', 10, 'mg/m³', 'maximum journalier de la moyenne glissante sur 8 heures', 'FR', 'Soit 10 000 µg/m³'),
 (28, 'Benzène (C6H6)', 'Objectif de qualité', 2, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
 (29, 'Benzène (C6H6)', 'Valeur limite pour la protection de la santé humaine', 5, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
 (30, 'Plomb (Pb)', 'Objectif de qualité', 0.25, 'µg/m³', 'moyenne annuelle', 'FR', NULL),
-(31, 'Plomb (Pb)', 'Valeur limite pour la protection de la santé humaine', 0.5, 'µg/m³', 'moyenne annuelle', 'UE', NULL),
-(32, 'Arsenic (As)', 'Valeur cible', 6, 'ng/m³', 'moyenne annuelle', 'UE', 'Fraction PM10'),
-(33, 'Cadmium (Cd)', 'Valeur cible', 5, 'ng/m³', 'moyenne annuelle', 'UE', NULL),
-(34, 'Nickel (Ni)', 'Valeur cible', 20, 'ng/m³', 'moyenne annuelle', 'UE', NULL),
-(35, 'Benzo(a)pyrène (B[a]P)', 'Valeur cible', 1, 'ng/m³', 'moyenne annuelle', 'UE', 'Fraction PM10');
+(31, 'Plomb (Pb)', 'Valeur limite pour la protection de la santé humaine', 0.5, 'µg/m³', 'moyenne annuelle', 'UE', NULL);
 
 -- --------------------------------------------------------
 
@@ -2913,7 +2917,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -2926,7 +2930,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_pictur
 (4, 'antho_ca', '$2y$10$WfR9whCreeapQnaxd4gPouGpXH2udKIfGFIqDIkqHlptMq/iEVUYq', '2024-11-08 10:00:01', 'user.png', ''),
 (5, 'antho', '$2y$10$6Ih55G9bJThS.tYixhqi9O.G8FWwP18GL8MQnow4w/1m5VG0eHtGa', '2024-11-14 07:42:43', 'user.png', 'antho@antho.com'),
 (6, 'Anthonyy', '$2y$10$yXRKuI4gGlAjt5CtTZcsuugx6ygmna0hAK.Y/TbcAolfBfoyq25R.', '2024-11-14 16:19:45', 'user.png', 'antho@gmail.com'),
-(7, 'combes', '$2y$10$8dn2..Zw32mP6Nc4SvNP0.8KsmWTMJSvAQwr4Mr0U1Fh5E39pP/S.', '2024-11-21 14:43:03', 'user.png', 'combes@combes.fr');
+(7, 'combes', '$2y$10$8dn2..Zw32mP6Nc4SvNP0.8KsmWTMJSvAQwr4Mr0U1Fh5E39pP/S.', '2024-11-21 14:43:03', 'user.png', 'combes@combes.fr'),
+(8, 'acombes8', '$2y$10$FDCgZLO3z.IFh7c8LpaPg.zN55pPnegtcCAyUghEqwRvUgC0DvJNC', '2024-11-29 09:51:15', 'user.png', 'antho4@gmail.com'),
+(9, 'acombes', '$2y$10$fsvrdqxHoBYwJwPhmDD2Te0dJhrtF3LiJD1h66gFZ/yr6/cfb27ze', '2024-12-01 10:40:11', 'user.png', 'antho22@gmail.com');
 
 --
 -- Contraintes pour les tables déchargées
