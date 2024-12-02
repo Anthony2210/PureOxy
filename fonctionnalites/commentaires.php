@@ -101,12 +101,12 @@ class Commentaire {
 /**
  * Récupère les commentaires et leurs réponses depuis la base de données.
  *
+ * @param string   $page       Page actuelle pour laquelle récupérer les commentaires.
  * @param int|null $parent_id Identifiant du commentaire parent. NULL pour les commentaires principaux.
- * @param string   $page      Page actuelle pour laquelle récupérer les commentaires.
  *
  * @return Commentaire[] Tableau d'objets Commentaire.
  */
-function getComments($parent_id = null, $page) {
+function getComments($page, $parent_id = null) { // Paramètres réordonnés
     global $conn;
     $comments = [];
 
@@ -135,7 +135,7 @@ function getComments($parent_id = null, $page) {
     while ($row = $result->fetch_assoc()) {
         $comment = new Commentaire($row);
         // Récursivement récupérer les réponses du commentaire
-        $comment->replies = getComments($comment->id, $page);
+        $comment->replies = getComments($page, $comment->id); // Appel mis à jour
         $comments[] = $comment;
     }
 
@@ -223,7 +223,7 @@ function displayComments($comments) {
      * Récupère et affiche les commentaires principaux pour la page courante.
      */
     // Récupérer les commentaires principaux
-    $comments = getComments(null, $page);
+    $comments = getComments($page); // Appel mis à jour
 
     if (!empty($comments)) {
         echo '<ul class="comments">';
@@ -258,6 +258,25 @@ function displayComments($comments) {
      */
 
     document.addEventListener('DOMContentLoaded', function() {
+        /**
+         * Affiche un message dans le conteneur des messages.
+         *
+         * @param {string} message Le message à afficher.
+         * @param {string} type    Le type de message ('success' ou 'error').
+         */
+        function displayMessage(message, type) {
+            var messageContainer = document.getElementById('message-container');
+            var messageDiv = document.createElement('div');
+            messageDiv.className = type === 'success' ? 'message success' : 'message error';
+            messageDiv.textContent = message;
+            messageContainer.appendChild(messageDiv);
+
+            // Supprimer le message après 5 secondes
+            setTimeout(function() {
+                messageDiv.remove();
+            }, 5000);
+        }
+
         /**
          * Gestion des formulaires de like et unlike.
          */
