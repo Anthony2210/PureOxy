@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 02 déc. 2024 à 17:17
+-- Généré le : dim. 01 déc. 2024 à 15:22
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `commentaire` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `commentaire`
@@ -50,8 +50,8 @@ INSERT INTO `commentaire` (`id`, `user_id`, `page`, `parent_id`, `content`, `lik
 (72, 6, 'details.php?ville=Paris', NULL, 'salut', 0, '2024-11-21 19:11:05'),
 (74, 1, 'details.php?ville=Mondeville', NULL, 'salut', 1, '2024-11-25 16:45:04'),
 (75, 1, 'details.php?ville=Mondeville', 74, 'saluuuut', 0, '2024-11-25 16:45:15'),
-(81, 11, 'details.php?ville=Mont-de-Marsan', NULL, 'Message supprimé', 1, '2024-12-02 17:48:54'),
-(82, 11, 'details.php?ville=Mont-de-Marsan', 81, 'salut', 0, '2024-12-02 17:49:06'),
+(79, 9, 'details.php?ville=Paris', 72, 'ok', 1, '2024-12-01 15:49:40'),
+(80, 9, 'details.php?ville=Paris', 79, 'daccord', 0, '2024-12-01 15:49:53'),
 (71, 6, 'details.php?ville=Pamiers', NULL, 'tg', 0, '2024-11-18 19:16:35'),
 (70, 6, 'qualite_air.php', NULL, 'salut', 0, '2024-11-18 18:52:24'),
 (69, 6, 'details.php?ville=Sablons', 68, 'salut', 0, '2024-11-18 18:52:07'),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `favorite_cities` (
   `city_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=193 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `favorite_cities`
@@ -95,12 +95,59 @@ INSERT INTO `favorite_cities` (`id`, `user_id`, `city_name`) VALUES
 (130, 6, 'Nîmes'),
 (133, 1, 'Mondeville'),
 (141, 6, 'Venaco'),
-(168, 9, 'paris'),
-(167, 9, 'paris'),
-(180, 10, 'montpellier'),
-(179, 10, 'montpellier'),
-(181, 10, 'paris'),
-(182, 10, 'paris');
+(154, 9, 'Paris');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `historical_emissions`
+--
+
+DROP TABLE IF EXISTS `historical_emissions`;
+CREATE TABLE IF NOT EXISTS `historical_emissions` (
+  `id_emission` int NOT NULL,
+  `ISO` varchar(3) DEFAULT NULL,
+  `Country` varchar(6) DEFAULT NULL,
+  `Data_source` varchar(13) DEFAULT NULL,
+  `Sector` varchar(28) DEFAULT NULL,
+  `Gas` varchar(7) DEFAULT NULL,
+  `Unit` varchar(6) DEFAULT NULL,
+  `2021` decimal(5,2) DEFAULT NULL,
+  `2020` decimal(5,2) DEFAULT NULL,
+  `2019` decimal(5,2) DEFAULT NULL,
+  `2018` decimal(5,2) DEFAULT NULL,
+  `2017` decimal(5,2) DEFAULT NULL,
+  `2016` decimal(5,2) DEFAULT NULL,
+  `2015` decimal(5,2) DEFAULT NULL,
+  `2014` decimal(5,2) DEFAULT NULL,
+  `2013` decimal(5,2) DEFAULT NULL,
+  `2012` decimal(5,2) DEFAULT NULL,
+  `2011` decimal(5,2) DEFAULT NULL,
+  `2010` decimal(5,2) DEFAULT NULL,
+  `id_pollution` int DEFAULT NULL,
+  PRIMARY KEY (`id_emission`),
+  KEY `étrangère` (`id_pollution`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `historical_emissions`
+--
+
+INSERT INTO `historical_emissions` (`id_emission`, `ISO`, `Country`, `Data_source`, `Sector`, `Gas`, `Unit`, `2021`, `2020`, `2019`, `2018`, `2017`, `2016`, `2015`, `2014`, `2013`, `2012`, `2011`, `2010`, `id_pollution`) VALUES
+(1, 'FRA', 'France', 'Climate Watch', 'Total excluding LUCF', 'All GHG', 'MtCO₂e', 404.56, 375.97, 412.89, 422.15, 436.57, 433.28, 433.07, 427.71, 461.19, 460.12, 456.53, 473.08, NULL),
+(2, 'FRA', 'France', 'Climate Watch', 'Total including LUCF', 'All GHG', 'MtCO₂e', 343.14, 314.54, 351.50, 360.73, 375.22, 371.85, 372.53, 367.18, 400.65, 399.64, 395.99, 407.15, NULL),
+(3, 'FRA', 'France', 'Climate Watch', 'Energy', 'All GHG', 'MtCO₂e', 300.57, 268.45, 302.18, 308.60, 319.62, 315.61, 312.84, 307.07, 340.08, 339.34, 335.05, 349.48, NULL),
+(4, 'FRA', 'France', 'Climate Watch', 'Transportation', 'All GHG', 'MtCO₂e', 122.05, 108.79, 128.65, 128.90, 131.84, 131.21, 130.67, 129.41, 129.21, 130.25, 131.31, 126.35, NULL),
+(5, 'FRA', 'France', 'Climate Watch', 'Agriculture', 'All GHG', 'MtCO₂e', 68.90, 71.61, 72.72, 74.20, 76.35, 75.44, 77.20, 76.44, 76.02, 74.98, 74.57, 76.65, NULL),
+(6, 'FRA', 'France', 'Climate Watch', 'Building', 'All GHG', 'MtCO₂e', 65.11, 60.65, 64.25, 65.94, 70.22, 70.45, 69.45, 66.26, 82.32, 79.38, 72.47, 87.09, NULL),
+(7, 'FRA', 'France', 'Climate Watch', 'Electricity/Heat', 'All GHG', 'MtCO₂e', 52.43, 48.70, 57.20, 59.85, 62.71, 53.82, 53.05, 49.95, 64.06, 66.83, 65.02, 74.85, NULL),
+(8, 'FRA', 'France', 'Climate Watch', 'Manufacturing/Construction', 'All GHG', 'MtCO₂e', 46.39, 36.10, 38.65, 40.58, 41.61, 46.55, 44.86, 46.49, 49.12, 47.98, 50.50, 45.34, NULL),
+(9, 'FRA', 'France', 'Climate Watch', 'Industrial Processes', 'All GHG', 'MtCO₂e', 20.51, 21.31, 23.30, 24.57, 25.74, 27.27, 27.05, 27.33, 27.67, 27.88, 28.35, 27.85, NULL),
+(10, 'FRA', 'France', 'Climate Watch', 'Waste', 'All GHG', 'MtCO₂e', 14.59, 14.60, 14.69, 14.78, 14.87, 14.96, 15.98, 16.86, 17.42, 17.92, 18.56, 19.10, NULL),
+(11, 'FRA', 'France', 'Climate Watch', 'Other Fuel Combustion', 'All GHG', 'MtCO₂e', 12.64, 12.36, 11.47, 11.42, 11.27, 11.57, 12.92, 13.17, 13.31, 12.85, 13.73, 13.48, NULL),
+(12, 'FRA', 'France', 'Climate Watch', 'Bunker Fuels', 'All GHG', 'MtCO₂e', 11.61, 11.19, 24.29, 24.20, 22.87, 22.31, 22.88, 22.59, 23.52, 24.42, 25.35, 24.12, NULL),
+(13, 'FRA', 'France', 'Climate Watch', 'Fugitive Emissions', 'All GHG', 'MtCO₂e', 1.95, 1.85, 1.95, 1.91, 1.97, 2.01, 1.89, 1.78, 2.07, 2.04, 2.02, 2.37, NULL),
+(14, 'FRA', 'France', 'Climate Watch', 'Land-Use Change and Forestry', 'All GHG', 'MtCO₂e', -61.43, -61.43, -61.39, -61.42, -61.36, -61.42, -60.54, -60.52, -60.54, -60.48, -60.54, -65.92, NULL);
 
 -- --------------------------------------------------------
 
@@ -116,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `comment_id` (`comment_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `likes`
@@ -138,8 +185,7 @@ INSERT INTO `likes` (`id`, `user_id`, `comment_id`) VALUES
 (39, 6, 76),
 (37, 1, 74),
 (35, 6, 68),
-(43, 9, 79),
-(44, 11, 81);
+(42, 9, 79);
 
 -- --------------------------------------------------------
 
@@ -158,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `messages_contact` (
   `date_demande` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `messages_contact`
@@ -2760,7 +2806,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `search_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `search_history`
@@ -2789,16 +2835,13 @@ INSERT INTO `search_history` (`id`, `user_id`, `search_query`, `search_date`) VA
 (69, 5, 'Paris', '2024-11-14 09:16:00'),
 (68, 5, 'Montpellier', '2024-11-14 08:40:01'),
 (110, 6, 'Montpellier', '2024-11-30 17:29:05'),
-(126, 11, 'Mont-de-Marsan', '2024-12-02 16:48:48'),
 (105, 6, 'Paray-le-Frésil', '2024-11-25 12:19:06'),
 (109, 6, 'Paris', '2024-11-30 17:28:59'),
 (102, 7, 'Paris', '2024-11-21 14:51:38'),
 (122, 9, 'Montpellier', '2024-12-01 14:44:31'),
 (106, 1, 'Mondeville', '2024-11-25 15:44:59'),
 (108, 6, 'Venaco', '2024-11-29 09:16:10'),
-(125, 10, 'Montpellier', '2024-12-01 16:15:40'),
-(123, 9, 'Paris', '2024-12-01 15:33:58'),
-(124, 10, 'Paris', '2024-12-01 16:13:29'),
+(116, 9, 'Rouen', '2024-12-01 11:50:10'),
 (117, 9, 'Fort-de-France', '2024-12-01 11:50:22'),
 (118, 9, 'Montpellier', '2024-12-01 13:34:56'),
 (119, 9, 'Paris', '2024-12-01 14:31:39'),
@@ -2822,7 +2865,7 @@ CREATE TABLE IF NOT EXISTS `seuils_normes` (
   `origine` varchar(10) DEFAULT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `seuils_normes`
@@ -2870,11 +2913,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '../images/user.png',
+  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '../images/user.png',
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -2889,9 +2932,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `profile_pictur
 (6, 'Anthonyy', '$2y$10$yXRKuI4gGlAjt5CtTZcsuugx6ygmna0hAK.Y/TbcAolfBfoyq25R.', '2024-11-14 16:19:45', 'user.png', 'antho@gmail.com'),
 (7, 'combes', '$2y$10$8dn2..Zw32mP6Nc4SvNP0.8KsmWTMJSvAQwr4Mr0U1Fh5E39pP/S.', '2024-11-21 14:43:03', 'user.png', 'combes@combes.fr'),
 (8, 'acombes8', '$2y$10$FDCgZLO3z.IFh7c8LpaPg.zN55pPnegtcCAyUghEqwRvUgC0DvJNC', '2024-11-29 09:51:15', 'user.png', 'antho4@gmail.com'),
-(9, 'acombes', '$2y$10$fsvrdqxHoBYwJwPhmDD2Te0dJhrtF3LiJD1h66gFZ/yr6/cfb27ze', '2024-12-01 10:40:11', 'user.png', 'antho22@gmail.com'),
-(10, 'test', '$2y$10$hls27oMGLSIrF5DZkibW8.z0rZwxYd9DYPu2ej8P8WWCCA4sq4VkK', '2024-12-01 16:13:00', 'user.png', 'test@test.test'),
-(11, 'serge', '$2y$10$XxJoZzK3L7BPxEJuUntzFefjtyN.nB3wV0gY/Ial4RLlohdMOr5hi', '2024-12-02 16:48:41', 'user.png', 'serge@gmail.com');
+(9, 'acombes', '$2y$10$fsvrdqxHoBYwJwPhmDD2Te0dJhrtF3LiJD1h66gFZ/yr6/cfb27ze', '2024-12-01 10:40:11', 'user.png', 'antho22@gmail.com');
 
 --
 -- Contraintes pour les tables déchargées
