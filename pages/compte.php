@@ -6,10 +6,6 @@
  * gestion des villes favorites et historique des recherches.
  */
 
-// Activer l'affichage des erreurs pour le débogage (à désactiver en production)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 session_start();
 ob_start();
 
@@ -23,7 +19,7 @@ if (empty($_SESSION['csrf_token'])) {
 }
 $csrf_token = $_SESSION['csrf_token'];
 
-require '../bd/bd.php'; // Connexion à la base de données
+require '../bd/bd.php';
 
 /**
  * Gestion de la connexion de l'utilisateur.
@@ -49,10 +45,10 @@ if (isset($_POST['login'])) {
 
             // Vérifie si l'utilisateur existe et si le mot de passe est correct
             if ($user && password_verify($password, $user['password'])) {
-                session_regenerate_id(true); // Sécurité supplémentaire
+                session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
-                header("Location: ../index.php"); // Redirige vers la page index.php
+                header("Location: ../index.php");
                 exit;
             } else {
                 $login_error = "Nom d'utilisateur ou mot de passe incorrect.";
@@ -956,11 +952,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 
     /**
      * Initialise les suggestions pour le champ de ville favorite.
-     *
-     * @param {string} inputId ID de l'input pour la ville favorite.
-     * @param {string} suggestionsListId ID de la liste des suggestions.
-     * @param {string} hiddenInputId ID de l'input caché pour stocker la ville sélectionnée.
-     * @param {string} buttonId ID du bouton d'ajout de la ville favorite.
      */
     // Initialiser les suggestions pour le champ de ville favorite
     initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
@@ -1015,7 +1006,5 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             });
     }
 </script>
-
 </body>
-
 </html>

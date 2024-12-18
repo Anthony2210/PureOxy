@@ -5,8 +5,8 @@ La qualité de l'air en France est l'une des préoccupations environnementales l
 
 ## Composition du groupe
 
-Ayoub Akkouh
-Anthony Combes-Aguéra
-Wassim Harraga
-Rekhis Mohamed Chaouki
+#### Ayoub Akkouh
+#### Anthony Combes-Aguéra
+#### Wassim Harraga
+#### Rekhis Mohamed Chaouki
 

@@ -21,7 +21,7 @@ window.onscroll = function() {
 // Ajoute un écouteur d'événement au clic sur le bouton "Revenir vers le haut"
 document.getElementById("backToTop").addEventListener("click", function() {
     window.scrollTo({
-        top: 0, // Position cible (haut de la page)
-        behavior: "smooth" // Défilement fluide
+        top: 0,
+        behavior: "smooth"
     });
 });

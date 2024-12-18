@@ -8,13 +8,12 @@
 
 // Sélectionne le premier formulaire trouvé sur la page
 document.querySelector('form').addEventListener('submit', function(e) {
-    // Sélectionne l'input nommé "ville"
     var ville = document.querySelector('input[name="ville"]');
 
     // Vérifie si le champ "ville" est vide après avoir supprimé les espaces
     if (ville.value.trim() === '') {
-        e.preventDefault();  // Empêche l'envoi du formulaire
-        ville.classList.add('error'); // Ajoute une classe CSS pour styliser l'erreur
-        alert('Veuillez entrer un nom de ville.'); // Affiche une alerte à l'utilisateur
+        e.preventDefault();
+        ville.classList.add('error');
+        alert('Veuillez entrer un nom de ville.');
     }
 });

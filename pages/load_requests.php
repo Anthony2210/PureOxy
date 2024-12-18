@@ -1,14 +1,10 @@
 <?php
 /**
- * Chargement des Demandes de l'Utilisateur
+ * load_requests.php
  *
- * Ce script récupère et affiche les demandes envoyées par l'utilisateur connecté.
+ * Ce code récupère et affiche les demandes envoyées par l'utilisateur connecté.
  * Si l'utilisateur n'est pas connecté, un message l'invitant à se connecter est affiché.
  *
- * @package PureOxy
- * @subpackage Demandes
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();

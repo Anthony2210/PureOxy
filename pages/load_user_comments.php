@@ -1,17 +1,14 @@
 <?php
 /**
- * Chargement des Commentaires de l'Utilisateur
+ * load_user_comments.php
  *
- * Ce script récupère et affiche les commentaires postés par l'utilisateur connecté.
+ * Ce code récupère et affiche les commentaires postés par l'utilisateur connecté.
  * Il inclut des fonctions pour sécuriser les sorties, formater les dates, et générer des URLs.
  *
- * @package PureOxy
- * @subpackage Commentaires
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
+
 require '../bd/bd.php';
 
 /**

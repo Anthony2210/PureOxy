@@ -21,12 +21,10 @@
     opacity: 0.9;
 }
 
-/* Style pour les messages de succès (en vert) */
 .success-message {
-    background-color: #4CAF50; /* Vert */
+    background-color: #4CAF50;
 }
 
-/* Style pour les messages d'erreur (en rouge) */
 .error-message {
-    background-color: #f44336; /* Rouge */
+    background-color: #f44336;
 }

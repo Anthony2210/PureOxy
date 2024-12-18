@@ -1,3 +1,13 @@
+<?php
+/**
+ * politique-confidentialite.php
+ *
+ * Cette page affiche la politique de confidentialité de PureOxy.
+ * Elle structure le contenu principal décrivant les pratiques de gestion des données personnelles.
+ *
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,13 +27,8 @@
     <!-- Script de validation de formulaire -->
     <script src="../script/erreur_formulaire.js"></script>
 </head>
+
 <?php
-/**
- * Inclusion de l'en-tête de la page.
- *
- * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
- * le menu de navigation et éventuellement d'autres éléments récurrents.
- */
 include '../includes/header.php';
 ?>
 
@@ -102,11 +107,5 @@ include '../includes/header.php';
 </section>
 
 <?php
-/**
- * Inclusion du pied de page de la page.
- *
- * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
- * des liens utiles, des informations de contact et d'autres éléments récurrents.
- */
 include '../includes/footer.php';
 ?>

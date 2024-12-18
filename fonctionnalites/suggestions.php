@@ -1,20 +1,15 @@
 <?php
 /**
- * Suggestions de Villes
+ * suggestions.php
  *
- * Ce script gère les requêtes AJAX pour fournir des suggestions de villes basées sur la saisie de l'utilisateur.
+ * Ce code gère les requêtes AJAX pour fournir des suggestions de villes basées sur la saisie de l'utilisateur.
  * Il retourne les résultats au format JSON pour être affichés dynamiquement sur la page de recherche.
  *
- * @package PureOxy
- * @subpackage Recherche
- * @author
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
 
-require_once('../bd/bd.php'); // Connexion à la base de données
+require_once('../bd/bd.php');
 
 /**
  * Récupération de la requête de l'utilisateur.
@@ -24,7 +19,6 @@ require_once('../bd/bd.php'); // Connexion à la base de données
  */
 $query = $_GET['query'] ?? '';
 
-// Initialisation du tableau des résultats
 $results = [];
 
 /**

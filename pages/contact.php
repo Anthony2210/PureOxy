@@ -6,7 +6,6 @@
  * Il récupère les informations de l'utilisateur connecté, valide les données du formulaire,
  * et enregistre le message de contact dans la base de données.
  *
- * @package Contact
  */
 
 session_start();

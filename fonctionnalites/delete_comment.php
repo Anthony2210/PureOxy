@@ -1,16 +1,13 @@
 <?php
 /**
- * Suppression de Commentaire - PureOxy
+ * delete_comment.php
  *
  * Ce script gère la suppression des commentaires par les utilisateurs. Il vérifie l'authentification de l'utilisateur,
  * valide le jeton CSRF, s'assure que le commentaire appartient à l'utilisateur, et décide de supprimer ou de
  * masquer le commentaire en fonction de la présence de réponses.
  *
- * @package PureOxy
- * @subpackage CommentSystem
  */
 
-// Inclusion du fichier de connexion à la base de données
 require '../bd/bd.php';
 
 /**

@@ -1,16 +1,11 @@
 <?php
 /**
  * submit_comment.php
- * Soumission de Commentaires
  *
- * Ce script gère la soumission des commentaires par les utilisateurs.
+ * Ce code gère la soumission des commentaires par les utilisateurs.
  * Il inclut des mesures de sécurité telles que la validation CSRF et la vérification de l'authentification de l'utilisateur.
  * Les commentaires sont insérés dans la base de données et une réponse JSON est retournée au client.
  *
- * @package PureOxy
- * @subpackage Commentaires
- * @version 1.0
- * @since 2024-04-27
  */
 
 require '../bd/bd.php';

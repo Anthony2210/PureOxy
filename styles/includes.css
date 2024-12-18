@@ -8,7 +8,7 @@ header {
     background-color: #f9f9e9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     top: 0;
-    border-bottom: 10px solid #6b8e23; /* Couleur verte et épaisseur de la bordure */
+    border-bottom: 10px solid #6b8e23;
 }
 
 header .container {

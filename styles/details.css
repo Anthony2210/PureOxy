@@ -10,7 +10,7 @@
  */
 #details-page {
     font-family: 'League Spartan', sans-serif;
-    background-color: #F9F9E9; /* Beige clair */
+    background-color: #F9F9E9;
     color: #333;
     margin: 0;
     padding: 0;
@@ -22,7 +22,7 @@
  * Styles pour les titres principaux et secondaires.
  */
 #details-page h1, #details-page h2 {
-    color: #6B8E23; /* Vert olive */
+    color: #6B8E23;
     margin-bottom: 20px;
 }
 
@@ -77,7 +77,7 @@
     padding: 10px;
     font-size: 1em;
     background-color: #fff;
-    border: 1px solid #6B8E23; /* Vert olive */
+    border: 1px solid #6B8E23;
     border-radius: 4px;
     color: #333;
 }
@@ -107,15 +107,15 @@
     color: white;
     font-weight: bold;
     position: sticky;
-    top: 0; /* Garde l'en-tête visible lors du défilement */
+    top: 0;
 }
 
 .table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Couleur de fond pour les lignes paires */
+    background-color: #f9f9f9;
 }
 
 .table tr:hover {
-    background-color: #f1f1f1; /* Couleur au survol */
+    background-color: #f1f1f1;
 }
 
 .table caption {
@@ -238,7 +238,7 @@
 
 #city-not-found h1 {
     font-size: 2em;
-    color: #e74c3c; /* Couleur rouge pour indiquer une erreur */
+    color: #e74c3c;
     margin-bottom: 20px;
 }
 

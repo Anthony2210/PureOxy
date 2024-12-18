@@ -8,8 +8,8 @@
     height: 500px;
     width: 85%;
     margin: 20px auto;
-    border: 3px solid #2d6a4f; /* Bordure verte foncée autour de la carte */
-    border-radius: 12px; /* Bordure arrondie pour un effet plus moderne */
+    border: 3px solid #2d6a4f;
+    border-radius: 12px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -55,7 +55,7 @@
 /* Panneau d'informations pour afficher les détails d'une ville */
 #info-panel {
     position: absolute;
-    top: 60px; /* Ajustement de la position en fonction de la page */
+    top: 60px;
     right: 20px;
     background: white;
     padding: 15px;
@@ -63,11 +63,11 @@
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
     max-width: 300px;
     z-index: 1000;
-    display: none; /* Par défaut, on masque le panneau */
+    display: none;
 }
 
 #info-panel.visible {
-    display: block; /* Affichage du panneau lorsqu'il devient visible */
+    display: block;
 }
 
 #info-panel h3 {
@@ -104,11 +104,11 @@
 }
 
 .pollutant-up {
-    color: green; /* Augmentation */
+    color: green;
 }
 
 .pollutant-down {
-    color: red; /* Diminution */
+    color: red;
 }
 
 /* Section de détails supplémentaires */
@@ -133,10 +133,10 @@ canvas {
 
 /* Ajouter une ombre et une bordure aux marqueurs */
 .leaflet-marker-icon {
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3)); /* Ombre douce pour un effet 3D */
-    transition: transform 0.2s ease-in-out; /* Animation au survol */
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease-in-out;
 }
 
 .leaflet-marker-icon:hover {
-    transform: scale(1.1); /* Zoom léger au survol */
+    transform: scale(1.1);
 }

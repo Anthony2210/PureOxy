@@ -1,22 +1,16 @@
 <?php
 /**
- * Page de Qualité de l'Air
+ * qualite_air.php
  *
  * Cette page affiche des informations sur la qualité de l'air, les sources de pollution
  * et leurs effets sur la santé. Elle inclut également des sections pour les commentaires
  * des utilisateurs et le pied de page du site.
  *
- * @package PureOxy
  */
 
 session_start();
 ob_start();
 
-/**
- * Inclusion du fichier de connexion à la base de données.
- *
- * Ce fichier établit une connexion à la base de données nécessaire pour le fonctionnement de la page.
- */
 require '../bd/bd.php';
 ?>
 
@@ -45,12 +39,6 @@ require '../bd/bd.php';
 </head>
 <body>
 <?php
-/**
- * Inclusion de l'en-tête de la page.
- *
- * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
- * le menu de navigation et éventuellement d'autres éléments récurrents.
- */
 include '../includes/header.php';
 ?>
 
@@ -89,20 +77,7 @@ include '../includes/header.php';
 
     </main>
     <?php
-    /**
-     * Inclusion de la section des commentaires.
-     *
-     * Le fichier commentaires.php gère l'affichage et la soumission des commentaires des utilisateurs,
-     * permettant ainsi l'interaction et le partage d'expériences concernant la qualité de l'air.
-     */
     include '../fonctionnalites/commentaires.php';
-
-    /**
-     * Inclusion du pied de page de la page.
-     *
-     * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
-     * des liens utiles, des informations de contact et d'autres éléments récurrents.
-     */
     include '../includes/footer.php';
     ?>
 </div>

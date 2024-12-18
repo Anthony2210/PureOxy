@@ -4,11 +4,6 @@
    ======================================================================== */
 
 /**
- * @section Account Styles
- * Styles pour la gestion des comptes utilisateurs.
- */
-
-/**
  * Account Container
  */
 .compte-container {
@@ -65,13 +60,13 @@
 .dashboard {
     display: flex;
     flex-direction: row;
-    align-items: flex-start; /* Aligne les éléments en haut */
+    align-items: flex-start;
     margin-top: 30px;
     gap: 30px;
 }
 
 .dashboard-content {
-    width: 65%; /* Ajustez la largeur pour que le contenu soit à droite */
+    width: 65%;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -292,7 +287,7 @@
     width: 100%;
     font-family: "League Spartan", sans-serif;
     font-size: 1.1em;
-    flex: 1; /* S'étend pour occuper l'espace disponible */
+    flex: 1;
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -309,9 +304,9 @@
  * Styles pour les listes de suggestions dans les formulaires.
  */
 .favorite-cities-section #suggestions-list {
-    top: calc(100% + 5px); /* Place les suggestions juste en dessous de l'input */
+    top: calc(100% + 5px);
     left: 0;
-    width: calc(100% - 30px); /* Ajuste la largeur pour qu'elle corresponde à l'input */
+    width: calc(100% - 30px);
     position: absolute;
     background-color: #fff;
     border-radius: 5px;
@@ -417,12 +412,12 @@
     color: #333;
     display: flex;
     align-items: center;
-    text-decoration: none; /* Supprime le soulignement par défaut des liens */
+    text-decoration: none;
 }
 
 .history-list li .search-query:hover {
-    text-decoration: underline; /* Ajoute un soulignement au survol pour indiquer que c'est cliquable */
-    color: #6b8e23; /* Change la couleur au survol */
+    text-decoration: underline;
+    color: #6b8e23;
 }
 
 .history-list li .search-query i {

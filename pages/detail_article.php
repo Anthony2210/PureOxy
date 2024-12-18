@@ -1,25 +1,15 @@
 <?php
 /**
- * Détail de l'Article
+ * detail_article.php
  *
  * Cette page affiche les détails d'un article spécifique en extrayant les données depuis le site source.
  * Elle limite la longueur du contenu affiché et fournit un lien vers l'article complet sur le site source.
  *
- * @package PureOxy
- * @subpackage Actualités
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
 ob_start();
 
-/**
- * Inclusion de l'en-tête de la page.
- *
- * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
- * le menu de navigation et éventuellement d'autres éléments récurrents.
- */
 include '../includes/header.php';
 ?>
 
@@ -122,17 +112,11 @@ include '../includes/header.php';
         echo "<p>Aucun article sélectionné.</p>";
     }
     ?>
-
 </div>
 
 <?php
-/**
- * Inclusion du pied de page de la page.
- *
- * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
- * des liens utiles, des informations de contact et d'autres éléments récurrents.
- */
-include '../includes/footer.php'; // Inclusion du footer
+include '../includes/footer.php';
 ?>
+
 </body>
 </html>

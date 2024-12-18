@@ -1,14 +1,10 @@
 <?php
 /**
- * Déconnexion de l'Utilisateur
+ * deconnecter.php
  *
- * Ce script gère la déconnexion des utilisateurs en supprimant les données de session
+ * Ce code gère la déconnexion des utilisateurs en supprimant les données de session
  * et en redirigeant l'utilisateur vers la page de compte.
  *
- * @package PureOxy
- * @subpackage Authentification
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();

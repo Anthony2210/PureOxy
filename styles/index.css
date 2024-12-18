@@ -4,11 +4,6 @@
    ======================================================================== */
 
 /**
- * @section Index Styles
- * Styles pour la page d'accueil.
- */
-
-/**
  * Introduction Section
  */
 #introduction {
@@ -17,7 +12,7 @@
     background-image: url('../images/vancouver-in-fall.png');
     background-size: cover;
     background-position: center;
-    padding: 80px 20px; /* Plus de padding pour l'espacement vertical */
+    padding: 80px 20px;
     color: white;
 }
 
@@ -28,13 +23,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Couleur sombre avec transparence */
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
 
 #introduction h2, #introduction p {
     position: relative;
-    z-index: 2; /* Assure que le texte reste au-dessus de la superposition */
+    z-index: 2;
 }
 
 /**
@@ -44,7 +39,7 @@
     font-size: 3em;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #fff; /* Titre en blanc */
+    color: #fff;
 }
 
 /**
@@ -59,40 +54,36 @@
 }
 
 /**
- * Features List
+ * Features
  */
 
-
-/**
- * Feature Item
- */
 
 #features ul {
     list-style-type: none;
     padding: 0;
 }
 #features li {
-    background-color: #f9f9e9; /* Couleur de fond douce */
+    background-color: #f9f9e9;
     padding: 20px;
     margin: 10px 10px 10px 10px;
-    border: 2px solid #6b8e23; /* Bordure verte */
+    border: 2px solid #6b8e23;
     border-radius: 8px;
     font-weight: bold;
     color: #556b2f;
     text-align: center;
-    box-shadow: none; /* Retire l'ombre pour un style plus épuré */
+    box-shadow: none;
     transition: transform 0.2s ease;
 }
 
 #features li:hover {
-    transform: translateY(-5px); /* Animation au survol */
+    transform: translateY(-5px);
 }
 
 /**
  * Feature Title
  */
 #features strong {
-    color: #6b8e23; /* Texte vert pour les titres des fonctionnalités */
+    color: #6b8e23;
     font-size: 1.2em;
 }
 
@@ -110,15 +101,15 @@
  */
 #cta {
     text-align: center;
-    background-color: #556b2f; /* Couleur verte pour le fond */
+    background-color: #556b2f;
     padding: 40px 0;
-    border-radius: 0; /* Pas de bordure arrondie pour la section */
-    color: #f9f9e9; /* Couleur claire pour le texte */
+    border-radius: 0;
+    color: #f9f9e9;
 }
 
 #cta h2 {
     font-size: 2em;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #f9f9e9; /* Couleur du texte en blanc cassé */
+    color: #f9f9e9;
 }

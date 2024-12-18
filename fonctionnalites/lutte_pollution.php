@@ -1,18 +1,17 @@
 <?php
 /**
- * Lutte contre la Pollution de l'Air - PureOxy
+ * lutte_pollution.php
  *
  * Cette page présente des informations détaillées sur les efforts de lutte contre la pollution de l'air.
  * Elle aborde des sujets tels que le Plan National de Réduction des Emissions et la Pollution Industrielle.
  * La page inclut également une section de commentaires pour permettre aux utilisateurs de discuter et d'interagir.
  *
- * @package PureOxy
  */
 
-session_start(); // Démarre une nouvelle session ou reprend une session existante
-ob_start();      // Démarre la temporisation de sortie
+session_start();
+ob_start();
 
-require '../bd/bd.php'; // Connexion à la base de données
+require '../bd/bd.php';
 
 ?>
 <!DOCTYPE html>
@@ -39,20 +38,12 @@ require '../bd/bd.php'; // Connexion à la base de données
     <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
+
 <?php
-/**
- * Inclut l'en-tête de la page.
- *
- * L'en-tête contient généralement le logo, le menu de navigation, et d'autres éléments communs
- * à toutes les pages du site.
- *
- * @see ../includes/header.php
- */
 include '../includes/header.php';
 ?>
-
+<main>
 <div class="content-wrapper">
-    <main>
         <div id="main-content" class="container">
             <!-- Section principale de contenu -->
             <section class="content-section">
@@ -110,28 +101,13 @@ include '../includes/header.php';
             <h2>À lire aussi</h2>
             <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
         </section>
-    </main>
-
     <?php
-    /**
-     * Inclut la section des commentaires de la page.
-     *
-     * Permet aux utilisateurs de poster, liker, et interagir avec les commentaires relatifs à cette page.
-     *
-     * @see ../fonctionnalites/commentaires.php
-     */
     include '../fonctionnalites/commentaires.php';
-
-    /**
-     * Inclut le pied de page de la page.
-     *
-     * Le pied de page contient généralement des informations de contact, des liens vers les réseaux sociaux,
-     * et d'autres éléments communs à toutes les pages du site.
-     *
-     * @see ../includes/footer.php
-     */
-    include '../includes/footer.php';
     ?>
-</div>
+</main>
 </body>
+
+<?php
+include '../includes/footer.php';
+?>
 </html>

@@ -1,14 +1,9 @@
 <?php
 /**
- * Page d'Accueil de PureOxy
- *
+ * index.php
  * Cette page sert de point d'entrée principal pour les utilisateurs visitant le site PureOxy.
  * Elle présente une introduction à la plateforme, ses fonctionnalités principales, et incite les utilisateurs à commencer leur exploration.
  *
- * @package PureOxy
- * @subpackage Pages
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
@@ -29,16 +24,10 @@ session_start();
     <link rel="stylesheet" href="styles/index.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="styles/boutons.css">
-    <script src="script/erreur_formulaire.js"></script> <!-- Script de validation de formulaire -->
+    <script src="script/erreur_formulaire.js"></script>
 </head>
 <body>
 <?php
-/**
- * Inclusion de l'en-tête de la page.
- *
- * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
- * le menu de navigation et éventuellement d'autres éléments récurrents.
- */
 include 'includes/header.php';
 ?>
 
@@ -70,12 +59,6 @@ include 'includes/header.php';
 </section>
 
 <?php
-/**
- * Inclusion du pied de page de la page.
- *
- * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
- * des liens utiles, des informations de contact et d'autres éléments récurrents.
- */
 include 'includes/footer.php';
 ?>
 </body>

@@ -47,11 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (addFavoriteForm) {
         addFavoriteForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+            event.preventDefault();
 
             const formData = new FormData(addFavoriteForm);
-            formData.append('ajax', '1'); // Indique que la requête est AJAX
-            formData.append('add_favorite_city', ''); // Paramètre supplémentaire pour l'action
+            formData.append('ajax', '1');
+            formData.append('add_favorite_city', '');
 
             console.log('Données envoyées (ajout de favoris):', Array.from(formData.entries()));
 
@@ -60,17 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Indique que la requête est AJAX
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
                 .then(response => {
                     console.log('Réponse brute (ajout de favoris):', response);
-                    return response.text(); // Obtient la réponse en texte brut
+                    return response.text();
                 })
                 .then(dataText => {
                     console.log('Contenu brut de la réponse (ajout de favoris):', dataText);
                     try {
-                        const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
+                        const data = JSON.parse(dataText);
                         console.log('Données reçues (ajout de favoris):', data);
                         if (data.success) {
                             const favoriteCitiesList = document.querySelector('.favorite-cities-list');
@@ -87,13 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                 `;
                                 favoriteCitiesList.appendChild(li);
 
-                                addFavoriteForm.reset(); // Réinitialise le formulaire
-                                attachDeleteEvent(li.querySelector('.delete-city-form')); // Attache l'événement de suppression au nouveau formulaire
+                                addFavoriteForm.reset();
+                                attachDeleteEvent(li.querySelector('.delete-city-form'));
                             }
 
-                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                            displayMessage(data.message, 'success');
                         } else {
-                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                            displayMessage(data.message, 'error');
                         }
                     } catch (e) {
                         console.error('Erreur lors du parsing JSON (ajout de favoris):', e);
@@ -114,11 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function attachDeleteEvent(form) {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+            event.preventDefault();
 
             const formData = new FormData(form);
-            formData.append('ajax', '1'); // Indique que la requête est AJAX
-            formData.append('delete_favorite_city', ''); // Paramètre supplémentaire pour l'action
+            formData.append('ajax', '1');
+            formData.append('delete_favorite_city', '');
 
             console.log('Suppression des données (favoris):', Array.from(formData.entries()));
 
@@ -132,18 +132,18 @@ document.addEventListener('DOMContentLoaded', function() {
             })
                 .then(response => {
                     console.log('Réponse brute pour suppression (favoris):', response);
-                    return response.text(); // Obtient la réponse en texte brut
+                    return response.text();
                 })
                 .then(dataText => {
                     console.log('Contenu brut de la réponse (suppression de favoris):', dataText);
                     try {
-                        const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
+                        const data = JSON.parse(dataText);
                         console.log('Réponse JSON pour suppression (favoris):', data);
                         if (data.success) {
-                            form.parentElement.remove(); // Supprime l'élément parent (la ville favorite) du DOM
-                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                            form.parentElement.remove();
+                            displayMessage(data.message, 'success');
                         } else {
-                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                            displayMessage(data.message, 'error');
                         }
                     } catch (e) {
                         console.error('Erreur lors du parsing JSON (suppression de favoris):', e);
@@ -182,10 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Ajoute un événement de soumission au formulaire de favori
         favoriteForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+            event.preventDefault();
 
             const formData = new FormData(favoriteForm);
-            formData.append('ajax', '1'); // Indique que la requête est AJAX
+            formData.append('ajax', '1');
 
             console.log('Données envoyées (favoris depuis details.php):', Array.from(formData.entries()));
 
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Contenu brut de la réponse (favoris depuis details.php):', dataText);
 
                     try {
-                        const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
+                        const data = JSON.parse(dataText);
                         console.log('Données reçues (favoris depuis details.php):', data);
                         if (data.success) {
                             const icon = favoriteForm.querySelector('.favorite-icon i');
@@ -212,9 +212,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                 icon.classList.add('far');
                                 favoriteButton.setAttribute('data-action', 'add_favorite');
                             }
-                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                            displayMessage(data.message, 'success');
                         } else {
-                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                            displayMessage(data.message, 'error');
                         }
                     } catch (e) {
                         console.error('Erreur lors du parsing JSON (favoris depuis details.php):', e);
@@ -235,11 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function attachDeleteSearchEvent(form) {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+            event.preventDefault();
 
             const formData = new FormData(form);
-            formData.append('ajax', '1'); // Indique que la requête est AJAX
-            formData.append('delete_search', ''); // Paramètre supplémentaire pour l'action
+            formData.append('ajax', '1');
+            formData.append('delete_search', '');
 
             console.log('Suppression des données (historique):', Array.from(formData.entries()));
 
@@ -255,13 +255,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(dataText => {
                     console.log('Contenu brut de la réponse (suppression historique):', dataText);
                     try {
-                        const data = JSON.parse(dataText); // Tente de parser la réponse en JSON
+                        const data = JSON.parse(dataText);
                         console.log('Réponse JSON pour suppression (historique):', data);
                         if (data.success) {
                             form.parentElement.remove(); // Supprime l'élément parent (la recherche) du DOM
-                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                            displayMessage(data.message, 'success');
                         } else {
-                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                            displayMessage(data.message, 'error');
                         }
                     } catch (e) {
                         console.error('Erreur lors du parsing JSON (suppression historique):', e);
@@ -290,11 +290,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (clearHistoryForm) {
         clearHistoryForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+            event.preventDefault();
 
             const formData = new FormData(clearHistoryForm);
-            formData.append('ajax', '1'); // Indique que la requête est AJAX
-            formData.append('clear_history', ''); // Paramètre supplémentaire pour l'action
+            formData.append('ajax', '1');
+            formData.append('clear_history', '');
 
             console.log('Effacement de l\'historique (AJAX):', Array.from(formData.entries()));
 
@@ -318,9 +318,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (historyList) {
                                 historyList.innerHTML = '';
                             }
-                            displayMessage(data.message, 'success'); // Affiche un message de succès
+                            displayMessage(data.message, 'success');
                         } else {
-                            displayMessage(data.message, 'error'); // Affiche un message d'erreur
+                            displayMessage(data.message, 'error');
                         }
                     } catch (e) {
                         console.error('Erreur lors du parsing JSON (effacement historique):', e);

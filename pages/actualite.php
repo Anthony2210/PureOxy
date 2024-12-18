@@ -1,26 +1,16 @@
 <?php
 /**
- * Page des Actualités sur la Qualité de l'Air
+ * Actualite.php
  *
  * Cette page récupère et affiche les actualités concernant la qualité de l'air en France
  * en extrayant les données du site Atmo France. Les articles sont affichés dans une grille
  * avec des liens vers des détails supplémentaires.
  *
- * @package PureOxy
- * @subpackage Actualités
- * @version 1.0
- * @since 2024-04-27
  */
 
 session_start();
 ob_start();
 
-/**
- * Inclusion de l'en-tête de la page.
- *
- * Le fichier header.php contient l'en-tête commun à toutes les pages du site, incluant le logo,
- * le menu de navigation et éventuellement d'autres éléments récurrents.
- */
 include '../includes/header.php';
 ?>
 
@@ -142,12 +132,6 @@ include '../includes/header.php';
 <script src="../script/backtotop.js"></script>
 
 <?php
-/**
- * Inclusion du pied de page de la page.
- *
- * Le fichier footer.php contient le pied de page commun à toutes les pages du site, incluant
- * des liens utiles, des informations de contact et d'autres éléments récurrents.
- */
 include '../includes/footer.php';
 ?>
 </body>

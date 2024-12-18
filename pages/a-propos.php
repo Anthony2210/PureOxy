@@ -1,25 +1,16 @@
 <?php
 /**
- * À Propos de PureOxy
+ * a-propos.php
  *
  * Cette page présente des informations sur PureOxy, une plateforme dédiée à la surveillance et à
  * l'analyse de la qualité de l'air en France. Elle inclut également des appels à l'action vers
  * des articles pertinents.
  *
- * @package PureOxy
  */
 
-session_start(); // Démarre une nouvelle session ou reprend une session existante
-ob_start();      // Démarre la temporisation de sortie
+session_start();
+ob_start();
 
-/**
- * Inclut l'en-tête de la page.
- *
- * L'en-tête contient généralement le logo, le menu de navigation, et d'autres éléments communs
- * à toutes les pages du site.
- *
- * @see ../includes/header.php
- */
 include '../includes/header.php';
 
 ?>
@@ -40,7 +31,7 @@ include '../includes/header.php';
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
     <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script></head>
+    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
 <main>
@@ -76,14 +67,6 @@ include '../includes/header.php';
     </section>
 </main>
 <?php
-/**
- * Inclut le pied de page de la page.
- *
- * Le pied de page contient généralement des informations de contact, des liens vers les réseaux sociaux,
- * et d'autres éléments communs à toutes les pages du site.
- *
- * @see ../includes/footer.php
- */
 include '../includes/footer.php';
 ?>
 </body>

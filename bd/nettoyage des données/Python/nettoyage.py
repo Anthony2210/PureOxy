@@ -3,17 +3,13 @@ from sqlalchemy import create_engine, text
 import requests
 from time import sleep
 
-# Connexion à la base de données avec SQLAlchemy
 engine = create_engine('mysql+mysqlconnector://root:@localhost/pureoxy')
 
-# Requête SQL pour récupérer toutes les latitudes et longitudes
 query = "SELECT Latitude, Longitude FROM pollution_villes"
 df = pd.read_sql(query, engine)
 
-# Cache local pour éviter les requêtes répétées
 cache = {}
 
-# Fichier pour enregistrer les erreurs
 error_log = "error_log.csv"
 
 # Fonction pour obtenir les détails de localisation via l'API Nominatim

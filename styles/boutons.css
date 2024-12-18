@@ -13,18 +13,18 @@
  * CTA Button
  */
 #cta .button {
-    background-color: #f9f9e9; /* Couleur de fond du bouton */
-    color: #6b8e23; /* Texte du bouton en vert foncé */
+    background-color: #f9f9e9;
+    color: #6b8e23;
     padding: 15px 30px;
     text-decoration: none;
     font-size: 1.2em;
-    border-radius: 30px; /* Bouton très arrondi */
+    border-radius: 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #cta .button:hover {
-    background-color: #e3e3d9; /* Couleur légèrement plus foncée au survol */
+    background-color: #e3e3d9;
     transform: translateY(-3px);
 }
 
@@ -168,7 +168,7 @@
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s;
-    margin-bottom: 15px; /* Un peu d'espace sous les boutons */
+    margin-bottom: 15px;
 }
 
 .detail-article-wrapper .button:hover {
@@ -419,8 +419,6 @@
  * Actualités
  * Bouton pour revenir en haut de la page
  */
-/* Styles pour le bouton "Revenir vers le haut" */
-
 #backToTop {
     position: fixed;
     bottom: 20px;

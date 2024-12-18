@@ -5,9 +5,6 @@
  * Il implémente un système de cache pour optimiser les performances et éviter les requêtes redondantes.
  */
 
-/**
- * Variables globales pour le suivi des requêtes et le cache des résultats.
- */
 let lastQuery = ""; // Stocke la dernière requête effectuée
 let cache = {}; // Objet pour stocker les résultats des requêtes précédentes
 
@@ -34,7 +31,7 @@ function initializeSuggestions(inputId, suggestionsListId, hiddenInputId, addBut
      * Ajoute un écouteur d'événement pour détecter les entrées dans le champ de recherche.
      */
     inputElement.addEventListener("input", function() {
-        const query = this.value.trim(); // Récupère et nettoie la saisie de l'utilisateur
+        const query = this.value.trim();
 
         // Réinitialise le champ caché et désactive le bouton Ajouter
         if (hiddenInput) {
@@ -101,7 +98,7 @@ function displaySuggestions(results, suggestionsList, inputElement, inputId, sug
         results.forEach(function(result, index) {
             suggestionsHtml += `<li style="--i: ${index}" onclick="selectCity('${result.ville}', '${inputId}', '${suggestionsListId}', '${hiddenInputId}', '${addButtonId}')">${result.ville} (${result.code_postal}, ${result.region})</li>`;
         });
-        suggestionsList.classList.add("show"); // Ajoute la classe pour afficher les suggestions
+        suggestionsList.classList.add("show");
     } else {
         // Affiche un message si aucune suggestion n'est trouvée
         suggestionsHtml = `<li>Aucune ville trouvée</li>`;
@@ -126,7 +123,7 @@ function selectCity(city, inputId, suggestionsListId, hiddenInputId, addButtonId
     const hiddenInput = document.getElementById(hiddenInputId);
     const addButton = document.getElementById(addButtonId);
 
-    inputElement.value = city; // Met à jour la valeur de l'input avec la ville sélectionnée
+    inputElement.value = city;
 
     lastQuery = ""; // Réinitialise la dernière requête
 
@@ -167,6 +164,6 @@ searchButton.addEventListener("click", function() {
         // Redirige vers la page de détails de la ville sélectionnée
         window.location.href = `/PUREOXY/fonctionnalites/details.php?ville=${encodeURIComponent(query)}`;
     } else {
-        alert("Veuillez entrer le nom d'une ville."); // Affiche une alerte si le champ est vide
+        alert("Veuillez entrer le nom d'une ville.");
     }
 });
