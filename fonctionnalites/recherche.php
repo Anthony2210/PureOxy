@@ -29,8 +29,7 @@ require_once('../bd/bd.php');
     <link rel="stylesheet" href="../styles/boutons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Script pour afficher des suggestions de recherche -->
-    <script src="../script/suggestions.js"></script>
-
+    <script src="../script/suggestions.js" defer></script>
 </head>
 <body id="recherche-page">
 <div class="content-wrapper">
