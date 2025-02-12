@@ -428,6 +428,14 @@ include '../includes/header.php';
                     <a class="nav-link" id="depassements-tab" data-toggle="tab" href="#depassements" role="tab"
                        aria-controls="depassements" aria-selected="false">Dépassements des seuils réglementaires</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="predictions-tab" data-toggle="tab" href="#predictions" role="tab"
+                       aria-controls="predictions" aria-selected="false">Prédictions des concentrations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="comparaison-tab" data-toggle="tab" href="#comparaison" role="tab"
+                       aria-controls="comparaison" aria-selected="false">Comparer les concentrations</a>
+                </li>
             </ul>
 
             <div class="tab-content" id="detailsTabsContent">
