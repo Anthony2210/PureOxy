@@ -406,3 +406,112 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Si vous avez déjà une fonction initializeSuggestions dans votre script suggestions.js,
+    // vous pouvez l'appeler pour activer les suggestions sur ces deux champs.
+    // Par exemple, si initializeSuggestions prend (inputId, suggestionsListId, hiddenInputId, addButtonId):
+    if (typeof initializeSuggestions === "function") {
+        initializeSuggestions('city1', 'suggestions-city1', 'city1_hidden', null);
+        initializeSuggestions('city2', 'suggestions-city2', 'city2_hidden', null);
+    }
+
+    // Gestion du clic sur le bouton "Comparer"
+    document.getElementById('compareCitiesButton').addEventListener('click', function() {
+        var city1 = document.getElementById('city1').value.trim();
+        var city2 = document.getElementById('city2').value.trim();
+
+        if (city1 === "" || city2 === "") {
+            alert("Veuillez entrer deux villes valides.");
+            return;
+        }
+
+        // Appel AJAX pour récupérer les données des deux villes via get_pollutants.php
+        Promise.all([
+            fetch('../fonctionnalites/get_pollutants.php?ville=' + encodeURIComponent(city1))
+                .then(response => response.json()),
+            fetch('../fonctionnalites/get_pollutants.php?ville=' + encodeURIComponent(city2))
+                .then(response => response.json())
+        ])
+            .then(function(results) {
+                var data1 = results[0];
+                var data2 = results[1];
+
+                // Vérification des éventuelles erreurs retournées
+                if (data1.error) {
+                    alert("Erreur pour la ville " + city1 + ": " + data1.error);
+                    return;
+                }
+                if (data2.error) {
+                    alert("Erreur pour la ville " + city2 + ": " + data2.error);
+                    return;
+                }
+
+                // Créer l'union des clés (polluants) des deux jeux de données
+                var pollutantsSet = new Set([...Object.keys(data1), ...Object.keys(data2)]);
+                var pollutantLabels = Array.from(pollutantsSet);
+
+                // Préparer le dataset pour la première ville
+                var dataset1 = {
+                    label: city1,
+                    data: pollutantLabels.map(function(p) {
+                        return data1[p] !== undefined ? parseFloat(data1[p]) : 0;
+                    }),
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',  // couleur avec transparence
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                };
+
+                // Préparer le dataset pour la deuxième ville
+                var dataset2 = {
+                    label: city2,
+                    data: pollutantLabels.map(function(p) {
+                        return data2[p] !== undefined ? parseFloat(data2[p]) : 0;
+                    }),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                };
+
+                // Si un graphique existait déjà, le détruire pour éviter les doublons
+                if (window.cityComparisonChart) {
+                    window.cityComparisonChart.destroy();
+                }
+
+                // Créer le graphique avec Chart.js
+                var ctx = document.getElementById('cityComparisonChart').getContext('2d');
+                window.cityComparisonChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: pollutantLabels,  // les polluants sur l'axe des abscisses
+                        datasets: [dataset1, dataset2]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Concentration (µg/m³)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y + ' µg/m³';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(function(error) {
+                console.error('Erreur lors de la récupération des données :', error);
+                alert("Erreur lors de la récupération des données pour les villes.");
+            });
+    });
+});

@@ -346,6 +346,8 @@ if ($ville) {
     <link rel="stylesheet" href="../styles/boutons.css">
     <!-- Styles pour les Messages -->
     <link rel="stylesheet" href="../styles/messages.css">
+    <!-- Styles pour les Recherches -->
+    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Script de validation de formulaire -->
     <script src="../script/erreur_formulaire.js"></script>
     <!-- Script pour les interactions AJAX -->
@@ -439,6 +441,7 @@ include '../includes/header.php';
             </ul>
 
             <div class="tab-content" id="detailsTabsContent">
+                <!-- Onglet Polluants -->
                 <div class="tab-pane fade show active" id="polluants" role="tabpanel" aria-labelledby="polluants-tab">
                     <h2 class="mt-4">Concentrations de polluants atmosphériques</h2>
                     <canvas id="pollutantsChart" class="my-4"></canvas>
@@ -501,6 +504,7 @@ include '../includes/header.php';
                             Européenne de l'Environnement).</a></p>
                 </div>
 
+                <!-- Onglet Dépassements -->
                 <div class="tab-pane fade" id="depassements" role="tabpanel" aria-labelledby="depassements-tab">
                     <h2 class="mt-4">Dépassements des seuils réglementaires</h2>
 
@@ -530,6 +534,38 @@ include '../includes/header.php';
                         </div>
                     <?php endif; ?>
                 </div>
+
+                <!-- Onglet Prédictions -->
+                <div class="tab-pane fade" id="predictions" role="tabpanel" aria-labelledby="predictions-tab">
+                    <h2 class="mt-4">Prédictions des concentrations</h2>
+                    <p>Fonctionnalité en cours de développement.</p>
+                </div>
+
+                <!-- Onglet Comparer les concentrations -->
+                <div class="tab-pane fade" id="comparaison" role="tabpanel" aria-labelledby="comparaison-tab">
+                    <h2 class="mt-4">Comparer les concentrations de deux villes</h2>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="city1">Ville 1</label>
+                            <input type="text" id="city1" class="form-control" placeholder="Entrez le nom de la première ville" autocomplete="off">
+                            <!-- Liste de suggestions pour la première ville -->
+                            <ul id="suggestions-city1" class="suggestions-list"></ul>
+                            <!-- Champ caché pour éventuellement stocker la ville sélectionnée -->
+                            <input type="hidden" id="city1_hidden">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="city2">Ville 2</label>
+                            <input type="text" id="city2" class="form-control" placeholder="Entrez le nom de la deuxième ville" autocomplete="off">
+                            <!-- Liste de suggestions pour la deuxième ville -->
+                            <ul id="suggestions-city2" class="suggestions-list"></ul>
+                            <input type="hidden" id="city2_hidden">
+                        </div>
+                    </div>
+                    <button id="compareCitiesButton" class="btn btn-primary mb-4">Comparer</button>
+                    <!-- Canvas pour afficher le graphique de comparaison -->
+                    <canvas id="cityComparisonChart"></canvas>
+                </div>
+
 
                 <section id="effets" class="mt-5">
                     <h2>Effets de la pollution atmosphérique</h2>
@@ -561,7 +597,9 @@ $city_pollution_averages_js = json_encode($city_pollution_averages);
     }, $dates)); ?>;
     var city_pollution_averages = <?php echo $city_pollution_averages_js; ?>;
 </script>
+<script src="../script/suggestions.js"></script>
 <script src="../script/details.js"></script>
+
 
 <?php
 include 'commentaires.php';
