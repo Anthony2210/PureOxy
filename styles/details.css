@@ -265,3 +265,15 @@
 #city-not-found a:hover {
     text-decoration: underline;
 }
+
+/**
+ * Onglet Comparaison
+ * ---------------------------------------
+ */
+
+/* Style pour les champs désactivés  */
+#comparaison input[disabled] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 1;
+}

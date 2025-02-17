@@ -11,6 +11,56 @@ ob_start();
 
 include '../bd/bd.php';
 
+if (isset($_GET['ajax']) && $_GET['ajax'] == '1'
+    && isset($_GET['action']) && $_GET['action'] === 'getPollutants'
+) {
+    header('Content-Type: application/json; charset=utf-8');
+
+    // Récupère la ville demandée via GET
+    $cityToFetch = $_GET['ville'] ?? '';
+
+    // Si pas de ville => renvoyer une erreur
+    if (empty($cityToFetch)) {
+        echo json_encode(['error' => 'Aucune ville spécifiée']);
+        exit;
+    }
+
+    // Requête pour récupérer (Pollutant, value) de la ville
+    $sqlCity = "SELECT Pollutant, value FROM pollution_villes WHERE City = ?";
+    $stmtCity = $conn->prepare($sqlCity);
+    $stmtCity->bind_param("s", $cityToFetch);
+    $stmtCity->execute();
+    $resCity = $stmtCity->get_result();
+
+    // Si la ville n’existe pas dans la table
+    if ($resCity->num_rows === 0) {
+        echo json_encode(['error' => 'Aucune donnée pour la ville ' . $cityToFetch]);
+        exit;
+    }
+
+    // On regroupe les valeurs par polluant
+    $pollutantsArr = [];
+    while ($row = $resCity->fetch_assoc()) {
+        $pollSymbol = $row['Pollutant'];
+        $val = (float) $row['value'];
+
+        if (!isset($pollutantsArr[$pollSymbol])) {
+            $pollutantsArr[$pollSymbol] = [];
+        }
+        $pollutantsArr[$pollSymbol][] = $val;
+    }
+
+    // Calcul de la moyenne pour chaque polluant
+    $finalData = [];
+    foreach ($pollutantsArr as $symbol => $values) {
+        $moyenne = array_sum($values) / count($values);
+        $finalData[$symbol] = round($moyenne, 2);
+    }
+
+    // On renvoie le résultat au format JSON
+    echo json_encode($finalData);
+    exit; // STOP ici pour la requête AJAX
+}
 // Récupérer le nom de la ville
 $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
 
@@ -338,6 +388,8 @@ if ($ville) {
     <link rel="stylesheet" href="../styles/base.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
+    <!-- Styles pour les Recherches -->
+    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Styles pour la page détails des villes -->
     <link rel="stylesheet" href="../styles/details.css">
     <!-- Styles pour les commentaires -->
@@ -346,8 +398,6 @@ if ($ville) {
     <link rel="stylesheet" href="../styles/boutons.css">
     <!-- Styles pour les Messages -->
     <link rel="stylesheet" href="../styles/messages.css">
-    <!-- Styles pour les Recherches -->
-    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Script de validation de formulaire -->
     <script src="../script/erreur_formulaire.js"></script>
     <!-- Script pour les interactions AJAX -->
@@ -545,26 +595,31 @@ include '../includes/header.php';
                 <div class="tab-pane fade" id="comparaison" role="tabpanel" aria-labelledby="comparaison-tab">
                     <h2 class="mt-4">Comparer les concentrations de deux villes</h2>
                     <div class="form-row">
+                        <!-- Ville 1 (verrouillée) -->
                         <div class="form-group col-md-6">
-                            <label for="city1">Ville 1</label>
-                            <input type="text" id="city1" class="form-control" placeholder="Entrez le nom de la première ville" autocomplete="off">
-                            <!-- Liste de suggestions pour la première ville -->
-                            <ul id="suggestions-city1" class="suggestions-list"></ul>
-                            <!-- Champ caché pour éventuellement stocker la ville sélectionnée -->
-                            <input type="hidden" id="city1_hidden">
+                            <label for="city1"><?php echo htmlspecialchars($ville); ?></label>
+                            <input type="text" id="city1" class="form-control"
+                                   value="<?php echo htmlspecialchars($ville); ?>" disabled>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="city2">Ville 2</label>
-                            <input type="text" id="city2" class="form-control" placeholder="Entrez le nom de la deuxième ville" autocomplete="off">
-                            <!-- Liste de suggestions pour la deuxième ville -->
+
+                        <!-- Ville 2 (avec suggestions) -->
+                        <!-- On applique position: relative sur le parent pour bien afficher la liste -->
+                        <div class="form-group col-md-6 position-relative">
+                            <label for="city2">Ville à comparer</label>
+                            <input type="text" id="city2" class="form-control"
+                                   placeholder="Entrez le nom de la ville à comparer" autocomplete="off">
                             <ul id="suggestions-city2" class="suggestions-list"></ul>
                             <input type="hidden" id="city2_hidden">
                         </div>
                     </div>
-                    <button id="compareCitiesButton" class="btn btn-primary mb-4">Comparer</button>
+
+                    <!-- Bouton Comparer (avec une classe pour le styliser) -->
+                    <button id="compareCitiesButton" class="btn-compare mb-4">Comparer</button>
+
                     <!-- Canvas pour afficher le graphique de comparaison -->
                     <canvas id="cityComparisonChart"></canvas>
                 </div>
+
 
 
                 <section id="effets" class="mt-5">

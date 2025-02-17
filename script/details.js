@@ -407,12 +407,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 document.addEventListener('DOMContentLoaded', function() {
-
-    // Si vous avez déjà une fonction initializeSuggestions dans votre script suggestions.js,
-    // vous pouvez l'appeler pour activer les suggestions sur ces deux champs.
-    // Par exemple, si initializeSuggestions prend (inputId, suggestionsListId, hiddenInputId, addButtonId):
+    // Active les suggestions uniquement pour city2
     if (typeof initializeSuggestions === "function") {
-        initializeSuggestions('city1', 'suggestions-city1', 'city1_hidden', null);
         initializeSuggestions('city2', 'suggestions-city2', 'city2_hidden', null);
     }
 
@@ -426,11 +422,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Appel AJAX pour récupérer les données des deux villes via get_pollutants.php
+        // Appel AJAX pour récupérer les données des deux villes
         Promise.all([
-            fetch('../fonctionnalites/get_pollutants.php?ville=' + encodeURIComponent(city1))
+            fetch('details.php?ajax=1&action=getPollutants&ville=' + encodeURIComponent(city1))
                 .then(response => response.json()),
-            fetch('../fonctionnalites/get_pollutants.php?ville=' + encodeURIComponent(city2))
+            fetch('details.php?ajax=1&action=getPollutants&ville=' + encodeURIComponent(city2))
                 .then(response => response.json())
         ])
             .then(function(results) {
@@ -457,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     data: pollutantLabels.map(function(p) {
                         return data1[p] !== undefined ? parseFloat(data1[p]) : 0;
                     }),
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',  // couleur avec transparence
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 };
@@ -473,12 +469,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     borderWidth: 1
                 };
 
-                // Si un graphique existait déjà, le détruire pour éviter les doublons
-                if (window.cityComparisonChart) {
+                // Vérifier si un graphique existe déjà, et le détruire si c'est bien un objet Chart
+                console.log("Avant destroy, cityComparisonChart =", window.cityComparisonChart);
+                if (
+                    window.cityComparisonChart &&
+                    typeof window.cityComparisonChart.destroy === 'function'
+                ) {
                     window.cityComparisonChart.destroy();
                 }
 
-                // Créer le graphique avec Chart.js
+                // Créer le nouveau graphique avec Chart.js
                 var ctx = document.getElementById('cityComparisonChart').getContext('2d');
                 window.cityComparisonChart = new Chart(ctx, {
                     type: 'bar',
