@@ -140,3 +140,26 @@ canvas {
 .leaflet-marker-icon:hover {
     transform: scale(1.1);
 }
+
+/* Style pour le conteneur du filtre heat map */
+#heatmap-filter {
+    margin: 10px auto;
+    width: 85%;
+    text-align: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#heatmap-filter label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#heatmap-filter select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+

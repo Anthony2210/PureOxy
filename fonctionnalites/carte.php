@@ -29,6 +29,8 @@ session_start();
     <link rel="stylesheet" href="../styles/boutons.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Inclusion de Leaflet.heat -->
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
     <!-- Inclusion du script externe carte.js avec l'attribut defer pour s'assurer qu'il est exécuté après le parsing du HTML -->
     <script src="../script/carte.js" defer></script>
 </head>
@@ -98,6 +100,19 @@ $conn->close();
 
 <section id="carte-interactive">
     <h2>Carte interactive de la qualité de l'air</h2>
+
+    <!-- Ajout du sélecteur pour le filtre heat map -->
+    <div id="heatmap-filter">
+        <label for="pollutant-filter">Filtrer par polluant (Heat Map) :</label>
+        <select id="pollutant-filter">
+            <option value="">-- Sélectionner un polluant --</option>
+            <option value="PM2.5">PM2.5</option>
+            <option value="NO2">NO2</option>
+            <option value="O3">O3</option>
+            <!-- Vous pouvez ajouter d'autres options selon vos données -->
+        </select>
+    </div>
+
     <div id="map"></div>
 
     <!-- Élément caché contenant les données des villes au format JSON -->
