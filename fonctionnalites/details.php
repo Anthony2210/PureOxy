@@ -350,6 +350,53 @@ if ($ville) {
                 exit;
             }
         }
+        $sqlAllCities = "
+    SELECT City, Pollutant, AVG(value) AS avg_val
+    FROM pollution_villes
+    GROUP BY City, Pollutant
+    ORDER BY Pollutant, avg_val DESC
+";
+        $resultAllCities = $conn->query($sqlAllCities);
+
+        $rankingByPollutant = [];
+        if ($resultAllCities && $resultAllCities->num_rows > 0) {
+            while ($rowAll = $resultAllCities->fetch_assoc()) {
+                $poll   = $rowAll['Pollutant'];
+                $city   = $rowAll['City'];
+                $avgVal = (float) $rowAll['avg_val'];
+
+                if (!isset($rankingByPollutant[$poll])) {
+                    $rankingByPollutant[$poll] = [];
+                }
+                $rankingByPollutant[$poll][] = [
+                    'city'    => $city,
+                    'avg_val' => $avgVal
+                ];
+            }
+        }
+
+        foreach ($rankingByPollutant as $poll => &$rows) {
+            $rang = 1;
+            foreach ($rows as &$item) {
+                $item['rank'] = $rang;
+                $rang++;
+            }
+        }
+        unset($rows);
+
+        $cityRankByPollutant = [];
+        foreach ($rankingByPollutant as $poll => $rows) {
+            $totalVilles = count($rows);
+            foreach ($rows as $row) {
+                if (strtolower($row['city']) === strtolower($ville)) {
+                    $cityRankByPollutant[$poll] = [
+                        'rank'  => $row['rank'],
+                        'total' => $totalVilles
+                    ];
+                    break;
+                }
+            }
+        }
 
         // Vérifier dépassements
         $has_depassements = false;
@@ -469,6 +516,20 @@ include '../includes/header.php';
                 </h1>
                 <p>Département : <?php echo htmlspecialchars($departement), '  (', number_format($population, 0, ',', ' '), ' habitants)'; ?></p>
                 <p>Région : <?php echo htmlspecialchars($region); ?></p>
+                <p> <?php if (!empty($cityRankByPollutant)) {
+                echo '<div style="margin-top: 1em;">';
+                    echo '<strong>Classement en termes de pollution :</strong>';
+                    echo '<ul style="list-style: none; padding-left: 0;">';
+
+                        foreach ($cityRankByPollutant as $poll => $info) {
+                        $rank  = $info['rank'];
+                        $total = $info['total'];
+                        echo "<li>• <strong>$poll</strong> : Rang $rank sur $total</li>";
+                        }
+
+                        echo '</ul>';
+                    echo '</div>'; }?>
+
             </section>
 
             <ul class="nav nav-tabs" id="detailsTabs" role="tablist">

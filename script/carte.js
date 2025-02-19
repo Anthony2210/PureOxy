@@ -87,59 +87,79 @@ function initMap(villes) {
      * - On crée la heat map avec L.heatLayer(heatData, ...).
      */
     function drawHeatMap(pollutant) {
+        // On supprime l'ancienne heat map si elle existe
         if (heatLayer) {
             map.removeLayer(heatLayer);
             heatLayer = null;
         }
+
+        // Si aucun polluant sélectionné, on ne fait rien
         if (!pollutant) return;
 
-        // Construire le tableau de points [lat, lon, intensity]
         var heatData = [];
         var maxValue = 0;
 
-        villes.forEach(function(ville, i) {
+        // Parcours des villes pour construire le tableau heatData
+        villes.forEach(function(ville) {
             if (ville.lat && ville.lon && ville.pollutants[pollutant]) {
                 let arr = ville.pollutants[pollutant].map(d => parseFloat(d.value) || 0);
                 let avg = calculateAverage(arr);
 
-                // Conserver la valeur max pour l'option "max"
                 if (avg > maxValue) {
                     maxValue = avg;
                 }
 
-                // On stocke la moyenne brute dans heatData
                 heatData.push([parseFloat(ville.lat), parseFloat(ville.lon), avg]);
             }
         });
 
-        // Indiquer le "max" pour forcer Leaflet.heat à faire un scale 0..1
+        // Debug : vérifier le nombre de points et la valeur max
+        console.log("Polluant sélectionné :", pollutant);
+        console.log("Nombre de points dans heatData :", heatData.length);
+        console.log("maxValue :", maxValue);
+
+        // Normaliser les intensités pour qu'elles soient comprises entre 0 et 1
+        if (maxValue > 0) {
+            heatData = heatData.map(function(point) {
+                return [point[0], point[1], point[2] / maxValue];
+            });
+        }
+
+        // Ajuster les paramètres pour améliorer la visibilité
         heatLayer = L.heatLayer(heatData, {
-            max: maxValue,      // <-- important
-            radius: 100,
-            blur: 80,
+            // Valeurs raisonnables pour tester
+            radius: 40,
+            blur: 20,
             gradient: {0.0: 'blue', 0.5: 'lime', 1.0: 'red'}
         }).addTo(map);
+
+        // Facultatif : recadrer la carte pour voir tous les points
+        // (si beaucoup de points sont hors métropole, vous verrez la carte dézoomée)
+        if (heatData.length > 0) {
+            var latLngs = heatData.map(pt => [pt[0], pt[1]]);
+            var bounds = L.latLngBounds(latLngs);
+            map.fitBounds(bounds);
+        }
     }
 
-    // --- Écouteur sur le <select> "pollutant-filter" ---
+    // Le <select> "pollutant-filter"
     var pollutantSelect = document.getElementById('pollutant-filter');
     if (pollutantSelect) {
         pollutantSelect.addEventListener('change', function() {
             var selectedPollutant = this.value;
             if (selectedPollutant) {
-                // L'utilisateur a choisi un polluant
-                // 1) On retire les marqueurs
+                // On enlève les marqueurs pour afficher la heat map
                 markersLayer.clearLayers();
-                // 2) On dessine la heat map pour ce polluant
                 drawHeatMap(selectedPollutant);
             } else {
-                // L'utilisateur remet à vide => on enlève la heat map et on remet les marqueurs
+                // Si polluant = vide, on retire la heat map et on remet les marqueurs
                 if (heatLayer) {
                     map.removeLayer(heatLayer);
                     heatLayer = null;
                 }
                 drawMarkers();
             }
+            console.log("Changement polluant ->", selectedPollutant);
         });
     }
 
