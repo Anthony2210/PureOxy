@@ -28,11 +28,10 @@ session_start();
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Styles Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Inclusion de Leaflet.heat -->
-    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
     <!-- Inclusion du script externe carte.js avec l'attribut defer pour s'assurer qu'il est exécuté après le parsing du HTML -->
     <script src="../script/carte.js" defer></script>
 </head>
@@ -109,9 +108,11 @@ $conn->close();
         <select id="pollutant-filter">
             <option value="">-- Sélectionner un polluant --</option>
             <option value="PM2.5">PM2.5</option>
+            <option value="PM10">PM10</option>
+            <option value="NO">NO</option>
             <option value="NO2">NO2</option>
             <option value="O3">O3</option>
-            <!-- Vous pouvez ajouter d'autres options selon vos données -->
+            <option value="CO">CO</option>
         </select>
     </div>
 
