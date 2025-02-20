@@ -63,18 +63,7 @@ unset($rows);
     </p>
 </section>
 
-<!-- Section présentant les fonctionnalités principales -->
-<section id="features">
-    <h2>Nos fonctionnalités</h2>
-    <ul>
-        <li><strong>Carte interactive</strong> : Visualisez les niveaux de pollution dans toute la France.</li>
-        <li><strong>Recherche par ville</strong> : Trouvez rapidement les données de pollution pour votre ville.</li>
-        <li><strong>Prédictions</strong> : Obtenez des prévisions sur la qualité de l'air grâce au machine learning.</li>
-        <li><strong>Recommandations personnalisées</strong> : Recevez des conseils pour limiter l'impact de la pollution sur votre santé.</li>
-    </ul>
-</section>
-
-<!-- Section Podium unique, avec un menu déroulant pour choisir le polluant -->
+<!-- Section Podium, avec un menu déroulant pour choisir le polluant -->
 <section id="podium">
     <h2>Podium des villes les plus polluées</h2>
     <p>Sélectionnez un polluant pour afficher le Top 3 (moyenne la plus élevée) :</p>
@@ -92,6 +81,17 @@ unset($rows);
 
     <!-- Conteneur vide : le JS va générer le podium ici -->
     <div id="podiumContainer"></div>
+</section>
+
+<!-- Section présentant les fonctionnalités principales -->
+<section id="features">
+    <h2>Nos fonctionnalités</h2>
+    <ul>
+        <li><strong>Carte interactive</strong> : Visualisez les niveaux de pollution dans toute la France.</li>
+        <li><strong>Recherche par ville</strong> : Trouvez rapidement les données de pollution pour votre ville.</li>
+        <li><strong>Prédictions</strong> : Obtenez des prévisions sur la qualité de l'air grâce au machine learning.</li>
+        <li><strong>Recommandations personnalisées</strong> : Recevez des conseils pour limiter l'impact de la pollution sur votre santé.</li>
+    </ul>
 </section>
 
 <!-- Section d'appel à l'action pour commencer -->
@@ -129,8 +129,8 @@ unset($rows);
         var second = rows[1] || null;
         var third  = rows[2] || null;
 
-        var html = escapeHTML(pollutant) +'</h3>';
-        html += '<div class="podium-container">';
+
+        var html = '<div class="podium-container">';
 
         // Place #2
         if (second) {
@@ -139,7 +139,6 @@ unset($rows);
             <div class="rank">2</div>
             <div class="city">
                 ${escapeHTML(second.city)}
-                <!-- On place la "médaille" à droite du nom -->
             </div>
             <div class="val">${parseFloat(second.avg_val).toFixed(2)} µg/m³</div>
         </div>
