@@ -104,7 +104,7 @@ $conn->close();
 
     <!-- Ajout du sélecteur pour le filtre heat map -->
     <div id="heatmap-filter">
-        <label for="pollutant-filter">Filtrer par polluant (Heat Map) :</label>
+        <label for="pollutant-filter">Filtrer par polluant :</label>
         <select id="pollutant-filter">
             <option value="">-- Sélectionner un polluant --</option>
             <option value="PM2.5">PM2.5</option>
