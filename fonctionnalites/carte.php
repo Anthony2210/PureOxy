@@ -102,11 +102,11 @@ $conn->close();
 <section id="carte-interactive">
     <h2>Carte interactive de la qualité de l'air</h2>
 
-    <!-- Ajout du sélecteur pour le filtre heat map -->
+    <!-- Ajout du sélecteur pour le filtre -->
     <div id="heatmap-filter">
         <label for="pollutant-filter">Filtrer par polluant :</label>
         <select id="pollutant-filter">
-            <option value="">-- Sélectionner un polluant --</option>
+            <option value="">Aucun</option>
             <option value="PM2.5">PM2.5</option>
             <option value="PM10">PM10</option>
             <option value="NO">NO</option>
