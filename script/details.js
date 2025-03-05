@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function() {
     // Active les suggestions uniquement pour city2
     if (typeof initializeSuggestions === "function") {
-        initializeSuggestions('city2', 'suggestions-city2', 'city2_hidden', null);
+        initializeSuggestions('city2', 'suggestions-list', 'city2_hidden', null);
     }
 
     // Gestion du clic sur le bouton "Comparer"
