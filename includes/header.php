@@ -33,17 +33,24 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         </nav>
     </div>
     <!-- Chatbot -->
-<div id="chatbot-container">
-    <div id="chatbot-header">PureOxy Chatbot</div>
-    <div id="chatbot-messages"></div>
-    <input type="text" id="chatbot-input" placeholder="Pose-moi une question !">
-</div>
-<button id="chatbot-toggle">Chat</button>
+    <div id="chatbot-container">
+        <!-- Texte visible en mode minimisé -->
+        <span id="chatbot-toggle-text">Chat</span>
 
-<!-- Lien vers le CSS du chatbot -->
-<link rel="stylesheet" href="../styles/chatbot.css">
+        <!-- Contenu de la chatbox (affiché en mode étendu) -->
+        <div id="chatbot-content">
+            <div id="chatbot-header">
+                PureOxy Chatbot
+                <button id="chatbot-close">✕</button>
+            </div>
+            <div id="chatbot-messages"></div>
+            <input type="text" id="chatbot-input" placeholder="Pose-moi une question !">
+        </div>
+    </div>
 
-<!-- Script du chatbot -->
-<script src="../script/chatbot.js" defer></script>
+    <!-- Lien vers le CSS du chatbot -->
+    <link rel="stylesheet" href="../styles/chatbot.css">
 
+    <!-- Script du chatbot -->
+    <script src="../script/chatbot.js" defer></script>
 </header>

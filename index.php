@@ -49,6 +49,8 @@ unset($rows);
     <link rel="stylesheet" href="styles/index.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="styles/boutons.css">
+    <!-- Styles pour le chatbot -->
+    <link rel="stylesheet" href="styles/chatbot.css">
 </head>
 <body>
 <?php include 'includes/header.php'; ?>
