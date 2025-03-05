@@ -1,87 +1,80 @@
 import pandas as pd
 import numpy as np
-
-# Pour le modèle
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
-# 1) CHARGER LE DATASET
-# ------------------------------------------------------------------
-# Adaptez le chemin, le séparateur (sep) et l'encodage si besoin
-df = pd.read_csv("/Users/akkouh/Desktop/2025_cleaned.csv", sep=";", encoding="utf-8")
+# 1) Lire le CSV dans df_original
+df_original = pd.read_csv("/Users/akkouh/Desktop/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
 
-# Exemple : renommer la colonne "Date de début" en "date_heure"
-df.rename(columns={"Date de début": "date_heure"}, inplace=True)
+# 2) Créer df_model (copie) pour transformations
+df_model = df_original.copy()
 
-# Convertir la colonne date_heure en datetime
-df["date_heure"] = pd.to_datetime(df["date_heure"], format="%Y/%m/%d %H:%M:%S", errors="coerce")
+# Convertir 'jour' en datetime, trier
+df_model["jour"] = pd.to_datetime(df_model["jour"])
+df_model.sort_values(["ville", "Polluant", "jour"], inplace=True)
 
-# 2) NETTOYAGE ET GESTION DES VALEURS MANQUANTES
-# ------------------------------------------------------------------
-# Par exemple, supprimer les lignes où la colonne "valeur" est NaN :
-df.dropna(subset=["valeur"], inplace=True)
+# 3) Créer des lags (par ville, Polluant)
+df_model["lag_1"] = df_model.groupby(["ville","Polluant"])["valeur_journaliere"].shift(1)
+df_model["lag_2"] = df_model.groupby(["ville","Polluant"])["valeur_journaliere"].shift(2)
 
-# 3) TRIER PAR [ville, date_heure]
-# ------------------------------------------------------------------
-df.sort_values(["ville", "date_heure"], inplace=True)
-df.reset_index(drop=True, inplace=True)
+# Variables calendaires
+df_model["dayofweek"] = df_model["jour"].dt.dayofweek
+df_model["month"] = df_model["jour"].dt.month
 
-# 4) CREATION DES LAGS PAR VILLE
-# ------------------------------------------------------------------
-df["lag_1"] = df.groupby("ville")["valeur"].shift(1)
-df["lag_2"] = df.groupby("ville")["valeur"].shift(2)
+# One-hot sur 'ville' et 'Polluant'
+df_model = pd.get_dummies(df_model, columns=["ville","Polluant"], drop_first=True)
 
-# 5) CREATION DES VARIABLES CALENDAIRES
-# ------------------------------------------------------------------
-df["hour"] = df["date_heure"].dt.hour
-df["dayofweek"] = df["date_heure"].dt.dayofweek
+# Supprimer NaN dus aux lags
+df_model.dropna(inplace=True)
 
-# Supprimer les lignes devenues NaN à cause des lags
-df.dropna(inplace=True)
-df.reset_index(drop=True, inplace=True)
+# Re-index
+df_model.reset_index(drop=False, inplace=True)
+# 'index' contient l'ancien index, on l'appelle 'old_index' par ex.
+df_model.rename(columns={"index": "old_index"}, inplace=True)
 
-# 6) ENCODAGE DE LA COLONNE "ville" (ONE-HOT ENCODING)
-# ------------------------------------------------------------------
-df = pd.get_dummies(df, columns=["ville"], drop_first=True)
+# 4) Définir X, y
+features = ["lag_1","lag_2","dayofweek","month"]
+one_hot_cols = [c for c in df_model.columns if c.startswith("ville_") or c.startswith("Polluant_")]
+features += one_hot_cols
 
-# 7) DEFINIR X (FEATURES) ET y (CIBLE)
-# ------------------------------------------------------------------
-features = ["lag_1", "lag_2", "hour", "dayofweek"]
-for col in df.columns:
-    if col.startswith("ville_"):
-        features.append(col)
+X = df_model[features]
+y = df_model["valeur_journaliere"]
 
-X = df[features]
-y = df["valeur"]  # la pollution à prédire
+# 5) Séparer Train / Test (chronologique)
+train_size = int(len(df_model)*0.8)
+X_train = X.iloc[:train_size]
+y_train = y.iloc[:train_size]
+X_test = X.iloc[train_size:]
+y_test = y.iloc[train_size:]
 
-# 8) SPLIT CHRONOLOGIQUE EN TRAIN / TEST
-# ------------------------------------------------------------------
-train_size = int(len(df) * 0.8)  # 80% des données pour le train
-X_train, X_test = X.iloc[:train_size], X.iloc[train_size:]
-y_train, y_test = y.iloc[:train_size], y.iloc[train_size:]
-
-# 9) ENTRAINER UN MODELE SUPERVISE (RANDOM FOREST)
-# ------------------------------------------------------------------
+# 6) Entraîner le RandomForest
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# 10) EVALUATION SUR LE TEST
-# ------------------------------------------------------------------
+# 7) Prédire
 y_pred = model.predict(X_test)
 
 mse = mean_squared_error(y_test, y_pred)
 rmse = mse**0.5
-print("RMSE sur le test =", rmse)
+r2 = r2_score(y_test, y_pred)
+print("RMSE =", rmse, "R² =", r2)
 
-# 11) CREER UN FICHIER CSV AVEC LES PREDICTIONS
-# ------------------------------------------------------------------
-# On récupère l'index du test pour lier à la date_heure ou autres colonnes
-df_test = df.iloc[train_size:].copy()
+# 8) Construire un DataFrame de test (df_model_test) pour récupérer 'old_index'
+df_model_test = df_model.iloc[train_size:].copy()
+df_model_test["valeur_predite"] = y_pred
 
-# Ajouter la colonne 'valeur_reelle' et 'valeur_predite'
-df_test["valeur_reelle"] = y_test.values
-df_test["valeur_predite"] = y_pred
+# 9) Mapper les prédictions dans df_original
+#    On utilise 'old_index' pour retrouver les lignes correspondantes
+df_original_test = df_original.loc[df_model_test["old_index"]].copy()
 
-# Sauvegarder dans un CSV
-df_test.to_csv("/Users/akkouh/Desktop/predictions.csv", index=False)
-print("Fichier 'predictions.csv' créé avec les valeurs réelles et prédites.")
+# Ajouter la colonne 'valeur_predite'
+df_original_test["valeur_predite"] = df_model_test["valeur_predite"].values
+
+# 10) Exporter un CSV final lisible
+#     -> colonnes : jour, ville, Polluant, valeur_journaliere, valeur_predite, etc.
+df_original_test.to_csv("/Users/akkouh/Desktop/predictions_test_readable.csv",
+                        sep=";", index=False, encoding="utf-8")
+
+print("Fichier de prédictions créé : predictions_test_readable.csv")
+print("Aperçu :")
+print(df_original_test.head(20))
