@@ -20,8 +20,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         <nav>
             <ul>
                 <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li>
-                <li><a href="<?php echo $baseUrl; ?>fonctionnalites/carte.php">Carte interactive</a></li>
-                <li><a href="<?php echo $baseUrl; ?>fonctionnalites/recherche.php">Recherche</a></li>
+                <li><a href="<?php echo $baseUrl; ?>pages/donnees_nationales.php">Données nationales</a></li>
+                <li><a href="<?php echo $baseUrl; ?>pages/donnees_locales.php">Données locales</a></li>
 
                 <!-- Vérifie si l'utilisateur est connecté pour afficher son nom au lieu de "Compte" -->
                 <?php if (isset($_SESSION['username'])): ?>

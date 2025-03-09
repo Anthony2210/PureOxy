@@ -1,0 +1,78 @@
+/* donnees_locales.css */
+
+/* Conteneur principal de la page */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Titre de la page */
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: darkolivegreen;
+    text-decoration: underline;
+    margin: 30px 0;
+}
+
+/* Style pour la section de choix */
+.choice-container {
+    text-align: center;
+    margin: 30px 0;
+    background: #f9f9e9;
+    padding: 20px;
+    border: 2px solid #6b8e23;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.choice-container p {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    color: #6b8e23;
+}
+
+.choice-container button {
+    margin: 0 15px;
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6b8e23;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.choice-container button:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+/* Style pour les sections de recherche et de carte */
+#search-section, #map-section {
+    margin: 40px 0;
+}
+
+/* Optionnel : style pour les titres des sections internes, si besoin */
+section h2 {
+    font-size: 2em;
+    text-align: center;
+    margin: 20px 0;
+    color: darkolivegreen;
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .choice-container p {
+        font-size: 1.2em;
+    }
+    .choice-container button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}

@@ -93,3 +93,34 @@ body, html {
     height: auto;!important;
     margin-right: 20px;!important;
 }
+
+/* Styles pour le dropdown (sous-onglets) */
+.dropdown:hover > a {
+    /* Optionnel : changer le style du lien parent au survol */
+    background-color: #eee;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.dropdown-content li a {
+    padding: 10px;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* Affichage du sous-menu au survol du parent */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
