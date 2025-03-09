@@ -1,38 +1,6 @@
 <?php
 session_start();
 include 'bd/bd.php';
-
-// 1) Récupérer la moyenne pour chaque polluant/ville
-$sql = "
-    SELECT Pollutant, City, AVG(value) AS avg_val
-    FROM pollution_villes
-    GROUP BY Pollutant, City
-    ORDER BY Pollutant, avg_val DESC
-";
-$result = $conn->query($sql);
-
-$podiumByPollutant = [];
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $pollutant = $row['Pollutant'];
-        $city      = $row['City'];
-        $avgVal    = (float) $row['avg_val'];
-
-        if (!isset($podiumByPollutant[$pollutant])) {
-            $podiumByPollutant[$pollutant] = [];
-        }
-        $podiumByPollutant[$pollutant][] = [
-            'city'    => $city,
-            'avg_val' => $avgVal
-        ];
-    }
-}
-
-// 2) Garder le top 3 pour chaque polluant
-foreach ($podiumByPollutant as $poll => &$rows) {
-    $rows = array_slice($rows, 0, 3);
-}
-unset($rows);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,6 +19,8 @@ unset($rows);
     <link rel="stylesheet" href="styles/boutons.css">
     <!-- Styles pour le chatbot -->
     <link rel="stylesheet" href="styles/chatbot.css">
+    <!-- Script du chatbot -->
+    <script src="./script/chatbot.js" defer></script>
 </head>
 <body>
 <?php include 'includes/header.php'; ?>
@@ -65,136 +35,50 @@ unset($rows);
     </p>
 </section>
 
-<!-- Section Podium, avec un menu déroulant pour choisir le polluant -->
-<section id="podium">
-    <h2>Podium des villes les plus polluées</h2>
-    <p>Sélectionnez un polluant pour afficher le Top 3 (moyenne la plus élevée) :</p>
-
-    <!-- Menu déroulant -->
-    <select id="pollutant-select">
-        <?php
-        // Lister les polluants
-        $pollutantsList = array_keys($podiumByPollutant);
-        foreach ($pollutantsList as $poll) {
-            echo '<option value="'.htmlspecialchars($poll).'">'.htmlspecialchars($poll).'</option>';
-        }
-        ?>
-    </select>
-
-    <!-- Conteneur vide : le JS va générer le podium ici -->
-    <div id="podiumContainer"></div>
-</section>
 
 <!-- Section présentant les fonctionnalités principales -->
 <section id="features">
     <h2>Nos fonctionnalités</h2>
     <ul>
-        <li><strong>Carte interactive</strong> : Visualisez les niveaux de pollution dans toute la France.</li>
-        <li><strong>Recherche par ville</strong> : Trouvez rapidement les données de pollution pour votre ville.</li>
-        <li><strong>Prédictions</strong> : Obtenez des prévisions sur la qualité de l'air grâce au machine learning.</li>
-        <li><strong>Recommandations personnalisées</strong> : Recevez des conseils pour limiter l'impact de la pollution sur votre santé.</li>
+        <li>
+            <a href="http://localhost/PUREOXY/pages/carte.php">
+                <strong>Carte interactive</strong> : Visualisez les niveaux de pollution dans toute la France.
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost/PUREOXY/pages/recherche.php">
+                <strong>Recherche par ville</strong> : Trouvez rapidement les données de pollution pour votre ville.
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost/PUREOXY/fonctionnalites/predictions.php">
+                <strong>Prédictions</strong> : Obtenez des prévisions sur la qualité de l'air grâce au machine learning.
+            </a>
+        </li>
     </ul>
 </section>
 
 <!-- Section d'appel à l'action pour commencer -->
 <section id="cta">
-    <h2>Commencez dès maintenant</h2>
-    <a href="fonctionnalites/recherche.php" class="button">Cliquez ici pour rechercher une ville</a>
+    <h3>Commencez dès maintenant à nous rejoindre afin de profiter de nouvelles fonctionnalités exclusives !</h3>
+    <ul>
+        <li>
+            <strong>L'accès à l'Espace commentaires</strong> : Discutez et débattez avec d'autres personnes.
+        </li>
+        <li>
+            <strong>Favoris</strong> : Ajoutez différentes villes à vos favoris afin de les retrouver plus rapidement.
+        </li>
+        <li>
+            <strong>Historique</strong> : Retrouvez vos dernières recherches.
+        </li>
+        <li>
+            <strong>Et bien plus encore !</strong>
+        </li>
+    </ul>
+    <a href="pages/compte.php" class="button">Nous rejoindre !</a>
 </section>
 
 <?php include 'includes/footer.php'; ?>
 
-<!-- On passe nos données en JSON au JavaScript -->
-<script>
-    var podiumData = <?php echo json_encode($podiumByPollutant, JSON_HEX_TAG|JSON_HEX_AMP|JSON_UNESCAPED_UNICODE); ?>;
-</script>
-
-<script>
-    // Fonction d'échappement
-    function escapeHTML(str) {
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;");
-    }
-
-    // Fonction pour construire le podium HTML
-    function buildPodiumHTML(pollutant) {
-        var rows = podiumData[pollutant] || [];
-        if (rows.length === 0) {
-            return '<p>Aucune donnée pour ce polluant.</p>';
-        }
-
-        // On récupère 1er, 2e, 3e
-        var first  = rows[0] || null;
-        var second = rows[1] || null;
-        var third  = rows[2] || null;
-
-
-        var html = '<div class="podium-container">';
-
-        // Place #2
-        if (second) {
-            html += `
-        <div class="place place-2" title="2ème place">
-            <div class="rank">2</div>
-            <div class="city">
-                ${escapeHTML(second.city)}
-            </div>
-            <div class="val">${parseFloat(second.avg_val).toFixed(2)} µg/m³</div>
-        </div>
-        `;
-        }
-
-        // Place #1
-        if (first) {
-            html += `
-        <div class="place place-1" title="1ère place">
-            <div class="rank">1</div>
-            <div class="city">
-                ${escapeHTML(first.city)}
-                <span class="medal-icon medal-gold" title="Or"></span>
-            </div>
-            <div class="val">${parseFloat(first.avg_val).toFixed(2)} µg/m³</div>
-        </div>
-        `;
-        }
-
-        // Place #3
-        if (third) {
-            html += `
-        <div class="place place-3" title="3ème place">
-            <div class="rank">3</div>
-            <div class="city">
-                ${escapeHTML(third.city)}
-            </div>
-            <div class="val">${parseFloat(third.avg_val).toFixed(2)} µg/m³</div>
-        </div>
-        `;
-        }
-
-        html += '</div>';
-        return html;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var select = document.getElementById('pollutant-select');
-        var container = document.getElementById('podiumContainer');
-
-        function updatePodium() {
-            var selectedPollutant = select.value;
-            container.innerHTML = buildPodiumHTML(selectedPollutant);
-        }
-
-        // Au changement
-        select.addEventListener('change', updatePodium);
-
-        // Afficher le premier polluant par défaut
-        if (select.value) {
-            updatePodium();
-        }
-    });
-</script>
 </body>
 </html>
