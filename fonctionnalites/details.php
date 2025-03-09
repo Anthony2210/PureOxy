@@ -484,12 +484,12 @@ include '../includes/header.php';
                 <ul>
                     <li>
                         <button>Taper la région ou le début du code postal dans la <a
-                                    href="../fonctionnalites/recherche.php">barre de recherche</a>.
+                                    href="../pages/recherche.php">barre de recherche</a>.
                         </button>
                     </li>
                     <li>
                         <button>Rechercher une ville proche géographiquement avec notre <a
-                                    href="../fonctionnalites/carte.php">carte interactive</a>.
+                                    href="../pages/carte.php">carte interactive</a>.
                         </button>
                     </li>
                     <li>

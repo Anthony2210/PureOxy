@@ -62,8 +62,8 @@ include '../includes/header.php';
     <section id="cta">
         <h2>Découvrez nos articles</h2>
         <p>Plongez dans des articles enrichissants qui couvrent des thématiques variées autour de la qualité de l'air.</p>
-        <a href="../fonctionnalites/qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
-        <a href="../fonctionnalites/lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>
+        <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
+        <a href="lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>
     </section>
 </main>
 <?php
