@@ -1,0 +1,257 @@
+/***********************************
+ * local_data.css
+ * Styles unifiés pour la page
+ * donnees_locales.php
+ ***********************************/
+
+/* ===============================
+   SECTION : CONTENEUR GLOBAL
+   =============================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Titre principal de la page */
+.container > h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: darkolivegreen;
+    text-decoration: underline;
+    margin: 30px 0;
+}
+
+/* ===============================
+   SECTION : CHOIX UTILISATEUR
+   =============================== */
+.choice-container {
+    text-align: center;
+    margin: 30px auto;
+    background: #f9f9e9;
+    padding: 20px;
+    border: 2px solid #6b8e23;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+}
+
+.choice-container p {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    color: #6b8e23;
+}
+
+.choice-container button {
+    margin: 0 15px;
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6b8e23;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.choice-container button:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+/* ===============================
+   SECTION : BARRE DE RECHERCHE
+   =============================== */
+
+/* Masquée par défaut ; elle sera affichée via JS */
+#search-section {
+    display: none;
+    margin: 60px 0;
+    text-align: center;
+}
+
+/* Conteneur du formulaire de recherche */
+#search-container {
+    background-color: transparent;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 700px;
+    margin: 0 auto; /* Centré */
+    text-align: center;
+}
+
+#search-container h1 {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #6b8e23;
+    text-decoration: underline;
+}
+
+/* Barre de recherche */
+#search-bar {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.2em;
+}
+
+#search-bar:focus {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Liste des suggestions */
+#suggestions-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+#suggestions-list.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#suggestions-list li {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+#suggestions-list li:hover {
+    background-color: #f0f0f0;
+    color: #6b8e23;
+}
+.avertissement {
+    color: #6b8e23;
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+/* Bouton de recherche */
+#search-button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6b8e23;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#search-button:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+/* ===============================
+   SECTION : CARTE INTERACTIVE
+   =============================== */
+
+/* Masquée par défaut ; elle sera affichée via JS */
+#map-section {
+    display: none;
+    margin: 60px 0;
+    text-align: center;
+}
+
+/* Carte Leaflet */
+#map {
+    height: 500px;
+    width: 85%;
+    margin: 20px auto;
+    border: 3px solid #2d6a4f;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup Leaflet */
+.popup-content {
+    font-size: 1.1em;
+    line-height: 1.6;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'League Spartan', sans-serif;
+}
+
+.popup-content strong {
+    color: darkolivegreen;
+}
+
+/* Filtre polluant */
+#heatmap-filter {
+    margin: 0 auto;
+    width: 85%;
+    text-align: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#heatmap-filter label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#heatmap-filter select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Survol marqueurs Leaflet */
+.leaflet-marker-icon {
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease-in-out;
+}
+
+.leaflet-marker-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .choice-container p {
+        font-size: 1.2em;
+    }
+    .choice-container button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+    #map {
+        width: 95%;
+    }
+}
