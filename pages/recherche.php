@@ -31,7 +31,7 @@ require_once('../bd/bd.php');
     <?php include('../includes/header.php'); ?>
     <main>
         <!-- Inclusion du contenu de la recherche -->
-        <?php include('../fonctionnalites/recherche-content.php'); ?>
+        <?php include('../fonctionnalites/recherche_content.php'); ?>
     </main>
     <?php include('../includes/footer.php'); ?>
 </div>
