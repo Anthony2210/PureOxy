@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function getBotResponse(userMessage) {
         try {
-            const response = await fetch('http://127.0.0.1:5000/chat', {
+            const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage })
+                body: JSON.stringify({ sender: "user", message: userMessage })
             });
             const data = await response.json();
-            return data.response;
+            return data[0]?.text || "Désolé, je n’ai pas compris.";
         } catch (error) {
-            console.error('Erreur lors de la requête au serveur :', error);
+            console.error('Erreur lors de la requête à Rasa :', error);
             return "Désolé, une erreur s’est produite. Réessaie plus tard !";
         }
     }
