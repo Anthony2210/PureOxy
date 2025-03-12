@@ -1,35 +1,49 @@
 document.addEventListener('DOMContentLoaded', function() {
     const chatbotContainer = document.getElementById('chatbot-container');
+    const chatbotContent = document.getElementById('chatbot-content');
+    const chatbotToggleText = document.getElementById('chatbot-toggle-text');
     const chatbotMessages = document.getElementById('chatbot-messages');
     const chatbotInput = document.getElementById('chatbot-input');
-    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotClose = document.getElementById('chatbot-close');
 
-    if (!chatbotToggle || !chatbotContainer || !chatbotMessages || !chatbotInput) {
+    if (!chatbotContainer || !chatbotContent || !chatbotToggleText || !chatbotMessages || !chatbotInput || !chatbotClose) {
         console.error('Erreur : Éléments du chatbot non trouvés dans le DOM');
         return;
-    } else {
-        console.log('Chatbot initialisé avec succès');
     }
 
-    chatbotToggle.addEventListener('click', function() {
-        if (chatbotContainer.style.display === 'block') {
-            chatbotContainer.style.display = 'none';
-            chatbotToggle.textContent = 'Chat';
-        } else {
-            chatbotContainer.style.display = 'block';
-            chatbotToggle.textContent = 'Fermer';
+    // Lorsque le container est cliqué en mode minimisé, il s'agrandit
+    chatbotContainer.addEventListener('click', function(e) {
+        if (!chatbotContainer.classList.contains('expanded')) {
+            chatbotContainer.classList.add('expanded');
+            // On empêche la propagation pour éviter d'éventuels conflits
+            e.stopPropagation();
         }
     });
 
+    // Bouton de fermeture (la croix) dans le header
+    chatbotClose.addEventListener('click', function(e) {
+        chatbotContainer.classList.remove('expanded');
+        // On empêche la propagation pour éviter de réouvrir immédiatement
+        e.stopPropagation();
+    });
+
+    // Empêcher la propagation des clics à l'intérieur du contenu pour ne pas fermer la chatbox accidentellement
+    chatbotContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Fonction pour ajouter un message dans le chat
     function addMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
         messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
         messageDiv.textContent = message;
         chatbotMessages.appendChild(messageDiv);
+        // Faire défiler vers le bas pour afficher le nouveau message
         chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
     }
 
+    // Fonction asynchrone pour récupérer la réponse du bot
     async function getBotResponse(userMessage) {
         try {
             const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
@@ -45,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Envoi du message lorsque l'utilisateur appuie sur la touche "Enter"
     chatbotInput.addEventListener('keypress', async function(e) {
         if (e.key === 'Enter' && chatbotInput.value.trim() !== '') {
             const userMessage = chatbotInput.value.trim();
@@ -55,5 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Message de bienvenue initial
     addMessage("Salut ! Je suis le chatbot PureOxy. Pose-moi une question !");
 });

@@ -516,7 +516,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                     <button id="view-comments-button">Voir vos commentaires</button>
                     <button id="view-requests-button">Demandes envoyées</button>
                     <!-- Bouton de déconnexion -->
-                    <a href="deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
+                    <a href="../fonctionnalites/deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
             </div>
             <!-- Contenu à droite : Favoris et Historique -->
@@ -710,7 +710,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             } else {
                 // Vérifier si le nom d'utilisateur existe déjà via AJAX
                 $.ajax({
-                    url: 'check_username.php',
+                    url: '../fonctionnalites/check_username.php',
                     method: 'POST',
                     data: { username: username },
                     dataType: 'json',
@@ -753,7 +753,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             } else {
                 // Vérifier si l'email existe déjà via AJAX
                 $.ajax({
-                    url: 'check_email.php',
+                    url: '../fonctionnalites/check_email.php',
                     method: 'POST',
                     data: { email: email },
                     dataType: 'json',
@@ -848,7 +848,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 };
                 // Envoyer les données via AJAX
                 $.ajax({
-                    url: 'register_user.php',
+                    url: '../fonctionnalites/register_user.php',
                     method: 'POST',
                     data: formData,
                     dataType: 'json',
@@ -904,7 +904,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
      * Charge les commentaires de l'utilisateur via une requête AJAX.
      */
     function loadUserComments() {
-        fetch('load_user_comments.php')
+        fetch('../fonctionnalites/load_user_comments.php')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('user-comments-list').innerHTML = data;
@@ -995,7 +995,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
      */
     // Fonction pour charger les demandes via AJAX
     function loadRequests() {
-        fetch('load_requests.php')
+        fetch('../fonctionnalites/load_requests.php')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('requests-list').innerHTML = data;

@@ -431,12 +431,12 @@ if ($ville) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Styles pour la Recherche -->
+    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Styles de Base -->
     <link rel="stylesheet" href="../styles/base.css">
     <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour les Recherches -->
-    <link rel="stylesheet" href="../styles/recherche.css">
     <!-- Styles pour la page détails des villes -->
     <link rel="stylesheet" href="../styles/details.css">
     <!-- Styles pour les commentaires -->
@@ -484,12 +484,12 @@ include '../includes/header.php';
                 <ul>
                     <li>
                         <button>Taper la région ou le début du code postal dans la <a
-                                    href="../fonctionnalites/recherche.php">barre de recherche</a>.
+                                    href="../pages/recherche.php">barre de recherche</a>.
                         </button>
                     </li>
                     <li>
                         <button>Rechercher une ville proche géographiquement avec notre <a
-                                    href="../fonctionnalites/carte.php">carte interactive</a>.
+                                    href="../pages/carte.php">carte interactive</a>.
                         </button>
                     </li>
                     <li>
@@ -669,11 +669,10 @@ include '../includes/header.php';
                             <label for="city2">Ville à comparer</label>
                             <input type="text" id="city2" class="form-control"
                                    placeholder="Entrez le nom de la ville à comparer" autocomplete="off">
-                            <ul id="suggestions-city2" class="suggestions-list"></ul>
+                            <ul id="suggestions-list"></ul>
                             <input type="hidden" id="city2_hidden">
                         </div>
                     </div>
-
                     <!-- Bouton Comparer (avec une classe pour le styliser) -->
                     <button id="compareCitiesButton" class="btn-compare mb-4">Comparer</button>
 

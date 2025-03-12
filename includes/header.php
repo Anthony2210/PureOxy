@@ -20,8 +20,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         <nav>
             <ul>
                 <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li>
-                <li><a href="<?php echo $baseUrl; ?>fonctionnalites/carte.php">Carte interactive</a></li>
-                <li><a href="<?php echo $baseUrl; ?>fonctionnalites/recherche.php">Recherche</a></li>
+                <li><a href="<?php echo $baseUrl; ?>pages/donnees_nationales.php">Données nationales</a></li>
+                <li><a href="<?php echo $baseUrl; ?>pages/donnees_locales.php">Données locales</a></li>
 
                 <!-- Vérifie si l'utilisateur est connecté pour afficher son nom au lieu de "Compte" -->
                 <?php if (isset($_SESSION['username'])): ?>
@@ -33,17 +33,24 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         </nav>
     </div>
     <!-- Chatbot -->
-<div id="chatbot-container">
-    <div id="chatbot-header">PureOxy Chatbot</div>
-    <div id="chatbot-messages"></div>
-    <input type="text" id="chatbot-input" placeholder="Pose-moi une question !">
-</div>
-<button id="chatbot-toggle">Chat</button>
+    <div id="chatbot-container">
+        <!-- Texte visible en mode minimisé -->
+        <span id="chatbot-toggle-text">Chat</span>
 
-<!-- Lien vers le CSS du chatbot -->
-<link rel="stylesheet" href="../styles/chatbot.css">
+        <!-- Contenu de la chatbox (affiché en mode étendu) -->
+        <div id="chatbot-content">
+            <div id="chatbot-header">
+                PureOxy Chatbot
+                <button id="chatbot-close">✕</button>
+            </div>
+            <div id="chatbot-messages"></div>
+            <input type="text" id="chatbot-input" placeholder="Pose-moi une question !">
+        </div>
+    </div>
 
-<!-- Script du chatbot -->
-<script src="../script/chatbot.js" defer></script>
+    <!-- Lien vers le CSS du chatbot -->
+    <link rel="stylesheet" href="../styles/chatbot.css">
 
+    <!-- Script du chatbot -->
+    <script src="../script/chatbot.js" defer></script>
 </header>
