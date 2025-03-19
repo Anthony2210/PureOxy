@@ -1,80 +1,174 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+import datetime
 
-# 1) Lire le CSV dans df_original
-df_original = pd.read_csv("/Users/akkouh/Desktop/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
+# ------------------------------------------------------------------
+# 1) LIRE LE FICHIER AGRÉGÉ
+# ------------------------------------------------------------------
+df = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
 
-# 2) Créer df_model (copie) pour transformations
-df_model = df_original.copy()
+# Convertir 'jour' en datetime et trier
+df["jour"] = pd.to_datetime(df["jour"])
+df.sort_values(["ville", "Polluant", "jour"], inplace=True)
 
-# Convertir 'jour' en datetime, trier
-df_model["jour"] = pd.to_datetime(df_model["jour"])
-df_model.sort_values(["ville", "Polluant", "jour"], inplace=True)
-
-# 3) Créer des lags (par ville, Polluant)
-df_model["lag_1"] = df_model.groupby(["ville","Polluant"])["valeur_journaliere"].shift(1)
-df_model["lag_2"] = df_model.groupby(["ville","Polluant"])["valeur_journaliere"].shift(2)
+# ------------------------------------------------------------------
+# 2) CRÉER LES LAGS PAR (ville, Polluant)
+# ------------------------------------------------------------------
+df["lag_1"] = df.groupby(["ville", "Polluant"])["valeur_journaliere"].shift(1)
+df["lag_2"] = df.groupby(["ville", "Polluant"])["valeur_journaliere"].shift(2)
 
 # Variables calendaires
-df_model["dayofweek"] = df_model["jour"].dt.dayofweek
-df_model["month"] = df_model["jour"].dt.month
+df["dayofweek"] = df["jour"].dt.dayofweek
+df["month"] = df["jour"].dt.month
 
 # One-hot sur 'ville' et 'Polluant'
-df_model = pd.get_dummies(df_model, columns=["ville","Polluant"], drop_first=True)
+df = pd.get_dummies(df, columns=["ville", "Polluant"], drop_first=True)
 
-# Supprimer NaN dus aux lags
-df_model.dropna(inplace=True)
+# Supprimer les lignes avec NaN (dus aux lags)
+df.dropna(inplace=True)
+df.reset_index(drop=True, inplace=True)
 
-# Re-index
-df_model.reset_index(drop=False, inplace=True)
-# 'index' contient l'ancien index, on l'appelle 'old_index' par ex.
-df_model.rename(columns={"index": "old_index"}, inplace=True)
-
-# 4) Définir X, y
-features = ["lag_1","lag_2","dayofweek","month"]
-one_hot_cols = [c for c in df_model.columns if c.startswith("ville_") or c.startswith("Polluant_")]
+# ------------------------------------------------------------------
+# 3) ENTRAÎNER UN RandomForest SUR TOUTES LES DATES
+# ------------------------------------------------------------------
+features = ["lag_1", "lag_2", "dayofweek", "month"]
+one_hot_cols = [c for c in df.columns if c.startswith("ville_") or c.startswith("Polluant_")]
 features += one_hot_cols
 
-X = df_model[features]
-y = df_model["valeur_journaliere"]
+X = df[features]
+y = df["valeur_journaliere"]
 
-# 5) Séparer Train / Test (chronologique)
-train_size = int(len(df_model)*0.8)
-X_train = X.iloc[:train_size]
-y_train = y.iloc[:train_size]
-X_test = X.iloc[train_size:]
-y_test = y.iloc[train_size:]
-
-# 6) Entraîner le RandomForest
 model = RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
+model.fit(X, y)
+print("Modèle RandomForest entraîné sur toutes les villes, tous polluants, toutes dates.")
 
-# 7) Prédire
-y_pred = model.predict(X_test)
+# ------------------------------------------------------------------
+# 4) TROUVER LA DERNIÈRE DATE
+# ------------------------------------------------------------------
+last_date = df["jour"].max()
+print("Dernière date mesurée :", last_date)
 
-mse = mean_squared_error(y_test, y_pred)
-rmse = mse**0.5
-r2 = r2_score(y_test, y_pred)
-print("RMSE =", rmse, "R² =", r2)
+# Définir l'horizon de prédiction : 365 jours à partir du lendemain de la dernière date
+start_date = last_date + pd.Timedelta(days=1)
+nb_jours = 365
+end_date = start_date + pd.Timedelta(days=nb_jours)  # date de fin exclue
 
-# 8) Construire un DataFrame de test (df_model_test) pour récupérer 'old_index'
-df_model_test = df_model.iloc[train_size:].copy()
-df_model_test["valeur_predite"] = y_pred
+# ------------------------------------------------------------------
+# 5) RÉCUPÉRER LA LISTE DES VILLES ET POLLUANTS (avant get_dummies)
+# ------------------------------------------------------------------
+df_orig2 = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
+df_orig2["jour"] = pd.to_datetime(df_orig2["jour"])
 
-# 9) Mapper les prédictions dans df_original
-#    On utilise 'old_index' pour retrouver les lignes correspondantes
-df_original_test = df_original.loc[df_model_test["old_index"]].copy()
+villes = df_orig2["ville"].dropna().unique()
+polluants = df_orig2["Polluant"].dropna().unique()
 
-# Ajouter la colonne 'valeur_predite'
-df_original_test["valeur_predite"] = df_model_test["valeur_predite"].values
+# ------------------------------------------------------------------
+# 6) CALCULER LES LAGS INITIAUX POUR CHAQUE (ville, Polluant)
+# ------------------------------------------------------------------
+def get_last_lags(sub_df, last_date):
+    """
+    Pour un sous-dataframe d'une ville et d'un polluant,
+    récupère la 'valeur_journaliere' du dernier jour (lag_1)
+    et celle du jour précédent (lag_2).
+    """
+    sub_df = sub_df.copy()
+    sub_df["jour"] = pd.to_datetime(sub_df["jour"])
+    sub_df.sort_values("jour", inplace=True)
 
-# 10) Exporter un CSV final lisible
-#     -> colonnes : jour, ville, Polluant, valeur_journaliere, valeur_predite, etc.
-df_original_test.to_csv("/Users/akkouh/Desktop/predictions_test_readable.csv",
-                        sep=";", index=False, encoding="utf-8")
+    row_last = sub_df[sub_df["jour"] == last_date]
+    val_last = row_last.iloc[0]["valeur_journaliere"] if len(row_last) == 1 else np.nan
 
-print("Fichier de prédictions créé : predictions_test_readable.csv")
+    sub_before = sub_df[sub_df["jour"] < last_date]
+    val_before = sub_before.iloc[-1]["valeur_journaliere"] if len(sub_before) > 0 else np.nan
+
+    return val_last, val_before
+
+lag_dict = {}
+for ville in villes:
+    for pol in polluants:
+        subset = df_orig2[(df_orig2["ville"] == ville) & (df_orig2["Polluant"] == pol)]
+        if subset.empty:
+            continue
+        val_last, val_before = get_last_lags(subset, last_date)
+        lag_dict[(ville, pol)] = {"lag_1": val_last, "lag_2": val_before}
+
+# ------------------------------------------------------------------
+# 7) PRÉ-CALCULER LE MAPPING ONE-HOT POUR CHAQUE (ville, Polluant)
+# ------------------------------------------------------------------
+# On récupère les colonnes one-hot utilisées lors de l'entraînement (déjà créées dans df)
+model_cols = [c for c in df.columns if c.startswith("ville_") or c.startswith("Polluant_")]
+base_features = ["lag_1", "lag_2", "dayofweek", "month"]
+
+one_hot_mapping = {}
+for (ville, pol) in lag_dict.keys():
+    row = {col: 0 for col in model_cols}
+    col_ville = "ville_" + ville.replace(" ", "_").replace("-", "_")
+    col_pol = "Polluant_" + pol
+    if col_ville in row:
+        row[col_ville] = 1
+    if col_pol in row:
+        row[col_pol] = 1
+    one_hot_mapping[(ville, pol)] = row
+
+# ------------------------------------------------------------------
+# 8) PRÉDICTION MULTI-STEP SUR 365 JOURS (VECTORISÉ PAR JOUR)
+# ------------------------------------------------------------------
+predictions = []
+current_date = start_date
+
+while current_date < end_date:
+    # Pour chaque jour, construire un DataFrame avec toutes les combinaisons (ville, Polluant)
+    rows = []
+    keys = list(lag_dict.keys())
+    for key in keys:
+        ville, pol = key
+        lags = lag_dict[key]
+        row = {
+            "lag_1": lags["lag_1"],
+            "lag_2": lags["lag_2"],
+            "dayofweek": current_date.weekday(),
+            "month": current_date.month
+        }
+        # Ajouter les variables one-hot pré-calculées
+        row.update(one_hot_mapping[key])
+        rows.append(row)
+    df_future = pd.DataFrame(rows)
+
+    # S'assurer que toutes les colonnes nécessaires sont présentes
+    full_features = base_features + model_cols
+    for col in full_features:
+        if col not in df_future.columns:
+            df_future[col] = 0
+    df_future = df_future[full_features]
+
+    # Prédiction en batch pour la journée
+    preds = model.predict(df_future)
+
+    # Mettre à jour les prédictions et les lags pour chaque couple (ville, Polluant)
+    for i, key in enumerate(keys):
+        ville, pol = key
+        y_future = preds[i]
+        predictions.append({
+            "jour": current_date,
+            "ville": ville,
+            "Polluant": pol,
+            "valeur_predite": y_future
+        })
+        # Mettre à jour les lags : lag_2 <- lag_1, lag_1 <- y_future
+        lag_dict[key]["lag_2"] = lag_dict[key]["lag_1"]
+        lag_dict[key]["lag_1"] = y_future
+
+    # Passer au jour suivant
+    current_date += datetime.timedelta(days=1)
+
+# ------------------------------------------------------------------
+# 9) EXPORTER LES PRÉDICTIONS
+# ------------------------------------------------------------------
+df_pred = pd.DataFrame(predictions)
+df_pred.sort_values(["ville", "Polluant", "jour"], inplace=True)
+df_pred.to_csv("/Users/akkouh/Desktop/scd3/prediction_1year_all_cities.csv", sep=";", index=False, encoding="utf-8")
+
+print("Fichier 'prediction_1year_all_cities.csv' créé.")
 print("Aperçu :")
-print(df_original_test.head(20))
+print(df_pred.head(20))
