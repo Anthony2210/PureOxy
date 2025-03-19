@@ -6,7 +6,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 # ------------------------------------------------------------------
 # 1) LIRE LE FICHIER AGRÉGÉ
 # ------------------------------------------------------------------
-df = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
+df = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily2.csv", sep=";", encoding="utf-8")
 df["jour"] = pd.to_datetime(df["jour"])
 df.sort_values(["ville", "Polluant", "jour"], inplace=True)
 
@@ -54,7 +54,7 @@ end_date = start_date + pd.Timedelta(days=nb_jours)  # date de fin exclue
 # ------------------------------------------------------------------
 # 5) RÉCUPÉRER LA LISTE DES VILLES ET POLLUANTS (avant get_dummies)
 # ------------------------------------------------------------------
-df_orig2 = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily.csv", sep=";", encoding="utf-8")
+df_orig2 = pd.read_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily2.csv", sep=";", encoding="utf-8")
 df_orig2["jour"] = pd.to_datetime(df_orig2["jour"])
 
 villes = df_orig2["ville"].dropna().unique()
