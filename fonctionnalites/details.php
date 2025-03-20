@@ -413,6 +413,37 @@ if ($ville) {
             }
         }
 
+        // --------------------------------------------
+// RÉCUPÉRATION DES PRÉDICTIONS XGBOOST
+// --------------------------------------------
+        $sqlPred = "SELECT jour, ville, Polluant, valeur_predite
+            FROM prediction_cities
+            WHERE ville = ?
+            ORDER BY jour";
+        $stmtPred = $conn->prepare($sqlPred);
+        $stmtPred->bind_param("s", $ville);
+        $stmtPred->execute();
+        $resPred = $stmtPred->get_result();
+
+        $predictions_data = [];
+        if ($resPred && $resPred->num_rows > 0) {
+            while ($row = $resPred->fetch_assoc()) {
+                $polluant = $row['Polluant'];
+                $date     = $row['jour'];
+                $valeur   = (float) $row['valeur_predite'];
+
+                // On range tout par polluant, puis on stocke la liste des dates + valeurs
+                if (!isset($predictions_data[$polluant])) {
+                    $predictions_data[$polluant] = [];
+                }
+                $predictions_data[$polluant][] = [
+                    'date' => $date,
+                    'value' => $valeur
+                ];
+            }
+        }
+
+
     }
 
 } else {
@@ -649,7 +680,87 @@ include '../includes/header.php';
                 <!-- Onglet Prédictions -->
                 <div class="tab-pane fade" id="predictions" role="tabpanel" aria-labelledby="predictions-tab">
                     <h2 class="mt-4">Prédictions des concentrations</h2>
-                    <p>Fonctionnalité en cours de développement.</p>
+
+                    <?php if (!empty($predictions_data)): ?>
+                        <p>Voici les prédictions pour la ville de <strong><?php echo htmlspecialchars($ville); ?></strong>.</p>
+
+                        <!-- FILTRES : polluant et mois -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="prediction-pollutant-select">Filtrer par polluant :</label>
+                                <select id="prediction-pollutant-select" class="form-control">
+                                    <option value="">Tous les polluants</option>
+                                    <?php
+                                    // Récupérer la liste de tous les polluants distincts
+                                    $uniquePolluants = array_keys($predictions_data);
+                                    foreach($uniquePolluants as $poll) {
+                                        echo '<option value="'.htmlspecialchars($poll).'">'.htmlspecialchars($poll).'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="prediction-month-select">Filtrer par mois :</label>
+                                <select id="prediction-month-select" class="form-control">
+                                    <option value="">Tous les mois</option>
+                                    <?php
+                                    // Extraire tous les mois distincts (format YYYY-MM) à partir de $predictions_data
+                                    $uniqueMonths = [];
+                                    foreach($predictions_data as $poll => $rows) {
+                                        foreach($rows as $r) {
+                                            // Exemple : si "jour" est "2025-06-07", on récupère "2025-06"
+                                            $month = substr($r['date'], 0, 7);
+                                            if(!in_array($month, $uniqueMonths)) {
+                                                $uniqueMonths[] = $month;
+                                            }
+                                        }
+                                    }
+                                    sort($uniqueMonths);
+                                    foreach($uniqueMonths as $m) {
+                                        echo '<option value="'.$m.'">'.$m.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- TABLEAU DES PRÉDICTIONS (avec data-* pour filtrer côté JS) -->
+                        <div class="table-responsive" id="predictions-table-container">
+                            <table class="table table-striped" id="predictions-table">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Polluant</th>
+                                    <th>Valeur Prédite (µg/m³)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($predictions_data as $poll => $rows): ?>
+                                    <?php foreach ($rows as $row): ?>
+                                        <tr data-polluant="<?php echo htmlspecialchars($poll); ?>" data-date="<?php echo htmlspecialchars($row['date']); ?>">
+                                            <td><?php echo htmlspecialchars($row['date']); ?></td>
+                                            <td><?php echo htmlspecialchars($poll); ?></td>
+                                            <td><?php echo round($row['value'], 2); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- DEUX GRAPHIQUES : un en lignes (évolution) et un en barres (comparaison) -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <canvas id="predictionChart1" height="200"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="predictionChart2" height="200"></canvas>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <p>Aucune donnée de prédiction disponible pour cette ville.</p>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Onglet Comparer les concentrations -->
@@ -711,6 +822,9 @@ $city_pollution_averages_js = json_encode($city_pollution_averages);
         return $entry['date'] . ($entry['location'] !== 'Inconnu' ? ' - ' . $entry['location'] : '');
     }, $dates)); ?>;
     var city_pollution_averages = <?php echo $city_pollution_averages_js; ?>;
+    var predictionsData = <?php echo json_encode($predictions_data); ?>;
+</script>
+
 </script>
 <script src="../script/suggestions.js"></script>
 <script src="../script/details.js"></script>
