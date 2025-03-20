@@ -515,3 +515,232 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 });
+/****************************************************
+ * Filtrage et affichage des prédictions
+ * (À placer dans details.js, après le DOMContentLoaded)
+ ****************************************************/
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Sélecteurs du DOM
+    var polluantSelect = document.getElementById('prediction-pollutant-select');
+    var monthSelect = document.getElementById('prediction-month-select');
+    var tableRows = document.querySelectorAll('#predictions-table tbody tr');
+
+    // Références aux canvas
+    var ctx1 = document.getElementById('predictionChart1')?.getContext('2d');
+    var ctx2 = document.getElementById('predictionChart2')?.getContext('2d');
+
+    // Références aux graphiques (pour les détruire/recréer au besoin)
+    var chart1 = null;
+    var chart2 = null;
+
+    /**
+     * Fonction principale : applique les filtres sur le tableau + met à jour les graphiques
+     */
+    function applyPredictionsFilter() {
+        var selectedPolluant = polluantSelect ? polluantSelect.value : '';
+        var selectedMonth    = monthSelect ? monthSelect.value : '';
+
+        // 1) Filtrer le TABLEAU
+        tableRows.forEach(function(row) {
+            var rowPolluant = row.getAttribute('data-polluant');
+            var rowDate     = row.getAttribute('data-date');  // ex. "2025-06-07"
+            var rowMonth    = rowDate.substring(0, 7);        // ex. "2025-06"
+
+            var matchPoll  = (!selectedPolluant || selectedPolluant === rowPolluant);
+            var matchMonth = (!selectedMonth || selectedMonth === rowMonth);
+
+            if (matchPoll && matchMonth) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // 2) Mettre à jour les graphiques
+        updatePredictionCharts(selectedPolluant, selectedMonth);
+    }
+
+    /**
+     * Met à jour les deux graphiques (chart1 : évolution dans le temps, chart2 : comparaison barres)
+     */
+    function updatePredictionCharts(selectedPolluant, selectedMonth) {
+        // Détruire les graphiques existants pour éviter les duplications
+        if (chart1) chart1.destroy();
+        if (chart2) chart2.destroy();
+
+        // --- CHART 1 : ÉVOLUTION DANS LE TEMPS (type: line) ---
+        // On affiche l'évolution dans le temps, soit pour 1 polluant (si selectedPolluant != ''),
+        // soit pour tous les polluants (chacun une courbe).
+        // On ne garde que les dates correspondant au mois filtré si selectedMonth != ''.
+
+        var lineLabels = [];
+        var lineDatasets = [];
+
+        if (!selectedPolluant) {
+            // Aucun polluant choisi => tracer une courbe par polluant
+            // 1) Récupérer la liste de toutes les dates concernées
+            var allDatesSet = new Set();
+
+            for (var poll in predictionsData) {
+                predictionsData[poll].forEach(function(d) {
+                    var m = d.date.substring(0, 7);
+                    if (!selectedMonth || m === selectedMonth) {
+                        allDatesSet.add(d.date);
+                    }
+                });
+            }
+            // Convertir en tableau et trier
+            var allDatesArr = Array.from(allDatesSet);
+            allDatesArr.sort();
+            lineLabels = allDatesArr;
+
+            // Construire un dataset par polluant
+            for (var poll in predictionsData) {
+                var dataArr = predictionsData[poll].filter(function(d) {
+                    // Filtre sur le mois
+                    return (!selectedMonth || d.date.substring(0, 7) === selectedMonth);
+                });
+                // On mappe date -> value pour retrouver plus vite
+                var dateMap = {};
+                dataArr.forEach(function(d){ dateMap[d.date] = d.value; });
+
+                // On crée le tableau de valeurs aligné sur allDatesArr
+                var values = allDatesArr.map(function(dt) {
+                    return dateMap[dt] !== undefined ? dateMap[dt] : null;
+                });
+
+                lineDatasets.push({
+                    label: poll,
+                    data: values,
+                    borderColor: randomColor(),
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    tension: 0.1
+                });
+            }
+
+        } else {
+            // Un polluant spécifique => 1 seule courbe
+            var filteredData = predictionsData[selectedPolluant] || [];
+            // On filtre par mois si besoin
+            if (selectedMonth) {
+                filteredData = filteredData.filter(function(d) {
+                    return d.date.substring(0, 7) === selectedMonth;
+                });
+            }
+            // On trie par date
+            filteredData.sort(function(a,b){ return a.date.localeCompare(b.date); });
+
+            // lineLabels = toutes les dates, lineDatasets = 1 dataset
+            lineLabels = filteredData.map(function(d){ return d.date; });
+            var values = filteredData.map(function(d){ return d.value; });
+
+            lineDatasets.push({
+                label: selectedPolluant,
+                data: values,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                tension: 0.1
+            });
+        }
+
+        // Construction du chart1 (Line)
+        chart1 = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: lineLabels,
+                datasets: lineDatasets
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Évolution dans le temps'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Date' } },
+                    y: { title: { display: true, text: 'µg/m³' }, beginAtZero: false }
+                }
+            }
+        });
+
+        // --- CHART 2 : COMPARAISON PAR POLLUANT (type: bar) ---
+        // On affiche la moyenne de chaque polluant sur la période filtrée (mois ou tout).
+        // - Si selectedMonth != '', on fait la moyenne *dans ce mois* pour chaque polluant.
+        // - Sinon, on fait la moyenne globale sur toute la période pour chaque polluant.
+
+        var barLabels = [];
+        var barValues = [];
+
+        // Parcours de tous les polluants
+        for (var poll in predictionsData) {
+            // Filtrer par mois
+            var arr = predictionsData[poll].filter(function(d){
+                var m = d.date.substring(0,7);
+                return (!selectedMonth || m === selectedMonth);
+            });
+            if (arr.length > 0) {
+                // Calculer la moyenne
+                var sum = 0;
+                arr.forEach(function(d){ sum += d.value; });
+                var avg = sum / arr.length;
+                barLabels.push(poll);
+                barValues.push(avg);
+            }
+        }
+
+        // Construction du chart2 (Bar)
+        chart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'Concentration moyenne (µg/m³)',
+                    data: barValues,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Comparaison des polluants'
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Polluant' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'µg/m³' } }
+                }
+            }
+        });
+    }
+
+    /**
+     * Générateur de couleur aléatoire pour distinguer les courbes
+     */
+    function randomColor() {
+        var r = Math.floor(Math.random()*255);
+        var g = Math.floor(Math.random()*255);
+        var b = Math.floor(Math.random()*255);
+        return 'rgba('+r+','+g+','+b+',1)';
+    }
+
+    // Écouteurs d'événements
+    if (polluantSelect) polluantSelect.addEventListener('change', applyPredictionsFilter);
+    if (monthSelect)    monthSelect.addEventListener('change', applyPredictionsFilter);
+
+    // Au premier chargement, on applique le filtre
+    applyPredictionsFilter();
+});
