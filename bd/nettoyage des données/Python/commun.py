@@ -6,25 +6,21 @@ from thefuzz import process
 # (2023 et 2024 : sep=";", 2025 : sep="\t")
 # ---------------------------------------------------------
 sep_map = {
-    "/Users/akkouh/Desktop/scd3/2023_merged.csv": ";",
-    "/Users/akkouh/Desktop/scd3/2024_merged.csv": ";",
-    "/Users/akkouh/Desktop/scd3/2025_merged.csv": "\t"
+    "/Users/akkouh/Desktop/scd3/2024_merged.csv": ";"
 }
 
 # ---------------------------------------------------------
 # LISTE DES FICHIERS :
 # ---------------------------------------------------------
 fichiers = [
-    "/Users/akkouh/Desktop/scd3/2023_merged.csv",
-    "/Users/akkouh/Desktop/scd3/2024_merged.csv",
-    "/Users/akkouh/Desktop/scd3/2025_merged.csv"
+    "/Users/akkouh/Desktop/scd3/2024_merged.csv"
 ]
 
 # Fichier référentiel de villes (pour fuzzy matching)
 fichier_villes = "/Users/akkouh/Desktop/scd3/cities_raw.csv"
 
 # Fichier final unique
-fichier_final = "/Users/akkouh/Desktop/scd3/all_years_cleaned_daily2.csv"
+fichier_final = "/Users/akkouh/Desktop/scd3/all_years_cleaned_daily3.csv"
 
 # ---------------------------------------------------------
 # CHARGER LA LISTE DE VILLES
@@ -169,8 +165,8 @@ if all_daily:
     # Imputer d'éventuels NaN résiduels dans le DataFrame final
     df_final.fillna(0, inplace=True)
 
-    df_final.to_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily.csv", sep=";", encoding="utf-8", index=False)
-    print("Fichier final unique créé : all_years_cleaned_daily.csv")
+    df_final.to_csv("/Users/akkouh/Desktop/scd3/all_years_cleaned_daily3.csv", sep=";", encoding="utf-8", index=False)
+    print("Fichier final unique créé : all_years_cleaned_daily3.csv")
     print("Taille du DataFrame final :", df_final.shape)
 else:
     print("Aucun fichier n'a été traité avec succès.")
