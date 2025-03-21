@@ -17,7 +17,7 @@
  */
 $servername = "localhost";
 $username = "root";
-$password = "root";
+$password = "";
 $dbname = "pureoxy";
 
 /**
@@ -27,7 +27,7 @@ $dbname = "pureoxy";
  *
  * @var mysqli $conn Objet de connexion à la base de données.
  */
-$conn = new mysqli($servername, $username, $password, $dbname, 8889);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 /**
  * Vérifie la connexion à la base de données.
