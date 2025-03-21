@@ -134,8 +134,17 @@ if (isset($_POST['register'])) {
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
+    // -------------------------------
     // Récupérer les 7 dernières recherches
-    $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7");
+    // -------------------------------
+    $stmt = $conn->prepare("
+        SELECT dv.ville AS search_query, sh.search_date
+        FROM search_history sh
+        JOIN donnees_villes dv ON sh.id_ville = dv.id_ville
+        WHERE sh.user_id = ?
+        ORDER BY sh.search_date DESC
+        LIMIT 7
+    ");
     if ($stmt) {
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -143,7 +152,20 @@ if (isset($_SESSION['user_id'])) {
         $search_history = $result->fetch_all(MYSQLI_ASSOC);
 
         // Supprimer les recherches plus anciennes
-        $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_date NOT IN (SELECT search_date FROM (SELECT search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 7) AS sub)");
+        $stmt = $conn->prepare("
+            DELETE FROM search_history
+            WHERE user_id = ?
+              AND search_date NOT IN (
+                  SELECT search_date
+                  FROM (
+                      SELECT search_date
+                      FROM search_history
+                      WHERE user_id = ?
+                      ORDER BY search_date DESC
+                      LIMIT 7
+                  ) AS sub
+              )
+        ");
         if ($stmt) {
             $stmt->bind_param("ii", $user_id, $user_id);
             $stmt->execute();
@@ -151,7 +173,12 @@ if (isset($_SESSION['user_id'])) {
     }
 
     // Récupérer les villes favorites
-    $stmt = $conn->prepare("SELECT city_name FROM favorite_cities WHERE user_id = ?");
+    $stmt = $conn->prepare("
+        SELECT dv.ville AS city_name
+        FROM favorite_cities fc
+        JOIN donnees_villes dv ON fc.id_ville = dv.id_ville
+        WHERE fc.user_id = ?
+    ");
     if ($stmt) {
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -160,7 +187,7 @@ if (isset($_SESSION['user_id'])) {
     }
 
     // Récupérer les détails de l'utilisateur
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id_users = ?");
     if ($stmt) {
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -168,8 +195,17 @@ if (isset($_SESSION['user_id'])) {
         $user = $user_result->fetch_assoc();
     }
 
+    // -------------------------------
     // Récupérer l'historique des recherches (10 dernières)
-    $stmt = $conn->prepare("SELECT search_query, search_date FROM search_history WHERE user_id = ? ORDER BY search_date DESC LIMIT 10");
+    // -------------------------------
+    $stmt = $conn->prepare("
+        SELECT dv.ville AS search_query, sh.search_date
+        FROM search_history sh
+        JOIN donnees_villes dv ON sh.id_ville = dv.id_ville
+        WHERE sh.user_id = ?
+        ORDER BY sh.search_date DESC
+        LIMIT 10
+    ");
     if ($stmt) {
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -189,8 +225,8 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
 
     // Vérifier que le nom de la ville n'est pas vide
     if (!empty($city_name)) {
-        // Vérifier que la ville existe dans la base de données
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM pollution_villes WHERE City = ?");
+        // 1) Récupérer l'id_ville correspondant dans donnees_villes
+        $stmt = $conn->prepare("SELECT id_ville FROM donnees_villes WHERE ville = ? LIMIT 1");
         if (!$stmt) {
             $response = [
                 'success' => false,
@@ -200,25 +236,37 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
             $stmt->bind_param("s", $city_name);
             $stmt->execute();
             $city_exists_result = $stmt->get_result();
-            $city_exists_row = $city_exists_result->fetch_assoc();
+            $city_row = $city_exists_result->fetch_assoc();
 
-            if ($city_exists_row['count'] > 0) {
-                // Vérifier que la ville n'est pas déjà dans les favoris de l'utilisateur
-                $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+            if ($city_row) {
+                // La ville existe
+                $idVille = $city_row['id_ville'];
+
+                // 2) Vérifier que la ville n'est pas déjà dans les favoris de l'utilisateur
+                $stmt = $conn->prepare("
+                    SELECT COUNT(*) as count 
+                    FROM favorite_cities 
+                    WHERE user_id = ? 
+                      AND id_ville = ?
+                ");
                 if (!$stmt) {
                     $response = [
                         'success' => false,
                         'message' => "Préparation de la requête échouée: " . $conn->error
                     ];
                 } else {
-                    $stmt->bind_param("is", $user_id, $city_name);
+                    $stmt->bind_param("ii", $user_id, $idVille);
                     $stmt->execute();
                     $city_favorite_result = $stmt->get_result();
                     $city_favorite_row = $city_favorite_result->fetch_assoc();
 
                     if ($city_favorite_row['count'] == 0) {
-                        // Vérifier le nombre actuel de villes favorites
-                        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM favorite_cities WHERE user_id = ?");
+                        // 3) Vérifier le nombre actuel de villes favorites
+                        $stmt = $conn->prepare("
+                            SELECT COUNT(*) as count 
+                            FROM favorite_cities 
+                            WHERE user_id = ?
+                        ");
                         if (!$stmt) {
                             $response = [
                                 'success' => false,
@@ -231,15 +279,18 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                             $count_row = $count_result->fetch_assoc();
 
                             if ($count_row['count'] < 5) {
-                                // Insérer la nouvelle ville favorite
-                                $stmt = $conn->prepare("INSERT INTO favorite_cities (user_id, city_name) VALUES (?, ?)");
+                                // 4) Insérer la nouvelle ville favorite (via id_ville)
+                                $stmt = $conn->prepare("
+                                    INSERT INTO favorite_cities (user_id, id_ville) 
+                                    VALUES (?, ?)
+                                ");
                                 if (!$stmt) {
                                     $response = [
                                         'success' => false,
                                         'message' => "Préparation de la requête échouée: " . $conn->error
                                     ];
                                 } else {
-                                    $stmt->bind_param("is", $user_id, $city_name);
+                                    $stmt->bind_param("ii", $user_id, $idVille);
                                     if ($stmt->execute()) {
                                         $response = [
                                             'success' => true,
@@ -308,11 +359,20 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
  * @return void
  */
 if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
-    $search_query = $_POST['search_query'];
+    $search_query = $_POST['search_query']; // c’est le nom de la ville
     $user_id = $_SESSION['user_id'];
 
-    // Supprimer la recherche
-    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ? AND search_query = ?");
+    // On supprime via l'id_ville correspondant à la ville
+    $stmt = $conn->prepare("
+        DELETE FROM search_history
+        WHERE user_id = ?
+          AND id_ville = (
+              SELECT id_ville
+              FROM donnees_villes
+              WHERE ville = ?
+              LIMIT 1
+          )
+    ");
     if (!$stmt) {
         $response = [
             'success' => false,
@@ -401,8 +461,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     $city_name = $_POST['city_name'];
     $user_id = $_SESSION['user_id'];
 
-    // Supprimer la ville favorite
-    $stmt = $conn->prepare("DELETE FROM favorite_cities WHERE user_id = ? AND city_name = ?");
+    // Supprimer la ville favorite via son id_ville
+    $stmt = $conn->prepare("
+        DELETE FROM favorite_cities
+        WHERE user_id = ?
+          AND id_ville = (
+              SELECT id_ville
+              FROM donnees_villes
+              WHERE ville = ?
+              LIMIT 1
+          )
+    ");
     if (!$stmt) {
         $response = [
             'success' => false,
@@ -439,7 +508,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -525,7 +593,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
                 <div class="favorite-cities-section">
                     <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
                     <!-- Contenu de la section Favoris -->
-                   <?php if (!empty($favorite_cities)): ?>
+                    <?php if (!empty($favorite_cities)): ?>
                         <ul class="favorite-cities-list">
                             <?php foreach ($favorite_cities as $city): ?>
                                 <li>
@@ -684,6 +752,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 <!-- Vos scripts JavaScript -->
 <script src="../script/suggestions.js"></script>
 <script src="../script/messagesAjax.js"></script>
+
 <script>
     $(document).ready(function() {
         var validUsername = false;
@@ -880,7 +949,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
     /**
      * Gestion de la fenêtre modale des commentaires.
      */
-        // Modal des commentaires
+// Modal des commentaires
     const commentsModal = document.getElementById("comments-modal");
     const commentsBtn = document.getElementById("view-comments-button");
     const closeCommentsBtn = document.querySelector(".close-button-comments");

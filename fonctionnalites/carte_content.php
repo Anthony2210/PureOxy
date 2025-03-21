@@ -5,45 +5,60 @@
 include '../bd/bd.php';
 
 /**
- * Récupère les données de pollution des villes depuis la base de données.
+ * Récupère la moyenne de pollution des villes depuis la table moy_pollution_villes,
+ * puis joint à donnees_villes pour obtenir la lat/lon, etc.
  */
 function getPollutionData($conn) {
-    $sql = "SELECT City AS nom, Latitude AS lat, Longitude AS lon, value AS pollution, Pollutant AS pollutant, Location AS location, `LastUpdated` AS date
-            FROM pollution_villes
-            ORDER BY date";
+    $sql = "
+        SELECT 
+            dv.ville AS nom,
+            dv.latitude AS lat,
+            dv.longitude AS lon,
+            dv.departement AS location,
+            mpv.avg_value AS pollution,
+            mpv.pollutant AS pollutant
+        FROM moy_pollution_villes mpv
+        JOIN donnees_villes dv 
+            ON dv.id_ville = mpv.id_ville
+        ORDER BY dv.ville
+    ";
+
     $result = $conn->query($sql);
     if (!$result) {
-        error_log("Erreur lors de l'exécution de la requête SQL : " . $conn->error);
+        error_log('Erreur lors de l\'exécution de la requête SQL : ' . $conn->error);
         exit('Une erreur est survenue lors du chargement des données.');
     }
-    $villes = array();
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $city_key = $row['nom'];
-            if (!isset($villes[$city_key])) {
-                $villes[$city_key] = [
-                    'nom' => $row['nom'],
-                    'lat' => $row['lat'],
-                    'lon' => $row['lon'],
-                    'location' => $row['location'],
-                    'pollutants' => [],
-                    'dates' => []
-                ];
-            }
-            if (!isset($villes[$city_key]['pollutants'][$row['pollutant']])) {
-                $villes[$city_key]['pollutants'][$row['pollutant']] = [];
-            }
-            $villes[$city_key]['pollutants'][$row['pollutant']][] = [
-                'value' => $row['pollution'],
-                'date' => $row['date'],
-                'location' => $row['location']
-            ];
-            $villes[$city_key]['dates'][] = [
-                'date' => $row['date'],
-                'location' => $row['location']
+
+    $villes = [];
+    while ($row = $result->fetch_assoc()) {
+        $city_key = $row['nom'];
+
+        // Si on n'a pas encore enregistré cette ville, on l'initialise
+        if (!isset($villes[$city_key])) {
+            $villes[$city_key] = [
+                'nom'       => $row['nom'],
+                'lat'       => $row['lat'],
+                'lon'       => $row['lon'],
+                'location'  => $row['location'],
+                'pollutants'=> []
             ];
         }
+
+        // On ajoute le polluant et sa valeur moyenne
+        $pollutant = $row['pollutant'];
+        if (!isset($villes[$city_key]['pollutants'][$pollutant])) {
+            $villes[$city_key]['pollutants'][$pollutant] = [];
+        }
+
+        // Comme c’est déjà agrégé, on n’a qu’une valeur par (ville, polluant),
+        // mais on le stocke quand même dans un tableau pour ne pas casser le code existant.
+        $villes[$city_key]['pollutants'][$pollutant][] = [
+            'value'    => $row['pollution'],
+            'date'     => null,        // plus de date ici
+            'location' => $row['location']
+        ];
     }
+
     return json_encode(array_values($villes));
 }
 

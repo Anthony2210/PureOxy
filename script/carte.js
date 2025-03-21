@@ -46,7 +46,7 @@ function initMap(villes) {
                 const popupContent = `
                     <div class="popup-content">
                         <strong>Ville :</strong> ${ville.nom}<br>
-                        ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
+                        ${ville.location !== 'Inconnu' ? `<strong>Département :</strong> ${ville.location}<br>` : ''}
                         <ul>${pollutantList}</ul>
                         <a href="../fonctionnalites/details.php?ville=${encodeURIComponent(ville.nom)}" id="see-more">Voir plus</a>
                     </div>
@@ -99,7 +99,7 @@ function initMap(villes) {
                 const popupContent = `
                 <div class="popup-content">
                     <strong>Ville :</strong> ${ville.nom}<br>
-                    ${ville.location !== 'Inconnu' ? `<strong>Localisation :</strong> ${ville.location}<br>` : ''}
+                    ${ville.location !== 'Inconnu' ? `<strong>Département :</strong> ${ville.location}<br>` : ''}
                     <ul>
                         <li><strong>${pollutant} :</strong> ${avg.toFixed(2)} µg/m³</li>
                     </ul>

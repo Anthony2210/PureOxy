@@ -8,7 +8,6 @@
  */
 
 session_start();
-
 require_once('../bd/bd.php');
 
 /**
@@ -28,16 +27,20 @@ if (!empty($query)) {
     /**
      * Préparation de la requête SQL pour rechercher des villes correspondantes.
      *
-     * La requête sélectionne le nom de la ville, le code postal minimum et la région.
+     * La requête sélectionne le nom de la ville, le code postal et la région.
      * Elle filtre les villes dont le nom ou le code postal commence par la requête de l'utilisateur.
      * Les résultats sont groupés par ville et région, triés par nom de ville, et limités à 10 résultats.
      */
     $stmt = $conn->prepare("
-        SELECT City AS ville, MIN(Postal_Code) AS code_postal, Region AS region 
-        FROM pollution_villes 
-        WHERE City LIKE CONCAT(?, '%') OR Postal_Code LIKE CONCAT(?, '%')
-        GROUP BY City, Region 
-        ORDER BY City 
+        SELECT 
+            ville AS ville, 
+            postal_code AS code_postal, 
+            region
+        FROM donnees_villes
+        WHERE ville LIKE CONCAT(?, '%')
+           OR postal_code LIKE CONCAT(?, '%')
+        GROUP BY ville, region
+        ORDER BY ville
         LIMIT 10
     ");
 
