@@ -1,0 +1,81 @@
+/* =======================================
+   Podium / Classement Styles
+   ======================================= */
+
+/* Section du classement */
+#classement {
+    text-align: center;
+    background-color: #f9f9e9;
+    border-bottom: 2px solid #6b8e23;
+    padding-bottom: 20px;
+}
+
+/* Le titre principal */
+#classement h2 {
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    color: #6b8e23;
+}
+
+#classement p {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Le sélecteur de polluant */
+#classement select {
+    font-size: 1.1em;
+    padding: 5px 10px;
+    margin: 10px auto;
+    display: block; /* centré */
+    border: 2px solid #6b8e23;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #6b8e23;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Tableau de classement */
+.table-classement {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 900px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.table-classement thead tr {
+    background-color: #6b8e23;
+    color: #fff;
+}
+
+.table-classement th,
+.table-classement td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 1em;
+}
+
+.table-classement tbody tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+/* Bouton "Voir plus" */
+.btn-voir-plus {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    background-color: #6b8e23;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-voir-plus:hover {
+    background-color: #56751b;
+}
