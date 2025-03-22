@@ -14,56 +14,6 @@ if (!cityNotFound) {
     console.log('measurementLabels:', measurementLabels);
 
     /**
-     * Création du graphique des polluants (Concentrations moyennes)
-     * Ce graphique montre les concentrations moyennes (µg/m³) de chaque polluant pour la ville sélectionnée.
-     */
-
-        // Tableau des labels (polluants) et données (concentrations moyennes)
-    var pollutantsLabels = [];
-    var pollutantsChartData = [];
-
-    // Parcours de l'objet city_pollution_averages pour récupérer les moyennes par polluant
-    for (var pollutant_symbol in city_pollution_averages) {
-        if (city_pollution_averages.hasOwnProperty(pollutant_symbol)) {
-            // Ajouter le label du polluant (ex: "CO", "NO2")
-            pollutantsLabels.push(pollutant_symbol);
-            // Ajouter la valeur moyenne arrondie à 2 décimales
-            pollutantsChartData.push(parseFloat(city_pollution_averages[pollutant_symbol]).toFixed(2));
-        }
-    }
-
-    // Initialisation du contexte du graphique pour les polluants
-    var ctxPolluants = document.getElementById('pollutantsChart').getContext('2d');
-
-    // Création du graphique des polluants (type: bar)
-    var pollutantsChart = new Chart(ctxPolluants, {
-        type: 'bar',
-        data: {
-            labels: pollutantsLabels,
-            datasets: [{
-                label: 'Concentration Moyenne (µg/m³)',
-                data: pollutantsChartData,
-                backgroundColor: 'rgba(107,142,35, 0.7)',  // Couleur de remplissage
-                borderColor: 'rgba(255,255,255, 1)',        // Couleur des bordures
-                borderWidth: 1,
-                borderRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Concentration (µg/m³)'
-                    }
-                }
-            }
-        }
-    });
-
-    /**
      * Variable globale pour le graphique des dépassements
      * Ce graphique sera mis à jour dynamiquement en fonction du polluant et des seuils sélectionnés.
      */
@@ -727,6 +677,82 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!cityNotFound) {
+            // --- Graphique 1 : Polluants Chart (Bar Chart) ---
+            var ctxPolluants = document.getElementById('polluantsChart').getContext('2d');
+            var pollutantsLabels = [];
+            var pollutantsChartData = [];
+            for (var symbol in city_pollution_averages) {
+                if (city_pollution_averages.hasOwnProperty(symbol)) {
+                    pollutantsLabels.push(symbol);
+                    // Assurez-vous que la donnée est un nombre
+                    pollutantsChartData.push(parseFloat(city_pollution_averages[symbol]).toFixed(2));
+                }
+            }
+            var pollutantsChart = new Chart(ctxPolluants, {
+                type: 'bar',
+                data: {
+                    labels: pollutantsLabels,
+                    datasets: [{
+                        label: 'Concentration Moyenne (µg/m³)',
+                        data: pollutantsChartData,
+                        backgroundColor: 'rgba(107,142,35, 0.7)',
+                        borderColor: 'rgba(255,255,255, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Concentration (µg/m³)' }
+                        }
+                    }
+                }
+            });
+
+            // --- Graphique 2 : Concentrations Chart (Line Chart) ---
+            var ctxConcentrations = document.getElementById('concentrationsChart').getContext('2d');
+            var datasets = [];
+            for (var pollutant in pollutantsData) {
+                if (pollutantsData.hasOwnProperty(pollutant)) {
+                    var dataObj = pollutantsData[pollutant].values;
+                    // Construit un tableau de valeurs aligné sur measurementLabels
+                    var dataArr = measurementLabels.map(function(label) {
+                        return dataObj[label] !== undefined ? parseFloat(dataObj[label]) : null;
+                    });
+                    datasets.push({
+                        label: pollutant,
+                        data: dataArr,
+                        borderColor: randomColor(),
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        tension: 0.1
+                    });
+                }
+            }
+            var concentrationsChart = new Chart(ctxConcentrations, {
+                type: 'line',
+                data: {
+                    labels: measurementLabels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Évolution des concentrations de polluants' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Date et emplacement' } },
+                        y: { title: { display: true, text: 'Concentration (µg/m³)' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+    });
 
     /**
      * Générateur de couleur aléatoire pour distinguer les courbes

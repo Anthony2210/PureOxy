@@ -768,12 +768,15 @@ if (!$cityNotFound) {
             <!-- Onglet Polluants -->
             <div class="tab-pane fade show active" id="polluants" role="tabpanel" aria-labelledby="polluants-tab">
                 <h2 class="mt-4">Concentrations de polluants atmosphériques</h2>
-                <canvas id="pollutantsChart" class="my-4"></canvas>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <canvas id="concentrationsChart" height="200"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="polluantsChart" height="200"></canvas>
+                    </div>
+                </div>
 
-                <p>
-                    Le tableau ci-dessous présente les concentrations des différents polluants atmosphériques
-                    mesurées dans la ville aux dates et emplacements spécifiés.
-                </p>
 
                 <div class="table-responsive">
                     <table id="details-table" class="table table-striped">
@@ -1010,7 +1013,7 @@ $city_pollution_averages_js = json_encode($city_pollution_averages);
     var seuilsData = <?php echo $seuils_js; ?>;
     var measurementIdentifiers = <?php echo json_encode(array_column($dates, 'identifier')); ?>;
     var measurementLabels = <?php echo json_encode(array_map(function($entry) {
-        return $entry['date'] + ($entry['location'] !== 'Inconnu' ? ' - ' + $entry['location'] : '');
+        return $entry['date'] . ($entry['location'] !== 'Inconnu' ? ' - ' . $entry['location'] : '');
     }, $dates)); ?>;
     var city_pollution_averages = <?php echo $city_pollution_averages_js; ?>;
     var predictionsData = <?php echo json_encode($predictions_data); ?>;
