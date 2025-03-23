@@ -2,17 +2,97 @@
 session_start();
 include '../bd/bd.php';
 
-/**
- * Étape 1 : Récupération du classement global
- * ------------------------------------------
- * - Jointure entre moy_pollution_villes (m) et donnees_villes (v)
- * - On récupère la valeur moyenne (avg_value), la ville, et les deux ratios (avg_par_habitant, avg_par_km2)
- * - On classe par polluant, puis par la valeur moyenne décroissante
- */
+/************************************************
+ * 1) Récupération des données de seuils
+ ************************************************/
+// On stocke d’abord TOUTES les lignes de seuils "moyenne annuelle" dans un tableau temporaire
+$thresholdsMulti = [];  // ex. $thresholdsMulti['NO2'] = [ [valeur=>40, origine=>'FR', ...], ... ]
+
+$sqlT = "
+    SELECT polluant, polluant_complet, valeur, unite, details, origine
+    FROM seuils_normes
+    WHERE periode = 'moyenne annuelle'
+";
+$resT = $conn->query($sqlT);
+if ($resT && $resT->num_rows > 0) {
+    while ($rowT = $resT->fetch_assoc()) {
+        $poll = $rowT['polluant']; // ex. "NO2"
+        if (!isset($thresholdsMulti[$poll])) {
+            $thresholdsMulti[$poll] = [];
+        }
+        $thresholdsMulti[$poll][] = [
+            'value'    => (float) $rowT['valeur'],
+            'unite'    => $rowT['unite'],
+            'details'  => $rowT['details'],
+            'origine'  => $rowT['origine'],
+            // Optionnellement, vous pouvez aussi stocker polluant_complet si utile
+            'complet'  => $rowT['polluant_complet']
+        ];
+    }
+}
+
+// Maintenant on agrège pour n’avoir qu’un seul objet par polluant
+$thresholds = []; // ex. $thresholds['NO2'] = [ 'value'=>40, 'unite'=>'µg/m³', 'origines'=>'FR,UE', 'hover'=>'...' ]
+foreach ($thresholdsMulti as $poll => $rows) {
+    if (empty($rows)) {
+        continue;
+    }
+    // On trie par valeur DESC pour trouver la plus élevée
+    usort($rows, function($a, $b) {
+        return $b['value'] <=> $a['value']; // tri décroissant
+    });
+
+    // La première ligne est la valeur la plus élevée
+    $maxVal = $rows[0]['value'];
+    $maxUnite = $rows[0]['unite'];
+    $maxDetails = $rows[0]['details'];
+    // On va collecter les origines pour toutes les lignes qui ont la même value max
+    $maxOrigins = [$rows[0]['origine']];
+
+    // Les autres seuils (valeurs inférieures ou différentes)
+    $others = [];
+    for ($i = 1; $i < count($rows); $i++) {
+        $row = $rows[$i];
+        if ($row['value'] == $maxVal) {
+            // Même valeur max => on ajoute juste l’origine
+            $maxOrigins[] = $row['origine'];
+        } else {
+            // Valeur plus basse => on la stocke dans "others"
+            // pour l’afficher au survol
+            $others[] = $row;
+        }
+    }
+
+    // On construit un texte pour l’infobulle
+    // - mention de la valeur max + origines
+    // - mention des autres (si existants)
+    $hoverText = "Seuil = {$maxVal} {$maxUnite}, origine : " . implode(", ", $maxOrigins) . ".";
+    if (!empty($others)) {
+        $hoverText .= " Autres seuils inférieurs : ";
+        $tmp = [];
+        foreach ($others as $o) {
+            $tmp[] = "{$o['value']} {$o['unite']} ({$o['origine']})";
+        }
+        $hoverText .= implode("; ", $tmp) . ".";
+    }
+
+    // On stocke dans $thresholds ce qu’on veut réutiliser côté JS
+    $thresholds[$poll] = [
+        'value'   => $maxVal,          // la valeur la plus élevée
+        'unite'   => $maxUnite,
+        'details' => $maxDetails,
+        'origines'=> implode(", ", $maxOrigins),
+        'hover'   => $hoverText        // un texte explicatif tout prêt
+    ];
+}
+
+/************************************************
+ * 2) Récupération du classement global
+ ************************************************/
 $sql = "
     SELECT
         m.id_ville,
-        m.pollutant,
+        m.polluant,
         m.avg_value,
         m.avg_par_habitant,
         m.avg_par_km2,
@@ -20,48 +100,38 @@ $sql = "
     FROM moy_pollution_villes AS m
     JOIN donnees_villes AS v
         ON m.id_ville = v.id_ville
-    ORDER BY m.pollutant, m.avg_value DESC
+    ORDER BY m.polluant, m.avg_value DESC
 ";
 $result = $conn->query($sql);
 
-/**
- * Étape 2 : Stockage des données dans $rankingData
- * -----------------------------------------------
- * - On ignore éventuellement le polluant 'C6H6' si on ne veut pas l'afficher
- * - Structure finale : $rankingData['NO2'] = [
- *     [ 'city' => 'Paris', 'avg_val' => 12.34, 'avg_hab' => 0.01, 'avg_km2' => 0.45 ],
- *     ...
- *   ];
- */
+/************************************************
+ * 3) Stockage des données dans $rankingData
+ ************************************************/
 $rankingData = [];
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $pollutant = $row['pollutant'];
-
+        $polluant = $row['polluant'];
         // Option : ignorer un polluant particulier, ex. 'C6H6'
-        if ($pollutant === 'C6H6') {
+        if ($polluant === 'C6H6') {
             continue;
         }
-
-        // Conversion en float
         $avgVal = (float) $row['avg_value'];
         $avgHab = (float) $row['avg_par_habitant'];
         $avgKm2 = (float) $row['avg_par_km2'];
 
-        // Création du tableau si inexistant
-        if (!isset($rankingData[$pollutant])) {
-            $rankingData[$pollutant] = [];
+        if (!isset($rankingData[$polluant])) {
+            $rankingData[$polluant] = [];
         }
-
-        // Ajout d'un enregistrement
-        $rankingData[$pollutant][] = [
+        $rankingData[$polluant][] = [
             'city'    => $row['city'],
             'avg_val' => $avgVal,
             'avg_hab' => $avgHab,
-            'avg_km2' => $avgKm2
+            'avg_par_km2' => $avgKm2
         ];
     }
 }
+
+// Passage des données en JSON pour le JS
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -90,13 +160,11 @@ if ($result && $result->num_rows > 0) {
     </p>
 
     <!-- Menu déroulant pour choisir le polluant -->
-    <label for="pollutant-select" style="font-weight: bold;">Polluant :</label>
-    <select id="pollutant-select" style="margin-left: 5px;"></select>
+    <label for="polluant-select" style="font-weight: bold;">Polluant :</label>
+    <select id="polluant-select" class="polluant-dropdown"></select>
 
     <!-- Paragraphe d'explication du polluant -->
-    <p id="pollutant-info" style="font-style: italic; color: #666; margin-top: 5px;">
-        <!-- Le texte sera mis à jour en JavaScript -->
-    </p>
+    <p id="polluant-info" style="font-style: italic; color: #666; margin-top: 5px;"></p>
 
     <!-- Cases à cocher pour afficher/masquer les colonnes -->
     <fieldset id="columns-choices" style="margin: 1em 0;">
@@ -119,7 +187,7 @@ if ($result && $result->num_rows > 0) {
     <div id="rankingContainer"></div>
 
     <!-- Bouton "Voir plus" pour la pagination -->
-    <button id="loadMoreButton" class="btn-voir-plus" style="display: none;">
+    <button id="loadMoreButton" class="btn-voir-plus" title="Charger plus de résultats" style="display: none;">
         Voir plus
     </button>
 </section>
@@ -127,14 +195,15 @@ if ($result && $result->num_rows > 0) {
 <script>
     (function() {
         /**************************************************************
-         * 1) Données du classement (récupérées en PHP, passées en JSON)
+         * 1) Données du classement + seuils (récupérées en PHP -> JSON)
          **************************************************************/
         var rankingData = <?php echo json_encode($rankingData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); ?>;
+        var thresholdData = <?php echo json_encode($thresholds, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); ?>;
 
         /**************************************************************
          * 2) Explications textuelles pour certains polluants
          **************************************************************/
-        var pollutantExplanations = {
+        var polluantExplanations = {
             'NO2':  "Le NO2 (Dioxyde d'azote) est un gaz irritant émis notamment par le trafic routier.",
             'PM10': "Particules de diamètre < 10 µm. Principales sources : transport, industries, etc.",
             'PM2.5':"Particules fines < 2,5 µm, encore plus dangereuses pour la santé.",
@@ -145,18 +214,18 @@ if ($result && $result->num_rows > 0) {
         /**************************************************************
          * 3) Variables globales et références DOM
          **************************************************************/
-        let currentPollutant = null;    // polluant en cours d'affichage
-        let currentOffset = 0;          // pagination : combien de villes déjà affichées
-        const pageSize = 25;            // nombre de villes à afficher par "page"
+        let currentPollutant = null; // polluant en cours d'affichage
+        let currentOffset = 0;       // pagination : combien de villes déjà affichées
+        const pageSize = 25;         // nombre de villes à afficher par "page"
 
-        let sortColumn = null;          // colonne utilisée pour trier ("city", "avg_val", "avg_hab", "avg_km2")
-        let sortAsc = true;             // sens du tri : croissant (true) ou décroissant (false)
+        let sortColumn = null;       // colonne utilisée pour trier ("city", "avg_val", "avg_hab", "avg_par_km2")
+        let sortAsc = true;          // sens du tri : croissant (true) ou décroissant (false)
 
         // Récupération des éléments du DOM
-        const pollutantSelect = document.getElementById('pollutant-select');
-        const rankingContainer = document.getElementById('rankingContainer');
-        const loadMoreButton   = document.getElementById('loadMoreButton');
-        const pollutantInfo    = document.getElementById('pollutant-info');
+        const polluantSelect    = document.getElementById('polluant-select');
+        const rankingContainer  = document.getElementById('rankingContainer');
+        const loadMoreButton    = document.getElementById('loadMoreButton');
+        const polluantInfo      = document.getElementById('polluant-info');
 
         // Cases à cocher
         const chkAvgVal = document.getElementById('chkAvgVal');
@@ -168,13 +237,13 @@ if ($result && $result->num_rows > 0) {
          **************************************************************/
         const allPolls = Object.keys(rankingData);
         if (allPolls.length === 0) {
-            pollutantSelect.innerHTML = '<option>Aucun polluant</option>';
+            polluantSelect.innerHTML = '<option>Aucun polluant</option>';
         } else {
             let optionsHtml = '';
             allPolls.forEach(p => {
                 optionsHtml += `<option value="${p}">${p}</option>`;
             });
-            pollutantSelect.innerHTML = optionsHtml;
+            polluantSelect.innerHTML = optionsHtml;
             currentPollutant = allPolls[0]; // on prend le premier polluant par défaut
         }
 
@@ -183,13 +252,13 @@ if ($result && $result->num_rows > 0) {
          **************************************************************/
         function updatePollutantExplanation(poll) {
             if (!poll) {
-                pollutantInfo.textContent = '';
+                polluantInfo.textContent = '';
                 return;
             }
-            if (!pollutantExplanations[poll]) {
-                pollutantInfo.textContent = "Aucune explication disponible pour ce polluant.";
+            if (!polluantExplanations[poll]) {
+                polluantInfo.textContent = "Aucune explication disponible pour ce polluant.";
             } else {
-                pollutantInfo.textContent = pollutantExplanations[poll];
+                polluantInfo.textContent = polluantExplanations[poll];
             }
         }
 
@@ -200,33 +269,29 @@ if ($result && $result->num_rows > 0) {
             if (!sortColumn) {
                 return rows; // pas de tri si sortColumn est null
             }
-
             // On copie le tableau pour ne pas modifier l'original
             const sorted = rows.slice();
 
             // Tri personnalisé
             sorted.sort((a, b) => {
                 let va, vb;
-
                 if (sortColumn === 'city') {
                     va = a.city.toLowerCase();
                     vb = b.city.toLowerCase();
                 } else {
-                    // "avg_val", "avg_hab", "avg_km2"
+                    // "avg_val", "avg_hab", "avg_par_km2"
                     va = a[sortColumn];
                     vb = b[sortColumn];
                 }
-
                 if (va < vb) return sortAsc ? -1 : 1;
                 if (va > vb) return sortAsc ? 1 : -1;
                 return 0;
             });
-
             return sorted;
         }
 
         /**************************************************************
-         * 7) Rendu du tableau (avec pagination et colonnes dynamiques)
+         * 7) Rendu du tableau (avec pagination + colonnes dynamiques)
          **************************************************************/
         function renderRanking() {
             // Vérifier si on a des données pour le polluant sélectionné
@@ -248,30 +313,61 @@ if ($result && $result->num_rows > 0) {
             const showAvgHab = chkAvgHab.checked;
             const showAvgKm2 = chkAvgKm2.checked;
 
-            // Construction du tableau HTML
-            let html = '<table class="table-classement">';
-            html += '<thead><tr>'
-                + '<th onclick="sortBy(\'city\')">Rang / Ville</th>';
+            // Construction de l'entête de tableau avec flèches
+            function getArrow(col) {
+                if (col !== sortColumn) return '';
+                return sortAsc ? ' &#x25B2;' : ' &#x25BC;'; // flèche up / down
+            }
 
-            // On propose le tri en cliquant sur les en-têtes
+            let html = '<table class="table-classement">';
+            html += '<thead><tr>';
+            html += `<th onclick="sortBy('city')">Rang / Ville${getArrow('city')}</th>`;
+
             if (showAvgVal) {
-                html += '<th onclick="sortBy(\'avg_val\')">Moy. (µg/m³)</th>';
+                html += `<th onclick="sortBy('avg_val')">Moy. (µg/m³)${getArrow('avg_val')}</th>`;
             }
             if (showAvgHab) {
-                html += '<th onclick="sortBy(\'avg_hab\')">Moy. par hab</th>';
+                html += `<th onclick="sortBy('avg_hab')">Moy. par hab${getArrow('avg_hab')}</th>`;
             }
             if (showAvgKm2) {
-                html += '<th onclick="sortBy(\'avg_km2\')">Moy. par km²</th>';
+                html += `<th onclick="sortBy('avg_par_km2')">Moy. par km²${getArrow('avg_par_km2')}</th>`;
             }
             html += '</tr></thead><tbody>';
 
+            // Récupération du seuil agrégé pour le polluant en cours
+            let seuilInfo = thresholdData[currentPollutant] || null;
+            // Ex. seuilInfo = { value:40, unite:'µg/m³', details:'A ne pas dépasser plus de 18h/an', origines:'FR,UE', hover:'...' }
+
+            let seuilVal = seuilInfo ? seuilInfo.value : null;
+            let hoverBase = seuilInfo ? seuilInfo.hover : '';
+
             // Remplir le tableau
             rowsToDisplay.forEach((item, index) => {
-                const rangAbsolu = index + 1;
+                // Rang : si tri décroissant => rang = (allRows.length - index), sinon rang = index+1
+                const rangAbsolu = sortAsc ? (index + 1) : (allRows.length - index);
                 const cityLink = `<a href="../fonctionnalites/details.php?ville=${encodeURIComponent(item.city)}">${item.city}</a>`;
 
-                html += `<tr>`;
-                // On fusionne Rang et Ville dans une seule colonne pour simplifier
+                // Couleur de fond en fonction du seuil
+                let ratio = 0;
+                let bgColorClass = '';
+                let hoverTitle = hoverBase || 'Aucun seuil défini.';
+                if (seuilVal) {
+                    ratio = item.avg_val / seuilVal;
+                    // <0.8 = vert, <1 = orange, >=1 = rouge
+                    if (ratio < 0.8) {
+                        bgColorClass = 'bg-green';
+                        hoverTitle = `Valeur en dessous de 80% du seuil (${seuilVal} ${seuilInfo.unite}). ${hoverBase}`;
+                    } else if (ratio < 1) {
+                        bgColorClass = 'bg-orange';
+                        hoverTitle = `Valeur proche du seuil (${seuilVal} ${seuilInfo.unite}). ${hoverBase}`;
+                    } else {
+                        bgColorClass = 'bg-red';
+                        hoverTitle = `Valeur au-dessus du seuil (${seuilVal} ${seuilInfo.unite}). ${hoverBase}`;
+                    }
+                }
+
+                html += `<tr class="${bgColorClass}" title="${hoverTitle}">`;
+                // On fusionne Rang et Ville dans une seule colonne
                 html += `<td>${rangAbsolu}. ${cityLink}</td>`;
 
                 if (showAvgVal) {
@@ -281,9 +377,8 @@ if ($result && $result->num_rows > 0) {
                     html += `<td>${item.avg_hab.toFixed(4)}</td>`;
                 }
                 if (showAvgKm2) {
-                    html += `<td>${item.avg_km2.toFixed(4)}</td>`;
+                    html += `<td>${item.avg_par_km2.toFixed(4)}</td>`;
                 }
-
                 html += `</tr>`;
             });
 
@@ -301,17 +396,15 @@ if ($result && $result->num_rows > 0) {
         /**************************************************************
          * 8) Fonction de tri (cliquable sur en-tête)
          **************************************************************/
-        // On rattache cette fonction à window pour y accéder via onclick="sortBy('avg_val')"
         window.sortBy = function(colKey) {
             // Si on reclique sur la même colonne, on inverse le sens
             if (sortColumn === colKey) {
                 sortAsc = !sortAsc;
             } else {
-                // On change de colonne, on se met en ordre croissant
+                // On change de colonne, on se met en ordre croissant par défaut
                 sortColumn = colKey;
                 sortAsc = true;
             }
-            // On reconstruit le tableau
             renderRanking();
         };
 
@@ -319,7 +412,7 @@ if ($result && $result->num_rows > 0) {
          * 9) Écouteurs d'événements
          **************************************************************/
         // Changement de polluant
-        pollutantSelect.addEventListener('change', function() {
+        polluantSelect.addEventListener('change', function() {
             currentPollutant = this.value;
             currentOffset = 0; // on réinitialise la pagination
             updatePollutantExplanation(currentPollutant);

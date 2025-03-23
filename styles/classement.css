@@ -5,44 +5,60 @@
 /* Section du classement */
 #classement {
     text-align: center;
-    background-color: #f9f9e9;
+    background: linear-gradient(to bottom, #f9f9e9, #fff);
     border-bottom: 2px solid #6b8e23;
-    padding-bottom: 20px;
+    padding: 30px 20px;
+    margin: 20px auto;
+    border-radius: 8px;
 }
 
 /* Le titre principal */
 #classement h2 {
-    font-size: 2.2em;
-    margin-bottom: 15px;
+    font-size: 2.5em;
+    margin-bottom: 20px;
     color: #6b8e23;
+    font-family: 'League Spartan', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* Paragraphes explicatifs */
 #classement p {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #333;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.5;
 }
 
-/* Le sélecteur de polluant */
+/* Sélecteur de polluant */
 #classement select {
     font-size: 1.1em;
-    padding: 5px 10px;
+    padding: 8px 12px;
     margin: 10px auto;
-    display: block; /* centré */
+    display: block;
     border: 2px solid #6b8e23;
     border-radius: 4px;
     background-color: #fff;
     color: #6b8e23;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#classement select:focus {
+    outline: none;
+    border-color: #56751b;
+    box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
 }
 
 /* Tableau de classement */
 .table-classement {
     margin: 20px auto;
     border-collapse: collapse;
-    width: 80%;
+    width: 90%;
     max-width: 900px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .table-classement thead tr {
@@ -52,30 +68,80 @@
 
 .table-classement th,
 .table-classement td {
-    padding: 10px 15px;
+    padding: 12px 20px;
     border: 1px solid #ddd;
     text-align: center;
     font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Curseur pointer sur les en-têtes triables */
+.table-classement th {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.table-classement th:hover {
+    background-color: #56751b;
 }
 
 .table-classement tbody tr:nth-child(even) {
     background-color: #f3f3f3;
 }
 
+.table-classement tbody tr:hover {
+    background-color: #e9f5e1;
+}
+
 /* Bouton "Voir plus" */
 .btn-voir-plus {
     display: inline-block;
-    margin: 15px auto;
-    padding: 10px 20px;
+    margin: 20px auto;
+    padding: 12px 25px;
     background-color: #6b8e23;
     color: #fff;
     border: none;
     border-radius: 4px;
     font-size: 1.1em;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-voir-plus:hover {
     background-color: #56751b;
+    transform: translateY(-2px);
+}
+/* Couleurs de fond selon le seuil */
+.bg-green:hover {
+    background-color: #d2f8d2 !important; /* survol plus clair */
+}
+.bg-green {
+    background-color: #e2fce2;
+}
+
+.bg-orange:hover {
+    background-color: #ffe0b2 !important;
+}
+.bg-orange {
+    background-color: #ffedcc;
+}
+
+.bg-red:hover {
+    background-color: #ffcccc !important;
+}
+.bg-red {
+    background-color: #ffd6d6;
+}
+
+/* Amélioration visuelle du menu déroulant */
+.pollutant-dropdown {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIHZlcnNpb249IjEuMSI+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCAwIDIgMCA2IDQgMTEgMCAxMiAxIi8+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCA0IDIgNCA2IDggMTEgNCAxMiA1Ii8+PC9zdmc=")
+    no-repeat 95% 50% / 12px 12px;
+    padding-right: 30px; /* pour laisser la place à l'icône */
+}
+.pollutant-dropdown:hover {
+    background-color: #f2f2f2;
 }
