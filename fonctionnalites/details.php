@@ -1,9 +1,6 @@
 <?php
 /**
  * details.php
- *
- * Gère la récupération et l'affichage des données de pollution pour une ville donnée.
- * Enregistre également l'historique des recherches et gère les villes favorites.
  */
 
 session_start();
@@ -13,93 +10,85 @@ ob_start();
 include '../bd/bd.php';
 
 /**
- * ------------------------------------------
  * 1) GESTION DE L'AJAX POUR COMPARER DEUX VILLES
- * ------------------------------------------
  */
-if (isset($_GET['ajax']) && $_GET['ajax'] == '1'
-    && isset($_GET['action']) && $_GET['action'] === 'getPollutants'
+if (
+    isset($_GET['ajax']) && $_GET['ajax'] == '1'
+    && isset($_GET['action']) && $_GET['action'] === 'getpolluants'
 ) {
     header('Content-Type: application/json; charset=utf-8');
 
-    // Récupère la ville demandée via GET
     $cityToFetch = $_GET['ville'] ?? '';
     if (empty($cityToFetch)) {
         echo json_encode(['error' => 'Aucune ville spécifiée']);
         exit;
     }
 
-    // 1. Trouver l'id_ville correspondant dans donnees_villes
+    // Trouver id_ville
     $sqlFindIdVille = "SELECT id_ville FROM donnees_villes WHERE UPPER(ville) = UPPER(?)";
     $stmtId = $conn->prepare($sqlFindIdVille);
     $stmtId->bind_param("s", $cityToFetch);
     $stmtId->execute();
     $resId = $stmtId->get_result();
     if ($resId->num_rows === 0) {
-        echo json_encode(['error' => 'La ville "'.$cityToFetch.'" n’existe pas dans donnees_villes']);
+        echo json_encode(['error' => "La ville \"$cityToFetch\" n’existe pas dans donnees_villes"]);
         exit;
     }
-    $rowId = $resId->fetch_assoc();
-    $idVille = (int)$rowId['id_ville'];
+    $rowId  = $resId->fetch_assoc();
+    $idVille= (int)$rowId['id_ville'];
 
-    // 2. Récupérer les mesures (Pollutant, valeur_journaliere) depuis all_years_cleaned_daily
-    $sqlCity = "
-        SELECT Polluant, valeur_journaliere
-        FROM all_years_cleaned_daily
-        WHERE id_ville = ?
-    ";
+    // Récup mesures dans all_years_cleaned_daily
+    $sqlCity = "SELECT polluant, valeur_journaliere
+                FROM all_years_cleaned_daily
+                WHERE id_ville = ?";
     $stmtCity = $conn->prepare($sqlCity);
     $stmtCity->bind_param("i", $idVille);
     $stmtCity->execute();
     $resCity = $stmtCity->get_result();
 
     if ($resCity->num_rows === 0) {
-        echo json_encode(['error' => 'Aucune mesure pour la ville ' . $cityToFetch]);
+        echo json_encode(['error' => "Aucune mesure pour la ville $cityToFetch"]);
         exit;
     }
 
-    // On regroupe les valeurs par polluant
-    $pollutantsArr = [];
+    // Regrouper par polluant
+    $polluantsArr = [];
     while ($row = $resCity->fetch_assoc()) {
-        $pollSymbol = $row['Pollutant'];
-        $val = (float) $row['valeur_journaliere'];
-        $pollutantsArr[$pollSymbol][] = $val;
+        $pollSymbol = $row['polluant'];
+        $val = (float)$row['valeur_journaliere'];
+        $polluantsArr[$pollSymbol][] = $val;
     }
 
-    // Calcul de la moyenne pour chaque polluant
+    // Moyennes
     $finalData = [];
-    foreach ($pollutantsArr as $symbol => $values) {
-        $moyenne = array_sum($values) / count($values);
-        $finalData[$symbol] = round($moyenne, 2);
+    foreach ($polluantsArr as $symbol => $values) {
+        $m = array_sum($values)/count($values);
+        $finalData[$symbol] = round($m, 2);
     }
 
-    // On renvoie le résultat au format JSON
     echo json_encode($finalData);
-    exit; // STOP ici pour la requête AJAX
+    exit;
 }
 
 /**
- * ------------------------------------------
  * 2) RÉCUPÉRATION DE LA VILLE VIA GET
- * ------------------------------------------
  */
-$ville = isset($_GET['ville']) ? $_GET['ville'] : '';
+$ville = $_GET['ville'] ?? '';
 if (!$ville) {
     echo "<h1>Erreur : Ville non spécifiée</h1>";
     exit;
 }
 
-// ----------------------------------------------------
-// 2A) TROUVER L'ID_VILLE + DEPARTEMENT + REGION DANS donnees_villes
-// ----------------------------------------------------
-$sqlVille = "SELECT id_ville, departement, region FROM donnees_villes WHERE UPPER(ville) = UPPER(?)";
+// id_ville, departement, region
+$sqlVille = "SELECT id_ville, departement, region
+             FROM donnees_villes
+             WHERE UPPER(ville)=UPPER(?)";
 $stmtVille = $conn->prepare($sqlVille);
 $stmtVille->bind_param("s", $ville);
 $stmtVille->execute();
 $resVille = $stmtVille->get_result();
 
 if ($resVille->num_rows === 0) {
-    // Aucune correspondance => cityNotFound = true
     $cityNotFound = true;
 } else {
     $cityNotFound = false;
@@ -109,28 +98,23 @@ if ($resVille->num_rows === 0) {
     $region       = $rowVille['region'];
 }
 
-// ----------------------------------------------------
-// 2B) SI UTILISATEUR CONNECTÉ => ENREGISTREMENT DANS search_history
-// ----------------------------------------------------
+/**
+ * 2B) HISTORIQUE DE RECHERCHE
+ */
 if (!$cityNotFound && isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-
-    // Vérifier si la recherche est déjà enregistrée récemment (id_ville)
     $check_stmt = $conn->prepare("
-        SELECT *
-        FROM search_history
+        SELECT * FROM search_history
         WHERE user_id = ?
           AND id_ville = ?
           AND search_date > (NOW() - INTERVAL 1 HOUR)
     ");
     $check_stmt->bind_param("ii", $user_id, $idVille);
     $check_stmt->execute();
-    $check_result = $check_stmt->get_result();
-
-    if ($check_result->num_rows === 0) {
-        // Insérer la nouvelle recherche : on stocke l'id_ville
+    $check_res = $check_stmt->get_result();
+    if ($check_res->num_rows === 0) {
         $insert_stmt = $conn->prepare("
-            INSERT INTO search_history (user_id, id_ville, search_date)
+            INSERT INTO search_history(user_id, id_ville, search_date)
             VALUES (?, ?, NOW())
         ");
         $insert_stmt->bind_param("ii", $user_id, $idVille);
@@ -139,55 +123,46 @@ if (!$cityNotFound && isset($_SESSION['user_id'])) {
 }
 
 /**
- * ------------------------------------------
  * 3) SI LA VILLE EST TROUVÉE => RÉCUPÉRER LES MESURES
- * ------------------------------------------
  */
 if (!$cityNotFound) {
-    // Requête : on ne récupère plus unite_de_mesure
-    $sql = "
-        SELECT Polluant, jour, valeur_journaliere
-        FROM all_years_cleaned_daily
-        WHERE id_ville = ?
-        ORDER BY jour
-    ";
+    // --- Récupération des données historiques (all_years_cleaned_daily) ---
+    $sql = "SELECT polluant, jour, valeur_journaliere
+            FROM all_years_cleaned_daily
+            WHERE id_ville = ?
+            ORDER BY jour";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $idVille);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
-        // Aucune mesure
         $cityNotFound = true;
     } else {
-        // Sinon on construit les tableaux
-        $pollutants_data = [];
+        $polluants_data = [];   // => pour l'onglet "Polluants"
         $dates = [];
 
         while ($row = $result->fetch_assoc()) {
-            $pollutant_full = $row['Polluant'];
-            $date           = $row['jour'];    // ex. "2023-01-20"
-            $value          = (float)$row['valeur_journaliere'];
+            $polluant_full = $row['polluant'];
+            $date          = $row['jour'];
+            $value         = (float)$row['valeur_journaliere'];
 
-            // On n'a plus de "Location", on peut mettre "Inconnu" ou faire autrement
-            $location       = 'Inconnu';
+            // Juste un label "Inconnu" si pas d'info de localisation précise
+            $location = 'Inconnu';
 
-            // Formatage de la date en "Mois Année"
-            $timestamp = strtotime($date);
-            $annee    = date('Y', $timestamp);
-            $num_mois = date('m', $timestamp);
+            $ts       = strtotime($date);
+            $annee    = date('Y', $ts);
+            $num_mois = date('m', $ts);
+
             $mois_fr = [
                 '01'=>'Janv','02'=>'Février','03'=>'Mars','04'=>'Avril','05'=>'Mai','06'=>'Juin',
                 '07'=>'Juil.','08'=>'Août','09'=>'Sept.','10'=>'Oct.','11'=>'Nov.','12'=>'Déc'
             ];
-            $nom_mois = $mois_fr[$num_mois] ?? $num_mois;
-            $formattedDate = $nom_mois . ' ' . $annee;
+            $nom_mois       = $mois_fr[$num_mois] ?? $num_mois;
+            $formattedDate  = $nom_mois.' '.$annee;
 
-            // Identifiant pour la colonne (mois + location)
-            $columnIdentifier = $formattedDate . ' - ' . $location;
-
-            // Stocker l'identifiant dans $dates si pas déjà présent
-            $exists = array_filter($dates, function($d) use ($columnIdentifier) {
+            $columnIdentifier = $formattedDate.' - '.$location;
+            $exists = array_filter($dates, function($d) use($columnIdentifier){
                 return $d['identifier'] === $columnIdentifier;
             });
             if (empty($exists)) {
@@ -198,80 +173,68 @@ if (!$cityNotFound) {
                 ];
             }
 
-            // PollSymbol (en majuscules)
-            $pollSymbol = strtoupper($pollutant_full);
-
-            // Initialiser la structure si besoin
-            if (!isset($pollutants_data[$pollSymbol])) {
-                $pollutants_data[$pollSymbol] = [
-                    'name'   => $pollutant_full,
-                    'values' => []
+            $pollSymbol = strtoupper($polluant_full);
+            if (!isset($polluants_data[$pollSymbol])) {
+                $polluants_data[$pollSymbol] = [
+                    'name'  => $polluant_full,
+                    'values'=> []
                 ];
             }
-
-            // On stocke juste la valeur (sans l’unité)
-            // car on suppose désormais tout est en µg/m³
-            $pollutants_data[$pollSymbol]['values'][$columnIdentifier] = $value;
+            $polluants_data[$pollSymbol]['values'][$columnIdentifier] = $value;
         }
 
-        // Calcul de la moyenne par polluant
+        // Moyennes globales sur all_years_cleaned_daily
         $city_pollution_averages = [];
-        foreach ($pollutants_data as $pollSymbol => $data) {
-            $vals = $data['values']; // tableau de valeurs numériques
-            $total = array_sum($vals);
+        foreach ($polluants_data as $pSym => $data) {
+            $vals  = $data['values'];
+            $sum   = array_sum($vals);
             $count = count($vals);
-            $average = ($count > 0) ? ($total / $count) : 0;
-            $city_pollution_averages[$pollSymbol] = round($average, 2);
+            $avg   = ($count > 0) ? ($sum / $count) : 0;
+            $city_pollution_averages[$pSym] = round($avg, 2);
         }
 
-        // Récupérer la population (table population_francaise_par_departement_2018)
-        $sql_population = "
-            SELECT population
-            FROM population_francaise_par_departement_2018
-            WHERE Département = ?
-        ";
+        // --- Population (table population_francaise_par_departement_2018) ---
+        $sql_population = "SELECT Population
+                           FROM population_francaise_par_departement_2018
+                           WHERE Département = ?";
         $stmt_pop = $conn->prepare($sql_population);
         $stmt_pop->bind_param("s", $departement);
         $stmt_pop->execute();
-        $res_pop = $stmt_pop->get_result();
-        $population = $res_pop->fetch_assoc()['population'] ?? 'Inconnue';
+        $res_pop    = $stmt_pop->get_result();
+        $population = $res_pop->fetch_assoc()['Population'] ?? 'Inconnue';
 
-        // ---------------------------------------
-        // Récupération des SEUILS (table seuils_normes)
-        // ---------------------------------------
-        $sql_seuils = "SELECT polluant, type_norme, valeur, unite, origine FROM seuils_normes";
+        // --- Seuils (pour onglet Dépassements) ---
+        // CHANGEMENT : on récupère polluant_complet AS polluant
+        $sql_seuils = "
+            SELECT polluant_complet AS polluant, type_norme, valeur, unite, origine
+            FROM seuils_normes
+        ";
         $result_seuils = $conn->query($sql_seuils);
-
         $seuils = [];
         if ($result_seuils && $result_seuils->num_rows > 0) {
             while ($row_s = $result_seuils->fetch_assoc()) {
                 $pollSymbol2 = strtoupper($row_s['polluant']);
-                $type_norme  = $row_s['type_norme'];
-                $valeur      = $row_s['valeur'];
-                $unite       = $row_s['unite'];
-                $origine     = $row_s['origine'];
-
-                $seuils[$pollSymbol2][$type_norme] = [
-                    'valeur' => $valeur,
-                    'unite'  => $unite,
-                    'origine'=> $origine
+                $tn          = $row_s['type_norme'];
+                $val         = $row_s['valeur'];
+                $un          = $row_s['unite'];
+                $og          = $row_s['origine'];
+                $seuils[$pollSymbol2][$tn] = [
+                    'valeur' => $val,
+                    'unite'  => $un,
+                    'origine'=> $og
                 ];
             }
         }
-        // Ne garder que les seuils correspondant aux polluants mesurés
-        foreach ($seuils as $pollSymbol2 => $types) {
-            if (!isset($pollutants_data[$pollSymbol2])) {
-                unset($seuils[$pollSymbol2]);
+        // Retirer les seuils des polluants qui ne sont pas mesurés ici
+        foreach ($seuils as $pS2 => $arr2) {
+            if (!isset($polluants_data[$pS2])) {
+                unset($seuils[$pS2]);
             }
         }
 
-        // ---------------------------------------
-        // Gestion des favoris (table favorite_cities)
-        // ---------------------------------------
+        // --- Gestion des favoris (si user connecté) ---
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
-
-            // Récupérer la liste des favoris (jointure pour avoir le nom de la ville)
             $stmtFav = $conn->prepare("
                 SELECT dv.ville
                 FROM favorite_cities fc
@@ -281,14 +244,13 @@ if (!$cityNotFound) {
             $stmtFav->bind_param("i", $user_id);
             $stmtFav->execute();
             $favorites_result = $stmtFav->get_result();
-
-            $favorite_cities = [];
+            $favorite_cities  = [];
             while ($r = $favorites_result->fetch_assoc()) {
                 $favorite_cities[] = strtolower($r['ville']);
             }
             $is_favorite = in_array(strtolower($ville), $favorite_cities);
 
-            // Ajout / retrait des favoris
+            // Ajout / suppression de favori
             if (isset($_POST['favorite_action'])) {
                 // Vérifier si c'est AJAX ou non
                 if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
@@ -311,8 +273,8 @@ if (!$cityNotFound) {
                         echo json_encode($response);
                         exit;
                     }
-                    $idRowFav = $resFind->fetch_assoc();
-                    $idVilleFav = (int)$idRowFav['id_ville'];
+                    $idRowFav  = $resFind->fetch_assoc();
+                    $idVilleFav= (int)$idRowFav['id_ville'];
 
                     if ($action == 'add_favorite') {
                         // Vérifier le nombre de favoris
@@ -320,7 +282,7 @@ if (!$cityNotFound) {
                         $stmt->bind_param("i", $user_id);
                         $stmt->execute();
                         $count_result = $stmt->get_result();
-                        $count_row = $count_result->fetch_assoc();
+                        $count_row    = $count_result->fetch_assoc();
 
                         if ($count_row['count'] < 5) {
                             // Vérifier si pas déjà favori
@@ -336,7 +298,10 @@ if (!$cityNotFound) {
                             $rowCheck = $resCheck->fetch_assoc();
 
                             if ($rowCheck['count'] == 0) {
-                                $stmtIns = $conn->prepare("INSERT INTO favorite_cities (user_id, id_ville) VALUES (?, ?)");
+                                $stmtIns = $conn->prepare("
+                                    INSERT INTO favorite_cities (user_id, id_ville)
+                                    VALUES (?, ?)
+                                ");
                                 $stmtIns->bind_param("ii", $user_id, $idVilleFav);
                                 if ($stmtIns->execute()) {
                                     $response = [
@@ -403,11 +368,10 @@ if (!$cityNotFound) {
                             'success' => false,
                             'message' => 'Ville introuvable.'
                         ];
-                        // Redirection
                         header("Location: details.php?ville=" . urlencode($ville));
                         exit;
                     }
-                    $idRowFav = $resFind->fetch_assoc();
+                    $idRowFav   = $resFind->fetch_assoc();
                     $idVilleFav = (int)$idRowFav['id_ville'];
 
                     if ($action == 'add_favorite') {
@@ -415,7 +379,7 @@ if (!$cityNotFound) {
                         $stmt->bind_param("i", $user_id);
                         $stmt->execute();
                         $count_result = $stmt->get_result();
-                        $count_row = $count_result->fetch_assoc();
+                        $count_row    = $count_result->fetch_assoc();
 
                         if ($count_row['count'] < 5) {
                             // Vérifier si pas déjà favori
@@ -431,7 +395,10 @@ if (!$cityNotFound) {
                             $rowCheck = $resCheck->fetch_assoc();
 
                             if ($rowCheck['count'] == 0) {
-                                $stmtIns = $conn->prepare("INSERT INTO favorite_cities (user_id, id_ville) VALUES (?, ?)");
+                                $stmtIns = $conn->prepare("
+                                    INSERT INTO favorite_cities (user_id, id_ville)
+                                    VALUES (?, ?)
+                                ");
                                 $stmtIns->bind_param("ii", $user_id, $idVilleFav);
                                 if ($stmtIns->execute()) {
                                     $response = [
@@ -478,7 +445,6 @@ if (!$cityNotFound) {
                         }
                     }
 
-                    // Redirection pour recharger la page
                     header("Location: details.php?ville=" . urlencode($ville));
                     exit;
                 }
@@ -487,162 +453,134 @@ if (!$cityNotFound) {
             $is_favorite = false;
         }
 
-        // ---------------------------------------
-        // Calcul du "classement" (ranking) par polluant
-        // ---------------------------------------
+        // --- Classement => UTILISATION DE LA TABLE moy_pollution_villes ---
+        // Au lieu de recalculer la moyenne via all_years_cleaned_daily,
+        // on utilise ta table moy_pollution_villes (screenshot 3).
         $sqlAllCities = "
-            SELECT v.ville AS City, d.Polluant, AVG(d.valeur_journaliere) AS avg_val
-            FROM all_years_cleaned_daily d
-            JOIN donnees_villes v ON d.id_ville = v.id_ville
-            GROUP BY v.ville, d.Polluant
-            ORDER BY d.Polluant, avg_val DESC
+            SELECT dv.ville AS City,
+                   mpv.polluant,
+                   mpv.avg_value
+            FROM moy_pollution_villes mpv
+            JOIN donnees_villes dv ON mpv.id_ville = dv.id_ville
+            ORDER BY mpv.polluant, mpv.avg_value DESC
         ";
         $resultAllCities = $conn->query($sqlAllCities);
-
-        $rankingByPollutant = [];
+        $rankingBypolluant = [];
         if ($resultAllCities && $resultAllCities->num_rows > 0) {
             while ($rowAll = $resultAllCities->fetch_assoc()) {
-                $poll   = $rowAll['Polluant'];
-                $city   = $rowAll['City'];
-                $avgVal = (float) $rowAll['avg_val'];
-
-                if (!isset($rankingByPollutant[$poll])) {
-                    $rankingByPollutant[$poll] = [];
+                $poll = $rowAll['polluant'];
+                $city = $rowAll['City'];
+                $avgV = (float)$rowAll['avg_value'];
+                if (!isset($rankingBypolluant[$poll])) {
+                    $rankingBypolluant[$poll] = [];
                 }
-                $rankingByPollutant[$poll][] = [
-                    'city'    => $city,
-                    'avg_val' => $avgVal
+                $rankingBypolluant[$poll][] = [
+                    'city'   => $city,
+                    'avg_value'=> $avgV
                 ];
             }
         }
-        // Attribuer un rang
-        foreach ($rankingByPollutant as $poll => &$rows) {
+        // On classe chaque polluant du + élevé au - élevé
+        foreach ($rankingBypolluant as $poll => &$rows) {
             usort($rows, function($a, $b) {
-                // Tri décroissant
-                return $b['avg_val'] <=> $a['avg_val'];
+                return $b['avg_value'] <=> $a['avg_value'];
             });
             $rang = 1;
-            foreach ($rows as &$item) {
-                $item['rank'] = $rang++;
+            foreach ($rows as &$it) {
+                $it['rank'] = $rang++;
             }
         }
         unset($rows);
 
-        // Retrouver le rang de la ville courante
-        $cityRankByPollutant = [];
-        foreach ($rankingByPollutant as $poll => $rows) {
-            $totalVilles = count($rows);
+        // Chercher le rang de la ville courante
+        $cityRankBypolluant = [];
+        foreach ($rankingBypolluant as $poll => $rows) {
+            $totVilles = count($rows);
             foreach ($rows as $item) {
                 if (strtolower($item['city']) === strtolower($ville)) {
-                    $cityRankByPollutant[$poll] = [
-                        'rank'  => $item['rank'],
-                        'total' => $totalVilles
+                    $cityRankBypolluant[$poll] = [
+                        'rank' => $item['rank'],
+                        'total'=> $totVilles
                     ];
                     break;
                 }
             }
         }
 
-        // ---------------------------------------
-        // Récupérer les prédictions (prediction_cities)
-        // ---------------------------------------
+        // --- Prédictions (table prediction_cities) ---
         $sqlPred = "
-            SELECT jour, Polluant, valeur_predite
-            FROM prediction_cities
-            WHERE UPPER(ville) = UPPER(?)
-            ORDER BY jour
+            SELECT pc.jour, pc.polluant, pc.valeur_predite
+            FROM prediction_cities pc
+            JOIN donnees_villes dv ON pc.id_ville = dv.id_ville
+            WHERE dv.id_ville = ?
+            ORDER BY pc.jour
         ";
         $stmtPred = $conn->prepare($sqlPred);
-        $stmtPred->bind_param("s", $ville);
+        $stmtPred->bind_param("i", $idVille);
         $stmtPred->execute();
         $resPred = $stmtPred->get_result();
 
-        $predictions_data = [];
+        $predictions_data = []; // => pour l’onglet "Prédictions"
         if ($resPred && $resPred->num_rows > 0) {
             while ($rowp = $resPred->fetch_assoc()) {
-                $poll = $rowp['Polluant'];
-                $date = $rowp['jour'];
+                $poll = $rowp['polluant'];
+                $dat  = $rowp['jour'];
                 $valp = (float)$rowp['valeur_predite'];
-
                 if (!isset($predictions_data[$poll])) {
                     $predictions_data[$poll] = [];
                 }
                 $predictions_data[$poll][] = [
-                    'date'  => $date,
-                    'value' => $valp
+                    'date' => $dat,
+                    'value'=> $valp
                 ];
             }
         }
-        $predictions_table = [];    // stocke les valeurs par polluant et par clé "YYYY-MM"
-        $pred_date_labels  = [];    // stocke les libellés humains "Février 2025" etc.
-
+        // Préparer un mapping "mois -> label" pour un usage plus simple
+        $predictions_table      = [];
+        $pred_date_labels       = [];
         $mois_fr = [
-            '01' => 'Janv', '02' => 'Février', '03' => 'Mars', '04' => 'Avril',
-            '05' => 'Mai',   '06' => 'Juin',   '07' => 'Juil.', '08' => 'Août',
-            '09' => 'Sept.', '10' => 'Oct.',   '11' => 'Nov.',  '12' => 'Déc'
+            '01'=>'Janv','02'=>'Février','03'=>'Mars','04'=>'Avril',
+            '05'=>'Mai','06'=>'Juin','07'=>'Juil.','08'=>'Août',
+            '09'=>'Sept','10'=>'Oct.','11'=>'Nov.','12'=>'Déc'
         ];
-
         if (!empty($predictions_data)) {
-            // On parcourt les prédictions
             foreach ($predictions_data as $polluant => $rows) {
-                foreach ($rows as $row) {
-                    $date       = $row['date']; // ex. "2025-02-11"
-                    $timestamp  = strtotime($date);
-                    $annee      = date('Y', $timestamp);  // ex. "2025"
-                    $num_mois   = date('m', $timestamp);  // ex. "02"
-
-                    // Clé de tri = "2025-02"
-                    $monthKey   = $annee . '-' . $num_mois;
-
-                    // Libellé humain (ex. "Février 2025")
-                    $monthLabel = $mois_fr[$num_mois] . ' ' . $annee;
-
-                    // On mémorise ce label
-                    $pred_date_labels[$monthKey] = $monthLabel;
-
-                    // On stocke la valeur prédite dans un tableau (liste),
-                    // car il peut y avoir plusieurs mesures pour le même polluant/mois
-                    $predictions_table[$polluant][$monthKey][] = $row['value'];
+                foreach ($rows as $rw) {
+                    $d  = $rw['date'];
+                    $ts = strtotime($d);
+                    $an = date('Y', $ts);
+                    $ms = date('m', $ts);
+                    $mk = $an.'-'.$ms;
+                    $labelM = ($mois_fr[$ms] ?? $ms).' '.$an;
+                    $pred_date_labels[$mk] = $labelM;
+                    $predictions_table[$polluant][$mk][] = $rw['value'];
                 }
             }
-
-            // Récupérer la liste des clés "2025-02", "2025-03", etc.
-            $pred_dates = array_keys($pred_date_labels);
-
-            // Trier dans l'ordre croissant => tri chronologique
-            sort($pred_dates);
-
-            // Calculer la moyenne pour chaque (polluant, mois)
-            $predictions_table_avg = [];
-            foreach ($predictions_table as $polluant => $moisArr) {
-                foreach ($moisArr as $monthKey => $values) {
-                    $moyenne = array_sum($values) / count($values);
-                    $predictions_table_avg[$polluant][$monthKey] = round($moyenne, 2);
-                }
-            }
-        } else {
-            // Pas de prédictions
-            $pred_dates            = [];
-            $pred_date_labels      = [];
-            $predictions_table_avg = [];
         }
+        $pred_dates = array_keys($pred_date_labels);
+        sort($pred_dates);
 
+        // => Pour l'affichage tabulaire (moyenne par mois)
+        $predictions_table_avg = [];
+        foreach ($predictions_table as $poll => $arrM) {
+            foreach ($arrM as $mk => $vals) {
+                $moy = array_sum($vals)/count($vals);
+                $predictions_table_avg[$poll][$mk] = round($moy, 2);
+            }
+        }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>PureOxy - Données détaillées de <?php echo htmlspecialchars($ville); ?></title>
-    <!-- Polices Google -->
+    <!-- Polices Google, Bootstrap, FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <!-- Tes styles -->
+    <!-- Vos styles -->
     <link rel="stylesheet" href="../styles/recherche.css">
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
@@ -650,7 +588,7 @@ if (!$cityNotFound) {
     <link rel="stylesheet" href="../styles/commentaire.css">
     <link rel="stylesheet" href="../styles/boutons.css">
     <link rel="stylesheet" href="../styles/messages.css">
-    <!-- Scripts (Chart.js, jQuery, Popper, Bootstrap) -->
+    <!-- Chart.js, jQuery, Popper, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
@@ -662,11 +600,11 @@ if (!$cityNotFound) {
 
 <div id="message-container">
     <?php
-    // Affichage des messages de succès/erreur suite à l'ajout/retrait de favoris
+    // Messages de succès/erreur lors de l'ajout/suppression favoris
     if (isset($response['success']) && $response['success'] === true) {
-        echo '<div class="success-message">' . htmlspecialchars($response['message'], ENT_QUOTES, 'UTF-8') . '</div>';
+        echo '<div class="success-message">'.htmlspecialchars($response['message'], ENT_QUOTES).'</div>';
     } elseif (isset($response['success']) && $response['success'] === false) {
-        echo '<div class="error-message">' . htmlspecialchars($response['message'], ENT_QUOTES, 'UTF-8') . '</div>';
+        echo '<div class="error-message">'.htmlspecialchars($response['message'], ENT_QUOTES).'</div>';
     }
     ?>
 </div>
@@ -675,358 +613,275 @@ if (!$cityNotFound) {
     <div id="details-page" class="container">
         <?php if ($cityNotFound): ?>
             <section id="city-not-found" class="text-center">
-                <h1>Oups ! Aucune donnée disponible pour la ville de "<?php echo htmlspecialchars($ville); ?>"</h1>
-                <p>Il semble que nous n'ayons pas de données pour cette ville.</p>
-                <p>Pour trouver une ville proche de la vôtre, vous pouvez :</p>
+                <h1>Oups ! Aucune donnée pour "<?php echo htmlspecialchars($ville); ?>"</h1>
+                <p>Il semble qu’aucune donnée ne soit disponible.</p>
                 <ul>
-                    <li>
-                        <button>
-                            Taper la région ou le début du code postal dans la
-                            <a href="../pages/recherche.php">barre de recherche</a>.
-                        </button>
-                    </li>
-                    <li>
-                        <button>
-                            Rechercher une ville proche géographiquement avec notre
-                            <a href="../pages/carte.php">carte interactive</a>.
-                        </button>
-                    </li>
-                    <li>
-                        <button>
-                            Nous envoyer une demande pour ajouter votre ville via notre
-                            <a href="../pages/contact.php">formulaire de contact</a>.
-                        </button>
-                    </li>
+                    <li><a href="../pages/recherche.php" class="btn btn-sm btn-info">Recherche</a></li>
+                    <li><a href="../pages/carte.php" class="btn btn-sm btn-info">Carte interactive</a></li>
+                    <li><a href="../pages/contact.php" class="btn btn-sm btn-info">Contact</a></li>
                 </ul>
             </section>
         <?php else: ?>
-        <section id="intro">
-            <h1 class="text-center mb-4">
-                <?php echo htmlspecialchars($ville); ?>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <form id="favorite-form" method="post" style="display: inline;">
-                        <input type="hidden" name="city_name" value="<?php echo htmlspecialchars($ville); ?>">
-                        <input type="hidden" name="favorite_action" id="favorite_action" value="">
-                        <button type="submit" class="favorite-icon"
-                                data-action="<?php echo $is_favorite ? 'remove_favorite' : 'add_favorite'; ?>">
-                            <i class="<?php echo $is_favorite ? 'fas' : 'far'; ?> fa-heart"></i>
-                        </button>
-                    </form>
-                <?php endif; ?>
-            </h1>
-            <p>
-                Département :
-                <?php echo htmlspecialchars($departement), '  (', number_format($population, 0, ',', ' '), ' habitants)'; ?>
-            </p>
-            <p>Région : <?php echo htmlspecialchars($region); ?></p>
-
-            <?php if (!empty($cityRankByPollutant)): ?>
-                <div style="margin-top: 1em;">
-                    <strong>Classement en termes de pollution :</strong>
-                    <ul style="list-style: none; padding-left: 0;">
-                        <?php foreach ($cityRankByPollutant as $poll => $info):
-                            $rank  = $info['rank'];
-                            $total = $info['total'];
-                            ?>
-                            <li>• <strong><?php echo htmlspecialchars($poll); ?></strong> :
-                                Rang <?php echo $rank; ?> sur <?php echo $total; ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-        </section>
-
-        <ul class="nav nav-tabs" id="detailsTabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="polluants-tab" data-toggle="tab" href="#polluants" role="tab"
-                   aria-controls="polluants" aria-selected="true">
-                    Concentrations de polluants atmosphériques
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="depassements-tab" data-toggle="tab" href="#depassements" role="tab"
-                   aria-controls="depassements" aria-selected="false">
-                    Dépassements des seuils réglementaires
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="predictions-tab" data-toggle="tab" href="#predictions" role="tab"
-                   aria-controls="predictions" aria-selected="false">
-                    Prédictions des concentrations
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="comparaison-tab" data-toggle="tab" href="#comparaison" role="tab"
-                   aria-controls="comparaison" aria-selected="false">
-                    Comparer les concentrations
-                </a>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="detailsTabsContent">
-            <!-- Onglet Polluants -->
-            <div class="tab-pane fade show active" id="polluants" role="tabpanel" aria-labelledby="polluants-tab">
-                <h2 class="mt-4">Concentrations de polluants atmosphériques</h2>
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <canvas id="concentrationsChart" height="200"></canvas>
-                    </div>
-                    <div class="col-md-6">
-                        <canvas id="polluantsChart" height="200"></canvas>
-                    </div>
-                </div>
-
-
-                <div class="table-responsive">
-                    <table id="details-table" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Polluant</th>
-                            <?php foreach ($dates as $entry): ?>
-                                <th data-location="<?php echo htmlspecialchars($entry['location']); ?>">
-                                    <?php echo htmlspecialchars($entry['date']); ?>
-                                    <?php if ($entry['location'] !== 'Inconnu'): ?>
-                                        <br>
-                                        <small><?php echo htmlspecialchars($entry['location']); ?></small>
-                                    <?php endif; ?>
-                                </th>
-                            <?php endforeach; ?>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($pollutants_data as $pollSymbol => $data): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($pollSymbol); ?></td>
-                                <?php foreach ($dates as $entry):
-                                    $identifier = $entry['identifier'];
-                                    $val = isset($data['values'][$identifier]) ? $data['values'][$identifier] : null;
-                                    ?>
-                                    <td>
-                                        <?php echo $val !== null ? round($val, 2) . ' µg/m³' : '/'; ?>
-                                    </td>
-                                <?php endforeach; ?>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p><strong>Sources : </strong>
-                    <a href="https://www.eea.europa.eu/fr" target="_blank">
-                        EEA France (Agence Européenne de l'Environnement)
-                    </a>.
+            <section id="intro">
+                <h1 class="text-center mb-4">
+                    <?php echo htmlspecialchars($ville); ?>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <form id="favorite-form" method="post" style="display:inline;">
+                            <input type="hidden" name="city_name" value="<?php echo htmlspecialchars($ville); ?>">
+                            <input type="hidden" name="favorite_action" id="favorite_action" value="">
+                            <button type="submit" class="favorite-icon"
+                                    data-action="<?php echo $is_favorite ? 'remove_favorite' : 'add_favorite'; ?>">
+                                <i class="<?php echo $is_favorite ? 'fas' : 'far'; ?> fa-heart"></i>
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                </h1>
+                <p>
+                    Département : <?php echo htmlspecialchars($departement); ?>
+                    (<?php echo number_format($population, 0, ',', ' '); ?> habitants)
                 </p>
-            </div>
+                <p>Région : <?php echo htmlspecialchars($region); ?></p>
 
-            <!-- Onglet Dépassements -->
-            <div class="tab-pane fade" id="depassements" role="tabpanel" aria-labelledby="depassements-tab">
-                <h2 class="mt-4">Dépassements des seuils réglementaires</h2>
-                <?php if (!empty($seuils)): ?>
-                    <div id="seuil-filters" class="mb-4">
-                        <h5>Filtrer par polluant et seuil :</h5>
-                        <div class="form-group">
-                            <label for="polluant-select">Sélectionnez un polluant :</label>
-                            <select id="polluant-select" class="form-control">
-                                <option value="">-- Sélectionnez un polluant --</option>
-                                <?php foreach ($seuils as $pollSymbol => $types): ?>
-                                    <option value="<?php echo htmlspecialchars($pollSymbol); ?>">
-                                        <?php echo htmlspecialchars($pollSymbol); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div id="seuil-type-container" class="form-group" style="display: none;">
-                            <label>Types de seuil :</label>
-                            <div id="seuil-types-checkboxes"></div>
-                        </div>
-                    </div>
-
-                    <canvas id="depassementsChart" class="my-4"></canvas>
-                    <div id="depassements-text" class="mt-4"></div>
-                <?php else: ?>
-                    <div class="alert alert-info mt-4" role="alert">
-                        <p>Aucun seuil réglementaire disponible pour cette ville.</p>
+                <?php if (!empty($cityRankBypolluant)): ?>
+                    <div style="margin-top:1em;">
+                        <strong>Classement en termes de pollution :</strong>
+                        <ul style="list-style:none; padding-left:0;">
+                            <?php foreach ($cityRankBypolluant as $poll => $info):
+                                $rank  = $info['rank'];
+                                $total = $info['total']; ?>
+                                <li>• <strong><?php echo htmlspecialchars($poll); ?></strong> :
+                                    Rang <?php echo $rank; ?> sur <?php echo $total; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
                 <?php endif; ?>
-            </div>
+            </section>
 
-            <!-- Onglet Prédictions -->
-            <div class="tab-pane fade" id="predictions" role="tabpanel" aria-labelledby="predictions-tab">
-                <h2 class="mt-4">Prédictions des concentrations</h2>
-                <?php if (!empty($predictions_data)): ?>
-                    <p>
-                        Voici les prédictions pour la ville de
-                        <strong><?php echo htmlspecialchars($ville); ?></strong>.
-                    </p>
+            <ul class="nav nav-tabs" id="detailsTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="polluants-tab" data-toggle="tab"
+                       href="#polluants" role="tab" aria-controls="polluants" aria-selected="true">
+                        Concentrations de polluants atmosphériques
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="depassements-tab" data-toggle="tab"
+                       href="#depassements" role="tab" aria-controls="depassements" aria-selected="false">
+                        Dépassements des seuils réglementaires
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="predictions-tab" data-toggle="tab"
+                       href="#predictions" role="tab" aria-controls="predictions" aria-selected="false">
+                        Prédictions des concentrations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="comparaison-tab" data-toggle="tab"
+                       href="#comparaison" role="tab" aria-controls="comparaison" aria-selected="false">
+                        Comparer les concentrations
+                    </a>
+                </li>
+            </ul>
 
-                    <h3>Tableau récapitulatif des prédictions</h3>
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="predictions-pivot-table">
-                            <thead>
-                            <tr>
-                                <th>Polluant</th>
-                                <?php foreach ($pred_dates as $monthKey): ?>
-                                    <th><?php echo htmlspecialchars($pred_date_labels[$monthKey]); ?></th>
-                                <?php endforeach; ?>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($predictions_table_avg as $polluant => $moisArr): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($polluant); ?></td>
-                                    <?php foreach ($pred_dates as $monthKey): ?>
-                                        <td>
-                                            <?php
-                                            echo isset($moisArr[$monthKey])
-                                                ? $moisArr[$monthKey] . ' µg/m³'
-                                                : '/';
-                                            ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="tab-content" id="detailsTabsContent">
 
-                    <?php /**<div class="row mb-3">
+                <!-- 1) Onglet Polluants (historique) -->
+                <div class="tab-pane fade show active" id="polluants" role="tabpanel" aria-labelledby="polluants-tab">
+                    <h2 class="mt-4">Concentrations de polluants atmosphériques</h2>
+
+                    <!-- Filtres polluant + mois (entre 2023-01 et 2025-01) -->
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="prediction-pollutant-select">Filtrer par polluant :</label>
-                            <select id="prediction-pollutant-select" class="form-control">
+                            <label for="polluants-polluant-select">Choisir un polluant :</label>
+                            <select id="polluants-polluant-select" class="form-control">
                                 <option value="">Tous les polluants</option>
-                                <?php
-                                $uniquePolluants = array_keys($predictions_data);
-                                foreach ($uniquePolluants as $poll) {
-                                    echo '<option value="'.htmlspecialchars($poll).'">'.htmlspecialchars($poll).'</option>';
-                                }
-                                ?>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="prediction-month-select">Filtrer par mois :</label>
-                            <select id="prediction-month-select" class="form-control">
-                                <option value="">Tous les mois</option>
-                                <?php
-                                $uniqueMonths = [];
-                                foreach ($predictions_data as $poll => $rows) {
-                                    foreach ($rows as $r) {
-                                        $month = substr($r['date'], 0, 7);
-                                        if (!in_array($month, $uniqueMonths)) {
-                                            $uniqueMonths[] = $month;
-                                        }
-                                    }
-                                }
-                                sort($uniqueMonths);
-                                foreach ($uniqueMonths as $m) {
-                                    echo '<option value="'.$m.'">'.$m.'</option>';
-                                }
-                                ?>
-                            </select>
+                            <label for="polluants-month-select">Filtrer par mois (2023-01 à 2025-01) :</label>
+                            <input type="month" id="polluants-month-select" class="form-control"
+                                   min="2023-01" max="2025-01">
                         </div>
                     </div>
 
-                    <!-- TABLEAU DES PRÉDICTIONS DÉTAILLÉ -->
-                    <div class="table-responsive" id="predictions-table-container">
-                        <table class="table table-striped" id="predictions-table">
-                            <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Polluant</th>
-                                <th>Valeur Prédite (µg/m³)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($predictions_data as $poll => $rows): ?>
-                                <?php foreach ($rows as $row): ?>
-                                    <tr data-polluant="<?php echo htmlspecialchars($poll); ?>"
-                                        data-date="<?php echo htmlspecialchars($row['date']); ?>">
-                                        <td><?php echo htmlspecialchars($row['date']); ?></td>
-                                        <td><?php echo htmlspecialchars($poll); ?></td>
-                                        <td><?php echo round($row['value'], 2); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endforeach; ?>
-                            </tbody>
+                    <!-- 2 graphiques (line + bar) filtrés -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="polluantsLineChart" height="200"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <canvas id="polluantsBarChart" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h3 class="mt-4">Tableau des concentrations (historique)</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="polluants-table">
+                            <thead></thead>
+                            <tbody></tbody>
                         </table>
-                    </div>**/?>
+                    </div>
+                </div>
 
-                    <!-- DEUX GRAPHIQUES -->
-                    <div class="row mt-4">
+                <!-- 2) Onglet Dépassements -->
+                <div class="tab-pane fade" id="depassements" role="tabpanel" aria-labelledby="depassements-tab">
+                    <h2 class="mt-4">Dépassements des seuils réglementaires</h2>
+
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <canvas id="predictionChart1" height="200"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas id="predictionChart2" height="200"></canvas>
+                            <label for="depassements-month-select">Filtrer par mois (AAAA-MM) :</label>
+                            <input type="month" id="depassements-month-select" class="form-control">
                         </div>
                     </div>
 
-                <?php else: ?>
-                    <p>Aucune donnée de prédiction disponible pour cette ville.</p>
-                <?php endif; ?>
-            </div>
+                    <?php if (!empty($seuils)): ?>
+                        <div id="seuil-filters" class="mb-4">
+                            <h5>Filtrer par polluant et seuil :</h5>
+                            <div class="form-group">
+                                <label for="polluant-select">Sélectionnez un polluant :</label>
+                                <select id="polluant-select" class="form-control">
+                                    <option value="">-- Sélectionnez un polluant --</option>
+                                    <?php foreach ($seuils as $pollSymbol => $types): ?>
+                                        <option value="<?php echo htmlspecialchars($pollSymbol); ?>">
+                                            <?php echo htmlspecialchars($pollSymbol); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div id="seuil-type-container" class="form-group" style="display:none;">
+                                <label>Types de seuil :</label>
+                                <div id="seuil-types-checkboxes"></div>
+                            </div>
+                        </div>
 
-            <!-- Onglet Comparaison -->
-            <div class="tab-pane fade" id="comparaison" role="tabpanel" aria-labelledby="comparaison-tab">
-                <h2 class="mt-4">Comparer les concentrations de deux villes</h2>
-                <div class="form-row">
-                    <!-- Ville 1 (verrouillée) -->
-                    <div class="form-group col-md-6">
-                        <label for="city1"><?php echo htmlspecialchars($ville); ?></label>
-                        <input type="text" id="city1" class="form-control"
-                               value="<?php echo htmlspecialchars($ville); ?>" disabled>
-                    </div>
+                        <canvas id="depassementsChart" class="my-4"></canvas>
+                        <div id="depassements-text" class="mt-4"></div>
 
-                    <!-- Ville 2 (avec suggestions) -->
-                    <div class="form-group col-md-6 position-relative">
-                        <label for="city2">Ville à comparer</label>
-                        <input type="text" id="city2" class="form-control"
-                               placeholder="Entrez le nom de la ville à comparer" autocomplete="off">
-                        <ul id="suggestions-list"></ul>
-                        <input type="hidden" id="city2_hidden">
+                        <canvas id="depassementsBarChart" height="200"></canvas>
+                    <?php else: ?>
+                        <div class="alert alert-info mt-4">
+                            <p>Aucun seuil réglementaire disponible pour cette ville.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- 3) Onglet Prédictions -->
+                <div class="tab-pane fade" id="predictions" role="tabpanel" aria-labelledby="predictions-tab">
+                    <h2 class="mt-4">Prédictions des concentrations</h2>
+                    <?php if (!empty($predictions_data)): ?>
+                        <p>Voici les prédictions pour la ville de <strong><?php echo htmlspecialchars($ville); ?></strong>.</p>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="prediction-polluant-select">Choisir un polluant :</label>
+                                <select id="prediction-polluant-select" class="form-control">
+                                    <option value="">Tous les polluants</option>
+                                    <?php
+                                    // Remplir en PHP direct
+                                    $listPredPolluants = array_keys($predictions_data);
+                                    foreach ($listPredPolluants as $pKey): ?>
+                                        <option value="<?php echo htmlspecialchars($pKey); ?>">
+                                            <?php echo htmlspecialchars($pKey); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="prediction-month-select">Filtrer par mois (2025-01 à 2026-01) :</label>
+                                <input type="month" id="prediction-month-select" class="form-control"
+                                       min="2025-01" max="2026-01">
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <canvas id="predictionChart1" height="200"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="predictionChart2" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-4">Tableau récapitulatif des prédictions</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="predictions-table">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p>Aucune donnée de prédiction disponible pour cette ville.</p>
+                    <?php endif; ?>
+                </div>
+
+                <!-- 4) Onglet Comparaison -->
+                <div class="tab-pane fade" id="comparaison" role="tabpanel" aria-labelledby="comparaison-tab">
+                    <h2 class="mt-4">Comparer les concentrations de deux villes</h2>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="city1"><?php echo htmlspecialchars($ville); ?></label>
+                            <input type="text" id="city1" class="form-control"
+                                   value="<?php echo htmlspecialchars($ville); ?>" disabled>
+                        </div>
+                        <div class="form-group col-md-6 position-relative">
+                            <label for="city2">Ville à comparer</label>
+                            <input type="text" id="city2" class="form-control"
+                                   placeholder="Entrez le nom de la ville" autocomplete="off">
+                            <ul id="suggestions-list"></ul>
+                            <input type="hidden" id="city2_hidden">
+                        </div>
+                        <button id="compareCitiesButton" class="btn btn-primary">Comparer</button>
                     </div>
-                    <button id="compareCitiesButton" class="btn btn-primary">Comparer</button>
                     <div class="row mt-4">
                         <div class="col-12">
                             <canvas id="cityComparisonChart" height="200"></canvas>
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
-            <?php endif; ?>
-        </div>
+        <?php endif; ?>
+    </div>
 </main>
 
 <?php
-// Passage des variables PHP vers JS
-$cityNotFoundJs = $cityNotFound ? 'true' : 'false';
-$pollutants_data_js = json_encode($pollutants_data);
-$seuils_js = json_encode($seuils);
-$dates_js = json_encode($dates);
+// Passage des variables vers JS
+$cityNotFoundJs          = $cityNotFound ? 'true' : 'false';
+$polluants_data_js       = json_encode($polluants_data);
+$seuils_js               = json_encode($seuils);
+$dates_js                = json_encode($dates);
 $city_pollution_averages_js = json_encode($city_pollution_averages);
+$predictions_data_js     = json_encode($predictions_data);
+$pred_dates_js           = json_encode($pred_dates);
+$pred_date_labels_js     = json_encode($pred_date_labels);
+$predictions_table_avg_js= json_encode($predictions_table_avg);
 ?>
-
 <script>
-    var cityNotFound = <?php echo $cityNotFoundJs; ?>;
-    var pollutantsData = <?php echo $pollutants_data_js; ?>;
-    var seuilsData = <?php echo $seuils_js; ?>;
-    var measurementIdentifiers = <?php echo json_encode(array_column($dates, 'identifier')); ?>;
-    var measurementLabels = <?php echo json_encode(array_map(function($entry) {
-        return $entry['date'] . ($entry['location'] !== 'Inconnu' ? ' - ' . $entry['location'] : '');
+    var cityNotFound          = <?php echo $cityNotFoundJs; ?>;
+    var polluantsData         = <?php echo $polluants_data_js; ?>;
+    var seuilsData            = <?php echo $seuils_js; ?>;
+    var measurementIdentifiers= <?php echo json_encode(array_column($dates, 'identifier')); ?>;
+    var measurementLabels     = <?php echo json_encode(array_map(function($e){
+        return $e['date'].($e['location'] !== 'Inconnu' ? ' - '.$e['location'] : '');
     }, $dates)); ?>;
     var city_pollution_averages = <?php echo $city_pollution_averages_js; ?>;
-    var predictionsData = <?php echo json_encode($predictions_data); ?>;
+
+    // Données prédictions
+    var predictionsData       = <?php echo $predictions_data_js; ?>;
+    var predDates             = <?php echo $pred_dates_js; ?>;
+    var predDateLabels        = <?php echo $pred_date_labels_js; ?>;
+    var predictionsTableAvg   = <?php echo $predictions_table_avg_js; ?>;
 </script>
 
-<!-- Scripts pour suggestions, détails, etc. -->
+<!-- Scripts (suggestions + details.js) -->
 <script src="../script/suggestions.js"></script>
 <script src="../script/details.js"></script>
 
 <?php
+// Inclusion des commentaires et du footer
 include 'commentaires.php';
 include '../includes/footer.php';
 ?>
-
-</body>
-</html>
