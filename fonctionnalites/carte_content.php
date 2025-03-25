@@ -1,22 +1,49 @@
 <?php
 // carte-content.php
-// Ce fichier contient uniquement le contenu de la carte interactive, sans la structure HTML complète.
+// Contenu de la carte interactive, sans la structure HTML complète.
 
 include '../bd/bd.php';
 
 /**
- * Récupère la moyenne de pollution des villes depuis la table moy_pollution_villes,
+ * Récupère la moyenne de pollution mensuelle des villes depuis la table moy_pollution_villes,
  * puis joint à donnees_villes pour obtenir la lat/lon, etc.
  */
 function getPollutionData($conn) {
+    // Sélection de toutes les colonnes mensuelles entre janvier 2023 et janvier 2025
+    // Adapte les noms si ta table les appelle différemment (moy_janv2023, moy_fev2023, etc.)
     $sql = "
         SELECT 
             dv.ville AS nom,
             dv.latitude AS lat,
             dv.longitude AS lon,
             dv.departement AS location,
-            mpv.avg_value AS pollution,
-            mpv.pollutant AS pollutant
+            mpv.polluant,
+            mpv.avg_value,  -- moyenne globale (colonne existante)
+            mpv.moy_janv2023,
+            mpv.moy_fev2023,
+            mpv.moy_mar2023,
+            mpv.moy_avril2023,
+            mpv.moy_mai2023,
+            mpv.moy_juin2023,
+            mpv.moy_juil2023,
+            mpv.moy_aout2023,
+            mpv.moy_sept2023,
+            mpv.moy_oct2023,
+            mpv.moy_nov2023,
+            mpv.moy_dec2023,
+            mpv.moy_janv2024,
+            mpv.moy_fev2024,
+            mpv.moy_mar2024,
+            mpv.moy_avril2024,
+            mpv.moy_mai2024,
+            mpv.moy_juin2024,
+            mpv.moy_juil2024,
+            mpv.moy_aout2024,
+            mpv.moy_sept2024,
+            mpv.moy_oct2024,
+            mpv.moy_nov2024,
+            mpv.moy_dec2024,
+            mpv.moy_janv2025
         FROM moy_pollution_villes mpv
         JOIN donnees_villes dv 
             ON dv.id_ville = mpv.id_ville
@@ -25,15 +52,15 @@ function getPollutionData($conn) {
 
     $result = $conn->query($sql);
     if (!$result) {
-        error_log('Erreur lors de l\'exécution de la requête SQL : ' . $conn->error);
+        error_log('Erreur SQL : ' . $conn->error);
         exit('Une erreur est survenue lors du chargement des données.');
     }
 
     $villes = [];
     while ($row = $result->fetch_assoc()) {
-        $city_key = $row['nom'];
+        $city_key  = $row['nom'];
+        $pollutant = $row['polluant'];
 
-        // Si on n'a pas encore enregistré cette ville, on l'initialise
         if (!isset($villes[$city_key])) {
             $villes[$city_key] = [
                 'nom'       => $row['nom'],
@@ -43,22 +70,40 @@ function getPollutionData($conn) {
                 'pollutants'=> []
             ];
         }
-
-        // On ajoute le polluant et sa valeur moyenne
-        $pollutant = $row['pollutant'];
         if (!isset($villes[$city_key]['pollutants'][$pollutant])) {
-            $villes[$city_key]['pollutants'][$pollutant] = [];
+            // On stocke la moyenne globale + un sous-tableau "monthly"
+            $villes[$city_key]['pollutants'][$pollutant] = [
+                'avg_value' => $row['avg_value'] ?? 0,
+                'monthly'   => [
+                    '2023-01' => $row['moy_janv2023'],
+                    '2023-02' => $row['moy_fev2023'],
+                    '2023-03' => $row['moy_mar2023'],
+                    '2023-04' => $row['moy_avril2023'],
+                    '2023-05' => $row['moy_mai2023'],
+                    '2023-06' => $row['moy_juin2023'],
+                    '2023-07' => $row['moy_juil2023'],
+                    '2023-08' => $row['moy_aout2023'],
+                    '2023-09' => $row['moy_sept2023'],
+                    '2023-10' => $row['moy_oct2023'],
+                    '2023-11' => $row['moy_nov2023'],
+                    '2023-12' => $row['moy_dec2023'],
+                    '2024-01' => $row['moy_janv2024'],
+                    '2024-02' => $row['moy_fev2024'],
+                    '2024-03' => $row['moy_mar2024'],
+                    '2024-04' => $row['moy_avril2024'],
+                    '2024-05' => $row['moy_mai2024'],
+                    '2024-06' => $row['moy_juin2024'],
+                    '2024-07' => $row['moy_juil2024'],
+                    '2024-08' => $row['moy_aout2024'],
+                    '2024-09' => $row['moy_sept2024'],
+                    '2024-10' => $row['moy_oct2024'],
+                    '2024-11' => $row['moy_nov2024'],
+                    '2024-12' => $row['moy_dec2024'],
+                    '2025-01' => $row['moy_janv2025'],
+                ]
+            ];
         }
-
-        // Comme c’est déjà agrégé, on n’a qu’une valeur par (ville, polluant),
-        // mais on le stocke quand même dans un tableau pour ne pas casser le code existant.
-        $villes[$city_key]['pollutants'][$pollutant][] = [
-            'value'    => $row['pollution'],
-            'date'     => null,        // plus de date ici
-            'location' => $row['location']
-        ];
     }
-
     return json_encode(array_values($villes));
 }
 
@@ -69,18 +114,54 @@ $conn->close();
 <section id="carte-interactive">
     <h2>Carte interactive de la qualité de l'air</h2>
 
-    <!-- Sélecteur pour filtrer par polluant -->
-    <div id="heatmap-filter">
-        <label for="pollutant-filter">Filtrer par polluant :</label>
-        <select id="pollutant-filter">
-            <option value="">Aucun</option>
-            <option value="PM2.5">PM2.5</option>
-            <option value="PM10">PM10</option>
-            <option value="NO">NO</option>
-            <option value="NO2">NO2</option>
-            <option value="O3">O3</option>
-            <option value="CO">CO</option>
-        </select>
+    <!-- FILTRES : polluant + mois -->
+    <div id="filters-container" style="display:flex; gap:1rem; margin-bottom:1rem;">
+        <!-- Filtre polluant -->
+        <div id="heatmap-filter">
+            <label for="pollutant-filter">Filtrer par polluant :</label>
+            <select id="pollutant-filter">
+                <option value="">(Aucun)</option>
+                <option value="PM2.5">PM2.5</option>
+                <option value="PM10">PM10</option>
+                <option value="NO">NO</option>
+                <option value="NO2">NO2</option>
+                <option value="O3">O3</option>
+                <option value="CO">CO</option>
+            </select>
+        </div>
+
+        <!-- Filtre mois (janv 2023 -> janv 2025) -->
+        <div id="month-filter">
+            <label for="month-filter-select">Choisir un mois :</label>
+            <select id="month-filter-select">
+                <option value="">(Aucun)</option>
+                <option value="2023-01">Janv 2023</option>
+                <option value="2023-02">Févr 2023</option>
+                <option value="2023-03">Mars 2023</option>
+                <option value="2023-04">Avr 2023</option>
+                <option value="2023-05">Mai 2023</option>
+                <option value="2023-06">Juin 2023</option>
+                <option value="2023-07">Juil 2023</option>
+                <option value="2023-08">Août 2023</option>
+                <option value="2023-09">Sept 2023</option>
+                <option value="2023-10">Oct 2023</option>
+                <option value="2023-11">Nov 2023</option>
+                <option value="2023-12">Déc 2023</option>
+                <option value="2024-01">Janv 2024</option>
+                <option value="2024-02">Févr 2024</option>
+                <option value="2024-03">Mars 2024</option>
+                <option value="2024-04">Avr 2024</option>
+                <option value="2024-05">Mai 2024</option>
+                <option value="2024-06">Juin 2024</option>
+                <option value="2024-07">Juil 2024</option>
+                <option value="2024-08">Août 2024</option>
+                <option value="2024-09">Sept 2024</option>
+                <option value="2024-10">Oct 2024</option>
+                <option value="2024-11">Nov 2024</option>
+                <option value="2024-12">Déc 2024</option>
+                <option value="2025-01">Janv 2025</option>
+            </select>
+        </div>
     </div>
 
     <!-- Conteneur de la carte -->
