@@ -1,24 +1,25 @@
 version: "3.1"
+
 nlu:
-- intent: greet
+- intent: question_generale
   examples: |
-    - Salut
-    - Bonjour
-    - Coucou
-    - Hey
-    - Hello
-- intent: ask_pollutant
+    - C’est quoi le NO2 ?
+    - C'est quoi NO2 ?
+    - Qu’est-ce que le dioxyde d’azote ?
+    - Tu peux m’expliquer PM2.5 ?
+    - Je veux savoir ce que c’est que NO2
+    - Dis-moi ce qu’est un polluant
+    - Qu’est-ce que la pollution atmosphérique ?
+    - À quoi sert un purificateur d’air ?
+    - Tu sais ce que c’est les particules fines ?
+    - C’est quoi l’ozone ?
+    - Est-ce dangereux PM10 ?
+    - Est-ce que le CO2 est nocif ?
+    - Quelle est la différence entre PM10 et PM2.5 ?
+    - Est-ce que respirer l’air en ville est dangereux ?
+    - Explique-moi la pollution de l’air
+
+- intent: out_of_scope
   examples: |
-    - C’est quoi PM2.5 ?
-    - Explique-moi PM10
-    - Qu’est-ce que NO2 ?
-- intent: ask_quality
-  examples: |
-    - Qualité Paris
-    - Comment est l’air à Lyon ?
-    - Pollution à Marseille
-- intent: goodbye
-  examples: |
-    - Au revoir
-    - Bye
-    - À plus
+    - Raconte-moi une blague
+    - Je veux commander une pizza

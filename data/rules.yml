@@ -1,21 +1,7 @@
 version: "3.1"
+
 rules:
-  - rule: Répondre à un salut
-    steps:
-      - intent: greet
-      - action: utter_greet
-
-  - rule: Répondre à une question sur un polluant
-    steps:
-      - intent: ask_pollutant
-      - action: utter_ask_pollutant
-
-  - rule: Répondre à une question sur la qualité de l'air
-    steps:
-      - intent: ask_quality
-      - action: utter_ask_quality
-
-  - rule: Répondre à un au revoir
-    steps:
-      - intent: goodbye
-      - action: utter_goodbye
+  - rule: Utiliser Mistral pour répondre
+    steps: 
+      - intent: question_generale
+      - action: action_mistral_response

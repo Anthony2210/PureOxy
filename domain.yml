@@ -1,21 +1,8 @@
 version: "3.1"
+
 intents:
-  - greet
-  - ask_pollutant
-  - ask_quality
-  - goodbye
+  - question_generale
 
 actions:
-  - action_default_fallback
+  - action_mistral_response
 
-responses:
-  utter_greet:
-    - text: "Salut ! Bienvenue sur PureOxy. Comment puis-je t’aider ?"
-  utter_ask_pollutant:
-    - text: "PM2.5, ce sont des particules fines de moins de 2,5 micromètres dans l’air, dangereuses pour les poumons. Veux-tu en savoir plus ?"
-  utter_ask_quality:
-    - text: "Je peux vérifier la qualité de l’air. Quelle ville veux-tu ?"
-  utter_goodbye:
-    - text: "À bientôt sur PureOxy !"
-  utter_default:
-    - text: "Désolé, je n’ai pas compris. Pouvez-vous reformuler ?"
