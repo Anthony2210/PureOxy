@@ -60,7 +60,6 @@ header nav ul li:hover > a {
     color: white !important;
     text-decoration: none;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
 }
 
 /* =========================

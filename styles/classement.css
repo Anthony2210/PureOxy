@@ -1,15 +1,18 @@
 /* =======================================
-   Podium / Classement Styles
+   classement.css
+   Styles pour la page classement
    ======================================= */
 
 /* Section du classement */
 #classement {
-    text-align: center;
-    background: linear-gradient(to bottom, #f9f9e9, #fff);
-    border-bottom: 2px solid #6b8e23;
-    padding: 30px 20px;
-    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #fff; /* Fond blanc pour la section */
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 30px 20px;
+    text-align: center;
 }
 
 /* Le titre principal */
@@ -29,12 +32,19 @@
     line-height: 1.5;
 }
 
-/* Sélecteur de polluant */
-#classement select {
+/* Label pour le polluant */
+.polluant-label {
+    font-weight: bold;
+    color: #556b2f;
+    font-size: 1.1em;
+    margin-right: 10px;
+}
+
+/* Menu déroulant polluant */
+.pollutant-dropdown {
     font-size: 1.1em;
     padding: 8px 12px;
-    margin: 10px auto;
-    display: block;
+    margin: 10px;
     border: 2px solid #6b8e23;
     border-radius: 4px;
     background-color: #fff;
@@ -42,20 +52,54 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIHZlcnNpb249IjEuMSI+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCAwIDIgMCA2IDQgMTEgMCAxMiAxIi8+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCA0IDIgNCA2IDggMTEgNCAxMiA1Ii8+PC9zdmc=");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) center;
+    background-size: 12px;
 }
 
-#classement select:focus {
-    outline: none;
-    border-color: #56751b;
-    box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
+/* Survol du menu déroulant */
+.pollutant-dropdown:hover {
+    background-color: #f2f2f2;
+    border-color: #556b2f;
+}
+
+/* Paragraphe explicatif du polluant */
+.polluant-info {
+    font-style: italic;
+    color: #666;
+    margin-top: 5px;
+    font-size: 0.95em;
+}
+
+/* Fieldset pour les cases à cocher */
+#columns-choices {
+    margin: 1em 0;
+    border: 2px solid #6b8e23;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+#columns-choices legend {
+    font-weight: bold;
+    color: #6b8e23;
+    padding: 0 10px;
+}
+
+#columns-choices label {
+    margin: 0 10px;
+    color: #333;
+    font-family: 'Open Sans', sans-serif;
 }
 
 /* Tableau de classement */
 .table-classement {
     margin: 20px auto;
     border-collapse: collapse;
-    width: 90%;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1000px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -93,10 +137,32 @@
     background-color: #e9f5e1;
 }
 
+/* Couleurs de fond selon le seuil */
+.bg-green {
+    background-color: #e2fce2; /* vert clair */
+}
+.bg-green:hover {
+    background-color: #d2f8d2 !important;
+}
+
+.bg-orange {
+    background-color: #ffedcc; /* orange clair */
+}
+.bg-orange:hover {
+    background-color: #ffe0b2 !important;
+}
+
+.bg-red {
+    background-color: #ffd6d6; /* rouge clair */
+}
+.bg-red:hover {
+    background-color: #ffcccc !important;
+}
+
 /* Bouton "Voir plus" */
 .btn-voir-plus {
     display: inline-block;
-    margin: 20px auto;
+    margin: 20px auto 0 auto;
     padding: 12px 25px;
     background-color: #6b8e23;
     color: #fff;
@@ -110,38 +176,4 @@
 .btn-voir-plus:hover {
     background-color: #56751b;
     transform: translateY(-2px);
-}
-/* Couleurs de fond selon le seuil */
-.bg-green:hover {
-    background-color: #d2f8d2 !important; /* survol plus clair */
-}
-.bg-green {
-    background-color: #e2fce2;
-}
-
-.bg-orange:hover {
-    background-color: #ffe0b2 !important;
-}
-.bg-orange {
-    background-color: #ffedcc;
-}
-
-.bg-red:hover {
-    background-color: #ffcccc !important;
-}
-.bg-red {
-    background-color: #ffd6d6;
-}
-
-/* Amélioration visuelle du menu déroulant */
-.pollutant-dropdown {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIHZlcnNpb249IjEuMSI+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCAwIDIgMCA2IDQgMTEgMCAxMiAxIi8+PHBvbHlsaW5lIGZpbGw9IiMyMjIiIHBvaW50cz0iMCA0IDIgNCA2IDggMTEgNCAxMiA1Ii8+PC9zdmc=")
-    no-repeat 95% 50% / 12px 12px;
-    padding-right: 30px; /* pour laisser la place à l'icône */
-}
-.pollutant-dropdown:hover {
-    background-color: #f2f2f2;
 }
