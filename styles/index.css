@@ -1,40 +1,39 @@
-/* ========================================================================
+/* =========================================================================
    index.css
-   Styles pour la section d'introduction
-   ======================================================================== */
+   ========================================================================= */
 
-/**
- * Introduction Section
- */
+/* =========================
+   1) Section d'introduction (Hero)
+   ========================= */
 #introduction {
     position: relative;
-    text-align: center;
-    background-image: url('../images/vancouver-in-fall.png');
-    background-size: cover;
-    background-position: center;
-    padding: 80px 20px;
-    color: white;
-}
+    /* Centrer le contenu verticalement */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-#introduction::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+    /* Dégradé + image de fond */
+    background: linear-gradient(
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.4)
+    ),
+    url('../images/vancouver-in-fall.png') center/cover no-repeat;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    margin: 0;
+    color: white;
+    overflow: visible;
 }
 
-#introduction h2, #introduction p {
+.intro-content {
     position: relative;
     z-index: 2;
+    max-width: 800px;
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/**
- * Introduction Heading
- */
 #introduction h2 {
     font-size: 3em;
     font-weight: bold;
@@ -42,78 +41,107 @@
     color: #fff;
 }
 
-/**
- * Introduction Paragraph
- */
-#introduction p {
-    font-size: 1.3em;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.8;
-    color: #f0f0f0;
+/* Effet de flou sous le texte du titre */
+#introduction h2 {
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/**
- * Features
- */
+/* =========================
+   2) Boîte floue pour les fonctionnalités
+   ========================= */
+.features-floating {
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    max-width: 600px;
 
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
 
-#features ul {
+    /* Bordure arrondie + légère ombre */
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+
+    color: #fff;
+    border: 2px solid transparent; /* fallback */
+    background-clip: padding-box;
+    position: relative;
+
+    /* Animation d’apparition (fade-in) */
+    opacity: 0;
+    animation: fadeIn 1s forwards 0.3s; /* 0.3s de delay, 1s de durée */
+}
+
+/* On peut simuler un contour en dégradé autour du bloc flou : */
+.features-floating::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, #6b8e23, #9acd32);
+    z-index: -1;
+}
+
+/* On veut que le background du bloc flou ne "mange" pas la bordure */
+.features-floating::before {
+    /* On applique un trick pour qu’il y ait un écart */
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 2px; /* même que la border:2px ci-dessus */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Titre dans la boîte floue */
+.features-floating h3 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Liste des fonctionnalités (inchangée) */
+.features-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
     list-style-type: none;
     padding: 0;
+    margin: 20px 0 0 0;
 }
-#features li {
+
+.features-list li {
     background-color: #f9f9e9;
     padding: 20px;
-    margin: 10px 10px 10px 10px;
     border: 2px solid #6b8e23;
     border-radius: 8px;
-    font-weight: bold;
     color: #556b2f;
-    text-align: center;
-    box-shadow: none;
+    width: 240px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.2s ease;
 }
 
-#features li:hover {
+.features-list li:hover {
     transform: translateY(-5px);
 }
 
-/**
- * Feature Title
- */
-#features strong {
+.features-list li a {
+    text-decoration: none;
+    color: #556b2f;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.features-list li strong {
     color: #6b8e23;
     font-size: 1.2em;
-}
-
-/**
- * Features Heading
- */
-#features h2 {
-    color: #6b8e23;
-    text-decoration: underline;
-    text-align: center;
-    font-size: 2.2em;
-}
-#features a {
-    color : darkolivegreen;
-}
-
-/**
- * CTA Section
- */
-#cta {
-    text-align: center;
-    background-color: #556b2f;
-    padding: 40px 0;
-    border-radius: 0;
-    color: #f9f9e9;
-}
-
-#cta h2 {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #f9f9e9;
 }

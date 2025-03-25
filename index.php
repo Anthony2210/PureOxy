@@ -25,60 +25,40 @@ include 'bd/bd.php';
 <body>
 <?php include 'includes/header.php'; ?>
 
-<!-- Section d'introduction à PureOxy -->
+<!-- Section d'introduction (Hero) -->
 <section id="introduction">
-    <h2>Bienvenue sur PureOxy</h2>
-    <p>
-        PureOxy est une plateforme interactive dédiée à l'analyse de la qualité de l'air en France.
-        Consultez en temps réel les niveaux de pollution dans votre ville, obtenez des prévisions grâce à nos algorithmes de machine learning,
-        et recevez des recommandations personnalisées pour protéger votre santé.
-    </p>
-</section>
+    <div class="intro-content">
+        <h2>Bienvenue sur PureOxy</h2>
 
+        <!-- Boîte floue pour les fonctionnalités -->
+        <div class="features-floating">
+            <h3>Nos fonctionnalités</h3>
+            <ul class="features-list">
+                <li>
+                    <a href="http://localhost/PUREOXY/pages/carte.php">
+                        <strong>Carte interactive</strong><br>
+                        Visualisez les niveaux de pollution dans toute la France.
+                    </a>
+                </li>
+                <li>
+                    <a href="http://localhost/PUREOXY/pages/recherche.php">
+                        <strong>Recherche par ville</strong><br>
+                        Trouvez rapidement les données de pollution pour votre ville.
+                    </a>
+                </li>
+                <li>
+                    <a href="http://localhost/PUREOXY/fonctionnalites/predictions.php">
+                        <strong>Prédictions</strong><br>
+                        Obtenez des prévisions sur la qualité de l'air grâce au machine learning.
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-<!-- Section présentant les fonctionnalités principales -->
-<section id="features">
-    <h2>Nos fonctionnalités</h2>
-    <ul>
-        <li>
-            <a href="http://localhost/PUREOXY/pages/carte.php">
-                <strong>Carte interactive</strong> : Visualisez les niveaux de pollution dans toute la France.
-            </a>
-        </li>
-        <li>
-            <a href="http://localhost/PUREOXY/pages/recherche.php">
-                <strong>Recherche par ville</strong> : Trouvez rapidement les données de pollution pour votre ville.
-            </a>
-        </li>
-        <li>
-            <a href="http://localhost/PUREOXY/fonctionnalites/predictions.php">
-                <strong>Prédictions</strong> : Obtenez des prévisions sur la qualité de l'air grâce au machine learning.
-            </a>
-        </li>
-    </ul>
-</section>
-
-<!-- Section d'appel à l'action pour commencer -->
-<section id="cta">
-    <h3>Commencez dès maintenant à nous rejoindre afin de profiter de nouvelles fonctionnalités exclusives !</h3>
-    <ul>
-        <li>
-            <strong>L'accès à l'Espace commentaires</strong> : Discutez et débattez avec d'autres personnes.
-        </li>
-        <li>
-            <strong>Favoris</strong> : Ajoutez différentes villes à vos favoris afin de les retrouver plus rapidement.
-        </li>
-        <li>
-            <strong>Historique</strong> : Retrouvez vos dernières recherches.
-        </li>
-        <li>
-            <strong>Et bien plus encore !</strong>
-        </li>
-    </ul>
-    <a href="pages/compte.php" class="button">Nous rejoindre !</a>
+        <a href="pages/compte.php" class="hero-button">Nous rejoindre</a>
+    </div>
 </section>
 
 <?php include 'includes/footer.php'; ?>
-
 </body>
 </html>

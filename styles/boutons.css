@@ -514,6 +514,22 @@
     background-color: #556b2f;
     text-decoration: underline;
 }
-.compareCitiesButton {
 
+.hero-button {
+    display: inline-block;
+    background-color: #6b8e23;
+    color: #fff;
+    padding: 14px 28px;
+    font-size: 1.1em;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+    margin-bottom: 20px; /* un peu d'espace */
+}
+.hero-button:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+    color: #fff;
 }
