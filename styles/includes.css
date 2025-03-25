@@ -3,40 +3,111 @@
    Styles supplémentaires pour les composants inclus (header et footer)
    ======================================================================== */
 
-/* En-tête (header) */
 header {
-    background-color: #f9f9e9;
+    background: linear-gradient(90deg, #f9f9e9 0%, #e6f4d7 100%);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    top: 0;
     border-bottom: 10px solid #6b8e23;
+    position: relative;
+    z-index: 999; /* le header au-dessus du contenu */
 }
 
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #556b2f;
+    padding: 0 20px;
+    min-height: 70px;
 }
 
-/* Liens du header */
-header nav ul li a {
+#logo img {
+    width: 220px; /* Ajustez selon votre logo */
+    height: auto;
+}
+
+header nav ul {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Chaque <li> est le conteneur d'un lien (et éventuel sous-menu) */
+header nav ul li {
+    position: relative; /* pour le dropdown */
+}
+
+/* Liens du menu principal */
+header nav ul li > a {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* espace entre icône et texte */
     color: #6b8e23;
     text-decoration: none;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: color 0.3s ease;
-}
-header nav ul li {
-    display: inline;
-    gap: 20px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    /* Transition plus complète (incluant ombre, transform, etc.) */
+    transition: background-color 0.3s ease, color 0.3s ease,
+    box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-header nav ul li a:hover {
-    color: #6b8e23;
-    text-decoration: underline;
+/* Survol de l'élément <li> => applique le style sur le lien <a> */
+header nav ul li:hover > a {
+    background-color: #556b2f;
+    color: white !important;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
+
+/* =========================
+   Dropdown
+========================= */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%; /* juste en dessous du parent */
+    left: 0;
+    background-color: #fff;
+    min-width: 160px;
+    border-radius: 6px;
+    margin: 0; /* pas de marge pour éviter le "gap" */
+    padding: 5px 0;
+    z-index: 1000;
+    max-height: 160px;       /* ~ 3 items (à ajuster selon ton padding) */
+    overflow-y: auto;        /* barre de défilement si + de 3 items */
+}
+
+.dropdown-content li a {
+    display: block;
+    padding: 10px 15px;
+    color: #556b2f;
+    font-weight: normal;
+    font-size: 0.95em;
+    gap: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Survol des liens du sous-menu => on utilise un vert plus foncé (#556b2f) */
+.dropdown-content li a:hover {
+    background-color: #556b2f;
+    color: #fff;
+}
+
+/* Au survol du parent .dropdown => on affiche le sous-menu */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* On garde la possibilité de survoler la dropdown-content elle-même */
+.dropdown-content:hover {
+    display: block;
+}
+
 
 /* Pied de page (footer) */
 footer {
@@ -88,39 +159,9 @@ body, html {
     flex-direction: column;
 }
 
+/* Agrandit un peu le logo (optionnel) */
 #logo img {
-    width: 300px;!important;
-    height: auto;!important;
-    margin-right: 20px;!important;
-}
-
-/* Styles pour le dropdown (sous-onglets) */
-.dropdown:hover > a {
-    /* Optionnel : changer le style du lien parent au survol */
-    background-color: #eee;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    min-width: 160px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 1000;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.dropdown-content li a {
-    padding: 10px;
-    color: #333;
-    white-space: nowrap;
-}
-
-/* Affichage du sous-menu au survol du parent */
-.dropdown:hover .dropdown-content {
-    display: block;
+    width: 300px !important;
+    height: auto !important;
+    margin-right: 20px !important;
 }

@@ -2,9 +2,7 @@
 /**
  * header.php
  *
- * Ce fichier contient le code HTML pour l'en-tête du site PureOxy.
- * Il inclut le logo, le menu de navigation principal et gère l'affichage conditionnel du nom de l'utilisateur si connecté.
- *
+ * En-tête du site PureOxy : logo, menu principal, chat.
  */
 
 $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
@@ -19,19 +17,63 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         </div>
         <nav>
             <ul>
-                <li><a href="<?php echo $baseUrl; ?>pages/actualite.php">Actualité</a></li>
-                <li><a href="<?php echo $baseUrl; ?>pages/donnees_nationales.php">Données nationales</a></li>
-                <li><a href="<?php echo $baseUrl; ?>pages/donnees_locales.php">Données locales</a></li>
+                <!-- Accueil -->
+                <li>
+                    <a href="<?php echo $baseUrl; ?>index.php">
+                        <i class="fas fa-home"></i> Accueil
+                    </a>
+                </li>
 
-                <!-- Vérifie si l'utilisateur est connecté pour afficher son nom au lieu de "Compte" -->
+                <!-- Actualités -->
+                <li>
+                    <a href="<?php echo $baseUrl; ?>pages/actualite.php">
+                        <i class="far fa-newspaper"></i> Actualités
+                    </a>
+                </li>
+
+                <!-- Données (menu déroulant) -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-database"></i> Données <i class="fas fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-content">
+                        <li>
+                            <a href="<?php echo $baseUrl; ?>pages/classement.php">
+                                <i class="fas fa-chart-bar"></i> Classement
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $baseUrl; ?>pages/recherche.php">
+                                <i class="fas fa-search"></i> Recherche
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $baseUrl; ?>pages/carte.php">
+                                <i class="fas fa-map"></i> Carte
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Compte (ou nom utilisateur si connecté) -->
                 <?php if (isset($_SESSION['username'])): ?>
-                    <li><a href="<?php echo $baseUrl; ?>pages/compte.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
+                    <li>
+                        <a href="<?php echo $baseUrl; ?>pages/compte.php">
+                            <i class="fas fa-user"></i>
+                            <?php echo htmlspecialchars($_SESSION['username']); ?>
+                        </a>
+                    </li>
                 <?php else: ?>
-                    <li><a href="<?php echo $baseUrl; ?>pages/compte.php">Compte</a></li>
+                    <li>
+                        <a href="<?php echo $baseUrl; ?>pages/compte.php">
+                            <i class="fas fa-user"></i> Mon compte
+                        </a>
+                    </li>
                 <?php endif; ?>
             </ul>
         </nav>
     </div>
+
     <!-- Chatbot -->
     <div id="chatbot-container">
         <!-- Texte visible en mode minimisé -->
@@ -50,6 +92,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
 
     <!-- Lien vers le CSS du chatbot -->
     <link rel="stylesheet" href="../styles/chatbot.css">
+    <!-- Font Awesome (icônes) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Script du chatbot -->
     <script src="../script/chatbot.js" defer></script>
