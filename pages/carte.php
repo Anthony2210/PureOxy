@@ -8,6 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Carte interactive</title>
+
     <!-- Liens CSS et JS spécifiques à la carte -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <link rel="stylesheet" href="../styles/base.css">
@@ -21,6 +22,8 @@ session_start();
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
+
+<h2 class="carte-title">Carte interactive de la qualité de l’air</h2>
 
 <!-- Inclusion du contenu de la carte -->
 <?php include('../fonctionnalites/carte_content.php'); ?>

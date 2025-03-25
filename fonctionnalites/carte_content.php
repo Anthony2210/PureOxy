@@ -110,15 +110,14 @@ function getPollutionData($conn) {
 $json_villes = getPollutionData($conn);
 $conn->close();
 ?>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
 
 <section id="carte-interactive">
-    <h2>Carte interactive de la qualité de l'air</h2>
-
     <!-- FILTRES : polluant + mois -->
-    <div id="filters-container" style="display:flex; gap:1rem; margin-bottom:1rem;">
+    <div id="filters-container">
         <!-- Filtre polluant -->
         <div id="heatmap-filter">
-            <label for="pollutant-filter">Filtrer par polluant :</label>
+            <label for="pollutant-filter">Polluant :</label>
             <select id="pollutant-filter">
                 <option value="">(Aucun)</option>
                 <option value="PM2.5">PM2.5</option>
@@ -132,7 +131,7 @@ $conn->close();
 
         <!-- Filtre mois (janv 2023 -> janv 2025) -->
         <div id="month-filter">
-            <label for="month-filter-select">Choisir un mois :</label>
+            <label for="month-filter-select">Mois :</label>
             <select id="month-filter-select">
                 <option value="">(Aucun)</option>
                 <option value="2023-01">Janv 2023</option>
