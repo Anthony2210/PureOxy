@@ -99,6 +99,7 @@
     height: 100%;
     opacity: 0.4;
     pointer-events: none;
+    background: radial-gradient(circle at top left, #d7e8ba, transparent 50%);
 }
 
 .polluants-title {
@@ -182,7 +183,7 @@
 }
 
 /* ===============================
-   Tableaux générés en AJAX
+   Tableaux “Historique” / “Prédictions”
    =============================== */
 .table thead th {
     background: linear-gradient(135deg, #e0e0d1 0%, #f0f0f0 100%);

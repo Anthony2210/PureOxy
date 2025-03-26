@@ -46,9 +46,7 @@ function loadDataAjax(tab, polluant, mois, monthlyContainerId, dailyContainerId)
         params.append('mois', mois);
     }
 
-    fetch('../fonctionnalites/details_data.php?' + params.toString(), {
-        method: 'GET'
-    })
+    fetch('details_data.php?' + params.toString(), { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             // data.monthlyData, data.dailyData
