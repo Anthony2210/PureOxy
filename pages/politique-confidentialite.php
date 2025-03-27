@@ -104,6 +104,11 @@ include '../includes/header.php';
         PureOxy<br>
         Adresse email : contact@pureoxy.fr
     </p>
+    <p>
+        By Wazerinh3
+        +o
+    </p>
+
 </section>
 
 <?php
