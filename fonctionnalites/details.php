@@ -121,7 +121,7 @@ for ($year = 2025; $year <= 2026; $year++) {
     var idVille = <?php echo $idVille; ?>;
 </script>
 
-<<div class="details-container">
+<div class="details-container">
     <!-- Colonne gauche -->
     <div class="left-column">
         <!-- Bloc d'informations sur la ville -->

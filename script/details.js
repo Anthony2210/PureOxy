@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    // Stockage des dernières données chargées pour chaque onglet
+    let latestBarData = { historique: null, predictions: null };
+    let latestTimeData = { historique: null, predictions: null };
+
     // Gestion du changement d'onglet principal
     const tabs = document.querySelectorAll('.tabs li');
     tabs.forEach(tab => {
@@ -28,6 +33,26 @@ document.addEventListener('DOMContentLoaded', function () {
             parent.querySelectorAll('.sub-tab-panel').forEach(panel => {
                 panel.classList.toggle('active', panel.id === selectedSubTab);
             });
+            // Après un court délai, détruire et recréer le graphique du sous-onglet visible
+            setTimeout(() => {
+                if (selectedSubTab.startsWith('line')) {
+                    if (parent.id === 'historique' && latestTimeData.historique) {
+                        if (timeChartHistorique) timeChartHistorique.destroy();
+                        updateTimeChart('historique', latestTimeData.historique);
+                    } else if (parent.id === 'predictions' && latestTimeData.predictions) {
+                        if (timeChartPredictions) timeChartPredictions.destroy();
+                        updateTimeChart('predictions', latestTimeData.predictions);
+                    }
+                } else if (selectedSubTab.startsWith('bar')) {
+                    if (parent.id === 'historique' && latestBarData.historique) {
+                        if (barChartHistorique) barChartHistorique.destroy();
+                        updateBarChart('historique', latestBarData.historique);
+                    } else if (parent.id === 'predictions' && latestBarData.predictions) {
+                        if (barChartPredictions) barChartPredictions.destroy();
+                        updateBarChart('predictions', latestBarData.predictions);
+                    }
+                }
+            }, 100);
         });
     });
 
@@ -72,7 +97,19 @@ document.addEventListener('DOMContentLoaded', function () {
             body: params,
         })
             .then(response => response.json())
-            .then(data => {console.log(data);
+            .then(data => {
+                console.log(data);
+                // Sauvegarder les données pour recréation ultérieure
+                latestBarData[tab] = data.barData;
+                latestTimeData[tab] = data.timeData;
+                // Détruire les graphiques existants avant de les recréer
+                if (tab === 'historique') {
+                    if (barChartHistorique) { barChartHistorique.destroy(); }
+                    if (timeChartHistorique) { timeChartHistorique.destroy(); }
+                } else if (tab === 'predictions') {
+                    if (barChartPredictions) { barChartPredictions.destroy(); }
+                    if (timeChartPredictions) { timeChartPredictions.destroy(); }
+                }
                 updateBarChart(tab, data.barData);
                 updateTimeChart(tab, data.timeData);
                 updateDataTable(tab, data.tableHtml);
@@ -82,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Variables globales pour Chart.js
     let barChartHistorique, timeChartHistorique, barChartPredictions, timeChartPredictions;
+
     function updateBarChart(tab, barData) {
         const ctx = document.getElementById(`bar-chart-${tab}`).getContext('2d');
         const config = {
@@ -100,10 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
         if (tab === 'historique') {
-            if (barChartHistorique) barChartHistorique.destroy();
             barChartHistorique = new Chart(ctx, config);
         } else if (tab === 'predictions') {
-            if (barChartPredictions) barChartPredictions.destroy();
             barChartPredictions = new Chart(ctx, config);
         }
     }
@@ -126,10 +162,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
         if (tab === 'historique') {
-            if (timeChartHistorique) timeChartHistorique.destroy();
             timeChartHistorique = new Chart(ctx, config);
         } else if (tab === 'predictions') {
-            if (timeChartPredictions) timeChartPredictions.destroy();
             timeChartPredictions = new Chart(ctx, config);
         }
     }
