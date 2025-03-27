@@ -46,7 +46,7 @@ if (isset($_POST['login'])) {
             // Vérifie si l'utilisateur existe et si le mot de passe est correct
             if ($user && password_verify($password, $user['password'])) {
                 session_regenerate_id(true);
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['id_users'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 header("Location: ../index.php");
                 exit;
@@ -131,8 +131,8 @@ if (isset($_POST['register'])) {
 /**
  * Vérifie si l'utilisateur est connecté et récupère l'historique des recherches et les villes favorites.
  */
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+if (isset($_SESSION['id_users'])) {
+    $id_users = $_SESSION['id_users'];
 
     // -------------------------------
     // Récupérer les 7 dernières recherches
@@ -141,12 +141,12 @@ if (isset($_SESSION['user_id'])) {
         SELECT dv.ville AS search_query, sh.search_date
         FROM search_history sh
         JOIN donnees_villes dv ON sh.id_ville = dv.id_ville
-        WHERE sh.user_id = ?
+        WHERE sh.id_users = ?
         ORDER BY sh.search_date DESC
         LIMIT 7
     ");
     if ($stmt) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         $stmt->execute();
         $result = $stmt->get_result();
         $search_history = $result->fetch_all(MYSQLI_ASSOC);
@@ -154,20 +154,20 @@ if (isset($_SESSION['user_id'])) {
         // Supprimer les recherches plus anciennes
         $stmt = $conn->prepare("
             DELETE FROM search_history
-            WHERE user_id = ?
+            WHERE id_users = ?
               AND search_date NOT IN (
                   SELECT search_date
                   FROM (
                       SELECT search_date
                       FROM search_history
-                      WHERE user_id = ?
+                      WHERE id_users = ?
                       ORDER BY search_date DESC
                       LIMIT 7
                   ) AS sub
               )
         ");
         if ($stmt) {
-            $stmt->bind_param("ii", $user_id, $user_id);
+            $stmt->bind_param("ii", $id_users, $id_users);
             $stmt->execute();
         }
     }
@@ -177,10 +177,10 @@ if (isset($_SESSION['user_id'])) {
         SELECT dv.ville AS city_name
         FROM favorite_cities fc
         JOIN donnees_villes dv ON fc.id_ville = dv.id_ville
-        WHERE fc.user_id = ?
+        WHERE fc.id_users = ?
     ");
     if ($stmt) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         $stmt->execute();
         $cities_result = $stmt->get_result();
         $favorite_cities = $cities_result->fetch_all(MYSQLI_ASSOC);
@@ -189,7 +189,7 @@ if (isset($_SESSION['user_id'])) {
     // Récupérer les détails de l'utilisateur
     $stmt = $conn->prepare("SELECT * FROM users WHERE id_users = ?");
     if ($stmt) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         $stmt->execute();
         $user_result = $stmt->get_result();
         $user = $user_result->fetch_assoc();
@@ -202,12 +202,12 @@ if (isset($_SESSION['user_id'])) {
         SELECT dv.ville AS search_query, sh.search_date
         FROM search_history sh
         JOIN donnees_villes dv ON sh.id_ville = dv.id_ville
-        WHERE sh.user_id = ?
+        WHERE sh.id_users = ?
         ORDER BY sh.search_date DESC
         LIMIT 10
     ");
     if ($stmt) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         $stmt->execute();
         $history_result = $stmt->get_result();
         $search_history = $history_result->fetch_all(MYSQLI_ASSOC);
@@ -219,9 +219,9 @@ if (isset($_SESSION['user_id'])) {
  *
  * @return void
  */
-if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
+if (isset($_POST['add_favorite_city']) && isset($_SESSION['id_users'])) {
     $city_name = trim($_POST['city_name']);
-    $user_id = $_SESSION['user_id'];
+    $id_users = $_SESSION['id_users'];
 
     // Vérifier que le nom de la ville n'est pas vide
     if (!empty($city_name)) {
@@ -246,7 +246,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                 $stmt = $conn->prepare("
                     SELECT COUNT(*) as count 
                     FROM favorite_cities 
-                    WHERE user_id = ? 
+                    WHERE id_users = ? 
                       AND id_ville = ?
                 ");
                 if (!$stmt) {
@@ -255,7 +255,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                         'message' => "Préparation de la requête échouée: " . $conn->error
                     ];
                 } else {
-                    $stmt->bind_param("ii", $user_id, $idVille);
+                    $stmt->bind_param("ii", $id_users, $idVille);
                     $stmt->execute();
                     $city_favorite_result = $stmt->get_result();
                     $city_favorite_row = $city_favorite_result->fetch_assoc();
@@ -265,7 +265,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                         $stmt = $conn->prepare("
                             SELECT COUNT(*) as count 
                             FROM favorite_cities 
-                            WHERE user_id = ?
+                            WHERE id_users = ?
                         ");
                         if (!$stmt) {
                             $response = [
@@ -273,7 +273,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                                 'message' => "Préparation de la requête échouée: " . $conn->error
                             ];
                         } else {
-                            $stmt->bind_param("i", $user_id);
+                            $stmt->bind_param("i", $id_users);
                             $stmt->execute();
                             $count_result = $stmt->get_result();
                             $count_row = $count_result->fetch_assoc();
@@ -281,7 +281,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                             if ($count_row['count'] < 5) {
                                 // 4) Insérer la nouvelle ville favorite (via id_ville)
                                 $stmt = $conn->prepare("
-                                    INSERT INTO favorite_cities (user_id, id_ville) 
+                                    INSERT INTO favorite_cities (id_users, id_ville) 
                                     VALUES (?, ?)
                                 ");
                                 if (!$stmt) {
@@ -290,7 +290,7 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
                                         'message' => "Préparation de la requête échouée: " . $conn->error
                                     ];
                                 } else {
-                                    $stmt->bind_param("ii", $user_id, $idVille);
+                                    $stmt->bind_param("ii", $id_users, $idVille);
                                     if ($stmt->execute()) {
                                         $response = [
                                             'success' => true,
@@ -358,14 +358,14 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['user_id'])) {
  *
  * @return void
  */
-if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
+if (isset($_POST['delete_search']) && isset($_SESSION['id_users'])) {
     $search_query = $_POST['search_query']; // c’est le nom de la ville
-    $user_id = $_SESSION['user_id'];
+    $id_users = $_SESSION['id_users'];
 
     // On supprime via l'id_ville correspondant à la ville
     $stmt = $conn->prepare("
         DELETE FROM search_history
-        WHERE user_id = ?
+        WHERE id_users = ?
           AND id_ville = (
               SELECT id_ville
               FROM donnees_villes
@@ -379,7 +379,7 @@ if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
             'message' => "Préparation de la requête échouée: " . $conn->error
         ];
     } else {
-        $stmt->bind_param("is", $user_id, $search_query);
+        $stmt->bind_param("is", $id_users, $search_query);
         if ($stmt->execute()) {
             $response = [
                 'success' => true,
@@ -414,16 +414,16 @@ if (isset($_POST['delete_search']) && isset($_SESSION['user_id'])) {
  *
  * @return void
  */
-if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $stmt = $conn->prepare("DELETE FROM search_history WHERE user_id = ?");
+if (isset($_POST['clear_history']) && isset($_SESSION['id_users'])) {
+    $id_users = $_SESSION['id_users'];
+    $stmt = $conn->prepare("DELETE FROM search_history WHERE id_users = ?");
     if (!$stmt) {
         $response = [
             'success' => false,
             'message' => "Préparation de la requête échouée: " . $conn->error
         ];
     } else {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         if ($stmt->execute()) {
             $response = [
                 'success' => true,
@@ -457,14 +457,14 @@ if (isset($_POST['clear_history']) && isset($_SESSION['user_id'])) {
  *
  * @return void
  */
-if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
+if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     $city_name = $_POST['city_name'];
-    $user_id = $_SESSION['user_id'];
+    $id_users = $_SESSION['id_users'];
 
     // Supprimer la ville favorite via son id_ville
     $stmt = $conn->prepare("
         DELETE FROM favorite_cities
-        WHERE user_id = ?
+        WHERE id_users = ?
           AND id_ville = (
               SELECT id_ville
               FROM donnees_villes
@@ -478,7 +478,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
             'message' => "Préparation de la requête échouée: " . $conn->error
         ];
     } else {
-        $stmt->bind_param("is", $user_id, $city_name);
+        $stmt->bind_param("is", $id_users, $city_name);
         if ($stmt->execute()) {
             $response = [
                 'success' => true,
@@ -570,7 +570,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['user_id'])) {
 <div class="compte-container">
     <h2>L’espace Compte</h2>
 
-    <?php if (isset($_SESSION['user_id'])): ?>
+    <?php if (isset($_SESSION['id_users'])): ?>
         <!-- Tableau de bord de l'utilisateur -->
         <div class="dashboard">
             <!-- Carte de Profil -->

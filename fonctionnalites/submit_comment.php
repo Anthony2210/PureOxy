@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_comment'])) {
     /**
      * Vérifier si l'utilisateur est connecté.
      */
-    if (isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
+    if (isset($_SESSION['id_users'])) {
+        $id_users = $_SESSION['id_users'];
         $content = trim($_POST['content']);
 
         /**
@@ -79,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_comment'])) {
              * Préparer la requête pour insérer le commentaire.
              */
             if ($parent_id === null) {
-                $stmt = $conn->prepare("INSERT INTO commentaire (user_id, page, content, parent_id) VALUES (?, ?, ?, NULL)");
-                $stmt->bind_param("iss", $user_id, $page, $content);
+                $stmt = $conn->prepare("INSERT INTO commentaire (id_users, page, content, parent_id) VALUES (?, ?, ?, NULL)");
+                $stmt->bind_param("iss", $id_users, $page, $content);
             } else {
-                $stmt = $conn->prepare("INSERT INTO commentaire (user_id, page, content, parent_id) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("issi", $user_id, $page, $content, $parent_id);
+                $stmt = $conn->prepare("INSERT INTO commentaire (id_users, page, content, parent_id) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("issi", $id_users, $page, $content, $parent_id);
             }
 
             /**

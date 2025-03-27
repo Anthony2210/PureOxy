@@ -23,7 +23,7 @@ if (session_status() == PHP_SESSION_NONE) {
  * Vérifie si l'utilisateur est authentifié.
  * Si non, renvoie une réponse JSON indiquant que l'utilisateur doit se connecter.
  */
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id_users'])) {
     echo json_encode([
         'success' => false,
         'message' => 'Vous devez être connecté pour liker un commentaire.'
@@ -31,7 +31,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+$id_users = $_SESSION['id_users'];
 
 /**
  * Vérification du jeton CSRF pour protéger contre les attaques de type Cross-Site Request Forgery.
@@ -71,11 +71,11 @@ if (isset($_POST['action']) && isset($_POST['comment_id'])) {
              */
 
             // Préparation de la requête pour vérifier l'existence du like
-            $stmt = $conn->prepare("SELECT * FROM likes WHERE user_id = ? AND comment_id = ?");
+            $stmt = $conn->prepare("SELECT * FROM likes WHERE id_users = ? AND comment_id = ?");
             if (!$stmt) {
                 throw new Exception('Erreur de préparation de la requête.');
             }
-            $stmt->bind_param("ii", $user_id, $comment_id);
+            $stmt->bind_param("ii", $id_users, $comment_id);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -87,11 +87,11 @@ if (isset($_POST['action']) && isset($_POST['comment_id'])) {
                 /**
                  * Insertion du like dans la table 'likes'.
                  */
-                $stmt = $conn->prepare("INSERT INTO likes (user_id, comment_id) VALUES (?, ?)");
+                $stmt = $conn->prepare("INSERT INTO likes (id_users, comment_id) VALUES (?, ?)");
                 if (!$stmt) {
                     throw new Exception('Erreur de préparation de la requête d\'insertion.');
                 }
-                $stmt->bind_param("ii", $user_id, $comment_id);
+                $stmt->bind_param("ii", $id_users, $comment_id);
                 if (!$stmt->execute()) {
                     throw new Exception('Erreur lors de l\'exécution de l\'insertion du like.');
                 }
@@ -165,11 +165,11 @@ if (isset($_POST['action']) && isset($_POST['comment_id'])) {
              */
 
             // Préparation de la requête pour vérifier l'existence du like
-            $stmt = $conn->prepare("SELECT * FROM likes WHERE user_id = ? AND comment_id = ?");
+            $stmt = $conn->prepare("SELECT * FROM likes WHERE id_users = ? AND comment_id = ?");
             if (!$stmt) {
                 throw new Exception('Erreur de préparation de la requête.');
             }
-            $stmt->bind_param("ii", $user_id, $comment_id);
+            $stmt->bind_param("ii", $id_users, $comment_id);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -181,11 +181,11 @@ if (isset($_POST['action']) && isset($_POST['comment_id'])) {
                 /**
                  * Suppression du like de la table 'likes'.
                  */
-                $stmt = $conn->prepare("DELETE FROM likes WHERE user_id = ? AND comment_id = ?");
+                $stmt = $conn->prepare("DELETE FROM likes WHERE id_users = ? AND comment_id = ?");
                 if (!$stmt) {
                     throw new Exception('Erreur de préparation de la requête de suppression.');
                 }
-                $stmt->bind_param("ii", $user_id, $comment_id);
+                $stmt->bind_param("ii", $id_users, $comment_id);
                 if (!$stmt->execute()) {
                     throw new Exception('Erreur lors de l\'exécution de la suppression du like.');
                 }

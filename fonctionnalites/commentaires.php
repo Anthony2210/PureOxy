@@ -25,28 +25,6 @@ if (empty($_SESSION['csrf_token'])) {
 $csrf_token = $_SESSION['csrf_token'];
 
 /**
- * Création de la table 'commentaire' avec une collation compatible
- */
-$createTableQuery = "CREATE TABLE IF NOT EXISTS `commentaire` (
-  `id_comm` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `page` varchar(255) NOT NULL,
-  `parent_id` int DEFAULT NULL,
-  `content` text NOT NULL,
-  `likes` int DEFAULT '0',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `id_users` int DEFAULT NULL,
-  PRIMARY KEY (`id_comm`),
-  KEY `user_id` (`user_id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `fk_users_commentaire` (`id_users`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
-
-if (!$conn->query($createTableQuery)) {
-    die("Erreur lors de la création de la table 'commentaire' : " . $conn->error);
-}
-
-/**
  * Récupère le nom de la ville depuis les paramètres GET et définit la page courante.
  */
 if (isset($_GET['ville'])) {
@@ -60,23 +38,60 @@ if (isset($_GET['ville'])) {
  * Classe représentant un commentaire.
  */
 class Commentaire {
+    /**
+     * @var int Identifiant du commentaire.
+     */
     public $id;
-    public $user_id;
+
+    /**
+     * @var int Identifiant de l'utilisateur qui a posté le commentaire.
+     */
+    public $id_users;
+
+    /**
+     * @var string Nom d'utilisateur de l'auteur du commentaire.
+     */
     public $username;
+
+    /**
+     * @var string Contenu du commentaire.
+     */
     public $content;
+
+    /**
+     * @var int Nombre de likes sur le commentaire.
+     */
     public $likes;
+
+    /**
+     * @var string Date et heure de création du commentaire.
+     */
     public $created_at;
+
+    /**
+     * @var array Tableau des réponses au commentaire.
+     */
     public $replies = [];
 
+    /**
+     * Constructeur de la classe Commentaire.
+     *
+     * @param array $data Données du commentaire provenant de la base de données.
+     */
     public function __construct($data) {
         $this->id = $data['id'];
-        $this->user_id = $data['user_id'];
+        $this->id_users = $data['id_users'];
         $this->username = $data['username'];
         $this->content = $data['content'];
         $this->likes = $data['likes'];
         $this->created_at = $data['created_at'];
     }
 
+    /**
+     * Ajoute une réponse au commentaire.
+     *
+     * @param Commentaire $reply Réponse à ajouter.
+     */
     public function addReply($reply) {
         $this->replies[] = $reply;
     }
@@ -84,6 +99,11 @@ class Commentaire {
 
 /**
  * Récupère les commentaires et leurs réponses depuis la base de données.
+ *
+ * @param string   $page       Page actuelle pour laquelle récupérer les commentaires.
+ * @param int|null $parent_id Identifiant du commentaire parent. NULL pour les commentaires principaux.
+ *
+ * @return Commentaire[] Tableau d'objets Commentaire.
  */
 function getComments($page, $parent_id = null) {
     global $conn;
@@ -91,7 +111,7 @@ function getComments($page, $parent_id = null) {
 
     $sql = "SELECT c.*, u.username 
             FROM commentaire c 
-            INNER JOIN users u ON c.user_id = u.id 
+            INNER JOIN users u ON c.id_users = u.id 
             WHERE c.page = ? AND ";
     if (is_null($parent_id)) {
         $sql .= "c.parent_id IS NULL ";
@@ -123,6 +143,10 @@ function getComments($page, $parent_id = null) {
 
 /**
  * Affiche les commentaires et leurs réponses de manière récursive.
+ *
+ * @param Commentaire[] $comments Tableau d'objets Commentaire à afficher.
+ *
+ * @return void
  */
 function displayComments($comments) {
     global $csrf_token, $conn;
@@ -137,27 +161,32 @@ function displayComments($comments) {
         echo '<p>' . nl2br(htmlspecialchars($comment->content, ENT_QUOTES, 'UTF-8')) . '</p>';
         echo '<div class="comment-actions">';
         // Formulaire de like
-        if (isset($_SESSION['user_id'])) {
-            $stmt_like = $conn->prepare("SELECT * FROM likes WHERE user_id = ? AND comment_id = ?");
-            $stmt_like->bind_param("ii", $_SESSION['user_id'], $comment->id);
+        if (isset($_SESSION['id_users'])) {
+            // Vérifier si l'utilisateur a déjà liké ce commentaire
+            $stmt_like = $conn->prepare("SELECT * FROM likes WHERE id_users = ? AND comment_id = ?");
+            $stmt_like->bind_param("ii", $_SESSION['id_users'], $comment->id);
             $stmt_like->execute();
             $result_like = $stmt_like->get_result();
 
             if ($result_like->num_rows == 0) {
+                // L'utilisateur n'a pas liké
                 echo '<form method="post" class="like-form" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '">';
                 echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') . '">';
                 echo '<button type="submit"><i class="fas fa-thumbs-up"></i> J\'aime (<span class="like-count">' . htmlspecialchars($comment->likes, ENT_QUOTES, 'UTF-8') . '</span>)</button>';
                 echo '</form>';
             } else {
+                // L'utilisateur a déjà liké
                 echo '<form method="post" class="unlike-form" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '">';
                 echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') . '">';
                 echo '<button type="submit"><i class="fas fa-thumbs-down"></i> Je n\'aime plus (<span class="like-count">' . htmlspecialchars($comment->likes, ENT_QUOTES, 'UTF-8') . '</span>)</button>';
                 echo '</form>';
             }
 
+            // Bouton pour répondre
             echo '<button class="reply-button" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '"><i class="fas fa-reply"></i> Répondre</button>';
 
-            if ($comment->user_id == $_SESSION['user_id']) {
+            // Bouton de suppression si l'utilisateur est l'auteur
+            if ($comment->id_users == $_SESSION['id_users']) {
                 echo '<button class="delete-comment-button" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '"><i class="fas fa-trash-alt"></i> Supprimer</button>';
             }
         } else {
@@ -166,6 +195,7 @@ function displayComments($comments) {
         echo '</div>';
         echo '</div>';
 
+        // Afficher les réponses
         if (!empty($comment->replies)) {
             echo '<ul class="replies">';
             displayComments($comment->replies);
@@ -179,9 +209,20 @@ function displayComments($comments) {
 
 <div class="comment-section">
     <h3>Commentaires</h3>
-    <div id="message-container"></div>
+
+    <!-- Conteneur pour les messages -->
+    <div id="message-container">
+        <?php
+        // Les messages d'erreur et de succès seront affichés ici
+        ?>
+    </div>
     <?php
-    $comments = getComments($page);
+    /**
+     * Récupère et affiche les commentaires principaux pour la page courante.
+     */
+    // Récupérer les commentaires principaux
+    $comments = getComments($page); // Appel mis à jour
+
     if (!empty($comments)) {
         echo '<ul class="comments">';
         displayComments($comments);
@@ -190,11 +231,15 @@ function displayComments($comments) {
         echo '<p>Soyez le premier à commenter cette page !</p>';
     }
 
-    if (isset($_SESSION['user_id'])) {
+    /**
+     * Affiche le formulaire pour ajouter un nouveau commentaire si l'utilisateur est connecté.
+     */
+    if (isset($_SESSION['id_users'])) {
         echo '<form method="post" class="comment-form" id="comment-form">';
         echo '<textarea name="content" placeholder="Votre commentaire..." required></textarea>';
         echo '<input type="hidden" name="parent_id" id="parent_id" value="">';
         echo '<input type="hidden" name="page" value="' . htmlspecialchars($page, ENT_QUOTES, 'UTF-8') . '">';
+        // Jeton CSRF
         echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') . '">';
         echo '<button type="submit" name="add_comment">Poster</button>';
         echo '</form>';

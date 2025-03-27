@@ -22,7 +22,7 @@ if (session_status() == PHP_SESSION_NONE) {
  *
  * Si l'utilisateur n'est pas connecté, renvoie une réponse JSON d'erreur et termine le script.
  */
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id_users'])) {
     echo json_encode([
         'success' => false,
         'message' => 'Vous devez être connecté pour supprimer un commentaire.'
@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+$id_users = $_SESSION['id_users'];
 
 /**
  * Vérifie la validité du jeton CSRF.
@@ -53,18 +53,18 @@ if (
  *
  * @param mysqli $conn        Connexion à la base de données.
  * @param int    $comment_id  Identifiant du commentaire.
- * @param int    $user_id     Identifiant de l'utilisateur.
+ * @param int    $id_users     Identifiant de l'utilisateur.
  *
  * @return bool Retourne true si le commentaire existe et appartient à l'utilisateur, sinon false.
  */
-function isUserComment($conn, $comment_id, $user_id) {
-    $stmt = $conn->prepare("SELECT id FROM commentaire WHERE id = ? AND user_id = ?");
+function isUserComment($conn, $comment_id, $id_users) {
+    $stmt = $conn->prepare("SELECT id FROM commentaire WHERE id = ? AND id_users = ?");
     if (!$stmt) {
         // Journalisation de l'erreur côté serveur
         error_log("Erreur de préparation de la requête SQL dans isUserComment: " . $conn->error);
         return false;
     }
-    $stmt->bind_param("ii", $comment_id, $user_id);
+    $stmt->bind_param("ii", $comment_id, $id_users);
     $stmt->execute();
     $result = $stmt->get_result();
     $exists = $result->num_rows > 0;
@@ -144,9 +144,9 @@ function hideComment($conn, $comment_id) {
  * Fonction principale pour traiter la suppression d'un commentaire.
  *
  * @param mysqli $conn        Connexion à la base de données.
- * @param int    $user_id     Identifiant de l'utilisateur.
+ * @param int    $id_users     Identifiant de l'utilisateur.
  */
-function processDeleteComment($conn, $user_id) {
+function processDeleteComment($conn, $id_users) {
     // Vérifie si les paramètres POST requis sont présents
     if (isset($_POST['action'], $_POST['comment_id']) && $_POST['action'] === 'delete_comment') {
         $comment_id = intval($_POST['comment_id']);
@@ -161,7 +161,7 @@ function processDeleteComment($conn, $user_id) {
         }
 
         // Vérifie que le commentaire appartient à l'utilisateur
-        if (!isUserComment($conn, $comment_id, $user_id)) {
+        if (!isUserComment($conn, $comment_id, $id_users)) {
             echo json_encode([
                 'success' => false,
                 'message' => 'Commentaire introuvable ou ne vous appartient pas.'
@@ -214,5 +214,5 @@ function processDeleteComment($conn, $user_id) {
 }
 
 // Traitement principal
-processDeleteComment($conn, $user_id);
+processDeleteComment($conn, $id_users);
 ?>

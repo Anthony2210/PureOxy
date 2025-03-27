@@ -1,279 +1,257 @@
-/* ========================================================================
-   details.css
-   Styles spécifiques pour la page de détails
-   ======================================================================== */
-
-/**
- * Details Page General Styles
- * ---------------------------------------
- * Styles généraux pour la page de détails.
- */
-#details-page {
-    font-family: 'League Spartan', sans-serif;
-    background-color: #F9F9E9;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-/**
- * Headers Styles
- * ---------------------------------------
- * Styles pour les titres principaux et secondaires.
- */
-#details-page h1, #details-page h2 {
-    color: #6B8E23;
-    margin-bottom: 20px;
-}
-
-#details-page h1 {
-    font-size: 2.5em;
-    text-align: center;
-}
-
-#details-page h2 {
-    font-size: 2em;
-    margin-top: 40px;
-}
-
-/**
- * Container Styles
- * ---------------------------------------
- * Styles pour le conteneur principal de la page de détails.
- */
-#details-page.container {
+/* Conteneur global */
+.details-container {
+    display: flex;
+    gap: 20px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 40px auto;
+    font-family: 'League Spartan', sans-serif;
+    padding: 0 20px;
+}
+
+/* === Colonne gauche === */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 350px; /* Largeur fixe (ajuste si besoin) */
+}
+
+/* Bloc infos Ville */
+.box-ville {
+    background: white;
     padding: 20px;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/**
- * Introduction Section
- * ---------------------------------------
- * Styles pour la section d'introduction.
- */
-#intro {
-    padding: 30px;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 40px;
-    border: 2px solid #2d6a4f;
+.ville-title {
+    margin: 0 0 10px 0;
+    font-size: 1.8em;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
 }
 
-#intro p {
-    font-size: 1.2em;
-    margin: 10px 0;
-}
-
-/**
- * Arrondissement Selector
- * ---------------------------------------
- * Styles pour le sélecteur d'arrondissement.
- */
-#arrondissement-select {
-    width: 300px;
-    margin: 0 auto 30px;
-    display: block;
+.grille-texte {
+    margin-bottom: 15px;
+    color: grey;
+    background-color: rgba(255,255,255,0.8);
     padding: 10px;
-    font-size: 1em;
-    background-color: #fff;
-    border: 1px solid #6B8E23;
-    border-radius: 4px;
-    color: #333;
+    border-radius: 8px;
+    font-style: italic;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
 }
 
-/**
- * Table Styles
- * ---------------------------------------
- * Styles pour les tableaux de données.
- */
+/* Détails de la ville */
+.city-details {
+    display: block;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 8px;
+
+}
+.city-detail {
+    margin-bottom: 8px;
+    display: block;
+    color: black;
+
+}
+
+/* Bloc Classement Polluants */
+.box-classement {
+    background: #fff;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.polluants-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: black;
+    border-bottom: 2px solid black;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
 .table {
+    border: 2px solid black;
+}
+.table-polluants {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 30px;
-    font-size: 0.95em;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.9em;
+    background-color: #fcfcf7;
+    overflow: hidden;
+    border: 2px solid black;
 }
-
-.table th,
-.table td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-.table th {
-    background-color: darkolivegreen;
-    color: white;
-    font-weight: bold;
-    position: sticky;
-    top: 0;
-}
-
-.table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.table tr:hover {
-    background-color: #f1f1f1;
-}
-
-.table caption {
-    caption-side: top;
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    color: darkolivegreen;
-    font-weight: bold;
-}
-
-/**
- * Charts Section
- * ---------------------------------------
- * Styles pour la section des graphiques.
- */
-#emissionsChart {
-    max-width: 100%;
-    height: auto;
-    margin: 40px auto;
-    display: block;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-/**
- * Effects Section
- * ---------------------------------------
- * Styles pour la section des effets.
- */
-#effets {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    margin-top: 40px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#effets p {
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: #555;
-}
-
-/**
- * IQA Section
- * ---------------------------------------
- * Styles pour la section de l'IQA.
- */
-#details-page #iqa h2 {
-    color: #6B8E23;
-    margin-bottom: 20px;
-}
-
-#details-page #iqa p {
-    font-size: 1.2em;
-}
-
-/**
- * Favorite Icon
- * ---------------------------------------
- * Styles pour l'icône de favori.
- */
-.favorite-icon {
-    font-size: 1.2em;
-    margin-left: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #e74c3c;
-}
-
-.favorite-icon .fas.fa-heart {
-    color: #e74c3c;
-}
-
-.favorite-icon .far.fa-heart {
-    color: #ccc;
-}
-
-.favorite-icon:hover {
-    opacity: 0.7;
-}
-
-/**
- * Error Messages
- * ---------------------------------------
- * Styles pour les messages d'erreur.
- */
-.error-message {
-    color: #e74c3c;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-/**
- * Navigation Tabs
- * ---------------------------------------
- * Styles pour les onglets de navigation.
- */
-.nav-tabs .nav-link {
-    color: #6b8e23;
-    font-weight: bold;
-}
-
-.nav-tabs .nav-link.active {
-    background-color: #6b8e23;
-    color: #fff;
-}
-
-/**
- * Details d'une ville non trouvée ou non existante
- * Styles pour la page indiquant qu'une ville n'a pas été trouvée.
- */
-#city-not-found {
-    padding: 50px 20px;
-    text-align: center;
-}
-
-#city-not-found h1 {
-    font-size: 2em;
-    color: #e74c3c;
-    margin-bottom: 20px;
-}
-
-#city-not-found p {
-    font-size: 1.2em;
+.table-polluants thead th {
+    background: linear-gradient(135deg, #e0e0d1 0%, #f0f0f0 100%);
     color: #333;
+    text-align: left;
+    padding: 8px;
+    border-bottom: 2px solid black;
+    font-weight: 700;
+}
+.table-polluants tbody td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    font-weight: 500;
+    color: #444;
+}
+.table-polluants tr:nth-child(even) {
+    background: #fafafa;
+}
+.table-polluants tr:hover {
+    background-color: #f2f2e9;
+}
+.aucun-classement {
+    font-style: italic;
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
+    background-color: #f9f9e9;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
-#city-not-found ul {
-    list-style-type: none;
+/* === Colonne droite : zone principale (onglets) === */
+.right-column {
+    flex: 1; /* prend tout l'espace restant */
+}
+
+/* Conteneur des onglets */
+.tabs-container {
+    border: 2px solid #333a20;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fff;
+    color : black;
+}
+
+/* Liste d'onglets (Historique, Prédictions) */
+.tabs {
+    list-style: none;
+    display: flex;
+    margin: 0;
     padding: 0;
+    border-bottom: 2px solid black;
+}
+.tabs li {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
+    cursor: pointer;
+    border-top: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-left: 2px solid transparent;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.tabs li.active {
+    border-top: 2px solid #333a20;
+    border-right: 2px solid #333a20;
+    border-left: 2px solid #333a20;
+    background-color: #f8f9fa;
+    font-weight: bold;
 }
 
-#city-not-found li {
-    margin: 10px 0;
-    font-size: 1.1em;
+/* Contenu principal des onglets */
+.tab-content {
+    margin-top: 15px;
+    position: relative;
 }
 
-#city-not-found a {
-    color: darkolivegreen;
-    text-decoration: none;
+/* Chaque panneau d'onglet (Historique, Prédictions) */
+.tab-panel {
+    display: none;   /* Masqué par défaut */
+}
+.tab-panel.active {
+    display: block;  /* Affiché quand actif */
 }
 
-#city-not-found a:hover {
-    text-decoration: underline;
+/* Sous-onglets (Bar, Ligne, Tableau) */
+.sub-tabs-container {
+    margin-top: 15px;
+    border: 2px solid #333a20;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+.sub-tabs {
+    list-style: none;
+    display: flex;
+    margin: 0 0 10px 0;
+    padding: 0;
+    border-bottom: 2px solid #333a20;
+}
+.sub-tabs li {
+    flex: 1;
+    padding: 8px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-top: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-left: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.sub-tabs li.active {
+    border-top: 2px solid #333a20;
+    border-right: 2px solid #333a20;
+    border-left: 2px solid #333a20;
+    border-bottom: 2px solid white;
+    background-color: #e9f0d8;
+    font-weight: bold;
 }
 
-/**
- * Onglet Comparaison
- * ---------------------------------------
- */
+/* Important : masquage des sous-onglets inactifs */
+.sub-tab-panel {
+    display: none;
+}
+.sub-tab-panel.active {
+    display: block;
+}
 
-/* Style pour les champs désactivés  */
-#comparaison input[disabled] {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-    opacity: 1;
+/* Chart : occupe la largeur de son parent, hauteur fixée ou auto */
+.chart {
+    display: block;
+    width: 100%;
+    height: 400px; /* Ajuste la hauteur du graphique si besoin */
+    margin: 0 auto;
+}
+
+/* Le tableau peut avoir une zone scrollable si trop grand */
+.table-scroll {
+    max-height: 400px; /* Ajuste si tu veux */
+    overflow-y: auto;  /* Barre de défilement verticale */
+}
+
+/* Filtres (polluant, mois) */
+.filter-container {
+    margin-bottom: 10px;
+}
+.filter-container label {
+    margin-right: 5px;
+    font-weight: bold;
+}
+.filter-container select {
+    margin-right: 15px;
+    padding: 4px 6px;
+    font-size: 0.9em;
 }

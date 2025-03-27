@@ -16,18 +16,18 @@ require_once('../bd/bd.php');
  *
  * Si l'utilisateur n'est pas connecté, afficher un message d'invitation à se connecter et arrêter le script.
  */
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id_users'])) {
     echo '<p>Veuillez vous connecter pour voir vos demandes.</p>';
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+$id_users = $_SESSION['id_users'];
 
 /**
  * Préparer et exécuter la requête SQL pour récupérer les demandes de l'utilisateur.
  */
-$stmt = $conn->prepare("SELECT sujet, message, date_demande FROM messages_contact WHERE user_id = ? ORDER BY date_demande DESC");
-$stmt->bind_param("i", $user_id);
+$stmt = $conn->prepare("SELECT sujet, message, date_demande FROM messages_contact WHERE id_users = ? ORDER BY date_demande DESC");
+$stmt->bind_param("i", $id_users);
 $stmt->execute();
 $result = $stmt->get_result();
 
