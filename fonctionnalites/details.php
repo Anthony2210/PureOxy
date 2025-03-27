@@ -1,19 +1,15 @@
 <?php
 session_start();
 ob_start();
-
 require_once '../bd/bd.php'; // Connexion BD
 
-// Vérification paramètre GET ?ville
 if (!isset($_GET['ville']) || empty($_GET['ville'])) {
     echo "Aucune ville spécifiée !";
     exit;
 }
 $nomVille = $_GET['ville'];
 
-// ---------------------------------------------------------------------
-// 1) Récupération infos de la ville
-// ---------------------------------------------------------------------
+// Récupération infos de la ville
 $sqlVille = $conn->prepare("
     SELECT 
         id_ville, 
@@ -41,11 +37,9 @@ if (!$infoVille) {
     echo "Ville introuvable dans la base de données.";
     exit;
 }
-$idVille = (int) $infoVille['id_ville'];
+$idVille = (int)$infoVille['id_ville'];
 
-// ---------------------------------------------------------------------
-// 2) Récupération du rang par polluant (classement global)
-// ---------------------------------------------------------------------
+// Récupération du classement polluants
 $sqlPolluants = $conn->prepare("
     SELECT 
       t1.polluant,
@@ -66,144 +60,42 @@ $sqlPolluants = $conn->prepare("
 ");
 $sqlPolluants->bind_param("i", $idVille);
 $sqlPolluants->execute();
-$resPoll   = $sqlPolluants->get_result();
+$resPoll = $sqlPolluants->get_result();
 $listePolluants = [];
 while ($row = $resPoll->fetch_assoc()) {
     $listePolluants[] = $row;
 }
 $sqlPolluants->close();
 
-// ---------------------------------------------------------------------
-// 3) Récupération des polluants disponibles pour cette ville
-//    (pour limiter la liste de polluants dans le <select>)
-// ---------------------------------------------------------------------
-$polluantsDispos = []; // ex: ['NO','NO2','O3','PM10',...]
-$sqlDist = $conn->prepare("
-    SELECT DISTINCT polluant
-    FROM moy_pollution_villes
-    WHERE id_ville = ?
-");
-$sqlDist->bind_param("i", $idVille);
-$sqlDist->execute();
-$resDist = $sqlDist->get_result();
-while ($p = $resDist->fetch_assoc()) {
-    $polluantsDispos[] = $p['polluant'];
-}
-$sqlDist->close();
-
-/**
- * Fonction pour l’icône polluant
- */
-function getPolluantIcon($polluant) {
-    switch (strtoupper($polluant)) {
-        case 'NO':   return '<i class="fa-solid fa-cloud"></i> NO';
-        case 'NO2':  return '<i class="fa-solid fa-cloud-bolt"></i> NO2';
-        case 'O3':   return '<i class="fa-solid fa-wind"></i> O3';
-        case 'PM10': return '<i class="fa-solid fa-cloud-meatball"></i> PM10';
-        case 'PM2.5':return '<i class="fa-solid fa-smog"></i> PM2.5';
-        case 'SO2':  return '<i class="fa-solid fa-cloud-showers-water"></i> SO2';
-        case 'CO':   return '<i class="fa-solid fa-cloud-rain"></i> CO';
-        default:     return '<i class="fa-solid fa-circle-question"></i> ' . htmlspecialchars($polluant);
+// Extraction des polluants uniques pour le filtre
+$uniquePolluants = [];
+foreach ($listePolluants as $poll) {
+    if (!in_array($poll['polluant'], $uniquePolluants)) {
+        $uniquePolluants[] = $poll['polluant'];
     }
 }
 
-// ---------------------------------------------------------------------
-// 4) Mois disponibles (historique vs prédictions)
-// ---------------------------------------------------------------------
-$monthsHistorique = [
-    'moy_janv2023' => 'Janv. 2023','moy_fev2023' => 'Févr. 2023','moy_mar2023' => 'Mars 2023',
-    'moy_avril2023'=> 'Avr. 2023','moy_mai2023'  => 'Mai 2023','moy_juin2023'  => 'Juin 2023',
-    'moy_juil2023' => 'Juil. 2023','moy_aout2023'=> 'Août 2023','moy_sept2023' => 'Sept. 2023',
-    'moy_oct2023'  => 'Oct. 2023','moy_nov2023' => 'Nov. 2023','moy_dec2023'  => 'Déc. 2023',
-    'moy_janv2024' => 'Janv. 2024','moy_fev2024' => 'Févr. 2024','moy_mar2024' => 'Mars 2024',
-    'moy_avril2024'=> 'Avr. 2024','moy_mai2024'  => 'Mai 2024','moy_juin2024'  => 'Juin 2024',
-    'moy_juil2024' => 'Juil. 2024','moy_aout2024'=> 'Août 2024','moy_sept2024' => 'Sept. 2024',
-    'moy_oct2024'  => 'Oct. 2024','moy_nov2024' => 'Nov. 2024','moy_dec2024'  => 'Déc. 2024',
-    'moy_janv2025' => 'Janv. 2025'
-];
-$monthsPrediction = [
-    'moy_predic_janv2025' => 'Janv. 2025','moy_predic_fev2025' => 'Févr. 2025','moy_predic_mars2025'=>'Mars 2025',
-    'moy_predic_avril2025'=> 'Avr. 2025','moy_predic_mai2025'  => 'Mai 2025','moy_predic_juin2025'=>'Juin 2025',
-    'moy_predic_juil2025' => 'Juil. 2025','moy_predic_aout2025'=> 'Août 2025','moy_predic_sept2025'=>'Sept. 2025',
-    'moy_predic_oct2025'  => 'Oct. 2025','moy_predic_nov2025' => 'Nov. 2025','moy_predic_dec2025'=>'Déc. 2025',
-    'moy_predic_janv2026' => 'Janv. 2026'
-];
-
-// ---------------------------------------------------------------------
-// 5) Récupération des filtres
-// ---------------------------------------------------------------------
-$tab        = isset($_GET['tab']) ? $_GET['tab'] : 'historique';
-$filtrePoll = isset($_GET['polluant']) ? trim($_GET['polluant']) : '';
-$filtreMois = isset($_GET['mois']) ? trim($_GET['mois']) : '';
-
-// On récupère toutes les colonnes possibles
-$allHistCols = array_keys($monthsHistorique);
-$allPredCols = array_keys($monthsPrediction);
-$allCols     = array_merge($allHistCols, $allPredCols);
-$colsStr     = implode(',', $allCols);
-
-// 6) Requête pour moy_pollution_villes (moyennes mensuelles)
-$sql = "SELECT polluant, $colsStr
-        FROM moy_pollution_villes
-        WHERE id_ville = ?";
-if($filtrePoll !== '') {
-    $sql .= " AND polluant = ?";
+// Génération des options pour le filtre des mois
+// Pour l'onglet Historique : de janvier 2023 à janvier 2025 inclus
+$historiqueMonths = [];
+$months = ["janv", "fev", "mars", "avril", "mai", "juin", "juil", "aout", "sept", "oct", "nov", "dec"];
+for ($year = 2023; $year <= 2025; $year++) {
+    foreach ($months as $index => $mon) {
+        if ($year == 2025 && $index > 0) break;
+        $value = $mon . $year; // ex: "janv2023"
+        $display = ucfirst($mon) . ". " . $year;
+        $historiqueMonths[] = ["value" => $value, "display" => $display];
+    }
 }
-$stmt = $conn->prepare($sql);
-if($filtrePoll !== '') {
-    $stmt->bind_param("is", $idVille, $filtrePoll);
-} else {
-    $stmt->bind_param("i", $idVille);
-}
-$stmt->execute();
-$resMoy = $stmt->get_result();
-$dataMoy = [];
-while($r = $resMoy->fetch_assoc()) {
-    $dataMoy[] = $r;
-}
-$stmt->close();
 
-// 7) Récupération des données journalières (si un mois est choisi)
-$dailyData = [];
-if($filtreMois !== '') {
-    $isPrediction = (strpos($filtreMois, 'predic') !== false);
-    $temp = str_replace(['moy_', 'predic_'], '', $filtreMois);
-    // parse le mois/année
-    $mapMois = [
-        'janv'=>1,'fev'=>2,'févr'=>2,'mar'=>3,'mars'=>3,'avril'=>4,'avr'=>4,'mai'=>5,'juin'=>6,
-        'juil'=>7,'aout'=>8,'sept'=>9,'oct'=>10,'nov'=>11,'dec'=>12,'déc'=>12
-    ];
-    if(preg_match('/^([a-zé]+)([0-9]+)/i', $temp, $m)) {
-        $moisStr  = $m[1];
-        $anneeStr = $m[2];
-        $moisNum  = isset($mapMois[$moisStr]) ? $mapMois[$moisStr] : 1;
-        $anneeNum = (int)$anneeStr;
-
-        $tableSource = $isPrediction ? 'prediction_cities' : 'all_years_cleaned_daily';
-        $colValeur   = $isPrediction ? 'valeur_predite' : 'valeur_journaliere';
-
-        $sql2 = "SELECT jour, polluant, $colValeur AS val
-                 FROM $tableSource
-                 WHERE id_ville = ?
-                   AND YEAR(jour)=? 
-                   AND MONTH(jour)=?";
-        if($filtrePoll !== '') {
-            $sql2 .= " AND polluant=? ";
-        }
-        $sql2 .= " ORDER BY jour ASC";
-
-        $stmt2 = $conn->prepare($sql2);
-        if($filtrePoll !== '') {
-            $stmt2->bind_param("iiis", $idVille, $anneeNum, $moisNum, $filtrePoll);
-        } else {
-            $stmt2->bind_param("iii", $idVille, $anneeNum, $moisNum);
-        }
-        $stmt2->execute();
-        $r2 = $stmt2->get_result();
-        while($row2 = $r2->fetch_assoc()) {
-            $dailyData[] = $row2;
-        }
-        $stmt2->close();
+// Pour l'onglet Prédictions : de janvier 2025 à janvier 2026 inclus, avec le préfixe "moy_predic_"
+$predictionsMonths = [];
+for ($year = 2025; $year <= 2026; $year++) {
+    foreach ($months as $index => $mon) {
+        if ($year == 2026 && $index > 0) break;
+        $value = "moy_predic_" . $mon . $year;
+        $display = ucfirst($mon) . ". " . $year;
+        $predictionsMonths[] = ["value" => $value, "display" => $display];
     }
 }
 ?>
@@ -212,298 +104,206 @@ if($filtreMois !== '') {
 <head>
     <meta charset="UTF-8">
     <title>PureOxy - Détails de <?php echo htmlspecialchars($infoVille['ville']); ?></title>
-
     <!-- Polices, Bootstrap, FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
     <!-- Vos styles -->
-    <link rel="stylesheet" href="../styles/details.css">
+    <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
+    <link rel="stylesheet" href="../styles/details.css">
 </head>
 <body>
-
 <?php include '../includes/header.php'; ?>
 
-<div class="details-container">
-    <!-- ======================= Bloc de gauche : infos sur la ville ======================= -->
-    <div class="bloc-ville">
-        <h1 class="ville-title">
-            <?php echo htmlspecialchars($infoVille['ville']); ?>
-        </h1>
-        <p class="grille-texte">
-            <?php echo nl2br(htmlspecialchars($infoVille['grille_densite_texte'])); ?>
-        </p>
-        <p class="info-ligne">
-            <strong><i class="fa-solid fa-user-group"></i> Population : </strong>
-            <?php echo number_format($infoVille['population'], 0, ',', ' '); ?> habitants
-        </p>
-        <p class="info-ligne">
-            <strong><i class="fa-solid fa-map-pin"></i> Département : </strong>
-            <?php echo htmlspecialchars($infoVille['departement']); ?>
-        </p>
-        <p class="info-ligne">
-            <strong><i class="fa-solid fa-location-dot"></i> Région : </strong>
-            <?php echo htmlspecialchars($infoVille['region']); ?>
-        </p>
-        <p class="info-ligne">
-            <strong><i class="fa-solid fa-map"></i> Superficie : </strong>
-            <?php echo number_format($infoVille['superficie_km2'], 0, ',', ' '); ?> km²
-        </p>
-    </div>
+<!-- Passage de la variable PHP vers JS -->
+<script>
+    var idVille = <?php echo $idVille; ?>;
+</script>
 
-    <!-- ======================= Bloc de droite : classement par polluant ======================= -->
-    <div class="bloc-polluants">
-        <h2 class="polluants-title">
-            <i class="fa-solid fa-ranking-star"></i> Classement par Polluant
-        </h2>
-        <?php if (!empty($listePolluants)): ?>
-            <table class="table-polluants">
-                <thead>
-                <tr>
-                    <th>Polluant</th>
-                    <th>Rang</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($listePolluants as $poll):
-                    $polluant = $poll['polluant'];
-                    $rang     = (int) $poll['rang'];
-                    $total    = (int) $poll['total'];
-                    ?>
-                    <tr>
-                        <td><?php echo getPolluantIcon($polluant); ?></td>
-                        <td>
-                            <i class="fa-solid fa-medal" style="color:#f4c542;"></i>
-                            <?php echo $rang . ' / ' . $total; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p class="aucun-classement">Aucun classement disponible.</p>
-        <?php endif; ?>
-    </div>
-</div>
+<<div class="details-container">
+    <!-- Colonne gauche -->
+    <div class="left-column">
+        <!-- Bloc d'informations sur la ville -->
+        <div class="box-ville">
+            <h1 class="ville-title"><?php echo htmlspecialchars($infoVille['ville']); ?></h1>
+            <p class="grille-texte">
+                <?php echo nl2br(htmlspecialchars($infoVille['grille_densite_texte'])); ?>
+            </p>
+            <div class="city-details">
+                <div class="city-detail">
+                    <i class="fa-solid fa-user-group"></i>
+                    Population : <?php echo number_format($infoVille['population'], 0, ',', ' '); ?> habitants
+                </div>
+                <div class="city-detail">
+                    <i class="fa-solid fa-map"></i>
+                    Superficie : <?php echo number_format($infoVille['superficie_km2'], 0, ',', ' '); ?> km²
+                </div>
+                <div class="city-detail">
+                    <i class="fa-solid fa-map-pin"></i>
+                    Département : <?php echo htmlspecialchars($infoVille['departement']); ?>
+                </div>
+                <div class="city-detail">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Région : <?php echo htmlspecialchars($infoVille['region']); ?>
+                </div>
+            </div>
+        </div>
 
-<hr>
-
-<!-- ====================== Onglets Historique / Prédictions ====================== -->
-<div class="container mt-4">
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link <?php echo ($tab === 'historique') ? 'active' : ''; ?>"
-               href="?ville=<?php echo urlencode($nomVille); ?>&tab=historique">
-                Historique
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?php echo ($tab === 'predictions') ? 'active' : ''; ?>"
-               href="?ville=<?php echo urlencode($nomVille); ?>&tab=predictions">
-                Prédictions
-            </a>
-        </li>
-    </ul>
-</div>
-
-<div class="container tab-content py-3">
-    <?php
-    if($tab === 'predictions'):
-        // ================== ONGLET PREDICTIONS ===================
-        ?>
-        <div class="tab-pane fade show active">
-            <h3>Prédictions (janv. 2025 à janv. 2026)</h3>
-
-            <!-- Formulaire (polluant, mois) -->
-            <form method="GET" class="form-inline mb-3">
-                <input type="hidden" name="ville" value="<?php echo htmlspecialchars($nomVille); ?>">
-                <input type="hidden" name="tab" value="predictions">
-
-                <label class="mr-2">Polluant :</label>
-                <select name="polluant" class="form-control mr-3">
-                    <option value="">-- Tous --</option>
-                    <?php foreach($polluantsDispos as $p): ?>
-                        <option value="<?php echo htmlspecialchars($p); ?>"
-                            <?php if($filtrePoll === $p) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($p); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label class="mr-2">Mois :</label>
-                <select name="mois" class="form-control mr-3">
-                    <option value="">-- Aucun --</option>
-                    <?php foreach($monthsPrediction as $col=>$label): ?>
-                        <option value="<?php echo $col; ?>"
-                            <?php if($filtreMois===$col) echo 'selected'; ?>>
-                            <?php echo $label; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <button type="submit" class="btn btn-success">Filtrer</button>
-            </form>
-
-            <!-- Tableau des moyennes mensuelles (prediction) -->
-            <table class="table table-bordered table-sm">
-                <thead class="thead-light">
-                <tr>
-                    <th>Polluant</th>
-                    <?php foreach($monthsPrediction as $col=>$label): ?>
-                        <th><?php echo $label; ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if(!empty($dataMoy)): ?>
-                    <?php foreach($dataMoy as $rowM): ?>
-                        <tr>
-                            <td><?php echo getPolluantIcon($rowM['polluant']); ?></td>
-                            <?php foreach($monthsPrediction as $col=>$label):
-                                $val = $rowM[$col];
-                                $val = (is_numeric($val)) ? round($val,2) : null;
-                                ?>
-                                <td><?php echo ($val!==null) ? $val : '-'; ?></td>
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="<?php echo 1 + count($monthsPrediction); ?>">
-                            Aucune donnée de prédiction
-                        </td></tr>
-                <?php endif; ?>
-                </tbody>
-            </table>
-
-            <?php if(!empty($filtreMois) && !empty($dailyData)): ?>
-                <h4 class="mt-4">Données journalières pour le mois sélectionné</h4>
-                <table class="table table-bordered table-sm">
+        <!-- Bloc du classement polluants -->
+        <div class="box-classement">
+            <h2 class="polluants-title">
+                <i class="fa-solid fa-ranking-star"></i> Classement par Polluant
+            </h2>
+            <?php if (!empty($listePolluants)): ?>
+                <table class="table-polluants">
                     <thead>
                     <tr>
-                        <th>Jour</th>
                         <th>Polluant</th>
-                        <th>Valeur prédite</th>
-                        <th>Unité</th>
+                        <th>Rang</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach($dailyData as $d): ?>
+                    <?php foreach ($listePolluants as $poll):
+                        $polluant = $poll['polluant'];
+                        $rang    = (int)$poll['rang'];
+                        $total   = (int)$poll['total'];
+                        ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($d['jour']); ?></td>
-                            <td><?php echo htmlspecialchars($d['polluant']); ?></td>
-                            <td><?php echo round($d['val'],2); ?></td>
-                            <td>µg-m3</td>
+                            <td><?php echo htmlspecialchars($polluant); ?></td>
+                            <td>
+                                <i class="fa-solid fa-medal" style="color:#f4c542;"></i>
+                                <?php echo $rang . ' / ' . $total; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-            <?php elseif(!empty($filtreMois)): ?>
-                <p>Aucune donnée journalière pour ce mois.</p>
+            <?php else: ?>
+                <p class="aucun-classement">Aucun classement disponible.</p>
             <?php endif; ?>
         </div>
+    </div>
 
-    <?php
-    else:
-        // ================== ONGLET HISTORIQUE ===================
-        ?>
-        <div class="tab-pane fade show active">
-            <h3>Historique (janv. 2023 à janv. 2025)</h3>
-
-            <!-- Formulaire (polluant, mois) -->
-            <form method="GET" class="form-inline mb-3">
-                <input type="hidden" name="ville" value="<?php echo htmlspecialchars($nomVille); ?>">
-                <input type="hidden" name="tab" value="historique">
-
-                <label class="mr-2">Polluant :</label>
-                <select name="polluant" class="form-control mr-3">
-                    <option value="">-- Tous --</option>
-                    <?php foreach($polluantsDispos as $p): ?>
-                        <option value="<?php echo htmlspecialchars($p); ?>"
-                            <?php if($filtrePoll === $p) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($p); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label class="mr-2">Mois :</label>
-                <select name="mois" class="form-control mr-3">
-                    <option value="">-- Aucun --</option>
-                    <?php foreach($monthsHistorique as $col=>$label): ?>
-                        <option value="<?php echo $col; ?>"
-                            <?php if($filtreMois===$col) echo 'selected'; ?>>
-                            <?php echo $label; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <button type="submit" class="btn btn-primary">Filtrer</button>
-            </form>
-
-            <!-- Tableau des moyennes mensuelles (historique) -->
-            <table class="table table-bordered table-sm">
-                <thead class="thead-light">
-                <tr>
-                    <th>Polluant</th>
-                    <?php foreach($monthsHistorique as $col=>$label): ?>
-                        <th><?php echo $label; ?></th>
-                    <?php endforeach; ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if(!empty($dataMoy)): ?>
-                    <?php foreach($dataMoy as $rowM): ?>
-                        <tr>
-                            <td><?php echo getPolluantIcon($rowM['polluant']); ?></td>
-                            <?php foreach($monthsHistorique as $col=>$label):
-                                $val = $rowM[$col];
-                                $val = (is_numeric($val)) ? round($val,2) : null;
-                                ?>
-                                <td><?php echo ($val!==null) ? $val : '-'; ?></td>
+    <!-- Colonne droite : zone principale avec les onglets -->
+    <div class="right-column">
+        <div class="tabs-container">
+            <ul class="tabs">
+                <li data-tab="historique" class="active">
+                    <i class="fa-solid fa-clock"></i> Historique
+                </li>
+                <li data-tab="predictions">
+                    <i class="fa-solid fa-forward"></i> Prédictions
+                </li>
+            </ul>
+            <div class="tab-content">
+                <!-- Onglet Historique -->
+                <div id="historique" class="tab-panel active">
+                    <div class="filter-container">
+                        <label for="pollutant-filter-historique">Polluant :</label>
+                        <select id="pollutant-filter-historique">
+                            <option value="">Tous les polluants</option>
+                            <?php foreach ($uniquePolluants as $p): ?>
+                                <option value="<?php echo htmlspecialchars($p); ?>">
+                                    <?php echo htmlspecialchars($p); ?>
+                                </option>
                             <?php endforeach; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="<?php echo 1+count($monthsHistorique); ?>">
-                            Aucune donnée
-                        </td></tr>
-                <?php endif; ?>
-                </tbody>
-            </table>
+                        </select>
+                        <label for="month-filter-historique">Mois :</label>
+                        <select id="month-filter-historique">
+                            <option value="">Tous les mois</option>
+                            <?php foreach ($historiqueMonths as $m): ?>
+                                <option value="<?php echo htmlspecialchars($m['value']); ?>">
+                                    <?php echo htmlspecialchars($m['display']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="sub-tabs-container">
+                        <ul class="sub-tabs">
+                            <li data-subtab="bar-historique" class="active">
+                                <i class="fa-solid fa-chart-bar"></i> Bar
+                            </li>
+                            <li data-subtab="line-historique">
+                                <i class="fa-solid fa-chart-line"></i> Ligne
+                            </li>
+                            <li data-subtab="table-historique">
+                                <i class="fa-solid fa-table"></i> Tableau
+                            </li>
+                        </ul>
+                        <div class="sub-tab-content">
+                            <div id="bar-historique" class="sub-tab-panel active">
+                                <canvas id="bar-chart-historique" class="chart"></canvas>
+                            </div>
+                            <div id="line-historique" class="sub-tab-panel">
+                                <canvas id="time-chart-historique" class="chart"></canvas>
+                            </div>
+                            <div id="table-historique" class="sub-tab-panel">
+                                <div class="table-scroll">
+                                    <div id="data-table-historique"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Onglet Prédictions -->
+                <div id="predictions" class="tab-panel">
+                    <div class="filter-container">
+                        <label for="pollutant-filter-predictions">Polluant :</label>
+                        <select id="pollutant-filter-predictions">
+                            <option value="">Tous les polluants</option>
+                            <?php foreach ($uniquePolluants as $p): ?>
+                                <option value="<?php echo htmlspecialchars($p); ?>">
+                                    <?php echo htmlspecialchars($p); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <label for="month-filter-predictions">Mois :</label>
+                        <select id="month-filter-predictions">
+                            <option value="">Tous les mois</option>
+                            <?php foreach ($predictionsMonths as $m): ?>
+                                <option value="<?php echo htmlspecialchars($m['value']); ?>">
+                                    <?php echo htmlspecialchars($m['display']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="sub-tabs-container">
+                        <ul class="sub-tabs">
+                            <li data-subtab="bar-predictions" class="active">
+                                <i class="fa-solid fa-chart-bar"></i> Bar
+                            </li>
+                            <li data-subtab="line-predictions">
+                                <i class="fa-solid fa-chart-line"></i> Ligne
+                            </li>
+                            <li data-subtab="table-predictions">
+                                <i class="fa-solid fa-table"></i> Tableau
+                            </li>
+                        </ul>
+                        <div class="sub-tab-content">
+                            <div id="bar-predictions" class="sub-tab-panel active">
+                                <canvas id="bar-chart-predictions" class="chart"></canvas>
+                            </div>
+                            <div id="line-predictions" class="sub-tab-panel">
+                                <canvas id="time-chart-predictions" class="chart"></canvas>
+                            </div>
+                            <div id="table-predictions" class="sub-tab-panel">
+                                <div class="table-scroll">
+                                    <div id="data-table-predictions"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Fin .tab-content -->
+        </div> <!-- Fin .tabs-container -->
+    </div> <!-- Fin .right-column -->
+</div> <!-- Fin .details-container -->
 
-            <?php if(!empty($filtreMois) && !empty($dailyData)): ?>
-                <h4 class="mt-4">Données journalières pour le mois sélectionné</h4>
-                <table class="table table-bordered table-sm">
-                    <thead>
-                    <tr>
-                        <th>Jour</th>
-                        <th>Polluant</th>
-                        <th>Valeur</th>
-                        <th>Unité</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach($dailyData as $d): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($d['jour']); ?></td>
-                            <td><?php echo htmlspecialchars($d['polluant']); ?></td>
-                            <td><?php echo round($d['val'],2); ?></td>
-                            <td>µg-m3</td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php elseif(!empty($filtreMois)): ?>
-                <p>Aucune donnée journalière pour ce mois.</p>
-            <?php endif; ?>
-        </div>
-    <?php
-    endif;
-    ?>
-</div>
 
+<!-- Inclusion des scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../script/details.js"></script>
 <?php include '../includes/footer.php'; ?>
-
 </body>
 </html>

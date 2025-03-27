@@ -1,177 +1,143 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-    // HISTORIQUE
-    const btnHistFilter = document.getElementById('btnHistFilter');
-    if (btnHistFilter) {
-        btnHistFilter.addEventListener('click', function() {
-            const polluant = document.getElementById('histPolluant').value;
-            const mois     = document.getElementById('histMois').value;
-            loadDataAjax('historique', polluant, mois, 'histMonthlyContainer', 'histDailyContainer');
+document.addEventListener('DOMContentLoaded', function () {
+    // Gestion du changement d'onglet principal
+    const tabs = document.querySelectorAll('.tabs li');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            const selectedTab = this.getAttribute('data-tab');
+            document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(selectedTab).classList.add('active');
+            // Réinitialiser les sous-onglets du panneau actif
+            const subTabs = document.querySelectorAll(`#${selectedTab} .sub-tabs li`);
+            subTabs.forEach((st, index) => st.classList.toggle('active', index === 0));
+            const subPanels = document.querySelectorAll(`#${selectedTab} .sub-tab-panel`);
+            subPanels.forEach((panel, index) => panel.classList.toggle('active', index === 0));
+            loadTabData(selectedTab);
         });
-    }
-
-    // PREDICTIONS
-    const btnPredFilter = document.getElementById('btnPredFilter');
-    if (btnPredFilter) {
-        btnPredFilter.addEventListener('click', function() {
-            const polluant = document.getElementById('predPolluant').value;
-            const mois     = document.getElementById('predMois').value;
-            loadDataAjax('predictions', polluant, mois, 'predMonthlyContainer', 'predDailyContainer');
-        });
-    }
-
-});
-
-/**
- * Charge les données en AJAX depuis details_data.php
- * @param {string} tab - 'historique' ou 'predictions'
- * @param {string} polluant
- * @param {string} mois
- * @param {string} monthlyContainerId - ID du div pour le tableau mensuel
- * @param {string} dailyContainerId   - ID du div pour le tableau journalier
- */
-function loadDataAjax(tab, polluant, mois, monthlyContainerId, dailyContainerId) {
-    // ID_VILLE est défini dans details.php
-    const idVille = window.ID_VILLE || 0;
-
-    // Construction de l’URL
-    const params = new URLSearchParams({
-        idVille: idVille,
-        tab: tab
     });
-    if (polluant) {
-        params.append('polluant', polluant);
+
+    // Gestion du changement de sous-onglets
+    const subTabs = document.querySelectorAll('.sub-tabs li');
+    subTabs.forEach(subTab => {
+        subTab.addEventListener('click', function () {
+            const parent = this.closest('.tab-panel');
+            const selectedSubTab = this.getAttribute('data-subtab');
+            parent.querySelectorAll('.sub-tabs li').forEach(st => st.classList.remove('active'));
+            this.classList.add('active');
+            parent.querySelectorAll('.sub-tab-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === selectedSubTab);
+            });
+        });
+    });
+
+    // Sélecteurs de filtres
+    const historiquePollutantFilter = document.getElementById('pollutant-filter-historique');
+    const historiqueMonthFilter = document.getElementById('month-filter-historique');
+    const predictionsPollutantFilter = document.getElementById('pollutant-filter-predictions');
+    const predictionsMonthFilter = document.getElementById('month-filter-predictions');
+
+    if (historiquePollutantFilter) {
+        historiquePollutantFilter.addEventListener('change', () => loadTabData('historique'));
     }
-    if (mois) {
-        params.append('mois', mois);
+    if (historiqueMonthFilter) {
+        historiqueMonthFilter.addEventListener('change', () => loadTabData('historique'));
+    }
+    if (predictionsPollutantFilter) {
+        predictionsPollutantFilter.addEventListener('change', () => loadTabData('predictions'));
+    }
+    if (predictionsMonthFilter) {
+        predictionsMonthFilter.addEventListener('change', () => loadTabData('predictions'));
     }
 
-    fetch('details_data.php?' + params.toString(), { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            // data.monthlyData, data.dailyData
-            renderMonthlyTable(data.monthlyData, tab, monthlyContainerId);
-            renderDailyTable(data.dailyData, tab, dailyContainerId);
+    // Fonction de chargement des données via AJAX
+    function loadTabData(tab) {
+        let pollutant = '';
+        let month = '';
+        if (tab === 'historique') {
+            pollutant = historiquePollutantFilter.value;
+            month = historiqueMonthFilter.value;
+        } else if (tab === 'predictions') {
+            pollutant = predictionsPollutantFilter.value;
+            month = predictionsMonthFilter.value;
+        }
+        const params = new URLSearchParams();
+        params.append('tab', tab);
+        params.append('pollutant', pollutant);
+        params.append('month', month);
+        params.append('id_ville', idVille);
+
+        fetch('../fonctionnalites/get_tab_data.php', {
+            method: 'POST',
+            body: params,
         })
-        .catch(err => {
-            console.error('Erreur AJAX : ', err);
-        });
-}
-
-/**
- * Construit le tableau HTML des moyennes mensuelles
- * @param {Array} monthlyData
- * @param {string} tab
- * @param {string} containerId
- */
-function renderMonthlyTable(monthlyData, tab, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    // Effacer le conteneur avant
-    container.innerHTML = '';
-
-    // Définition des colonnes selon l’onglet
-    const monthsHistorique = [
-        'moy_janv2023','moy_fev2023','moy_mar2023','moy_avril2023','moy_mai2023','moy_juin2023',
-        'moy_juil2023','moy_aout2023','moy_sept2023','moy_oct2023','moy_nov2023','moy_dec2023',
-        'moy_janv2024','moy_fev2024','moy_mar2024','moy_avril2024','moy_mai2024','moy_juin2024',
-        'moy_juil2024','moy_aout2024','moy_sept2024','moy_oct2024','moy_nov2024','moy_dec2024',
-        'moy_janv2025'
-    ];
-    const monthsPrediction = [
-        'moy_predic_janv2025','moy_predic_fev2025','moy_predic_mars2025','moy_predic_avril2025',
-        'moy_predic_mai2025','moy_predic_juin2025','moy_predic_juil2025','moy_predic_aout2025',
-        'moy_predic_sept2025','moy_predic_oct2025','moy_predic_nov2025','moy_predic_dec2025',
-        'moy_predic_janv2026'
-    ];
-
-    let columns = [];
-    if (tab === 'historique') {
-        columns = monthsHistorique;
-    } else {
-        columns = monthsPrediction;
+            .then(response => response.json())
+            .then(data => {console.log(data);
+                updateBarChart(tab, data.barData);
+                updateTimeChart(tab, data.timeData);
+                updateDataTable(tab, data.tableHtml);
+            })
+            .catch(error => console.error('Erreur:', error));
     }
 
-    // Si aucune data => message
-    if (!monthlyData || monthlyData.length === 0) {
-        container.innerHTML = '<p>Aucune donnée.</p>';
-        return;
-    }
-
-    // Construction du tableau
-    let html = '<table class="table table-bordered table-sm">';
-    html += '<thead><tr><th>Polluant</th>';
-    columns.forEach(col => {
-        html += `<th>${col}</th>`;
-    });
-    html += '</tr></thead><tbody>';
-
-    monthlyData.forEach(row => {
-        html += '<tr>';
-        // On affiche le polluant
-        html += `<td>${row.polluant}</td>`;
-        columns.forEach(col => {
-            let val = row[col];
-            if (val !== null && val !== undefined && !isNaN(val)) {
-                val = parseFloat(val).toFixed(2);
-            } else {
-                val = '-';
+    // Variables globales pour Chart.js
+    let barChartHistorique, timeChartHistorique, barChartPredictions, timeChartPredictions;
+    function updateBarChart(tab, barData) {
+        const ctx = document.getElementById(`bar-chart-${tab}`).getContext('2d');
+        const config = {
+            type: 'bar',
+            data: {
+                labels: barData.labels,
+                datasets: [{
+                    label: 'Moyenne des polluants',
+                    data: barData.values,
+                    backgroundColor: barData.colors
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } }
             }
-            html += `<td>${val}</td>`;
-        });
-        html += '</tr>';
-    });
-
-    html += '</tbody></table>';
-    container.innerHTML = html;
-}
-
-/**
- * Construit le tableau HTML des données journalières
- * @param {Array} dailyData
- * @param {string} tab
- * @param {string} containerId
- */
-function renderDailyTable(dailyData, tab, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    // On efface avant
-    container.innerHTML = '';
-
-    // S’il n’y a pas de données => on n’affiche rien
-    if (!dailyData || dailyData.length === 0) {
-        return;
+        };
+        if (tab === 'historique') {
+            if (barChartHistorique) barChartHistorique.destroy();
+            barChartHistorique = new Chart(ctx, config);
+        } else if (tab === 'predictions') {
+            if (barChartPredictions) barChartPredictions.destroy();
+            barChartPredictions = new Chart(ctx, config);
+        }
     }
 
-    let title = (tab === 'historique')
-        ? 'Données journalières (Historique)'
-        : 'Données journalières (Prédictions)';
+    function updateTimeChart(tab, timeData) {
+        const ctx = document.getElementById(`time-chart-${tab}`).getContext('2d');
+        const config = {
+            type: 'line',
+            data: {
+                labels: timeData.labels,
+                datasets: timeData.datasets
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true } },
+                scales: {
+                    x: { title: { display: true, text: 'Date' } },
+                    y: { title: { display: true, text: 'Valeur' } }
+                }
+            }
+        };
+        if (tab === 'historique') {
+            if (timeChartHistorique) timeChartHistorique.destroy();
+            timeChartHistorique = new Chart(ctx, config);
+        } else if (tab === 'predictions') {
+            if (timeChartPredictions) timeChartPredictions.destroy();
+            timeChartPredictions = new Chart(ctx, config);
+        }
+    }
 
-    let html = `<h4>${title}</h4>`;
-    html += `<table class="table table-bordered table-sm">
-               <thead>
-                 <tr>
-                   <th>Jour</th>
-                   <th>Polluant</th>
-                   <th>Valeur</th>
-                   <th>Unité</th>
-                 </tr>
-               </thead>
-               <tbody>`;
+    function updateDataTable(tab, tableHtml) {
+        document.getElementById(`data-table-${tab}`).innerHTML = tableHtml;
+    }
 
-    dailyData.forEach(d => {
-        let val = parseFloat(d.val).toFixed(2);
-        // On force l'unité à µg-m3
-        html += `<tr>
-                   <td>${d.jour}</td>
-                   <td>${d.polluant}</td>
-                   <td>${val}</td>
-                   <td>µg-m3</td>
-                 </tr>`;
-    });
-
-    html += '</tbody></table>';
-    container.innerHTML = html;
-}
+    // Chargement initial de l'onglet Historique
+    loadTabData('historique');
+});
