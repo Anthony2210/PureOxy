@@ -1,14 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Variables de pagination
+    let currentPageHistorique = 1;
+    let currentPagePredictions = 1;
 
     // Stockage des dernières données chargées pour chaque onglet
     let latestBarData = { historique: null, predictions: null };
     let latestTimeData = { historique: null, predictions: null };
 
-    // Gestion du changement d'onglet principal
+    // Gestion des onglets principaux
     const tabs = document.querySelectorAll('.tabs li');
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             const selectedTab = this.getAttribute('data-tab');
+            // Réinitialiser les onglets
             document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
@@ -18,11 +22,17 @@ document.addEventListener('DOMContentLoaded', function () {
             subTabs.forEach((st, index) => st.classList.toggle('active', index === 0));
             const subPanels = document.querySelectorAll(`#${selectedTab} .sub-tab-panel`);
             subPanels.forEach((panel, index) => panel.classList.toggle('active', index === 0));
-            loadTabData(selectedTab);
+            // Réinitialiser la pagination pour le nouvel onglet
+            if (selectedTab === 'historique') {
+                currentPageHistorique = 1;
+            } else if (selectedTab === 'predictions') {
+                currentPagePredictions = 1;
+            }
+            loadTabData(selectedTab, false);
         });
     });
 
-    // Gestion du changement de sous-onglets
+    // Gestion des sous-onglets
     const subTabs = document.querySelectorAll('.sub-tabs li');
     subTabs.forEach(subTab => {
         subTab.addEventListener('click', function () {
@@ -33,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             parent.querySelectorAll('.sub-tab-panel').forEach(panel => {
                 panel.classList.toggle('active', panel.id === selectedSubTab);
             });
-            // Après un court délai, détruire et recréer le graphique du sous-onglet visible
+            // Après un court délai, recréer le graphique du sous-onglet visible
             setTimeout(() => {
                 if (selectedSubTab.startsWith('line')) {
                     if (parent.id === 'historique' && latestTimeData.historique) {
@@ -63,34 +73,51 @@ document.addEventListener('DOMContentLoaded', function () {
     const predictionsMonthFilter = document.getElementById('month-filter-predictions');
 
     if (historiquePollutantFilter) {
-        historiquePollutantFilter.addEventListener('change', () => loadTabData('historique'));
+        historiquePollutantFilter.addEventListener('change', () => {
+            currentPageHistorique = 1;
+            loadTabData('historique', false);
+        });
     }
     if (historiqueMonthFilter) {
-        historiqueMonthFilter.addEventListener('change', () => loadTabData('historique'));
+        historiqueMonthFilter.addEventListener('change', () => {
+            currentPageHistorique = 1;
+            loadTabData('historique', false);
+        });
     }
     if (predictionsPollutantFilter) {
-        predictionsPollutantFilter.addEventListener('change', () => loadTabData('predictions'));
+        predictionsPollutantFilter.addEventListener('change', () => {
+            currentPagePredictions = 1;
+            loadTabData('predictions', false);
+        });
     }
     if (predictionsMonthFilter) {
-        predictionsMonthFilter.addEventListener('change', () => loadTabData('predictions'));
+        predictionsMonthFilter.addEventListener('change', () => {
+            currentPagePredictions = 1;
+            loadTabData('predictions', false);
+        });
     }
 
     // Fonction de chargement des données via AJAX
-    function loadTabData(tab) {
+    // isLoadMore indique si l'on doit ajouter (concaténer) ou remplacer le tableau
+    function loadTabData(tab, isLoadMore) {
         let pollutant = '';
         let month = '';
+        let page = 1;
         if (tab === 'historique') {
-            pollutant = historiquePollutantFilter.value;
-            month = historiqueMonthFilter.value;
+            pollutant = historiquePollutantFilter ? historiquePollutantFilter.value : '';
+            month = historiqueMonthFilter ? historiqueMonthFilter.value : '';
+            page = currentPageHistorique;
         } else if (tab === 'predictions') {
-            pollutant = predictionsPollutantFilter.value;
-            month = predictionsMonthFilter.value;
+            pollutant = predictionsPollutantFilter ? predictionsPollutantFilter.value : '';
+            month = predictionsMonthFilter ? predictionsMonthFilter.value : '';
+            page = currentPagePredictions;
         }
         const params = new URLSearchParams();
         params.append('tab', tab);
         params.append('pollutant', pollutant);
         params.append('month', month);
         params.append('id_ville', idVille);
+        params.append('page', page);
 
         fetch('../fonctionnalites/get_tab_data.php', {
             method: 'POST',
@@ -112,10 +139,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 updateBarChart(tab, data.barData);
                 updateTimeChart(tab, data.timeData);
-                updateDataTable(tab, data.tableHtml);
+                if (!isLoadMore) {
+                    updateDataTable(tab, data.tableHtml);
+                } else {
+                    appendDataTable(tab, data.tableHtml);
+                }
             })
             .catch(error => console.error('Erreur:', error));
     }
+
+    // Fonction pour mettre à jour le tableau (remplacement)
+    function updateDataTable(tab, tableHtml) {
+        document.getElementById(`data-table-${tab}`).innerHTML = tableHtml;
+    }
+
+    // Fonction pour ajouter des lignes au tableau existant
+    // On utilise un DOMParser pour extraire les lignes (<tr>) du <tbody> du HTML renvoyé
+    function appendDataTable(tab, extraHtml) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(extraHtml, 'text/html');
+        const newRows = doc.querySelectorAll('table tbody tr');
+        const container = document.querySelector(`#data-table-${tab} table tbody`);
+        // Supprimer le bouton "Voir plus" s'il existe
+        const oldBtn = document.querySelector(`#data-table-${tab} .btn-load-more`);
+        if (oldBtn) {
+            oldBtn.remove();
+        }
+        newRows.forEach(row => {
+            container.appendChild(row);
+        });
+        // Si le extraHtml contient un bouton "Voir plus", on l'ajoute à la fin du tbody
+        const newBtn = doc.querySelector('.btn-load-more');
+        if (newBtn) {
+            container.parentElement.insertAdjacentHTML('beforeend', newBtn.outerHTML);
+        }
+    }
+
+    // Fonction pour charger plus de données (pagination)
+    function loadMore(tab) {
+        if (tab === 'historique') {
+            currentPageHistorique++;
+        } else if (tab === 'predictions') {
+            currentPagePredictions++;
+        }
+        loadTabData(tab, true);
+    }
+
+    // Exposer la fonction loadMore pour l'appel depuis le HTML
+    window.loadMore = loadMore;
 
     // Variables globales pour Chart.js
     let barChartHistorique, timeChartHistorique, barChartPredictions, timeChartPredictions;
@@ -168,10 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateDataTable(tab, tableHtml) {
-        document.getElementById(`data-table-${tab}`).innerHTML = tableHtml;
-    }
-
     // Chargement initial de l'onglet Historique
-    loadTabData('historique');
+    loadTabData('historique', false);
 });

@@ -164,7 +164,7 @@
     border-top: 2px solid #333a20;
     border-right: 2px solid #333a20;
     border-left: 2px solid #333a20;
-    background-color: #f8f9fa;
+    background-color: #e9f0d8;
     font-weight: bold;
 }
 
@@ -238,8 +238,10 @@
 
 /* Le tableau peut avoir une zone scrollable si trop grand */
 .table-scroll {
-    max-height: 400px; /* Ajuste si tu veux */
-    overflow-y: auto;  /* Barre de défilement verticale */
+    max-height: 400px !important; /* Ajuste si tu veux */
+    overflow-y: auto !important;  /* Barre de défilement verticale */
+    max-width: 100% !important;
+    overflow-x: auto !important;
 }
 
 /* Filtres (polluant, mois) */
