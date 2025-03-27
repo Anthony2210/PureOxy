@@ -162,7 +162,7 @@ try {
             $colName = "moy_" . $colVal;
             $sqlTable .= ", $colName as `$colName`";
         }
-        $sqlTable .= " FROM moy_pollution_villes WHERE id_ville = ? LIMIT 1";
+        $sqlTable .= " FROM moy_pollution_villes WHERE id_ville = ?";
         $stmtTable = $conn->prepare($sqlTable);
         $stmtTable->bind_param("i", $id_ville);
         $stmtTable->execute();
