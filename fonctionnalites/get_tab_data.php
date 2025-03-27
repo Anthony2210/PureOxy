@@ -317,6 +317,7 @@ try {
         // ===============================
         // TABLEAU pour Prédictions
         // ===============================
+        $monthsArr = ["janv", "fev", "mars", "avril", "mai", "juin", "juil", "aout", "sept", "oct", "nov", "dec"];
         $predictionsMonths = [];
         for ($year = 2025; $year <= 2026; $year++) {
             foreach ($monthsArr as $index => $mon) {
