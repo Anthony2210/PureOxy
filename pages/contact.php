@@ -28,16 +28,16 @@ $message = '';
  * Récupère les informations de l'utilisateur connecté à partir de la session.
  *
  * @param mysqli $conn     Connexion à la base de données
- * @param int    $user_id  ID de l'utilisateur
+ * @param int    $id_users  ID de l'utilisateur
  *
  * @return void
  */
-function getUserInfo($conn, $user_id) {
+function getUserInfo($conn, $id_users) {
     global $nom, $email;
 
     // Préparer la requête pour récupérer le nom d'utilisateur et l'email
     $stmt = $conn->prepare("SELECT username, email FROM users WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
+    $stmt->bind_param("i", $id_users);
     $stmt->execute();
     $user_result = $stmt->get_result();
 
@@ -49,9 +49,9 @@ function getUserInfo($conn, $user_id) {
 }
 
 // Vérifier si l'utilisateur est connecté et récupérer ses informations
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    getUserInfo($conn, $user_id);
+if (isset($_SESSION['id_users'])) {
+    $id_users = $_SESSION['id_users'];
+    getUserInfo($conn, $id_users);
 }
 
 /**
@@ -95,7 +95,7 @@ function validateFormData($data) {
  * Insère le message de contact dans la base de données.
  *
  * @param mysqli $conn    Connexion à la base de données
- * @param int    $user_id ID de l'utilisateur (peut être NULL)
+ * @param int    $id_users ID de l'utilisateur (peut être NULL)
  * @param string $nom     Nom de l'utilisateur
  * @param string $email   Email de l'utilisateur
  * @param string $sujet   Sujet du message
@@ -103,9 +103,9 @@ function validateFormData($data) {
  *
  * @return bool True si l'insertion est réussie, False sinon
  */
-function insertContactMessage($conn, $user_id, $nom, $email, $sujet, $message) {
-    $stmt = $conn->prepare("INSERT INTO messages_contact (user_id, nom, email, sujet, message) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issss", $user_id, $nom, $email, $sujet, $message);
+function insertContactMessage($conn, $id_users, $nom, $email, $sujet, $message) {
+    $stmt = $conn->prepare("INSERT INTO messages_contact (id_users, nom, email, sujet, message) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("issss", $id_users, $nom, $email, $sujet, $message);
     return $stmt->execute();
 }
 
@@ -116,14 +116,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $sujet = trim($_POST['sujet']);
     $message = trim($_POST['message']);
-    $user_id = $_SESSION['user_id'] ?? NULL;
+    $id_users = $_SESSION['id_users'] ?? NULL;
 
     // Valider les données du formulaire
     $errors = validateFormData($_POST);
 
     if (empty($errors)) {
         // Insérer le message de contact dans la base de données
-        if (insertContactMessage($conn, $user_id, $nom, $email, $sujet, $message)) {
+        if (insertContactMessage($conn, $id_users, $nom, $email, $sujet, $message)) {
             $success_message = "Votre message a été envoyé avec succès.";
             // Réinitialiser les champs du formulaire
             $nom = '';

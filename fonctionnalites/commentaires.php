@@ -46,7 +46,7 @@ class Commentaire {
     /**
      * @var int Identifiant de l'utilisateur qui a posté le commentaire.
      */
-    public $user_id;
+    public $id_users;
 
     /**
      * @var string Nom d'utilisateur de l'auteur du commentaire.
@@ -80,7 +80,7 @@ class Commentaire {
      */
     public function __construct($data) {
         $this->id = $data['id'];
-        $this->user_id = $data['user_id'];
+        $this->id_users = $data['id_users'];
         $this->username = $data['username'];
         $this->content = $data['content'];
         $this->likes = $data['likes'];
@@ -111,7 +111,7 @@ function getComments($page, $parent_id = null) {
 
     $sql = "SELECT c.*, u.username 
             FROM commentaire c 
-            INNER JOIN users u ON c.user_id = u.id 
+            INNER JOIN users u ON c.id_users = u.id 
             WHERE c.page = ? AND ";
     if (is_null($parent_id)) {
         $sql .= "c.parent_id IS NULL ";
@@ -161,10 +161,10 @@ function displayComments($comments) {
         echo '<p>' . nl2br(htmlspecialchars($comment->content, ENT_QUOTES, 'UTF-8')) . '</p>';
         echo '<div class="comment-actions">';
         // Formulaire de like
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['id_users'])) {
             // Vérifier si l'utilisateur a déjà liké ce commentaire
-            $stmt_like = $conn->prepare("SELECT * FROM likes WHERE user_id = ? AND comment_id = ?");
-            $stmt_like->bind_param("ii", $_SESSION['user_id'], $comment->id);
+            $stmt_like = $conn->prepare("SELECT * FROM likes WHERE id_users = ? AND comment_id = ?");
+            $stmt_like->bind_param("ii", $_SESSION['id_users'], $comment->id);
             $stmt_like->execute();
             $result_like = $stmt_like->get_result();
 
@@ -186,7 +186,7 @@ function displayComments($comments) {
             echo '<button class="reply-button" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '"><i class="fas fa-reply"></i> Répondre</button>';
 
             // Bouton de suppression si l'utilisateur est l'auteur
-            if ($comment->user_id == $_SESSION['user_id']) {
+            if ($comment->id_users == $_SESSION['id_users']) {
                 echo '<button class="delete-comment-button" data-comment-id="' . htmlspecialchars($comment->id, ENT_QUOTES, 'UTF-8') . '"><i class="fas fa-trash-alt"></i> Supprimer</button>';
             }
         } else {
@@ -234,7 +234,7 @@ function displayComments($comments) {
     /**
      * Affiche le formulaire pour ajouter un nouveau commentaire si l'utilisateur est connecté.
      */
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['id_users'])) {
         echo '<form method="post" class="comment-form" id="comment-form">';
         echo '<textarea name="content" placeholder="Votre commentaire..." required></textarea>';
         echo '<input type="hidden" name="parent_id" id="parent_id" value="">';

@@ -25,13 +25,13 @@ if (isset($_GET['ville']) && !empty($_GET['ville'])) {
     if ($row = $result->fetch_assoc()) {
         $idVille = $row['id_ville'];
 
-        // On suppose que l'ID utilisateur est en session (ex: $_SESSION['user_id'])
+        // On suppose que l'ID utilisateur est en session (ex: $_SESSION['id_users'])
         // Sinon, tu peux mettre 0 ou NULL par défaut
-        $userId = $_SESSION['user_id'] ?? 0;
+        $userId = $_SESSION['id_users'] ?? 0;
 
         // Insère un enregistrement dans search_history
         $stmt2 = $conn->prepare("
-            INSERT INTO search_history (user_id, search_date, id_ville)
+            INSERT INTO search_history (id_users, search_date, id_ville)
             VALUES (?, NOW(), ?)
         ");
         $stmt2->bind_param("ii", $userId, $idVille);

@@ -110,7 +110,7 @@ if (isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['confi
                  * Connexion automatique de l'utilisateur après une inscription réussie.
                  * Stocke l'ID utilisateur et le nom d'utilisateur dans la session.
                  */
-                $_SESSION['user_id'] = $conn->insert_id;
+                $_SESSION['id_users'] = $conn->insert_id;
                 $_SESSION['username'] = $username;
 
                 echo json_encode(['success' => true, 'message' => 'Compte créé avec succès ! Vous allez être redirigé.']);

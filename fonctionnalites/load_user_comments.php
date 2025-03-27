@@ -35,10 +35,10 @@ function formatDate($date) {
  * Récupère les commentaires d'un utilisateur.
  *
  * @param mysqli $conn La connexion à la base de données.
- * @param int $user_id L'ID de l'utilisateur.
+ * @param int $id_users L'ID de l'utilisateur.
  * @return mysqli_result|false Le résultat de la requête ou false en cas d'erreur.
  */
-function getUserComments($conn, $user_id) {
+function getUserComments($conn, $id_users) {
     $query = "
         SELECT 
             c.id, 
@@ -54,7 +54,7 @@ function getUserComments($conn, $user_id) {
         LEFT JOIN 
             commentaire r ON c.id = r.parent_id
         WHERE 
-            c.user_id = ? 
+            c.id_users = ? 
         GROUP BY 
             c.id
         ORDER BY 
@@ -62,7 +62,7 @@ function getUserComments($conn, $user_id) {
     ";
 
     if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("i", $id_users);
         if ($stmt->execute()) {
             return $stmt->get_result();
         }
@@ -179,9 +179,9 @@ $page_titles = [
 /**
  * Vérifier si l'utilisateur est connecté et récupérer ses commentaires.
  */
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $comments = getUserComments($conn, $user_id);
+if (isset($_SESSION['id_users'])) {
+    $id_users = $_SESSION['id_users'];
+    $comments = getUserComments($conn, $id_users);
 
     if ($comments && $comments->num_rows > 0) {
         displayComments($comments, $page_titles);
