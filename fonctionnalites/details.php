@@ -179,6 +179,14 @@ for ($year = 2025; $year <= 2026; $year++) {
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+
+                <button
+                        onclick="window.location.href='http://localhost/PUREOXY/pages/classement.php'"
+                        style="margin-top: 10px;">
+                    Voir le classement complet
+                </button>
+
+
             <?php else: ?>
                 <p class="aucun-classement">Aucun classement disponible.</p>
             <?php endif; ?>
