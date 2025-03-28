@@ -43,13 +43,13 @@ include 'bd/bd.php';
                 <li>
                     <a href="http://localhost/PUREOXY/pages/recherche.php">
                         <strong>Recherche par ville</strong><br>
-                        Trouvez rapidement les données de pollution pour votre ville.
+                        Trouvez les données de pollution pour votre ville.
                     </a>
                 </li>
                 <li>
-                    <a href="http://localhost/PUREOXY/fonctionnalites/predictions.php">
-                        <strong>Prédictions</strong><br>
-                        Obtenez des prévisions sur la qualité de l'air grâce au machine learning.
+                    <a href="http://localhost/PUREOXY/pages/classement.php">
+                        <strong>Classement</strong><br>
+                        Classez les villes les plus polluées pour chaque polluant.
                     </a>
                 </li>
             </ul>

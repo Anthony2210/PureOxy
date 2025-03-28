@@ -38,8 +38,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                     </a>
                     <ul class="dropdown-content">
                         <li>
-                            <a href="<?php echo $baseUrl; ?>pages/classement.php">
-                                <i class="fas fa-chart-bar"></i> Classement
+                            <a href="<?php echo $baseUrl; ?>pages/carte.php">
+                                <i class="fas fa-map"></i> Carte
                             </a>
                         </li>
                         <li>
@@ -48,8 +48,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo $baseUrl; ?>pages/carte.php">
-                                <i class="fas fa-map"></i> Carte
+                            <a href="<?php echo $baseUrl; ?>pages/classement.php">
+                                <i class="fas fa-chart-bar"></i> Classement
                             </a>
                         </li>
                     </ul>
