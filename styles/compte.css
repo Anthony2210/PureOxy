@@ -1,43 +1,45 @@
-/* ========================================================================
-   compte.css
-   Styles pour la gestion des comptes utilisateurs
-   ======================================================================== */
+/* Variables CSS */
+:root {
+    --main-color: #6b8e23;
+    --secondary-color: darkolivegreen;
+    --background-color: #ffffff;
+    --light-background: #f3f4ed;
+    --hover-background: #e0e0d1;
+    --font-color: #333;
+    --muted-color: #777;
+    --max-width-container: 800px;
+    --padding-container: 40px 20px;
+}
 
-/**
- * Account Container
- */
+/* Container général */
 .compte-container {
-    max-width: 800px;
+    max-width: var(--max-width-container);
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: var(--padding-container);
     text-align: center;
 }
 
-/**
- * Main Heading
- */
-.compte-container h1 {
+/* Titres */
+.compte-container h1,
+.compte-container h2 {
     font-size: 2.5em;
-    color: #4c5f2d;
+    color: var(--main-color);
     margin-bottom: 30px;
 }
 
-/**
- * Custom Tabs
- * Styles pour les onglets personnalisés.
- */
+/* Onglets personnalisés */
 .compte-tabs {
     display: flex;
     justify-content: center;
     margin-bottom: 30px;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid var(--background-color);
 }
 
 .compte-tab-link {
     background: none;
     border: none;
     padding: 10px 20px;
-    color: #6b8e23;
+    color: var(--main-color);
     cursor: pointer;
     font-size: 1.1em;
     font-weight: bold;
@@ -45,18 +47,13 @@
     margin-bottom: -1px;
 }
 
-.compte-tab-link.active {
-    color: darkolivegreen;
-    border-bottom: 3px solid darkolivegreen;
-}
-
+.compte-tab-link.active,
 .compte-tab-link:hover {
-    color: darkolivegreen;
+    color: var(--secondary-color);
+    border-bottom: 3px solid var(--secondary-color);
 }
 
-/**
- * Dashboard Layout
- */
+/* Layout Dashboard */
 .dashboard {
     display: flex;
     flex-direction: row;
@@ -72,11 +69,9 @@
     gap: 20px;
 }
 
-/**
- * Profile Card
- */
+/* Carte de profil */
 .profile-card {
-    background-color: #ffffff;
+    background-color: var(--background-color);
     flex: 0 0 30%;
     max-width: 300px;
     padding: 20px;
@@ -86,30 +81,28 @@
 
 .profile-card img {
     border-radius: 100px;
-    border: 1px solid black;
+    border: 1px solid var(--font-color);
 }
 
 .profile-avatar {
     font-size: 4em;
-    color: #6b8e23;
+    color: var(--main-color);
     text-align: center;
 }
 
 .profile-info h2 {
     font-size: 1.8em;
-    color: #333;
+    color: var(--font-color);
     margin: 0;
     text-decoration: none;
 }
 
 .profile-info p {
-    color: #777;
+    color: var(--muted-color);
     margin-top: 5px;
 }
 
-/**
- * Tab Content
- */
+/* Contenu des onglets */
 .compte-tab-content {
     display: none;
 }
@@ -118,10 +111,7 @@
     display: block;
 }
 
-/**
- * Forms
- * Styles pour les formulaires dans les comptes.
- */
+/* Formulaires */
 .compte-form {
     text-align: left;
     max-width: 400px;
@@ -131,7 +121,7 @@
 .compte-form h2 {
     margin-bottom: 20px;
     font-size: 1.4em;
-    color: #4c5f2d;
+    color: var(--main-color);
     font-weight: bold;
 }
 
@@ -145,7 +135,7 @@
     top: 50%;
     left: 15px;
     transform: translateY(-50%);
-    color: #6b8e23;
+    color: var(--main-color);
 }
 
 .input-group input {
@@ -155,22 +145,22 @@
     border-radius: 6px;
     font-size: 1.1em;
     transition: border-color 0.3s;
-    color: #4c5f2d;
+    color: var(--main-color);
     font-family: 'League Spartan', sans-serif;
     box-sizing: border-box;
 }
 
 .input-group input:focus {
-    border-color: #6b8e23;
+    border-color: var(--main-color);
     outline: none;
 }
 
 .input-group input::placeholder {
-    color: darkolivegreen;
+    color: var(--secondary-color);
     font-family: 'League Spartan', sans-serif;
 }
 
-/* Styles pour les champs valides et invalides */
+/* Champs valides/invalides */
 .input-field.valid {
     border-color: green;
 }
@@ -179,30 +169,19 @@
     border-color: red;
 }
 
-/* Styles pour les messages d'erreur du formulaire d'inscription */
+/* Messages d'erreur */
 .error-message-inscription {
     display: block;
     color: red;
     font-size: 12px;
-    max-width: 100%;
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
     margin: 5px 0;
 }
-/**
- * @section Favorite Cities List Styles
- * Styles pour la liste des villes favorites des utilisateurs.
- */
 
-/**
- * Favorite Cities Section
- * Conteneur principal pour la section des villes favorites.
- */
+/* Villes favorites */
 .favorite-cities-section {
     width: 100%;
     max-width: 600px;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     padding: 20px;
     margin: auto;
     border-radius: 10px;
@@ -210,34 +189,22 @@
     text-align: left;
 }
 
-/**
- * Favorite Cities Heading
- * Titre de la section des villes favorites.
- */
 .favorite-cities-section h3 {
     font-size: 1.5em;
-    color: #6b8e23;
+    color: var(--main-color);
     margin-bottom: 15px;
     display: flex;
     align-items: center;
 }
 
-/**
- * Favorite Cities List
- * Liste des villes favorites.
- */
 .favorite-cities-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-/**
- * Favorite Cities List Item
- * Élément individuel de la liste des favoris.
- */
 .favorite-cities-list li {
-    background-color: #f3f4ed;
+    background-color: var(--light-background);
     padding: 10px 15px;
     margin-bottom: 10px;
     border-radius: 8px;
@@ -245,33 +212,24 @@
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.2s;
-    color : darkolivegreen;
+    color: var(--secondary-color);
 }
 
 .favorite-cities-list li:hover {
-    background-color: #e0e0d1;
-
+    background-color: var(--hover-background);
 }
 
-/**
- * Favorite City Name
- * Nom de la ville favorite.
- */
 .favorite-link {
     font-size: 1.1em;
-    color: #333;
+    color: var(--font-color);
     text-decoration: none;
 }
-.favorite-link:hover{
-    color : darkolivegreen;
+.favorite-link:hover {
+    color: var(--secondary-color);
     text-decoration: underline;
 }
 
-/**
- * @section Suggestions List Styles
- * Styles pour la barre de recherche pour entrer une ville en favoris.
- */
-
+/* Suggestions */
 .favorite-city-form {
     display: flex;
     align-items: center;
@@ -291,18 +249,16 @@
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    color: #333;
+    color: var(--font-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .favorite-city-form input[type="text"]:focus {
-    border-color: #6b8e23;
+    border-color: var(--main-color);
     box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
     outline: none;
 }
-/**
- * Styles pour les listes de suggestions dans les formulaires.
- */
+
 .favorite-cities-section #suggestions-list {
     top: calc(100% + 5px);
     left: 0;
@@ -331,28 +287,20 @@
 .favorite-cities-section #suggestions-list li {
     padding: 10px 15px;
     cursor: pointer;
-    color: #333;
+    color: var(--font-color);
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .favorite-cities-section #suggestions-list li:hover {
-    background-color: #f3f4ed;
-    color: #6b8e23;
+    background-color: var(--light-background);
+    color: var(--secondary-color);
 }
 
-/**
- * @section History List Styles
- * Styles pour la liste de l'historique des recherches des utilisateurs.
- */
-
-/**
- * History Section
- * Conteneur principal pour la section de l'historique des recherches.
- */
+/* Historique */
 .history-section {
     width: 100%;
     max-width: 600px;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     padding: 20px;
     margin: 30px auto;
     border-radius: 10px;
@@ -360,77 +308,67 @@
     text-align: left;
 }
 
-/**
- * History Heading
- * Titre de la section de l'historique.
- */
 .history-section h3 {
     font-size: 1.5em;
-    color: #6b8e23;
+    color: var(--main-color);
     margin-bottom: 15px;
     display: flex;
     align-items: center;
 }
 
-/**
- * History List
- * Liste de l'historique des recherches.
- */
 .history-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-/**
- * History List Item
- * Élément individuel de la liste de l'historique.
- */
 .history-list li {
-    background-color: #f3f4ed;
+    background-color: var(--light-background);
     padding: 10px 15px;
     margin-bottom: 10px;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap : 20px;
+    gap: 20px;
     transition: background-color 0.2s;
 }
 
 .history-list li:hover {
-    background-color: #e0e0d1;
+    background-color: var(--hover-background);
 }
 
-/**
- * History Search Query
- * Requête de recherche dans l'historique.
- */
 .history-list li .search-query {
-    flex : 1    ;
+    flex: 1;
     font-size: 1.1em;
-    color: #333;
+    color: var(--font-color);
+    text-decoration: none;
     display: flex;
     align-items: center;
-    text-decoration: none;
 }
 
 .history-list li .search-query:hover {
     text-decoration: underline;
-    color: #6b8e23;
+    color: var(--main-color);
 }
 
 .history-list li .search-query i {
     margin-right: 8px;
-    color: #6b8e23;
+    color: var(--main-color);
 }
 
-/**
- * Compte
- * Logo des titres h2
- */
+/* Icones */
 .fa-solid, .fas {
     font-weight: 900;
     margin-right: 10px;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+    .profile-card {
+        max-width: 100%;
+    }
+}
