@@ -22,6 +22,6 @@ session_destroy();
 /**
  * Rediriger l'utilisateur vers la page de compte après la déconnexion.
  */
-header("Location: compte.php");
+header("Location: ../pages/compte.php");
 exit;
 ?>
