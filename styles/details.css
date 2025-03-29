@@ -23,6 +23,7 @@
     border-radius: 10px;
     border: 2px solid black;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .ville-title {
@@ -256,4 +257,48 @@
     margin-right: 15px;
     padding: 4px 6px;
     font-size: 0.9em;
+}
+
+/* Positionnement du bouton d'étoile en haut à droite */
+.favorite-icon {
+    position: absolute;
+    top: 18px;
+    right: 17px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style de l'icône selon son état */
+.favorite-icon i.fas {
+    font-size: 1.8em;
+    color: #f4c542; /* Etoile pleine en jaune */
+}
+.favorite-icon i.far {
+    font-size: 1.8em;
+    color: #ccc; /* Etoile vide en gris */
+}
+
+/* Nouvelle version améliorée des particules */
+.favorite-icon .particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #f4c542;
+    border-radius: 50%;
+    opacity: 1;
+    pointer-events: none;
+    transform: scale(1);
+    animation: particle 0.8s ease-out forwards;
+}
+
+@keyframes particle {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+    }
 }

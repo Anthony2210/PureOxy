@@ -1,7 +1,70 @@
 <?php
 session_start();
 ob_start();
-require_once '../bd/bd.php'; // Connexion BD
+require_once '../bd/bd.php';
+$db = new Database();
+
+// Gestion AJAX du toggling du favori
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax']) && isset($_POST['favorite_action'])) {
+    if (!isset($_SESSION['id_users'])) {
+        echo json_encode(['success' => false, 'message' => 'Vous devez être connecté pour ajouter aux favoris.']);
+        exit;
+    }
+    $id_users = $_SESSION['id_users'];
+    if (!isset($_GET['ville']) || empty($_GET['ville'])) {
+        echo json_encode(['success' => false, 'message' => 'Ville non spécifiée.']);
+        exit;
+    }
+    $nomVille = $_GET['ville'];
+    $stmtVille = $db->prepare("SELECT id_ville, ville FROM donnees_villes WHERE ville = ? LIMIT 1");
+    $stmtVille->bind_param("s", $nomVille);
+    $stmtVille->execute();
+    $resVille = $stmtVille->get_result();
+    $infoVilleAjax = $resVille->fetch_assoc();
+    $stmtVille->close();
+    if (!$infoVilleAjax) {
+        echo json_encode(['success' => false, 'message' => 'Ville introuvable.']);
+        exit;
+    }
+    $idVille = (int)$infoVilleAjax['id_ville'];
+    $cityName = $infoVilleAjax['ville'];
+
+    $action = $_POST['favorite_action'];
+    if ($action == 'add_favorite') {
+        // Vérifier si déjà favorite
+        $stmtCheck = $db->prepare("SELECT * FROM favorite_cities WHERE id_users = ? AND id_ville = ?");
+        $stmtCheck->bind_param("ii", $id_users, $idVille);
+        $stmtCheck->execute();
+        $resultCheck = $stmtCheck->get_result();
+        if ($resultCheck->num_rows > 0) {
+            echo json_encode(['success' => true, 'message' => 'Déjà dans les favoris.', 'action' => 'added']);
+            exit;
+        }
+        $stmtCheck->close();
+        $stmtInsert = $db->prepare("INSERT INTO favorite_cities (id_users, id_ville) VALUES (?, ?)");
+        $stmtInsert->bind_param("ii", $id_users, $idVille);
+        if ($stmtInsert->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Ville ajoutée aux favoris.', 'action' => 'added']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout aux favoris.']);
+        }
+        $stmtInsert->close();
+        exit;
+    } elseif ($action == 'remove_favorite') {
+        $stmtDelete = $db->prepare("DELETE FROM favorite_cities WHERE id_users = ? AND id_ville = ?");
+        $stmtDelete->bind_param("ii", $id_users, $idVille);
+        if ($stmtDelete->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Ville retirée des favoris.', 'action' => 'removed']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de la suppression des favoris.']);
+        }
+        $stmtDelete->close();
+        exit;
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Action non reconnue.']);
+        exit;
+    }
+}
 
 if (!isset($_GET['ville']) || empty($_GET['ville'])) {
     echo "Aucune ville spécifiée !";
@@ -9,8 +72,8 @@ if (!isset($_GET['ville']) || empty($_GET['ville'])) {
 }
 $nomVille = $_GET['ville'];
 
-// Récupération infos de la ville
-$sqlVille = $conn->prepare("
+// Récupération des infos de la ville
+$stmtVille = $db->prepare("
     SELECT 
         id_ville, 
         ville, 
@@ -27,11 +90,11 @@ $sqlVille = $conn->prepare("
     WHERE ville = ?
     LIMIT 1
 ");
-$sqlVille->bind_param("s", $nomVille);
-$sqlVille->execute();
-$resVille  = $sqlVille->get_result();
+$stmtVille->bind_param("s", $nomVille);
+$stmtVille->execute();
+$resVille = $stmtVille->get_result();
 $infoVille = $resVille->fetch_assoc();
-$sqlVille->close();
+$stmtVille->close();
 
 if (!$infoVille) {
     echo "Ville introuvable dans la base de données.";
@@ -39,8 +102,33 @@ if (!$infoVille) {
 }
 $idVille = (int)$infoVille['id_ville'];
 
-// Récupération du classement polluants
-$sqlPolluants = $conn->prepare("
+// Ajout de la recherche dans l'historique (uniquement si l'utilisateur est connecté)
+if (isset($_SESSION['id_users'])) {
+    $id_users = $_SESSION['id_users'];
+
+    // Récupérer la dernière recherche de l'utilisateur
+    $stmtLast = $db->prepare("SELECT id_ville FROM search_history WHERE id_users = ? ORDER BY search_date DESC LIMIT 1");
+    if ($stmtLast) {
+        $stmtLast->bind_param("i", $id_users);
+        $stmtLast->execute();
+        $resultLast = $stmtLast->get_result();
+        $lastEntry = $resultLast->fetch_assoc();
+        $stmtLast->close();
+
+        // Si la dernière ville enregistrée n'est pas la même que celle en cours, insérer la nouvelle recherche
+        if (!$lastEntry || $lastEntry['id_ville'] != $idVille) {
+            $stmtHistory = $db->prepare("INSERT INTO search_history (id_users, search_date, id_ville) VALUES (?, NOW(), ?)");
+            if ($stmtHistory) {
+                $stmtHistory->bind_param("ii", $id_users, $idVille);
+                $stmtHistory->execute();
+                $stmtHistory->close();
+            }
+        }
+    }
+}
+
+// Récupération du classement des polluants
+$stmtPoll = $db->prepare("
     SELECT 
       t1.polluant,
       t1.avg_value,
@@ -58,14 +146,14 @@ $sqlPolluants = $conn->prepare("
     FROM moy_pollution_villes t1
     WHERE t1.id_ville = ?
 ");
-$sqlPolluants->bind_param("i", $idVille);
-$sqlPolluants->execute();
-$resPoll = $sqlPolluants->get_result();
+$stmtPoll->bind_param("i", $idVille);
+$stmtPoll->execute();
+$resPoll = $stmtPoll->get_result();
 $listePolluants = [];
 while ($row = $resPoll->fetch_assoc()) {
     $listePolluants[] = $row;
 }
-$sqlPolluants->close();
+$stmtPoll->close();
 
 // Extraction des polluants uniques pour le filtre
 $uniquePolluants = [];
@@ -75,20 +163,19 @@ foreach ($listePolluants as $poll) {
     }
 }
 
-// Génération des options pour le filtre des mois
-// Pour l'onglet Historique : de janvier 2023 à janvier 2025 inclus
+// Génération des options pour le filtre des mois (Historique)
 $historiqueMonths = [];
 $months = ["janv", "fev", "mars", "avril", "mai", "juin", "juil", "aout", "sept", "oct", "nov", "dec"];
 for ($year = 2023; $year <= 2025; $year++) {
     foreach ($months as $index => $mon) {
         if ($year == 2025 && $index > 0) break;
-        $value = $mon . $year; // ex: "janv2023"
+        $value = $mon . $year;
         $display = ucfirst($mon) . ". " . $year;
         $historiqueMonths[] = ["value" => $value, "display" => $display];
     }
 }
 
-// Pour l'onglet Prédictions : de janvier 2025 à janvier 2026 inclus, avec le préfixe "moy_predic_"
+// Pour l'onglet Prédictions
 $predictionsMonths = [];
 for ($year = 2025; $year <= 2026; $year++) {
     foreach ($months as $index => $mon) {
@@ -98,6 +185,7 @@ for ($year = 2025; $year <= 2026; $year++) {
         $predictionsMonths[] = ["value" => $value, "display" => $display];
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -127,6 +215,26 @@ for ($year = 2025; $year <= 2026; $year++) {
         <!-- Bloc d'informations sur la ville -->
         <div class="box-ville">
             <h1 class="ville-title"><?php echo htmlspecialchars($infoVille['ville']); ?></h1>
+            <?php
+            $isFavorite = false;
+            if (isset($_SESSION['id_users'])) {
+                $id_users = $_SESSION['id_users'];
+                $stmtFav = $db->prepare("SELECT * FROM favorite_cities WHERE id_users = ? AND id_ville = ?");
+                $stmtFav->bind_param("ii", $id_users, $idVille);
+                $stmtFav->execute();
+                $resultFav = $stmtFav->get_result();
+                if ($resultFav->num_rows > 0) {
+                    $isFavorite = true;
+                }
+                $stmtFav->close();
+            }
+            ?>
+            <form id="favorite-form" method="post" style="display:inline;">
+                <input type="hidden" name="favorite_action" id="favorite_action" value="<?php echo $isFavorite ? 'remove_favorite' : 'add_favorite'; ?>">
+                <button type="submit" class="favorite-icon" data-action="<?php echo $isFavorite ? 'remove_favorite' : 'add_favorite'; ?>">
+                    <i class="<?php echo $isFavorite ? 'fas' : 'far'; ?> fa-star"></i>
+                </button>
+            </form>
             <p class="grille-texte">
                 <?php echo nl2br(htmlspecialchars($infoVille['grille_densite_texte'])); ?>
             </p>
@@ -308,10 +416,10 @@ for ($year = 2025; $year <= 2026; $year++) {
     </div> <!-- Fin .right-column -->
 </div> <!-- Fin .details-container -->
 
-
 <!-- Inclusion des scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../script/details.js"></script>
+<script src="../script/favorites.js"></script>
 <?php include '../includes/footer.php'; ?>
 </body>
 </html>
