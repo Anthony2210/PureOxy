@@ -10,6 +10,28 @@ document.addEventListener('DOMContentLoaded', function() {
             messageDiv.remove();
         }, 5000);
     }
+
+    // Met à jour l'affichage de l'historique
+    function updateHistoryUI() {
+        const historyList = document.querySelector('.history-list');
+        if (!historyList || historyList.children.length === 0) {
+            // Cache le bouton "Effacer l'historique"
+            const clearHistoryForm = document.getElementById('clear-history-form');
+            if (clearHistoryForm) {
+                clearHistoryForm.style.display = 'none';
+            }
+            // Affiche la phrase "Vous n'avez pas encore effectué de recherches."
+            const historySection = document.querySelector('.history-section');
+            if (historySection && !historySection.querySelector('.no-searches-message')) {
+                const p = document.createElement('p');
+                p.classList.add('no-searches-message');
+                p.textContent = "Vous n'avez pas encore effectué de recherches.";
+                historySection.appendChild(p);
+            }
+        }
+    }
+
+    // Attache l'événement de suppression d'une recherche individuelle
     function attachDeleteSearchEvent(form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -28,8 +50,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     try {
                         const data = JSON.parse(dataText);
                         if (data.success) {
+                            // Supprime l'élément de la liste
                             form.parentElement.remove();
                             displayMessage(data.message, 'success');
+                            updateHistoryUI();
                         } else {
                             displayMessage(data.message, 'error');
                         }
@@ -44,10 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+
+    // Attache les événements aux formulaires existants
     const deleteSearchForms = document.querySelectorAll('.delete-search-form');
     deleteSearchForms.forEach(form => {
         attachDeleteSearchEvent(form);
     });
+
+    // Gestion du bouton "Effacer l'historique"
     const clearHistoryForm = document.getElementById('clear-history-form');
     if (clearHistoryForm) {
         clearHistoryForm.addEventListener('submit', function(event) {
@@ -72,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 historyList.innerHTML = '';
                             }
                             displayMessage(data.message, 'success');
+                            updateHistoryUI();
                         } else {
                             displayMessage(data.message, 'error');
                         }

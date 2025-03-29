@@ -200,6 +200,7 @@ for ($year = 2025; $year <= 2026; $year++) {
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
     <link rel="stylesheet" href="../styles/details.css">
+    <link rel="stylesheet" href="../styles/messages.css">
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
@@ -416,10 +417,15 @@ for ($year = 2025; $year <= 2026; $year++) {
     </div> <!-- Fin .right-column -->
 </div> <!-- Fin .details-container -->
 
+<?php include 'commentaires.php'; ?>
+
 <!-- Inclusion des scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../script/details.js"></script>
 <script src="../script/favorites.js"></script>
+<link rel="stylesheet" href="../styles/commentaires.css">
+<script src="../script/commentaires.js"></script>
+
 <?php include '../includes/footer.php'; ?>
 </body>
 </html>

@@ -14,7 +14,6 @@ session_start();
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
     <link rel="stylesheet" href="../styles/carte.css"/>
-    <link rel="stylesheet" href="../styles/commentaire.css">
     <link rel="stylesheet" href="../styles/boutons.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

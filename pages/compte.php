@@ -388,7 +388,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
-    <link rel="stylesheet" href="../styles/commentaire.css">
+    <link rel="stylesheet" href="../styles/commentaires.css">
     <link rel="stylesheet" href="../styles/recherche.css">
     <link rel="stylesheet" href="../styles/compte.css">
     <link rel="stylesheet" href="../styles/boutons.css">
@@ -554,21 +554,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     <?php endif; ?>
 </div>
 
-<div id="requests-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Vos demandes</h2>
-        <div id="requests-list"></div>
-    </div>
-</div>
-
-<div id="comments-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button-comments">&times;</span>
-        <h2>Vos commentaires</h2>
-        <div id="user-comments-list"></div>
-    </div>
-</div>
 
 <main></main>
 <?php include '../includes/footer.php'; ?>
