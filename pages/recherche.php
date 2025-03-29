@@ -1,36 +1,18 @@
 <?php
-/**
- * recherche.php
- *
- * Cette page permet aux utilisateurs de rechercher des villes en entrant le nom ou le code postal.
- * Elle affiche des suggestions en temps réel et affiche les résultats de la recherche.
- *
- */
-
 session_start();
 require_once('../bd/bd.php');
+$db = new Database();
 
-// ---------------------------------------------------------------------
-// Enregistrer la recherche dans la table search_history
-// si l'utilisateur a soumis une recherche en GET ?ville=...
-// ---------------------------------------------------------------------
 if (isset($_GET['ville']) && !empty($_GET['ville'])) {
     $villeSaisie = trim($_GET['ville']);
-
-    // Récupère l'id_ville correspondant (si la ville existe dans donnees_villes)
-    $stmt = $conn->prepare("SELECT id_ville FROM donnees_villes WHERE ville = ? LIMIT 1");
+    $stmt = $db->prepare("SELECT id_ville FROM donnees_villes WHERE ville = ? LIMIT 1");
     $stmt->bind_param("s", $villeSaisie);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
         $idVille = $row['id_ville'];
-
-        // On suppose que l'ID utilisateur est en session (ex: $_SESSION['id_users'])
-        // Sinon, tu peux mettre 0 ou NULL par défaut
         $userId = $_SESSION['id_users'] ?? 0;
-
-        // Insère un enregistrement dans search_history
-        $stmt2 = $conn->prepare("
+        $stmt2 = $db->prepare("
             INSERT INTO search_history (id_users, search_date, id_ville)
             VALUES (?, NOW(), ?)
         ");

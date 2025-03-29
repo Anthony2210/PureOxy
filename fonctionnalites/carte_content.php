@@ -1,16 +1,8 @@
 <?php
-// carte-content.php
-// Contenu de la carte interactive, sans la structure HTML complète.
-
 include '../bd/bd.php';
+$db = new Database();
 
-/**
- * Récupère la moyenne de pollution mensuelle des villes depuis la table moy_pollution_villes,
- * puis joint à donnees_villes pour obtenir la lat/lon, etc.
- */
-function getPollutionData($conn) {
-    // Sélection de toutes les colonnes mensuelles entre janvier 2023 et janvier 2025
-    // Adapte les noms si ta table les appelle différemment (moy_janv2023, moy_fev2023, etc.)
+function getPollutionData($db) {
     $sql = "
         SELECT 
             dv.ville AS nom,
@@ -18,7 +10,7 @@ function getPollutionData($conn) {
             dv.longitude AS lon,
             dv.departement AS location,
             mpv.polluant,
-            mpv.avg_value,  -- moyenne globale (colonne existante)
+            mpv.avg_value,
             mpv.moy_janv2023,
             mpv.moy_fev2023,
             mpv.moy_mars2023,
@@ -45,22 +37,18 @@ function getPollutionData($conn) {
             mpv.moy_dec2024,
             mpv.moy_janv2025
         FROM moy_pollution_villes mpv
-        JOIN donnees_villes dv 
-            ON dv.id_ville = mpv.id_ville
+        JOIN donnees_villes dv ON dv.id_ville = mpv.id_ville
         ORDER BY dv.ville
     ";
-
-    $result = $conn->query($sql);
+    $result = $db->getConnection()->query($sql);
     if (!$result) {
-        error_log('Erreur SQL : ' . $conn->error);
+        error_log('Erreur SQL : ' . $db->getConnection()->error);
         exit('Une erreur est survenue lors du chargement des données.');
     }
-
     $villes = [];
     while ($row = $result->fetch_assoc()) {
         $city_key  = $row['nom'];
         $pollutant = $row['polluant'];
-
         if (!isset($villes[$city_key])) {
             $villes[$city_key] = [
                 'nom'       => $row['nom'],
@@ -71,7 +59,6 @@ function getPollutionData($conn) {
             ];
         }
         if (!isset($villes[$city_key]['pollutants'][$pollutant])) {
-            // On stocke la moyenne globale + un sous-tableau "monthly"
             $villes[$city_key]['pollutants'][$pollutant] = [
                 'avg_value' => $row['avg_value'] ?? 0,
                 'monthly'   => [
@@ -107,8 +94,8 @@ function getPollutionData($conn) {
     return json_encode(array_values($villes));
 }
 
-$json_villes = getPollutionData($conn);
-$conn->close();
+$json_villes = getPollutionData($db);
+$db->getConnection()->close();
 ?>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
 

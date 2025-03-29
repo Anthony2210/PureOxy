@@ -1,6 +1,7 @@
 <?php
 session_start();
-include '../bd/bd.php';
+require_once '../bd/bd.php';
+$db = new Database();
 
 /************************************************
  * 1) Récupération des données de seuils
@@ -11,7 +12,7 @@ $sqlT = "
     FROM seuils_normes
     WHERE periode = 'moyenne annuelle'
 ";
-$resT = $conn->query($sqlT);
+$resT = $db->getConnection()->query($sqlT);
 if ($resT && $resT->num_rows > 0) {
     while ($rowT = $resT->fetch_assoc()) {
         $poll = $rowT['polluant'];
@@ -28,22 +29,16 @@ if ($resT && $resT->num_rows > 0) {
     }
 }
 
-// Agrège pour n’avoir qu’un seul objet par polluant
 $thresholds = [];
 foreach ($thresholdsMulti as $poll => $rows) {
-    if (empty($rows)) {
-        continue;
-    }
-    // Tri par valeur DESC
+    if (empty($rows)) continue;
     usort($rows, function($a, $b) {
         return $b['value'] <=> $a['value'];
     });
-
     $maxVal = $rows[0]['value'];
     $maxUnite = $rows[0]['unite'];
     $maxDetails = $rows[0]['details'];
     $maxOrigins = [$rows[0]['origine']];
-
     $others = [];
     for ($i = 1; $i < count($rows); $i++) {
         $row = $rows[$i];
@@ -53,7 +48,6 @@ foreach ($thresholdsMulti as $poll => $rows) {
             $others[] = $row;
         }
     }
-
     $hoverText = "Seuil = {$maxVal} {$maxUnite}, origine : " . implode(", ", $maxOrigins) . ".";
     if (!empty($others)) {
         $hoverText .= " Autres seuils inférieurs : ";
@@ -63,7 +57,6 @@ foreach ($thresholdsMulti as $poll => $rows) {
         }
         $hoverText .= implode("; ", $tmp) . ".";
     }
-
     $thresholds[$poll] = [
         'value'   => $maxVal,
         'unite'   => $maxUnite,
@@ -85,11 +78,10 @@ $sql = "
         m.avg_par_km2,
         v.ville AS city
     FROM moy_pollution_villes AS m
-    JOIN donnees_villes AS v
-        ON m.id_ville = v.id_ville
+    JOIN donnees_villes AS v ON m.id_ville = v.id_ville
     ORDER BY m.polluant, m.avg_value DESC
 ";
-$result = $conn->query($sql);
+$result = $db->getConnection()->query($sql);
 
 /************************************************
  * 3) Stockage des données dans $rankingData
@@ -98,13 +90,10 @@ $rankingData = [];
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $polluant = $row['polluant'];
-        if ($polluant === 'C6H6') {
-            continue;
-        }
-        $avgVal = (float) $row['avg_value'];
-        $avgHab = (float) $row['avg_par_habitant'];
-        $avgKm2 = (float) $row['avg_par_km2'];
-
+        if ($polluant === 'C6H6') continue;
+        $avgVal = (float)$row['avg_value'];
+        $avgHab = (float)$row['avg_par_habitant'];
+        $avgKm2 = (float)$row['avg_par_km2'];
         if (!isset($rankingData[$polluant])) {
             $rankingData[$polluant] = [];
         }

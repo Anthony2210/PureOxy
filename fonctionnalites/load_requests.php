@@ -1,21 +1,8 @@
 <?php
-/**
- * load_requests.php
- *
- * Ce code récupère et affiche les demandes envoyées par l'utilisateur connecté.
- * Si l'utilisateur n'est pas connecté, un message l'invitant à se connecter est affiché.
- *
- */
-
 session_start();
-
 require_once('../bd/bd.php');
+$db = new Database();
 
-/**
- * Vérifier si l'utilisateur est connecté.
- *
- * Si l'utilisateur n'est pas connecté, afficher un message d'invitation à se connecter et arrêter le script.
- */
 if (!isset($_SESSION['id_users'])) {
     echo '<p>Veuillez vous connecter pour voir vos demandes.</p>';
     exit;
@@ -23,17 +10,11 @@ if (!isset($_SESSION['id_users'])) {
 
 $id_users = $_SESSION['id_users'];
 
-/**
- * Préparer et exécuter la requête SQL pour récupérer les demandes de l'utilisateur.
- */
-$stmt = $conn->prepare("SELECT sujet, message, date_demande FROM messages_contact WHERE id_users = ? ORDER BY date_demande DESC");
+$stmt = $db->prepare("SELECT sujet, message, date_demande FROM messages_contact WHERE id_users = ? ORDER BY date_demande DESC");
 $stmt->bind_param("i", $id_users);
 $stmt->execute();
 $result = $stmt->get_result();
 
-/**
- * Vérifier si des demandes ont été trouvées et les afficher.
- */
 if ($result->num_rows > 0) {
     echo '<ul>';
     while ($row = $result->fetch_assoc()) {
@@ -45,14 +26,7 @@ if ($result->num_rows > 0) {
     }
     echo '</ul>';
 } else {
-    /**
-     * Afficher un message si l'utilisateur n'a pas encore envoyé de demandes.
-     */
     echo '<p>Vous n\'avez pas encore envoyé de demandes.</p>';
 }
-
-/**
- * Fermer la requête préparée.
- */
 $stmt->close();
 ?>
