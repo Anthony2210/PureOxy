@@ -10,11 +10,11 @@ header('Content-Type: application/json');
 // Récupération des paramètres POST
 $tab             = isset($_POST['tab']) ? $_POST['tab'] : '';
 $pollutantFilter = isset($_POST['pollutant']) ? $_POST['pollutant'] : '';
-$monthFilter     = isset($_POST['month']) ? $_POST['month'] : ''; // Peut être vide ou contenir une valeur (ex: "janv2023" ou "moy_predic_janv2025")
+$monthFilter     = isset($_POST['month']) ? $_POST['month'] : ''; // Vide pour "Tous les mois"
 $id_ville        = isset($_POST['id_ville']) ? intval($_POST['id_ville']) : 0;
-// Paramètres de pagination pour le tableau pivoté (mode pivot toujours)
+// Paramètres de pagination pour le tableau pivoté (mode pivot)
 $page            = isset($_POST['page']) ? intval($_POST['page']) : 1;
-$limit           = 5; // afficher 5 dates par page
+$limit           = 5; // Afficher 5 mois (ou dates) par page
 $offset          = ($page - 1) * $limit;
 
 if (empty($tab) || $id_ville <= 0) {
@@ -69,7 +69,9 @@ function formatDate($dateStr) {
 try {
     if ($tab === "historique") {
 
-        // ---------- Graphiques (Bar & Time) restent inchangés ----------
+        // ---------------------------
+        // Graphiques (Bar & Time)
+        // ---------------------------
         // BAR CHART pour Historique
         $sql = "SELECT polluant, avg_value";
         if (!empty($monthFilter)) {
@@ -95,10 +97,9 @@ try {
         }
         $stmt->close();
 
-        // TIME CHART pour Historique
+        // TIME CHART pour Historique (daily)
         $dailyQuery = "SELECT jour, polluant, valeur_journaliere FROM all_years_cleaned_daily WHERE id_ville = ?";
         if (!empty($monthFilter)) {
-            // Si un mois est sélectionné, filtrer sur cette période
             $monAbbr = substr($monthFilter, 0, strpos($monthFilter, "2"));
             $yearStr = substr($monthFilter, strpos($monthFilter, "2"));
             if (isset($monthsMap[$monAbbr])) {
@@ -157,111 +158,110 @@ try {
             $colorIndex++;
         }
 
-        // ---------- Tableau pivoté pour Historique (pour tous les tableaux, qu'un mois soit sélectionné ou non) ----------
-        // Ici, nous récupérons les dates distinctes depuis all_years_cleaned_daily (daily mode)
-        // Si $monthFilter est renseigné, on ne prendra que les dates de cette période, sinon toutes les dates disponibles
-        $dailyDatesQuery = "SELECT DISTINCT jour FROM all_years_cleaned_daily WHERE id_ville = ?";
-        $params = [$id_ville];
-        $types = "i";
-        if (!empty($monthFilter)) {
-            $monAbbr = substr($monthFilter, 0, strpos($monthFilter, "2"));
-            $yearStr = substr($monthFilter, strpos($monthFilter, "2"));
-            if (isset($monthsMap[$monAbbr])) {
-                $monthNum = $monthsMap[$monAbbr];
-                $dateLike = $yearStr . "-" . $monthNum . "-%";
-                $dailyDatesQuery .= " AND jour LIKE ?";
-                $params[] = $dateLike;
-                $types .= "s";
-            }
-        }
-        $dailyDatesQuery .= " ORDER BY jour ASC LIMIT ? OFFSET ?";
-        $params[] = $limit;
-        $params[] = $offset;
-        $types .= "ii";
-        $stmtDates = $conn->prepare($dailyDatesQuery);
-        $stmtDates->bind_param($types, ...$params);
-        $stmtDates->execute();
-        $resDates = $stmtDates->get_result();
-        $dates = [];
-        while ($rowD = $resDates->fetch_assoc()) {
-            $dates[] = $rowD['jour'];
-        }
-        $stmtDates->close();
-
-        if (count($dates) === 0) {
-            $tableHtml = "<p>Aucune donnée pour cette page.</p>";
-        } else {
-            // Récupérer la liste des polluants pour ces dates
-            $polluants = [];
-            if (!empty($pollutantFilter)) {
-                $polluants[] = $pollutantFilter;
-            } else {
-                $inClause = implode(',', array_fill(0, count($dates), '?'));
-                $sqlPolls = "SELECT DISTINCT polluant FROM all_years_cleaned_daily 
-                             WHERE id_ville = ? AND jour IN ($inClause) ORDER BY polluant";
-                $paramsPolls = array_merge([$id_ville], $dates);
-                $typesPolls = "i" . str_repeat("s", count($dates));
-                $stmtPolls = $conn->prepare($sqlPolls);
-                $stmtPolls->bind_param($typesPolls, ...$paramsPolls);
-                $stmtPolls->execute();
-                $resPolls = $stmtPolls->get_result();
-                while ($rp = $resPolls->fetch_assoc()) {
-                    $polluants[] = $rp['polluant'];
-                }
-                $stmtPolls->close();
-            }
-            // Récupérer les valeurs pour le pivot
-            $inClause = implode(',', array_fill(0, count($dates), '?'));
-            if (!empty($pollutantFilter)) {
-                $sqlPivot = "SELECT jour, polluant, valeur_journaliere FROM all_years_cleaned_daily 
-                             WHERE id_ville = ? AND jour IN ($inClause) AND polluant = ?";
-                $pivotParams = array_merge([$id_ville], $dates, [$pollutantFilter]);
-                $pivotTypes = "i" . str_repeat("s", count($dates)) . "s";
-            } else {
-                $sqlPivot = "SELECT jour, polluant, valeur_journaliere FROM all_years_cleaned_daily 
-                             WHERE id_ville = ? AND jour IN ($inClause)";
-                $pivotParams = array_merge([$id_ville], $dates);
-                $pivotTypes = "i" . str_repeat("s", count($dates));
-            }
-            $stmtPivot = $conn->prepare($sqlPivot);
-            $stmtPivot->bind_param($pivotTypes, ...$pivotParams);
-            $stmtPivot->execute();
-            $resPivot = $stmtPivot->get_result();
-            $pivot = [];
-            foreach ($dates as $d) {
-                $pivot[$d] = [];
-                foreach ($polluants as $p) {
-                    $pivot[$d][$p] = null;
+        // ---------------------------
+        // Tableau pivoté pour Historique
+        // ---------------------------
+        if (empty($monthFilter)) {
+            // Lorsque le filtre est sur "Tous les mois", on utilise la table moy_pollution_villes.
+            // Pour Historique, les mois concernés sont de janvier 2023 à décembre 2023, tous les mois de 2024, et uniquement janvier 2025.
+            $allMonths = [];
+            // Années 2023 et 2024 : tous les mois
+            $monthsArr = ["janv", "fev", "mars", "avril", "mai", "juin", "juil", "aout", "sept", "oct", "nov", "dec"];
+            for ($year = 2023; $year <= 2024; $year++) {
+                foreach ($monthsArr as $mon) {
+                    $allMonths[] = $mon . $year;
                 }
             }
-            while ($rowP = $resPivot->fetch_assoc()) {
-                $d = $rowP['jour'];
-                $p = $rowP['polluant'];
-                $v = round(floatval($rowP['valeur_journaliere']), 2);
-                $pivot[$d][$p] = $v;
+            // Pour 2025, seulement janvier
+            $allMonths[] = "janv2025";
+            // Pagination : sélectionner $limit mois parmi $allMonths
+            $pagedMonths = array_slice($allMonths, $offset, $limit);
+            // Construire la requête pour récupérer uniquement les colonnes des mois paginés
+            $sqlTable = "SELECT polluant, avg_value";
+            foreach ($pagedMonths as $mCode) {
+                $sqlTable .= ", moy_" . $mCode . " as moy_" . $mCode;
             }
-            $stmtPivot->close();
-
-            // Construction du tableau pivoté : lignes = dates, colonnes = polluants
+            $sqlTable .= " FROM moy_pollution_villes WHERE id_ville = ?";
+            if (!empty($pollutantFilter)) {
+                $sqlTable .= " AND polluant = ?";
+            }
+            $stmtTable = $conn->prepare($sqlTable);
+            if (!empty($pollutantFilter)) {
+                $stmtTable->bind_param("is", $id_ville, $pollutantFilter);
+            } else {
+                $stmtTable->bind_param("i", $id_ville);
+            }
+            $stmtTable->execute();
+            $resultTable = $stmtTable->get_result();
+            // Organiser les résultats par polluant
+            $data = [];
+            while ($row = $resultTable->fetch_assoc()) {
+                $data[$row['polluant']] = $row;
+            }
+            $stmtTable->close();
+            $polluants = array_keys($data);
+            // Construction du tableau pivoté : lignes = mois paginés, colonnes = polluants
             $tableHtml = "<table class='table table-striped'>";
-            $tableHtml .= "<thead><tr><th>Date</th>";
+            $tableHtml .= "<thead><tr><th>Mois</th>";
             foreach ($polluants as $p) {
                 $tableHtml .= "<th>" . htmlspecialchars($p) . "</th>";
             }
             $tableHtml .= "</tr></thead><tbody>";
-            foreach ($dates as $d) {
-                $formattedDate = formatDate($d);
-                $tableHtml .= "<tr><td>" . htmlspecialchars($formattedDate) . "</td>";
+            foreach ($pagedMonths as $mCode) {
+                // Formatage de l'affichage du mois (ex: "janv2023" -> "Janv. 2023")
+                $monAbbr = substr($mCode, 0, strpos($mCode, "2"));
+                $yearStr = substr($mCode, strpos($mCode, "2"));
+                $displayMonth = ucfirst($monAbbr) . ". " . $yearStr;
+                $tableHtml .= "<tr><td>" . htmlspecialchars($displayMonth) . "</td>";
                 foreach ($polluants as $p) {
-                    $val = isset($pivot[$d][$p]) ? $pivot[$d][$p] : "";
+                    $colName = "moy_" . $mCode;
+                    $val = isset($data[$p][$colName]) ? round(floatval($data[$p][$colName]), 2) : "";
                     $tableHtml .= "<td>" . htmlspecialchars($val) . "</td>";
                 }
                 $tableHtml .= "</tr>";
             }
             $tableHtml .= "</tbody></table>";
-            if (count($dates) == $limit) {
+            if (count($pagedMonths) == $limit) {
                 $tableHtml .= "<button class='btn-load-more' onclick=\"loadMore('historique')\">Voir plus</button>";
             }
+        } else {
+            // Mode daily classique lorsque $monthFilter est renseigné
+            $monAbbr = substr($monthFilter, 0, strpos($monthFilter, "2"));
+            $yearStr = substr($monthFilter, strpos($monthFilter, "2"));
+            if (isset($monthsMap[$monAbbr])) {
+                $monthNum = $monthsMap[$monAbbr];
+                $dateLike = $yearStr . "-" . $monthNum . "-%";
+            } else {
+                $dateLike = "";
+            }
+            $sqlTable = "SELECT jour, polluant, valeur_journaliere FROM all_years_cleaned_daily WHERE id_ville = ? AND jour LIKE ?";
+            if (!empty($pollutantFilter)) {
+                $sqlTable .= " AND polluant = ?";
+            }
+            $stmtTable = $conn->prepare($sqlTable);
+            if (!empty($pollutantFilter)) {
+                $stmtTable->bind_param("iss", $id_ville, $dateLike, $pollutantFilter);
+            } else {
+                $stmtTable->bind_param("is", $id_ville, $dateLike);
+            }
+            $stmtTable->execute();
+            $resultTable = $stmtTable->get_result();
+            $tableHtml = "<table class='table table-striped'>";
+            $tableHtml .= "<thead><tr>
+                           <th>Date</th>
+                           <th>Polluant</th>
+                           <th>Valeur Journalière</th>
+                           </tr></thead><tbody>";
+            while ($row = $resultTable->fetch_assoc()) {
+                $formattedDate = formatDate($row['jour']);
+                $tableHtml .= "<tr>";
+                $tableHtml .= "<td>" . htmlspecialchars($formattedDate) . "</td>";
+                $tableHtml .= "<td>" . htmlspecialchars($row['polluant']) . "</td>";
+                $tableHtml .= "<td>" . htmlspecialchars(round(floatval($row['valeur_journaliere']), 2)) . "</td>";
+                $tableHtml .= "</tr>";
+            }
+            $tableHtml .= "</tbody></table>";
+            $stmtTable->close();
         }
 
         $response = [
@@ -278,12 +278,11 @@ try {
         ];
         echo json_encode($response);
         exit;
-
     } else if ($tab === "predictions") {
 
-        // ===============================
+        // ---------------------------
         // BAR CHART pour Prédictions
-        // ===============================
+        // ---------------------------
         $sql = "SELECT polluant, avg_value";
         if (!empty($monthFilter)) {
             $col = $monthFilter;
@@ -308,9 +307,9 @@ try {
         }
         $stmt->close();
 
-        // ===============================
+        // ---------------------------
         // TIME CHART pour Prédictions
-        // ===============================
+        // ---------------------------
         $dailyQuery = "SELECT jour, polluant, valeur_predite FROM prediction_cities WHERE id_ville = ?";
         if (!empty($monthFilter)) {
             $temp = str_replace("moy_predic_", "", $monthFilter);
@@ -372,11 +371,11 @@ try {
             $colorIndex++;
         }
 
-        // ===============================
+        // ---------------------------
         // TABLEAU pour Prédictions
-        // ===============================
+        // ---------------------------
         if (empty($monthFilter)) {
-            // Pour Prédictions, mode "Tous les mois" : tableau pivoté avec les mois en lignes et les polluants en colonnes.
+            // Mode "Tous les mois" pour Prédictions : tableau pivoté avec lignes = mois, colonnes = polluants
             $monthsArr = ["janv", "fev", "mars", "avril", "mai", "juin", "juil", "aout", "sept", "oct", "nov", "dec"];
             $allMonths = [];
             for ($year = 2025; $year <= 2026; $year++) {
@@ -385,10 +384,10 @@ try {
                     $allMonths[] = $mon . $year;
                 }
             }
-            // Pagination : 5 mois par page
+            // Pagination : sélectionner 5 mois par page
             $pagedMonths = array_slice($allMonths, $offset, $limit);
             $sqlTable = "SELECT polluant, avg_value";
-            foreach ($allMonths as $mCode) {
+            foreach ($pagedMonths as $mCode) {
                 $sqlTable .= ", moy_predic_" . $mCode . " as moy_predic_" . $mCode;
             }
             $sqlTable .= " FROM moy_pollution_villes WHERE id_ville = ?";
@@ -432,7 +431,8 @@ try {
                 $tableHtml .= "<button class='btn-load-more' onclick=\"loadMore('predictions')\">Voir plus</button>";
             }
         } else {
-            // Pour Prédictions, si un mois est sélectionné : tableau pivoté sur les dates de ce mois
+            // Mode daily classique pour Prédictions quand un mois est sélectionné :
+            // Ajout de l'ORDER BY pour trier par date si le filtre "Tous les polluants" est activé
             $temp = str_replace("moy_predic_", "", $monthFilter);
             $monAbbr = substr($temp, 0, strpos($temp, "2"));
             $yearStr = substr($temp, strpos($temp, "2"));
@@ -442,88 +442,38 @@ try {
             } else {
                 $dateLike = "";
             }
-            $sqlDates = "SELECT DISTINCT jour FROM prediction_cities 
-                         WHERE id_ville = ? AND jour LIKE ? ORDER BY jour ASC LIMIT ? OFFSET ?";
-            $stmtDates = $conn->prepare($sqlDates);
-            $stmtDates->bind_param("isii", $id_ville, $dateLike, $limit, $offset);
-            $stmtDates->execute();
-            $resDates = $stmtDates->get_result();
-            $dates = [];
-            while ($rowD = $resDates->fetch_assoc()) {
-                $dates[] = $rowD['jour'];
+            $sqlTable = "SELECT jour, polluant, valeur_predite FROM prediction_cities WHERE id_ville = ? AND jour LIKE ? ";
+            // Si aucun polluant n'est sélectionné (tous les polluants), trier par date
+            if (empty($pollutantFilter)) {
+                $sqlTable .= " ORDER BY jour ASC";
             }
-            $stmtDates->close();
-            if (count($dates) === 0) {
-                $tableHtml = "<p>Aucune donnée pour cette page.</p>";
+            if (!empty($pollutantFilter)) {
+                $sqlTable .= " AND polluant = ?";
+            }
+            $stmtTable = $conn->prepare($sqlTable);
+            if (!empty($pollutantFilter)) {
+                $stmtTable->bind_param("iss", $id_ville, $dateLike, $pollutantFilter);
             } else {
-                $polluants = [];
-                if (!empty($pollutantFilter)) {
-                    $polluants[] = $pollutantFilter;
-                } else {
-                    $inClause = implode(',', array_fill(0, count($dates), '?'));
-                    $sqlPolls = "SELECT DISTINCT polluant FROM prediction_cities 
-                                 WHERE id_ville = ? AND jour IN ($inClause) ORDER BY polluant";
-                    $params = array_merge([$id_ville], $dates);
-                    $types = "i" . str_repeat("s", count($dates));
-                    $stmtPolls = $conn->prepare($sqlPolls);
-                    $stmtPolls->bind_param($types, ...$params);
-                    $stmtPolls->execute();
-                    $resPolls = $stmtPolls->get_result();
-                    while ($rp = $resPolls->fetch_assoc()) {
-                        $polluants[] = $rp['polluant'];
-                    }
-                    $stmtPolls->close();
-                }
-                $inClause = implode(',', array_fill(0, count($dates), '?'));
-                if (!empty($pollutantFilter)) {
-                    $sqlPivot = "SELECT jour, polluant, valeur_predite FROM prediction_cities 
-                                 WHERE id_ville = ? AND jour IN ($inClause) AND polluant = ?";
-                    $pivotParams = array_merge([$id_ville], $dates, [$pollutantFilter]);
-                    $pivotTypes = "i" . str_repeat("s", count($dates)) . "s";
-                } else {
-                    $sqlPivot = "SELECT jour, polluant, valeur_predite FROM prediction_cities 
-                                 WHERE id_ville = ? AND jour IN ($inClause)";
-                    $pivotParams = array_merge([$id_ville], $dates);
-                    $pivotTypes = "i" . str_repeat("s", count($dates));
-                }
-                $stmtPivot = $conn->prepare($sqlPivot);
-                $stmtPivot->bind_param($pivotTypes, ...$pivotParams);
-                $stmtPivot->execute();
-                $resPivot = $stmtPivot->get_result();
-                $pivot = [];
-                foreach ($dates as $d) {
-                    $pivot[$d] = [];
-                    foreach ($polluants as $p) {
-                        $pivot[$d][$p] = null;
-                    }
-                }
-                while ($rowP = $resPivot->fetch_assoc()) {
-                    $d = $rowP['jour'];
-                    $p = $rowP['polluant'];
-                    $v = round(floatval($rowP['valeur_predite']), 2);
-                    $pivot[$d][$p] = $v;
-                }
-                $stmtPivot->close();
-                $tableHtml = "<table class='table table-striped'>";
-                $tableHtml .= "<thead><tr><th>Date</th>";
-                foreach ($polluants as $p) {
-                    $tableHtml .= "<th>" . htmlspecialchars($p) . "</th>";
-                }
-                $tableHtml .= "</tr></thead><tbody>";
-                foreach ($dates as $d) {
-                    $formattedDate = formatDate($d);
-                    $tableHtml .= "<tr><td>" . htmlspecialchars($formattedDate) . "</td>";
-                    foreach ($polluants as $p) {
-                        $val = isset($pivot[$d][$p]) ? $pivot[$d][$p] : "";
-                        $tableHtml .= "<td>" . htmlspecialchars($val) . "</td>";
-                    }
-                    $tableHtml .= "</tr>";
-                }
-                $tableHtml .= "</tbody></table>";
-                if (count($dates) == $limit) {
-                    $tableHtml .= "<button class='btn-load-more' onclick=\"loadMore('predictions')\">Voir plus</button>";
-                }
+                $stmtTable->bind_param("is", $id_ville, $dateLike);
             }
+            $stmtTable->execute();
+            $resultTable = $stmtTable->get_result();
+            $tableHtml = "<table class='table table-striped'>";
+            $tableHtml .= "<thead><tr>
+                       <th>Date</th>
+                       <th>Polluant</th>
+                       <th>Valeur Journalière</th>
+                       </tr></thead><tbody>";
+            while ($row = $resultTable->fetch_assoc()) {
+                $formattedDate = formatDate($row['jour']);
+                $tableHtml .= "<tr>";
+                $tableHtml .= "<td>" . htmlspecialchars($formattedDate) . "</td>";
+                $tableHtml .= "<td>" . htmlspecialchars($row['polluant']) . "</td>";
+                $tableHtml .= "<td>" . htmlspecialchars(round(floatval($row['valeur_predite']), 2)) . "</td>";
+                $tableHtml .= "</tr>";
+            }
+            $tableHtml .= "</tbody></table>";
+            $stmtTable->close();
         }
 
         $response = [
@@ -545,7 +495,6 @@ try {
         echo json_encode(["error" => "Onglet non valide"]);
         exit;
     }
-
 } catch (Exception $e) {
     echo json_encode(["error" => $e->getMessage()]);
     exit;
