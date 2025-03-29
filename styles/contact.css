@@ -1,46 +1,51 @@
 /* ========================================================================
    contact.css
-   Styles pour la page de contact
+   Styles modernisés pour la page de contact
    ======================================================================== */
 
-/**
- * Section principale
- */
+/* Variables globales */
+:root {
+    --primary-color: #2d4739;      /* Vert foncé moderne */
+    --accent-color: darkolivegreen;       /* Teinte d'accent */
+    --text-color: #333;
+    --background-color: #f8f9fa;   /* Fond clair */
+}
+
+/* Conteneur principal du formulaire */
 #contact {
     max-width: 600px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
-    color: #333;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Titre de la section */
 #contact h2 {
     text-align: center;
-    font-size: 1.8em;
+    font-size: 2em;
     margin-bottom: 20px;
-    color: #4c5f2d;
+    color: var(--primary-color);
 }
 
-/**
- * Messages de feedback (succès ou erreur)
- */
-.success-message {
+/* Messages de feedback */
+.success-message,
+.error-message {
     text-align: center;
-    color: #4caf50;
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+.success-message {
+    color: #4caf50;
 }
 
 .error-message {
-    text-align: center;
     color: #e74c3c;
-    font-weight: bold;
-    margin-bottom: 20px;
 }
 
-/**
- * Formulaire de contact
- */
+/* Formulaire de contact */
 form {
     display: flex;
     flex-direction: column;
@@ -55,14 +60,14 @@ form {
 .input-group label {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #6b8e23;
+    color: var(--primary-color);
 }
 
 .input-group input,
 .input-group textarea {
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
@@ -71,13 +76,36 @@ form {
 
 .input-group input:focus,
 .input-group textarea:focus {
-    border-color: #6b8e23;
-    box-shadow: 0 0 5px rgba(107, 142, 35, 0.5);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(45, 71, 57, 0.5);
 }
 
 .input-group textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
     max-height: 300px;
 }
 
+/* Bouton d'envoi */
+button#envoyer {
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button#envoyer:hover {
+    background-color: var(--accent-color);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    #contact {
+        margin: 20px;
+        padding: 20px;
+    }
+}

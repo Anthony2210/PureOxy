@@ -24,8 +24,6 @@
     <link rel="stylesheet" href="../styles/p-c.css">
     <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
-    <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script>
 </head>
 
 <?php
@@ -104,11 +102,6 @@ include '../includes/header.php';
         PureOxy<br>
         Adresse email : contact@pureoxy.fr
     </p>
-    <p>
-        By Wazerinh3
-        +o
-    </p>
-
 </section>
 
 <?php
