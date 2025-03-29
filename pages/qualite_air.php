@@ -3,9 +3,7 @@
  * qualite_air.php
  *
  * Cette page affiche des informations sur la qualité de l'air, les sources de pollution
- * et leurs effets sur la santé. Elle inclut également des sections pour les commentaires
- * des utilisateurs et le pied de page du site.
- *
+ * et leurs effets sur la santé.
  */
 
 session_start();
@@ -13,7 +11,6 @@ ob_start();
 
 require '../bd/bd.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -22,64 +19,57 @@ require '../bd/bd.php';
     <title>PureOxy - Qualité de l'air et effets sur la santé</title>
     <!-- Polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Lien Font Awesome pour les icônes -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <!-- Styles de Base -->
+    <!-- Feuilles de style -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour la page à propos -->
     <link rel="stylesheet" href="../styles/articles.css">
-    <!-- Styles pour les commentaires -->
-    <link rel="stylesheet" href="../styles/commentaire.css">
-    <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
-    <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
-<?php
-include '../includes/header.php';
-?>
+<?php include '../includes/header.php'; ?>
 
-<div class="content-wrapper">
-    <main>
+<main>
+    <div class="content-wrapper">
         <div id="main-content" class="container">
-            <!-- Section sur les sources de pollution -->
+            <!-- Sources de pollution -->
             <section class="content-section">
                 <h2>Qualité de l’air : Sources de pollution et effets sur la santé</h2>
-                <p><strong>La pollution de l’air</strong> est un mélange complexe, en évolution constante, de composés qui peuvent être :</p>
-                <ul>
-                    <li><strong>Chimiques</strong> : comme les particules, l’ozone, le dioxyde et les oxydes d’azote, le dioxyde de soufre, les métaux (arsenic, plomb), certains composés organiques volatils (COV) comme le butane, l’éthanol ou le benzène, ou encore des hydrocarbures (hydrocarbures aromatiques polycycliques – HAP) présents dans le charbon, le pétrole, ou provenant de la combustion des carburants ou du bois.</li>
-                    <li><strong>Biologiques</strong> : tels que les pollens et les moisissures.</li>
-                </ul>
-                <p>Ces polluants de l’air proviennent en minorité de phénomènes d’origine naturelle (vents de sable du Sahara, érosion des sols, éruptions volcaniques, feux de végétation…) et en majorité des activités humaines.</p>
+                <p>
+                    <strong>La pollution de l’air</strong> est un mélange complexe et en constante évolution de divers composés, dont certains sont d’origine chimique (particules, ozone, oxydes d’azote, dioxyde de soufre, métaux lourds, composés organiques volatils, hydrocarbures aromatiques polycycliques) et d’autres d’origine biologique (pollens, moisissures).
+                </p>
+                <p>
+                    Alors que certaines sources de pollution sont naturelles (vents de sable, érosion, éruptions volcaniques, feux de végétation), la majorité provient des activités humaines.
+                </p>
                 <div class="image-wrapper">
                     <img src="../images/qualité-air-graph.png" alt="Graphique sur la qualité de l'air">
                 </div>
             </section>
 
-            <!-- Section sur les effets de la pollution sur la santé -->
+            <!-- Effets sur la santé -->
             <section class="content-section">
-                <h2>Effet des épisodes de pollution sur la santé</h2>
-                <p>Les effets de la pollution de l’air sur la santé observés suite à une exposition de quelques heures à quelques jours (exposition aiguë, dite à court terme) sont les suivants : irritations oculaires ou des voies respiratoires, crises d’asthme, exacerbation de troubles cardio-vasculaires et respiratoires pouvant conduire à une hospitalisation, et dans les cas les plus graves au décès.</p>
-                <p>En France, l’exposition à long terme à la pollution de l’air conduit aux impacts les plus importants sur la santé et la part des effets sanitaires attribuables aux épisodes de pollution demeure faible (source : Santé publique France). L’impact prépondérant sur la santé de la pollution de l’air est donc dû à l’exposition tout au long de l’année aux niveaux moyens de pollution et non aux pics.</p>
-                <p>Santé Publique France estime que chaque année près de 40 000 décès seraient attribuables à une exposition des personnes âgées de 30 ans et plus aux particules fines (PM2,5). La pollution de l’air ambiant est ainsi un facteur de risque important pour la santé en France puisqu’elle représente 7% de la mortalité totale de la population française attribuable à une exposition aux PM2,5.</p>
+                <h2>Effets des épisodes de pollution sur la santé</h2>
+                <p>
+                    L'exposition aiguë à la pollution, même de courte durée, peut provoquer des irritations oculaires, des problèmes respiratoires, des crises d'asthme ainsi qu’une exacerbation de troubles cardio-vasculaires. Dans les cas les plus graves, ces effets peuvent nécessiter une hospitalisation, voire entraîner le décès.
+                </p>
+                <p>
+                    En France, l’exposition prolongée à la pollution de l’air contribue significativement aux impacts sanitaires, principalement en raison des niveaux moyens de pollution rencontrés toute l’année. Santé Publique France estime qu’environ 40 000 décès annuels seraient attribuables aux particules fines (PM2,5) chez les personnes de plus de 30 ans, représentant près de 7% de la mortalité totale.
+                </p>
                 <div class="image-wrapper">
-                    <img src="../images/pollution.png" alt="Image de la pollution">
+                    <img src="../images/pollution.png" alt="Image illustrant la pollution">
                 </div>
             </section>
         </div>
+
+        <!-- Appel à l'action -->
         <section id="cta" class="mt-5">
-            <h2>À lire aussi </h2>
+            <h2>À lire aussi</h2>
             <a href="lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>
         </section>
+    </div>
+</main>
 
-    </main>
-    <?php
-    include '../fonctionnalites/commentaires.php';
-    include '../includes/footer.php';
-    ?>
-</div>
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>

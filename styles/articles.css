@@ -1,70 +1,129 @@
 /* ========================================================================
-   Articles - Qualité de l'air et Lutte contre la pollution
+   Articles - Qualité de l'air et Lutte contre la pollution (Modernisé)
    ======================================================================== */
+
+/* Variables globales */
+:root {
+    --primary-color: #2d4739;      /* Vert foncé moderne */
+    --secondary-color: #4c5f2d;    /* Vert secondaire */
+    --accent-color: darkgray;
+    --background-color: #f8f9fa;   /* Fond très clair */
+}
 
 /* Wrapper principal */
 .content-wrapper {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    color: #333;
-    border-radius: 8px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Section principale */
+/* Sections de contenu */
 .content-section {
-    margin-bottom: 40px;
-    padding: 20px;
-    border-radius: 8px;
+    margin-bottom: 60px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .content-section h2,
 .content-section h3 {
-    color: #4c5f2d;
-    margin-bottom: 15px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
 .content-section p {
     font-size: 1.1em;
-    line-height: 1.6;
+    line-height: 1.8;
     color: #555;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
+/* Listes */
 .content-section ul {
     margin: 20px 0;
     padding-left: 40px;
 }
 
 .content-section ul li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-size: 1.1em;
-    color: #333;
-    line-height: 1.5;
+    color: var(--text-color);
+    line-height: 1.6;
+    list-style: disc;
 }
 
 /* Images */
 .image-wrapper {
     text-align: center;
-    width: 75%;
+    margin: 30px 0;
 }
 
 .image-wrapper img {
-    max-width: 80%;
+    width: 100%;
+    max-width: 600px;
     height: auto;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.image-wrapper img:hover {
+    transform: scale(1.03);
 }
 
 /* Appel à l'action */
 #cta {
     text-align: center;
-    margin: 40px 0;
-    padding: 20px;
-    border-radius: 8px;
+    margin: 60px 0;
+    padding: 40px;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+    color: #fff;
+    border-radius: 12px;
 }
 
 #cta h2 {
-    font-size: 1.8em;
-    color: #4c5f2d;
+    font-size: 2em;
     margin-bottom: 20px;
+    font-weight: 700;
+    color : white;
+}
+
+#cta a.button {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    color: #fff;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#cta a.button:hover {
+    background-color: #fff;
+    color: var(--secondary-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 20px;
+        margin: 20px;
+    }
+    .content-section {
+        padding: 20px;
+    }
+    #cta {
+        padding: 30px;
+    }
 }

@@ -3,16 +3,12 @@
  * lutte_pollution.php
  *
  * Cette page présente des informations détaillées sur les efforts de lutte contre la pollution de l'air.
- * Elle aborde des sujets tels que le Plan National de Réduction des Emissions et la Pollution Industrielle.
- * La page inclut également une section de commentaires pour permettre aux utilisateurs de discuter et d'interagir.
- *
  */
 
 session_start();
 ob_start();
 
 require '../bd/bd.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -21,38 +17,29 @@ require '../bd/bd.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PureOxy - Lutte contre la pollution de l'air</title>
     <!-- Polices Google -->
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Lien Font Awesome pour les icônes -->
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <!-- Styles de Base -->
+    <!-- Feuilles de style -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour la page à propos -->
     <link rel="stylesheet" href="../styles/articles.css">
-    <!-- Styles pour les commentaires -->
-    <link rel="stylesheet" href="../styles/commentaire.css">
-    <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
-    <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script>
 </head>
 <body>
+<?php include '../includes/header.php'; ?>
 
-<?php
-include '../includes/header.php';
-?>
 <main>
-<div class="content-wrapper">
+    <div class="content-wrapper">
         <div id="main-content" class="container">
-            <!-- Section principale de contenu -->
+            <!-- Section principale -->
             <section class="content-section">
                 <h2>Lutte contre la pollution de l’air</h2>
                 <p>
                     La qualité de l’air est un enjeu majeur pour la santé et l’environnement. La politique en faveur de la qualité de l’air
-                    nécessite des actions à tous les niveaux, national comme local, et dans tous les secteurs d’activité. L’État, les
+                    nécessite des actions à tous les niveaux – national comme local – et dans tous les secteurs d’activité. L’État, les
                     collectivités territoriales, les opérateurs publics, les entreprises, les citoyens et les organisations non gouvernementales
-                    doivent conjuguer leurs efforts pour garantir à chacun le droit de respirer un air qui ne nuise pas à sa santé.
+                    doivent conjuguer leurs efforts pour garantir à chacun le droit de respirer un air sain.
                 </p>
             </section>
 
@@ -60,18 +47,16 @@ include '../includes/header.php';
             <section class="content-section">
                 <h3>Plan national de réduction des émissions de polluants atmosphériques (PREPA)</h3>
                 <p>
-                    Le plan national de réduction des émissions de polluants atmosphériques (PREPA) fixe la stratégie de l'État pour
-                    réduire les émissions de polluants atmosphériques au niveau national et respecter les exigences européennes. C’est
-                    l’un des outils de déclinaison de la politique climat air énergie.
+                    Le PREPA définit la stratégie de l'État pour réduire les émissions de polluants atmosphériques et respecter les exigences européennes.
+                    Il constitue un outil déclinaison de la politique climat-air-énergie.
                 </p>
                 <p>
-                    Il combine les différents outils de politique publique : réglementations sectorielles, mesures fiscales, initiatives,
-                    actions de sensibilisation et de mobilisation des acteurs, action d'amélioration des connaissances. Il regroupe dans
-                    un document unique les orientations de l’État en faveur de la qualité de l’air sur le moyen et long termes dans de
-                    nombreux secteurs : industrie, transport, résidentiel-tertiaire et agriculture.
+                    Ce plan combine diverses mesures : réglementations sectorielles, actions fiscales, initiatives de sensibilisation et mobilisation des acteurs,
+                    ainsi qu’une amélioration continue des connaissances sur le sujet. Il rassemble en un document unique les orientations de l’État pour la
+                    qualité de l’air sur le moyen et long terme dans des secteurs variés comme l’industrie, le transport, le résidentiel-tertiaire et l’agriculture.
                 </p>
                 <div class="image-wrapper">
-                    <img src="../images/pollution-moyen-déplacement.png" alt="Graphique des déplacements exposés à la pollution" style="width: 30%; height: auto;">
+                    <img src="../images/pollution-moyen-déplacement.png" alt="Graphique des déplacements exposés à la pollution">
                 </div>
             </section>
 
@@ -79,19 +64,12 @@ include '../includes/header.php';
             <section class="content-section">
                 <h3>Pollution Industrielle</h3>
                 <p>
-                    La réduction de la pollution de l’air a des conséquences significatives sur les industries, tant
-                    positives que négatives, selon la manière dont elles s’adaptent à de nouvelles réglementations et
-                    technologies plus écologiques. Voici quelques effets clés :
+                    La réduction de la pollution de l’air impacte les industries de plusieurs manières, selon leur capacité d’adaptation aux nouvelles réglementations et technologies écologiques. Voici quelques points clés :
                 </p>
                 <ul>
-                    <li><strong>Adaptation des industries aux normes environnementales</strong></li>
-                    <li><strong>Coûts initiaux élevés</strong> : Les industries doivent investir dans des technologies de réduction
-                        des émissions, telles que des systèmes de filtration, des énergies renouvelables, ou des véhicules électriques,
-                        ce qui entraîne des coûts initiaux importants.
-                    </li>
-                    <li><strong>Réorganisation des processus</strong> : Certaines industries sont contraintes de modifier leurs
-                        procédés de production pour respecter des limites plus strictes d’émissions de particules fines et de gaz à effet de serre.
-                    </li>
+                    <li><strong>Adaptation aux normes environnementales</strong></li>
+                    <li><strong>Coûts initiaux élevés</strong> : investissements importants dans des technologies de réduction des émissions (systèmes de filtration, énergies renouvelables, véhicules électriques…)</li>
+                    <li><strong>Réorganisation des processus</strong> : modification des procédés de production pour se conformer aux limites d’émissions.</li>
                 </ul>
             </section>
         </div>
@@ -101,13 +79,9 @@ include '../includes/header.php';
             <h2>À lire aussi</h2>
             <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>
         </section>
-    <?php
-    include '../fonctionnalites/commentaires.php';
-    ?>
+    </div>
 </main>
-</body>
 
-<?php
-include '../includes/footer.php';
-?>
+<?php include '../includes/footer.php'; ?>
+</body>
 </html>
