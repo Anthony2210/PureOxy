@@ -2,38 +2,51 @@
 /**
  * bd.php
  *
- * Ce code établit une connexion à la base de données MySQL en utilisant les informations de configuration fournies.
- * Il initialise la variable `$conn` qui sera utilisée pour interagir avec la base de données dans d'autres scripts.
- *
+ * Ce code établit une connexion à la base de données MySQL et définit
+ * la classe Database qui centralise et sécurise l'accès à la base.
+ * Vous pouvez instancier cette classe et utiliser sa méthode prepare() pour préparer vos requêtes.
  */
 
-/**
- * Informations de connexion à la base de données.
- *
- * @var string $servername Adresse du serveur MySQL.
- * @var string $username   Nom d'utilisateur MySQL.
- * @var string $password   Mot de passe MySQL.
- * @var string $dbname     Nom de la base de données.
- */
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "pureoxy";
+// Informations de connexion à la base de données.
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'pureoxy');
 
-/**
- * Établit une connexion à la base de données MySQL.
- *
- * Utilise l'extension mysqli pour se connecter à la base de données.
- *
- * @var mysqli $conn Objet de connexion à la base de données.
- */
-$conn = new mysqli($servername, $username, $password, $dbname);
+class Database {
+    private $connection;
 
-/**
- * Vérifie la connexion à la base de données.
- *
- * Si la connexion échoue, le script s'arrête et affiche un message d'erreur.
- */
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
+    public function __construct() {
+        $this->connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+        if ($this->connection->connect_error) {
+            die("Échec de la connexion : " . $this->connection->connect_error);
+        }
+        // Définit le charset pour éviter les problèmes d'encodage
+        $this->connection->set_charset("utf8mb4");
+    }
+
+    /**
+     * Prépare une requête SQL et renvoie l'objet statement.
+     *
+     * @param string $query La requête SQL à préparer.
+     * @return mysqli_stmt L'objet statement préparé.
+     * @throws Exception Si la préparation échoue.
+     */
+    public function prepare($query) {
+        $stmt = $this->connection->prepare($query);
+        if (!$stmt) {
+            throw new Exception("La préparation de la requête a échoué : " . $this->connection->error);
+        }
+        return $stmt;
+    }
+
+    /**
+     * Retourne l'objet de connexion MySQLi.
+     *
+     * @return mysqli L'objet de connexion.
+     */
+    public function getConnection() {
+        return $this->connection;
+    }
 }
+?>
