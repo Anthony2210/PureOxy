@@ -502,40 +502,79 @@ function time_elapsed_string($datetime, $full = false) {
             }
         }
 
-        // Fonction récursive pour afficher les commentaires avec arborescence limitée
-        function displayComments($comments, $depth = 0) {
-            foreach ($comments as $comment) {
-                // Pour les commentaires de réponse, on n'ajoute pas de marge supplémentaire (affichage au même niveau)
-                echo '<div class="comment" data-id="' . $comment['id_comm'] . '">';
-                echo '<div class="comment-header">';
+      // Fonction récursive pour afficher les commentaires avec arborescence limitée
+function displayComments($comments, $depth = 0) {
+    global $db;
+    foreach ($comments as $comment) {
+        // Récupération des compteurs de votes pour ce commentaire
+        $stmtLikes = $db->prepare("SELECT COUNT(*) as like_count FROM likes WHERE id_comm = ? AND vote = 1");
+        $stmtLikes->bind_param("i", $comment['id_comm']);
+        $stmtLikes->execute();
+        $resultLikes = $stmtLikes->get_result();
+        $rowLikes = $resultLikes->fetch_assoc();
+        $like_count = $rowLikes && $rowLikes['like_count'] !== null ? $rowLikes['like_count'] : 0;
+        $stmtLikes->close();
+
+        $stmtDislikes = $db->prepare("SELECT COUNT(*) as dislike_count FROM likes WHERE id_comm = ? AND vote = -1");
+        $stmtDislikes->bind_param("i", $comment['id_comm']);
+        $stmtDislikes->execute();
+        $resultDislikes = $stmtDislikes->get_result();
+        $rowDislikes = $resultDislikes->fetch_assoc();
+        $dislike_count = $rowDislikes && $rowDislikes['dislike_count'] !== null ? $rowDislikes['dislike_count'] : 0;
+        $stmtDislikes->close();
+
+        // Récupération du vote de l'utilisateur courant (pour le style)
+        $userVote = 0;
+        if (isset($_SESSION['id_users'])) {
+            $stmtUserVote = $db->prepare("SELECT vote FROM likes WHERE id_users = ? AND id_comm = ?");
+            $stmtUserVote->bind_param("ii", $_SESSION['id_users'], $comment['id_comm']);
+            $stmtUserVote->execute();
+            $resultUserVote = $stmtUserVote->get_result();
+            if ($resultUserVote->num_rows > 0) {
+                $voteData = $resultUserVote->fetch_assoc();
+                $userVote = (int)$voteData['vote'];
+            }
+            $stmtUserVote->close();
+        }
+        $likeClass = ($userVote === 1) ? 'voted-like' : '';
+        $dislikeClass = ($userVote === -1) ? 'voted-dislike' : '';
+
+        echo '<div class="comment" data-id="' . $comment['id_comm'] . '">';
+            echo '<div class="comment-header">';
                 echo '<img src="../images/' . htmlspecialchars($comment['profile_picture']) . '" alt="' . htmlspecialchars($comment['username']) . '" class="comment-avatar">';
                 echo '<span class="comment-username">' . htmlspecialchars($comment['username']) . '</span>';
                 echo '<span class="comment-date"><i class="fa-solid fa-clock"></i> ' . time_elapsed_string($comment['created_at']) . '</span>';
-                echo '</div>';
-                echo '<div class="comment-body">' . nl2br(htmlspecialchars($comment['content'])) . '</div>';
-                if (isset($_SESSION['id_users'])) {
-                    echo '<button class="reply-button" data-parent="' . $comment['id_comm'] . '"><i class="fa-solid fa-reply"></i> Répondre</button>';
-                    echo '<div class="reply-form" data-parent-form="' . $comment['id_comm'] . '" style="display:none;">';
+            echo '</div>';
+            echo '<div class="comment-body">' . nl2br(htmlspecialchars($comment['content'])) . '</div>';
+            // Bloc des votes
+            echo '<div class="comment-actions">';
+                echo '<button class="like-button ' . $likeClass . '" data-id="' . $comment['id_comm'] . '" data-vote="1"><i class="fa-solid fa-thumbs-up"></i></button>';
+                echo '<span class="like-count">' . $like_count . '</span>';
+                echo '<button class="dislike-button ' . $dislikeClass . '" data-id="' . $comment['id_comm'] . '" data-vote="-1"><i class="fa-solid fa-thumbs-down"></i></button>';
+                echo '<span class="dislike-count">' . $dislike_count . '</span>';
+            echo '</div>';
+            // Bouton Répondre et formulaire
+            if (isset($_SESSION['id_users'])) {
+                echo '<button class="reply-button" data-parent="' . $comment['id_comm'] . '"><i class="fa-solid fa-reply"></i> Répondre</button>';
+                echo '<div class="reply-form" data-parent-form="' . $comment['id_comm'] . '" style="display:none;">';
                     echo '<textarea placeholder="Votre réponse..."></textarea>';
                     echo '<button class="submit-reply" data-parent="' . $comment['id_comm'] . '"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>';
-                    echo '</div>';
-                }
-                // On autorise l'imbrication seulement si on est sur un commentaire principal (depth == 0)
-                if ($depth == 0 && !empty($comment['replies'])) {
-                    echo '<div class="replies">';
-                    foreach ($comment['replies'] as $reply) {
-                        // Même niveau pour les réponses
-                        displayComments([$reply], 1);
-                    }
-                    echo '</div>';
-                } else if ($depth > 0 && !empty($comment['replies'])) {
-                    // Pour les réponses à une réponse, on reste au même niveau (aucune imbrication supplémentaire)
-                    foreach ($comment['replies'] as $reply) {
-                        displayComments([$reply], 1);
-                    }
-                }
                 echo '</div>';
             }
+            // Imbrication limitée : seules les réponses directes (depth == 0)
+            if ($depth == 0 && !empty($comment['replies'])) {
+                echo '<div class="replies">';
+                foreach ($comment['replies'] as $reply) {
+                    displayComments([$reply], 1);
+                }
+                echo '</div>';
+            } else if ($depth > 0 && !empty($comment['replies'])) {
+                foreach ($comment['replies'] as $reply) {
+                    displayComments([$reply], 1);
+                }
+            }
+        echo '</div>';
+    }
         }
         displayComments($rootComments);
         ?>

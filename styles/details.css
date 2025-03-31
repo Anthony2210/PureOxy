@@ -384,6 +384,7 @@
 /* Corps du commentaire */
 .comment-body {
     margin-bottom: 10px;
+    margin-left : 50px;
     color: #444;
     line-height: 1.5;
 }
@@ -430,4 +431,39 @@
     margin-left: 50px;
     margin-top: 10px;
     /* Pas de nouvelle bordure pour limiter la hiérarchie */
+}
+
+/* Styles pour les boutons de vote */
+
+.comment-actions{
+    margin-left : 50px;
+}
+.comment-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+/* Couleurs par défaut */
+.like-button i, .dislike-button i {
+    color: #333a20;
+}
+
+/* Lorsque le like est voté, le pouce devient vert */
+.like-button.voted-like i {
+    color: green;
+}
+
+/* Lorsque le dislike est voté, le pouce devient rouge */
+.dislike-button.voted-dislike i {
+    color: red;
+}
+
+/* Ajoutez éventuellement un peu d'espace entre les compteurs et les boutons */
+.like-count, .dislike-count {
+    margin: 0 10px;
+    font-weight: bold;
 }
