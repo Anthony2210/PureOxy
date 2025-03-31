@@ -186,6 +186,46 @@ for ($year = 2025; $year <= 2026; $year++) {
     }
 }
 
+// Fonction de conversion en temps relatif
+function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    // Calculez le nombre de semaines et le reste de jours sans ajouter de propriété à $diff
+    $w = floor($diff->d / 7);
+    $d = $diff->d - $w * 7;
+
+    // Créez un tableau local avec toutes les valeurs
+    $diffArray = [
+        'y' => $diff->y,
+        'm' => $diff->m,
+        'w' => $w,
+        'd' => $d,
+        'h' => $diff->h,
+        'i' => $diff->i,
+        's' => $diff->s
+    ];
+
+    $string = [
+        'y' => 'an',
+        'm' => 'mois',
+        'w' => 'semaine',
+        'd' => 'jour',
+        'h' => 'h',
+        'i' => 'min',
+        's' => 'sec'
+    ];
+    foreach ($string as $k => &$v) {
+        if ($diffArray[$k]) {
+            $v = $diffArray[$k] . ' ' . $v . ($diffArray[$k] > 1 && $k !== 'h' ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -417,13 +457,95 @@ for ($year = 2025; $year <= 2026; $year++) {
     </div> <!-- Fin .right-column -->
 </div> <!-- Fin .details-container -->
 
-<?php include 'commentaires.php'; ?>
+<!-- Section Commentaires -->
+<div id="comments-section" class="comments-section">
+    <h2>Commentaires</h2>
+    <?php if(isset($_SESSION['id_users'])): ?>
+        <!-- Formulaire pour poster un nouveau commentaire -->
+        <div id="comment-form">
+            <textarea id="new-comment" placeholder="Écrire un commentaire..."></textarea>
+            <button id="submit-comment">Envoyer</button>
+        </div>
+    <?php else: ?>
+        <p>Vous devez être connecté pour écrire un commentaire. <a href="../login.php">Se connecter</a></p>
+    <?php endif; ?>
+
+    <div id="comments-list">
+        <?php
+        // Récupération des commentaires pour la ville (affichage par ordre chronologique)
+        $stmtComments = $db->prepare("SELECT c.*, u.username, u.profile_picture FROM commentaires c JOIN users u ON c.id_users = u.id_users WHERE c.id_ville = ? ORDER BY c.created_at ASC");
+        $stmtComments->bind_param("i", $idVille);
+        $stmtComments->execute();
+        $resultComments = $stmtComments->get_result();
+        $comments = [];
+        while($row = $resultComments->fetch_assoc()){
+            $comments[] = $row;
+        }
+        $stmtComments->close();
+
+        // Organisation en arborescence : les commentaires dont parent_id == 0 sont les racines
+        $commentsById = [];
+        foreach($comments as $comment){
+            $comment['replies'] = [];
+            $commentsById[$comment['id_comm']] = $comment;
+        }
+        $rootComments = [];
+        foreach($commentsById as $id => $comment){
+            if($comment['parent_id'] == 0){
+                $rootComments[] = &$commentsById[$id];
+            } else {
+                if(isset($commentsById[$comment['parent_id']])){
+                    $commentsById[$comment['parent_id']]['replies'][] = &$commentsById[$id];
+                } else {
+                    $rootComments[] = &$commentsById[$id]; // cas de sécurité
+                }
+            }
+        }
+
+        // Fonction récursive pour afficher les commentaires avec arborescence limitée
+        function displayComments($comments, $depth = 0) {
+            foreach ($comments as $comment) {
+                // Pour les commentaires de réponse, on n'ajoute pas de marge supplémentaire (affichage au même niveau)
+                echo '<div class="comment" data-id="' . $comment['id_comm'] . '">';
+                echo '<div class="comment-header">';
+                echo '<img src="../images/' . htmlspecialchars($comment['profile_picture']) . '" alt="' . htmlspecialchars($comment['username']) . '" class="comment-avatar">';
+                echo '<span class="comment-username">' . htmlspecialchars($comment['username']) . '</span>';
+                echo '<span class="comment-date"><i class="fa-solid fa-clock"></i> ' . time_elapsed_string($comment['created_at']) . '</span>';
+                echo '</div>';
+                echo '<div class="comment-body">' . nl2br(htmlspecialchars($comment['content'])) . '</div>';
+                if (isset($_SESSION['id_users'])) {
+                    echo '<button class="reply-button" data-parent="' . $comment['id_comm'] . '"><i class="fa-solid fa-reply"></i> Répondre</button>';
+                    echo '<div class="reply-form" data-parent-form="' . $comment['id_comm'] . '" style="display:none;">';
+                    echo '<textarea placeholder="Votre réponse..."></textarea>';
+                    echo '<button class="submit-reply" data-parent="' . $comment['id_comm'] . '"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>';
+                    echo '</div>';
+                }
+                // On autorise l'imbrication seulement si on est sur un commentaire principal (depth == 0)
+                if ($depth == 0 && !empty($comment['replies'])) {
+                    echo '<div class="replies">';
+                    foreach ($comment['replies'] as $reply) {
+                        // Même niveau pour les réponses
+                        displayComments([$reply], 1);
+                    }
+                    echo '</div>';
+                } else if ($depth > 0 && !empty($comment['replies'])) {
+                    // Pour les réponses à une réponse, on reste au même niveau (aucune imbrication supplémentaire)
+                    foreach ($comment['replies'] as $reply) {
+                        displayComments([$reply], 1);
+                    }
+                }
+                echo '</div>';
+            }
+        }
+        displayComments($rootComments);
+        ?>
+    </div>
+</div>
 
 <!-- Inclusion des scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../script/details.js"></script>
 <script src="../script/favorites.js"></script>
-<link rel="stylesheet" href="../styles/commentaires.css">
 <script src="../script/commentaires.js"></script>
 
 <?php include '../includes/footer.php'; ?>
