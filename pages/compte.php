@@ -338,6 +338,46 @@ if (isset($_POST['clear_history']) && isset($_SESSION['id_users'])) {
         exit;
     }
 }
+if (!function_exists('time_elapsed_string')) {
+    function time_elapsed_string($datetime, $full = false) {
+        $now = new DateTime;
+        $ago = new DateTime($datetime);
+        $diff = $now->diff($ago);
+
+        // Calcul du nombre de semaines et jours restants
+        $w = floor($diff->d / 7);
+        $d = $diff->d - $w * 7;
+
+        $diffArray = [
+            'y' => $diff->y,
+            'm' => $diff->m,
+            'w' => $w,
+            'd' => $d,
+            'h' => $diff->h,
+            'i' => $diff->i,
+            's' => $diff->s
+        ];
+
+        $string = [
+            'y' => 'an',
+            'm' => 'mois',
+            'w' => 'semaine',
+            'd' => 'jour',
+            'h' => 'h',
+            'i' => 'min',
+            's' => 'sec'
+        ];
+        foreach ($string as $k => &$v) {
+            if ($diffArray[$k]) {
+                $v = $diffArray[$k] . ' ' . $v . ($diffArray[$k] > 1 && $k !== 'h' ? 's' : '');
+            } else {
+                unset($string[$k]);
+            }
+        }
+        if (!$full) $string = array_slice($string, 0, 1);
+        return $string ? implode(', ', $string) . ' ago' : 'just now';
+    }
+}
 
 /**
  * Suppression d'une ville favorite de l'utilisateur.
@@ -388,7 +428,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="../styles/base.css">
     <link rel="stylesheet" href="../styles/includes.css">
-    <link rel="stylesheet" href="../styles/commentaires.css">
     <link rel="stylesheet" href="../styles/recherche.css">
     <link rel="stylesheet" href="../styles/compte.css">
     <link rel="stylesheet" href="../styles/boutons.css">
@@ -421,7 +460,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
 
 <div class="compte-container">
     <h2>L’espace Compte</h2>
-
     <?php if (isset($_SESSION['id_users'])): ?>
         <div class="dashboard">
             <div class="profile-card">
@@ -431,8 +469,6 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                 <div class="profile-info">
                     <h2><?= htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8') ?></h2>
                     <p>Membre depuis <?= isset($user['created_at']) ? date('d/m/Y', strtotime($user['created_at'])) : 'Date inconnue' ?></p>
-                    <button id="view-comments-button">Voir vos commentaires</button>
-                    <button id="view-requests-button">Demandes envoyées</button>
                     <a href="../fonctionnalites/deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
             </div>
@@ -493,6 +529,40 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                     <?php endif; ?>
                 </div>
             </div>
+        </div>
+        <div class="user-comments-section">
+            <h3><i class="fa-solid fa-comment"></i> Mes derniers commentaires</h3>
+            <?php
+            // Récupération des 5 derniers commentaires postés par l'utilisateur connecté
+            $stmtComments = $db->prepare("SELECT c.*, dv.ville AS ville 
+            FROM commentaires c 
+            JOIN donnees_villes dv ON c.id_ville = dv.id_ville 
+            WHERE c.id_users = ? 
+            ORDER BY c.created_at DESC 
+            LIMIT 5");
+            $stmtComments->bind_param("i", $id_users);
+            $stmtComments->execute();
+            $resultComments = $stmtComments->get_result();
+            $user_comments = $resultComments->fetch_all(MYSQLI_ASSOC);
+            $stmtComments->close();
+
+            if (!empty($user_comments)) {
+                echo "<ul class='user-comments-list'>";
+                foreach ($user_comments as $comment) {
+                    echo "<li>";
+                    // Lien vers la page détails pour la ville concernée
+                    echo "<a href='../fonctionnalites/details.php?ville=" . urlencode($comment['ville']) . "'>" . htmlspecialchars($comment['ville']) . "</a>";
+                    // Affichage du contenu du commentaire
+                    echo "<div class='comment-content'>" . htmlspecialchars($comment['content']) . "</div>";
+                    // Affichage de la date au format relatif
+                    echo "<div class='comment-date'><i class='fa-solid fa-clock'></i> " . time_elapsed_string($comment['created_at']) . "</div>";
+                    echo "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<p>Vous n'avez encore posté aucun commentaire.</p>";
+            }
+            ?>
         </div>
     <?php else: ?>
         <div class="compte-tabs">

@@ -57,11 +57,22 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
 
                 <!-- Compte (ou nom utilisateur si connecté) -->
                 <?php if (isset($_SESSION['username'])): ?>
-                    <li>
-                        <a href="<?php echo $baseUrl; ?>pages/compte.php">
-                            <i class="fas fa-user"></i>
-                            <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)">
+                            <i class="fas fa-user"></i> <?php echo htmlspecialchars($_SESSION['username']); ?> <i class="fas fa-caret-down"></i>
                         </a>
+                        <ul class="dropdown-content">
+                            <li>
+                                <a href="<?php echo $baseUrl; ?>pages/compte.php">
+                                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $baseUrl; ?>fonctionnalites/deconnecter.php" style="color: red;">
+                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 <?php else: ?>
                     <li>
@@ -70,7 +81,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                         </a>
                     </li>
                 <?php endif; ?>
-            </ul>
+            <ul>
         </nav>
     </div>
 
