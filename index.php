@@ -21,7 +21,7 @@ session_start();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>PureOxy - Respirez mieux, vivez mieux</title>
+    <title>PureOxy</title>
 
     <!-- Importation des polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
