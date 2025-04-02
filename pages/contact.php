@@ -6,6 +6,8 @@
  * Il récupère les informations de l'utilisateur connecté depuis la table "users",
  * valide les données du formulaire, et enregistre le message dans la table "messages_contact"
  * qui comporte les colonnes : nom, id_message, email, sujet, message, date_demande, id_users.
+ *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();

@@ -1,3 +1,19 @@
+/**
+ * compte.js
+ *
+ * Ce script gère les interactions sur la page "compte.php", notamment :
+ *  - La validation en temps réel des champs du formulaire d'inscription avec vérification AJAX.
+ *  - L'activation ou la désactivation du bouton d'inscription en fonction de la validité des champs.
+ *  - La gestion des fenêtres modales pour les commentaires et les demandes.
+ *
+ * Références :
+ * - ChatGPT pour la structuration du code et la gestion des erreurs.
+ *
+ * Utilisation :
+ * - Ce script s'exécute sur la page "compte.php" et améliore l'expérience utilisateur lors de l'inscription.
+ *
+ * Fichier placé dans le dossier script.
+ */
 $(document).ready(function() {
     var validUsername = false;
     var validEmail = false;
@@ -12,7 +28,7 @@ $(document).ready(function() {
         }
     }
 
-    // Validation du nom d'utilisateur avec vérification AJAX
+    // Validation AJAX du nom d'utilisateur
     $('#username').on('input', function() {
         var username = $(this).val();
         if (username.trim() === '') {
@@ -48,7 +64,7 @@ $(document).ready(function() {
         }
     });
 
-    // Validation de l'email avec vérification AJAX
+    // Validation AJAX de l'email
     $('#email').on('input', function() {
         var email = $(this).val();
         var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -249,7 +265,7 @@ $(document).ready(function() {
             });
     }
 
-    // Fonction d'ouverture des onglets
+    // Fonction d'ouverture des onglets dans l'espace compte
     window.openTab = function(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("compte-tab-content");
@@ -272,7 +288,7 @@ $(document).ready(function() {
         connexionTab.style.display = "block";
     }
 
-    // Initialisation des suggestions pour le champ de ville favorite (défini dans suggestions.js)
+    // Initialisation des suggestions pour le champ de ville favorite
     if (typeof initializeSuggestions === 'function') {
         initializeSuggestions('favorite-city-input', 'suggestions-list', 'city_name_hidden', 'add-favorite-button');
     }

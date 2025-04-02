@@ -1,10 +1,11 @@
 <?php
 /**
- * politique-confidentialite.php
+ * politique_confidentialite.php
  *
  * Cette page affiche la politique de confidentialité de PureOxy.
- * Elle structure le contenu principal décrivant les pratiques de gestion des données personnelles.
+ * Elle décrit les pratiques de gestion des données personnelles.
  *
+ * Fichier placé dans le dossier pages.
  */
 ?>
 

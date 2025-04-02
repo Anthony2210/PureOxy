@@ -3,6 +3,8 @@
  * lutte_pollution.php
  *
  * Cette page présente des informations détaillées sur les efforts de lutte contre la pollution de l'air.
+ *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();
@@ -74,7 +76,7 @@ require '../bd/bd.php';
             </section>
         </div>
 
-        <!-- Appel à l'action -->
+        <!-- Section d'appel à l'action -->
         <section id="cta" class="mt-5">
             <h2>À lire aussi</h2>
             <a href="qualite_air.php" class="button">Sources de pollution et effets sur la santé</a>

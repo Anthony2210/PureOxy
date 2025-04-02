@@ -4,6 +4,8 @@
  * Ce script gère l'affichage et le comportement du bouton "Revenir vers le haut" sur la page.
  * Le bouton apparaît lorsque l'utilisateur fait défiler la page vers le bas et permet de revenir
  * rapidement en haut de la page avec un défilement fluide.
+ *
+ * Fichier placé dans le dossier script.
  */
 
 // Fonction appelée à chaque événement de défilement

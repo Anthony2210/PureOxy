@@ -1,19 +1,21 @@
 /* =========================================================================
    index.css
+   Styles spécifiques pour la page d'accueil (index) de PureOxy.
+   Ce fichier contient les règles de style pour la section d'introduction (hero)
+   et la présentation des fonctionnalités du site.
    ========================================================================= */
 
-/* =========================
+/* ---------------------------
    1) Section d'introduction (Hero)
-   ========================= */
+   ---------------------------
+   Style de la section principale avec un fond dégradé et une image.
+*/
 #introduction {
     position: relative;
-    /* Centrer le contenu verticalement */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    /* Dégradé + image de fond */
     background: linear-gradient(
             rgba(0, 0, 0, 0.2),
             rgba(0, 0, 0, 0.4)
@@ -25,6 +27,7 @@
     overflow: visible;
 }
 
+/* Conteneur central du contenu textuel de la section d'introduction */
 .intro-content {
     position: relative;
     z-index: 2;
@@ -34,44 +37,37 @@
     padding: 20px;
 }
 
+/* Style spécifique du titre dans la section d'introduction */
 #introduction h2 {
     font-size: 3em;
     font-weight: bold;
     margin-bottom: 20px;
     color: #fff;
-}
-
-/* Effet de flou sous le texte du titre */
-#introduction h2 {
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* =========================
+/* ---------------------------
    2) Boîte floue pour les fonctionnalités
-   ========================= */
+   ---------------------------
+   Boîte semi-transparente avec effet de flou pour mettre en valeur les fonctionnalités.
+*/
 .features-floating {
     margin: 0 auto 20px auto;
     padding: 20px;
     max-width: 600px;
-
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(8px);
-
-    /* Bordure arrondie + légère ombre */
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-
     color: #fff;
-    border: 2px solid transparent; /* fallback */
+    border: 2px solid transparent;
     background-clip: padding-box;
     position: relative;
-
-    /* Animation d’apparition (fade-in) */
     opacity: 0;
-    animation: fadeIn 1s forwards 0.3s; /* 0.3s de delay, 1s de durée */
+    animation: fadeIn 1s forwards 0.3s;
 }
 
-/* On peut simuler un contour en dégradé autour du bloc flou : */
+/* Simule un contour en dégradé autour du bloc flou */
 .features-floating::before {
     content: "";
     position: absolute;
@@ -79,17 +75,13 @@
     border-radius: inherit;
     background: linear-gradient(45deg, #6b8e23, #9acd32);
     z-index: -1;
-}
-
-/* On veut que le background du bloc flou ne "mange" pas la bordure */
-.features-floating::before {
-    /* On applique un trick pour qu’il y ait un écart */
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     -webkit-mask-composite: xor;
-    padding: 2px; /* même que la border:2px ci-dessus */
+    padding: 2px;
 }
 
+/* Animation pour l'apparition progressive */
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -100,7 +92,8 @@
         transform: translateY(0);
     }
 }
-/* Titre dans la boîte floue */
+
+/* Style du titre à l'intérieur de la boîte floue */
 .features-floating h3 {
     margin-top: 0;
     font-size: 1.8em;
@@ -108,7 +101,11 @@
     text-decoration: underline;
 }
 
-/* Liste des fonctionnalités (inchangée) */
+/* ---------------------------
+   3) Liste des fonctionnalités
+   ---------------------------
+   Mise en forme en flexbox pour présenter chaque fonctionnalité.
+*/
 .features-list {
     display: flex;
     flex-wrap: wrap;

@@ -1,8 +1,24 @@
 <?php
+/**
+ * recherche.php
+ *
+ * Cette page permet à l'utilisateur de rechercher une ville.
+ * Si une ville est spécifiée dans l'URL via le paramètre GET 'ville',
+ * la recherche est enregistrée dans l'historique et l'utilisateur est redirigé.
+ *
+ * Références :
+ * - ChatGPT pour la gestion de l'insertion et l'historique.
+ *
+ * Utilisation :
+ * - Accéder à cette page pour effectuer une recherche de ville.
+ *
+ * Fichier placé dans le dossier pages.
+ */
 session_start();
 require_once('../bd/bd.php');
 $db = new Database();
 
+// Enregistrement de la recherche si le paramètre 'ville' est présent
 if (isset($_GET['ville']) && !empty($_GET['ville'])) {
     $villeSaisie = trim($_GET['ville']);
     $stmt = $db->prepare("SELECT id_ville FROM donnees_villes WHERE ville = ? LIMIT 1");

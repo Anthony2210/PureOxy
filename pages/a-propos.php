@@ -2,17 +2,23 @@
 /**
  * a-propos.php
  *
- * Cette page présente des informations sur PureOxy, une plateforme dédiée à la surveillance et à
- * l'analyse de la qualité de l'air en France. Elle inclut également des appels à l'action vers
- * des articles pertinents.
+ * Cette page présente des informations sur PureOxy.
+ * Elle détaille également la composition du groupe de projet et propose des liens vers des articles.
  *
+ * Références :
+ * - ChatGPT pour des conseils sur la structuration et la documentation du code.
+ *
+ * Utilisation :
+ * - Accéder à cette page pour afficher des informations sur PureOxy, la composition du groupe et pour naviguer
+ *   vers des articles sur la qualité de l'air.
+ *
+ *  Fichier placé dans le dossier pages.
  */
 
-session_start();
-ob_start();
+session_start(); // Démarrage ou reprise de la session en cours
+ob_start();      // Démarrage de la temporisation de sortie
 
-include '../includes/header.php';
-
+include '../includes/header.php'; // Inclusion de l'en-tête du site
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,11 +41,12 @@ include '../includes/header.php';
 </head>
 <body>
 <main>
+    <!-- Section présentant les informations sur PureOxy -->
     <section id="apropos">
         <h2>À propos de PureOxy</h2>
         <p>
             PureOxy est une plateforme dédiée à la surveillance et à l'analyse de la qualité de l'air en France.
-            Nous fournissons des informations en temps réel sur les niveaux de pollution atmosphérique et proposons des solutions pour aider à améliorer la qualité de l'air.
+            Nous fournissons des informations en temps réel sur les niveaux de pollution atmosphérique et proposons des solutions pour améliorer la qualité de l'air.
         </p>
         <p>
             En utilisant des données collectées sur des polluants comme les particules fines (PM2.5, PM10) et les oxydes d'azote (NO₂),
@@ -47,7 +54,7 @@ include '../includes/header.php';
         </p>
     </section>
 
-    <!-- Section Composition du groupe -->
+    <!-- Section présentant la composition du groupe de projet -->
     <section id="team">
         <h2>Composition du groupe</h2>
         <ul>
@@ -58,7 +65,7 @@ include '../includes/header.php';
         </ul>
     </section>
 
-    <!-- Appel à l'action -->
+    <!-- Section avec un appel à l'action vers des articles -->
     <section id="cta">
         <h2>Découvrez nos articles</h2>
         <p>Plongez dans des articles enrichissants qui couvrent des thématiques variées autour de la qualité de l'air.</p>
@@ -67,7 +74,7 @@ include '../includes/header.php';
     </section>
 </main>
 <?php
-include '../includes/footer.php';
+include '../includes/footer.php'; // Inclusion du pied de page du site
 ?>
 </body>
 </html>

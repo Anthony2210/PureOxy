@@ -4,6 +4,8 @@
  *
  * Cette page affiche des informations sur la qualité de l'air, les sources de pollution
  * et leurs effets sur la santé.
+ *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();
@@ -33,11 +35,11 @@ require '../bd/bd.php';
 <main>
     <div class="content-wrapper">
         <div id="main-content" class="container">
-            <!-- Sources de pollution -->
+            <!-- Section : Sources de pollution -->
             <section class="content-section">
                 <h2>Qualité de l’air : Sources de pollution et effets sur la santé</h2>
                 <p>
-                    <strong>La pollution de l’air</strong> est un mélange complexe et en constante évolution de divers composés, dont certains sont d’origine chimique (particules, ozone, oxydes d’azote, dioxyde de soufre, métaux lourds, composés organiques volatils, hydrocarbures aromatiques polycycliques) et d’autres d’origine biologique (pollens, moisissures).
+                    <strong>La pollution de l’air</strong> est un mélange complexe et en constante évolution de divers composés, dont certains sont d’origine chimique (particules, ozone, oxydes d’azote, dioxyde de soufre, métaux lourds, composés organiques volatils, hydrocarbures aromatiques polycycliques) et d’origine biologique (pollens, moisissures).
                 </p>
                 <p>
                     Alors que certaines sources de pollution sont naturelles (vents de sable, érosion, éruptions volcaniques, feux de végétation), la majorité provient des activités humaines.
@@ -47,7 +49,7 @@ require '../bd/bd.php';
                 </div>
             </section>
 
-            <!-- Effets sur la santé -->
+            <!-- Section : Effets sur la santé -->
             <section class="content-section">
                 <h2>Effets des épisodes de pollution sur la santé</h2>
                 <p>
@@ -62,7 +64,7 @@ require '../bd/bd.php';
             </section>
         </div>
 
-        <!-- Appel à l'action -->
+        <!-- Section d'appel à l'action -->
         <section id="cta" class="mt-5">
             <h2>À lire aussi</h2>
             <a href="lutte_pollution.php" class="button">Lutte contre la pollution de l'air</a>

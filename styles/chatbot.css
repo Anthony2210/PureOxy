@@ -1,9 +1,19 @@
-/* chatbot.css */
+/* =========================================================================
+   chatbot.css
+   Styles pour le Chatbot PureOxy.
+   Ce fichier définit l'apparence et les transitions du chatbot en mode minimisé et étendu.
+   ========================================================================= */
+
+/* ---------------------------
+   1) Conteneur principal du chatbot
+   ---------------------------
+   Positionné en bas à droite et avec une taille réduite en mode minimisé.
+*/
 #chatbot-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;           /* Taille initiale réduite */
+    width: 50px;
     height: 50px;
     background: #fff;
     border: 1px solid #ccc;
@@ -18,7 +28,11 @@
     cursor: pointer;
 }
 
-/* Contenu de la chatbox : caché en mode minimisé */
+/* ---------------------------
+   2) Contenu du chatbot
+   ---------------------------
+   Caché en mode minimisé et affiché en mode étendu.
+*/
 #chatbot-content {
     display: none;
     flex-direction: column;
@@ -26,16 +40,15 @@
     height: 100%;
 }
 
-/* En mode étendu, le container s'agrandit et affiche le contenu */
+/* Mode étendu : agrandissement et affichage du contenu */
 #chatbot-container.expanded {
     width: 300px;
     height: 400px;
-    border-radius: 8px;    /* Angles arrondis pour la chatbox */
+    border-radius: 8px;
     align-items: stretch;
     justify-content: flex-start;
 }
 
-/* En mode étendu, on affiche le contenu et on masque le texte de toggle */
 #chatbot-container.expanded #chatbot-content {
     display: flex;
 }
@@ -44,14 +57,18 @@
     display: none;
 }
 
-/* Texte affiché en mode minimisé */
+/* Texte du toggle en mode minimisé */
 #chatbot-toggle-text {
     font-size: 16px;
     font-weight: bold;
     color: darkolivegreen;
 }
 
-/* Chatbot header */
+/* ---------------------------
+   3) Header du chatbot
+   ---------------------------
+   En-tête avec fond coloré et bouton de fermeture.
+*/
 #chatbot-header {
     background: darkolivegreen;
     color: white;
@@ -71,7 +88,11 @@
     cursor: pointer;
 }
 
-/* Zone de messages */
+/* ---------------------------
+   4) Zone de messages
+   ---------------------------
+   Conteneur des messages du chatbot avec défilement automatique.
+*/
 #chatbot-messages {
     flex: 1;
     overflow-y: auto;
@@ -79,7 +100,11 @@
     border-bottom: 1px solid #ccc;
 }
 
-/* Input pour envoyer un message */
+/* ---------------------------
+   5) Champ de saisie
+   ---------------------------
+   Input pour envoyer un message.
+*/
 #chatbot-input {
     width: 100%;
     padding: 10px;
@@ -88,7 +113,11 @@
     box-sizing: border-box;
 }
 
-/* Styles pour les messages du chat */
+/* ---------------------------
+   6) Styles pour les messages
+   ---------------------------
+   Différenciation visuelle entre messages utilisateur et bot.
+*/
 .message {
     margin: 5px 0;
     padding: 5px 10px;

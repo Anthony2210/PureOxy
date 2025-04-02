@@ -1,4 +1,19 @@
+/**
+ * historique.js
+ *
+ * Ce script gère l'affichage et la mise à jour dynamique de l'historique des recherches sur la page compte.php.
+ * Il permet de supprimer individuellement une recherche ou d'effacer l'historique complet via AJAX.
+ *
+ * Références :
+ * - ChatGPT pour la gestion des requêtes AJAX et le parsing JSON.
+ *
+ * Utilisation :
+ * - Ce script est chargé sur la page compte.php pour améliorer l'expérience utilisateur en lui donnant accès à son historique.
+ *
+ * Fichier placé dans le dossier script.
+ */
 document.addEventListener('DOMContentLoaded', function() {
+    // Affiche un message temporaire
     function displayMessage(message, type) {
         type = type.trim().toLowerCase();
         const messageDiv = document.createElement('div');
@@ -15,12 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateHistoryUI() {
         const historyList = document.querySelector('.history-list');
         if (!historyList || historyList.children.length === 0) {
-            // Cache le bouton "Effacer l'historique"
             const clearHistoryForm = document.getElementById('clear-history-form');
             if (clearHistoryForm) {
                 clearHistoryForm.style.display = 'none';
             }
-            // Affiche la phrase "Vous n'avez pas encore effectué de recherches."
             const historySection = document.querySelector('.history-section');
             if (historySection && !historySection.querySelector('.no-searches-message')) {
                 const p = document.createElement('p');
@@ -50,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     try {
                         const data = JSON.parse(dataText);
                         if (data.success) {
-                            // Supprime l'élément de la liste
                             form.parentElement.remove();
                             displayMessage(data.message, 'success');
                             updateHistoryUI();

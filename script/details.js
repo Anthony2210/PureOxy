@@ -1,9 +1,25 @@
+/**
+ * details.js
+ *
+ * Ce script gère l'interactivité sur la page "details.php".
+ * Il prend en charge la pagination pour les onglets Historique et Prédictions,
+ * la gestion des filtres (polluant et mois) et le rafraîchissement dynamique des graphiques
+ * (bar chart, time chart) ainsi que du tableau de données.
+ *
+ * Références :
+ * - ChatGPT pour la structuration des événements et la gestion de la pagination.
+ *
+ * Utilisation :
+ * - Ce script est chargé sur la page "details.php" et s'active lors de l'interaction de l'utilisateur.
+ *
+ * Fichier placé dans le dossier script.
+ */
 document.addEventListener('DOMContentLoaded', function () {
-    // Variables de pagination
+    // Variables de pagination pour Historique et Prédictions
     let currentPageHistorique = 1;
     let currentPagePredictions = 1;
 
-    // Stockage des dernières données chargées pour chaque onglet
+    // Stockage des dernières données chargées pour recréer les graphiques
     let latestBarData = { historique: null, predictions: null };
     let latestTimeData = { historique: null, predictions: null };
 
@@ -12,17 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             const selectedTab = this.getAttribute('data-tab');
-            // Réinitialiser les onglets
+            // Réinitialisation des onglets
             document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
             document.getElementById(selectedTab).classList.add('active');
-            // Réinitialiser les sous-onglets du panneau actif
+            // Réinitialisation des sous-onglets
             const subTabs = document.querySelectorAll(`#${selectedTab} .sub-tabs li`);
             subTabs.forEach((st, index) => st.classList.toggle('active', index === 0));
             const subPanels = document.querySelectorAll(`#${selectedTab} .sub-tab-panel`);
             subPanels.forEach((panel, index) => panel.classList.toggle('active', index === 0));
-            // Réinitialiser la pagination pour le nouvel onglet
+            // Réinitialisation de la pagination pour l'onglet sélectionné
             if (selectedTab === 'historique') {
                 currentPageHistorique = 1;
             } else if (selectedTab === 'predictions') {
@@ -32,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Gestion des sous-onglets
+    // Gestion des sous-onglets (Bar, Ligne, Tableau)
     const subTabs = document.querySelectorAll('.sub-tabs li');
     subTabs.forEach(subTab => {
         subTab.addEventListener('click', function () {
@@ -43,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             parent.querySelectorAll('.sub-tab-panel').forEach(panel => {
                 panel.classList.toggle('active', panel.id === selectedSubTab);
             });
-            // Après un court délai, recréer le graphique du sous-onglet visible
+            // Recréation des graphiques après un court délai
             setTimeout(() => {
                 if (selectedSubTab.startsWith('line')) {
                     if (parent.id === 'historique' && latestTimeData.historique) {
@@ -66,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Sélecteurs de filtres
+    // Sélecteurs pour les filtres des onglets
     const historiquePollutantFilter = document.getElementById('pollutant-filter-historique');
     const historiqueMonthFilter = document.getElementById('month-filter-historique');
     const predictionsPollutantFilter = document.getElementById('pollutant-filter-predictions');
@@ -97,8 +113,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Fonction de chargement des données via AJAX
-    // isLoadMore indique si l'on doit ajouter (concaténer) ou remplacer le tableau
+    /**
+     * Charge les données de l'onglet via AJAX.
+     *
+     * @param {string} tab L'onglet à charger ("historique" ou "predictions").
+     * @param {boolean} isLoadMore Si true, les données sont ajoutées au tableau existant.
+     */
     function loadTabData(tab, isLoadMore) {
         let pollutant = '';
         let month = '';
@@ -126,10 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                // Sauvegarder les données pour recréation ultérieure
+                // Sauvegarde des données pour recréer les graphiques en cas de changement de sous-onglet
                 latestBarData[tab] = data.barData;
                 latestTimeData[tab] = data.timeData;
-                // Détruire les graphiques existants avant de les recréer
+                // Destruction des graphiques existants
                 if (tab === 'historique') {
                     if (barChartHistorique) { barChartHistorique.destroy(); }
                     if (timeChartHistorique) { timeChartHistorique.destroy(); }
@@ -148,19 +168,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Erreur:', error));
     }
 
-    // Fonction pour mettre à jour le tableau (remplacement)
+    // Mise à jour complète du tableau (remplacement)
     function updateDataTable(tab, tableHtml) {
         document.getElementById(`data-table-${tab}`).innerHTML = tableHtml;
     }
 
-    // Fonction pour ajouter des lignes au tableau existant
-    // On utilise un DOMParser pour extraire les lignes (<tr>) du <tbody> du HTML renvoyé
+    // Ajoute des lignes au tableau existant (pour la pagination)
     function appendDataTable(tab, extraHtml) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(extraHtml, 'text/html');
         const newRows = doc.querySelectorAll('table tbody tr');
         const container = document.querySelector(`#data-table-${tab} table tbody`);
-        // Supprimer le bouton "Voir plus" s'il existe
+        // Supprime le bouton "Voir plus" existant
         const oldBtn = document.querySelector(`#data-table-${tab} .btn-load-more`);
         if (oldBtn) {
             oldBtn.remove();
@@ -168,14 +187,14 @@ document.addEventListener('DOMContentLoaded', function () {
         newRows.forEach(row => {
             container.appendChild(row);
         });
-        // Si le extraHtml contient un bouton "Voir plus", on l'ajoute à la fin du tbody
+        // Ajoute un nouveau bouton "Voir plus" si présent
         const newBtn = doc.querySelector('.btn-load-more');
         if (newBtn) {
             container.parentElement.insertAdjacentHTML('beforeend', newBtn.outerHTML);
         }
     }
 
-    // Fonction pour charger plus de données (pagination)
+    // Fonction de chargement pour la pagination
     function loadMore(tab) {
         if (tab === 'historique') {
             currentPageHistorique++;
@@ -184,13 +203,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         loadTabData(tab, true);
     }
-
-    // Exposer la fonction loadMore pour l'appel depuis le HTML
     window.loadMore = loadMore;
 
     // Variables globales pour Chart.js
     let barChartHistorique, timeChartHistorique, barChartPredictions, timeChartPredictions;
 
+    /**
+     * Met à jour le graphique en barres avec les données fournies.
+     *
+     * @param {string} tab "historique" ou "predictions"
+     * @param {Object} barData Données pour le graphique en barres
+     */
     function updateBarChart(tab, barData) {
         const ctx = document.getElementById(`bar-chart-${tab}`).getContext('2d');
         const config = {
@@ -215,6 +238,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /**
+     * Met à jour le graphique linéaire avec les données temporelles.
+     *
+     * @param {string} tab "historique" ou "predictions"
+     * @param {Object} timeData Données pour le graphique linéaire
+     */
     function updateTimeChart(tab, timeData) {
         const ctx = document.getElementById(`time-chart-${tab}`).getContext('2d');
         const config = {

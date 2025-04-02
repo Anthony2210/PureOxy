@@ -49,65 +49,61 @@
     color: #6b8e23;
     font-size: 1em;
 }
+
 /**
  * Detail Article Wrapper
  * Conteneur spécifique de l'article pour éviter les conflits avec les autres styles.
  */
 .detail-article-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: #f9f9f9;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    line-height: 1.8;
-    font-family: 'Open Sans', sans-serif;
 }
-
-/**
- * Titre principal de l'article.
- */
 .detail-article-wrapper h2 {
-    font-size: 2.2em;
-    color: #4c5f2d;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
     text-align: center;
-    font-weight: 700;
-    text-decoration: underline;
 }
-
-/**
- * Image de l'article.
- */
-.detail-article-wrapper img {
-    display: block;
-    max-width: 90%;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/**
- * Detail Article Content
- * Contenu de l'article.
- */
-.detail-article-content {
-    font-size: 1.2em;
-    color: #333;
-    text-align: justify;
-    line-height: 1.8;
+.detail-article-wrapper p.date {
+    color: #95a5a6;
+    text-align: center;
+    font-size: 0.9rem;
     margin-bottom: 20px;
 }
-
-/**
- * Date de publication de l'article.
- */
-.detail-article-wrapper p em {
+.detail-article-wrapper img {
     display: block;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    color: #6b8e23;
-    font-style: normal;
-    text-align: center;
+    max-width: 100%;
+    margin: 20px auto;
+    border-radius: 8px;
 }
-
+.detail-article-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #34495e;
+    margin-bottom: 30px;
+}
+.detail-article-wrapper a.button {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #164c01;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+.detail-article-wrapper a.button:hover {
+    background: #164c01;
+}
+.back-button {
+    margin-bottom: 20px;
+    display: inline-block;
+    color: #164c01;
+    text-decoration: none;
+    font-weight: bold;
+}
+.back-button:hover {
+    text-decoration: underline;
+}

@@ -1,11 +1,15 @@
-/* ========================================================================
+/* =========================================================================
    base.css
-   Styles de base et globaux pour le site
-   ======================================================================== */
+   Styles de base et globaux pour le site PureOxy.
+   Ce fichier définit la typographie, les couleurs de fond, et les règles de mise en page
+   utilisées par l'ensemble du site.
+   ========================================================================= */
 
-/**
- * Body Styles
- */
+/* ---------------------------
+   1) Styles du body
+   ---------------------------
+   Définit la police, la couleur de fond, le texte, et les espacements par défaut.
+*/
 body {
     font-family: 'League Spartan', sans-serif;
     background-color: #f9f9e9;
@@ -16,43 +20,33 @@ body {
     font-size: 16px;
 }
 
-/**
- * HTML and Body Full Height
- */
+/* ---------------------------
+   2) Hauteur complète pour html et body
+   ---------------------------
+   Assure que la page occupe toute la hauteur de la fenêtre.
+*/
 html, body {
     height: 100%;
     margin: 0;
 }
 
-/**
- * Content Wrapper
- * Conteneur principal qui englobe tout le contenu de la page.
- */
-.content-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/**
- * Main Content
- * Zone principale de contenu entre le header et le footer.
- */
-main {
-    flex: 1;
-}
-
-/**
- * Global Container
- * Conteneur global avec largeur maximale et marges automatiques.
- */
+/* ---------------------------
+   3) Conteneur principal
+   ---------------------------
+   Utilisé pour centrer le contenu avec une largeur maximale.
+*/
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-h2{
+/* ---------------------------
+   4) Styles des titres
+   ---------------------------
+   Définition de l'apparence des titres (h2 ici).
+*/
+h2 {
     text-align: center;
     font-weight: bold;
     text-decoration: underline;
@@ -60,15 +54,41 @@ h2{
     font-size: 2em;
 }
 
+/* ---------------------------
+   5) Réinitialisation des listes
+   ---------------------------
+   Supprime les puces par défaut pour les listes.
+*/
 ul, li {
     list-style: none;
 }
-a{
+
+/* ---------------------------
+   6) Styles des liens
+   ---------------------------
+   Définition de la couleur et des effets au survol.
+*/
+a {
     color: green;
 }
 
-a:hover{
+a:hover {
     text-decoration: underline;
-    color : darkolivegreen;
+    color: darkolivegreen;
     transition-duration: 0.5s;
+}
+
+/* ---------------------------
+   7) Gestion de la structure principale
+   ---------------------------
+   Permet de gérer la disposition globale via flexbox.
+*/
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
 }
