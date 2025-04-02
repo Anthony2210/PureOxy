@@ -1,16 +1,28 @@
-/* ========================================================================
+/* =========================================================================
    includes.css
-   Styles supplémentaires pour les composants inclus (header et footer)
-   ======================================================================== */
+   Styles supplémentaires pour les composants inclus : header et footer du site PureOxy.
+   ========================================================================= */
 
+/* -------------------------
+   Styles pour le Header
+------------------------- */
+
+/**
+ * header
+ * Définition du fond, de l'ombre et de la bordure inférieure pour l'en-tête.
+ */
 header {
     background: linear-gradient(90deg, #f9f9e9 0%, #e6f4d7 100%);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-bottom: 10px solid #6b8e23;
     position: relative;
-    z-index: 999; /* le header au-dessus du contenu */
+    z-index: 999; /* Assure que le header reste au-dessus du contenu */
 }
 
+/**
+ * header .container
+ * Utilisation de Flexbox pour espacer et centrer les éléments du header.
+ */
 header .container {
     display: flex;
     justify-content: space-between;
@@ -19,11 +31,19 @@ header .container {
     min-height: 70px;
 }
 
+/**
+ * #logo img
+ * Style appliqué au logo pour définir sa taille.
+ */
 #logo img {
-    width: 220px; /* Ajustez selon votre logo */
+    width: 220px;
     height: auto;
 }
 
+/**
+ * header nav ul
+ * Mise en forme du menu de navigation principal avec espacement et suppression des puces.
+ */
 header nav ul {
     display: flex;
     align-items: center;
@@ -33,53 +53,70 @@ header nav ul {
     padding: 0;
 }
 
-/* Chaque <li> est le conteneur d'un lien (et éventuel sous-menu) */
+/**
+ * header nav ul li
+ * Chaque élément de liste est positionné relativement pour permettre l'affichage du dropdown.
+ */
 header nav ul li {
-    position: relative; /* pour le dropdown */
+    position: relative;
 }
 
-/* Liens du menu principal */
+/**
+ * header nav ul li > a
+ * Style de base pour les liens du menu, avec icônes et transitions pour un effet interactif.
+ */
 header nav ul li > a {
     display: flex;
     align-items: center;
-    gap: 6px; /* espace entre icône et texte */
+    gap: 6px;
     color: #6b8e23;
     text-decoration: none;
     font-size: 1.1em;
     font-weight: bold;
     padding: 8px 12px;
     border-radius: 4px;
-    /* Transition plus complète (incluant ombre, transform, etc.) */
-    transition: background-color 0.3s ease, color 0.3s ease,
-    box-shadow 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-/* Survol de l'élément <li> => applique le style sur le lien <a> */
+/**
+ * header nav ul li:hover > a
+ * Style appliqué au survol d'un élément du menu pour améliorer la visibilité.
+ */
 header nav ul li:hover > a {
     background-color: #556b2f;
     color: white !important;
     text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* =========================
-   Dropdown
-========================= */
+/* -------------------------
+   Styles pour le Dropdown
+------------------------- */
+
+/**
+ * .dropdown-content
+ * Menu déroulant positionné juste en dessous de l'élément parent.
+ * Contient les liens vers les pages secondaires.
+ */
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 100%; /* juste en dessous du parent */
+    top: 100%; /* Positionné juste en dessous de l'élément parent */
     left: 0;
     background-color: #fff;
     min-width: 160px;
     border-radius: 6px;
-    margin: 0; /* pas de marge pour éviter le "gap" */
+    margin: 0;
     padding: 5px 0;
     z-index: 1000;
-    max-height: 160px;       /* ~ 3 items (à ajuster selon ton padding) */
-    overflow-y: auto;        /* barre de défilement si + de 3 items */
+    max-height: 160px;
+    overflow-y: auto;
 }
 
+/**
+ * .dropdown-content li a
+ * Style des liens à l'intérieur du menu déroulant.
+ */
 .dropdown-content li a {
     display: block;
     padding: 10px 15px;
@@ -91,24 +128,33 @@ header nav ul li:hover > a {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Survol des liens du sous-menu => on utilise un vert plus foncé (#556b2f) */
+/**
+ * .dropdown-content li a:hover
+ * Survol des liens dans le dropdown avec changement de couleur de fond et du texte.
+ */
 .dropdown-content li a:hover {
     background-color: #556b2f;
     color: #fff;
 }
 
-/* Au survol du parent .dropdown => on affiche le sous-menu */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* On garde la possibilité de survoler la dropdown-content elle-même */
+/**
+ * .dropdown:hover .dropdown-content,
+ * .dropdown-content:hover
+ * Affiche le menu déroulant lorsque l'élément parent ou le menu lui-même est survolé.
+ */
+.dropdown:hover .dropdown-content,
 .dropdown-content:hover {
     display: block;
 }
 
+/* -------------------------
+   Styles pour le Footer
+------------------------- */
 
-/* Pied de page (footer) */
+/**
+ * footer
+ * Définit le fond, la couleur du texte et la disposition du pied de page.
+ */
 footer {
     background-color: #556b2f;
     color: white;
@@ -121,10 +167,18 @@ footer {
     border-top: white 1px solid;
 }
 
+/**
+ * footer p
+ * Suppression de la marge sur le paragraphe du footer.
+ */
 footer p {
     margin: 0;
 }
 
+/**
+ * footer nav ul
+ * Mise en forme du menu du pied de page pour centrer les liens.
+ */
 footer nav ul {
     list-style: none;
     padding: 0;
@@ -134,10 +188,18 @@ footer nav ul {
     gap: 20px;
 }
 
+/**
+ * footer nav ul li
+ * Affichage en ligne pour chaque élément du menu du footer.
+ */
 footer nav ul li {
     display: inline;
 }
 
+/**
+ * footer nav ul li a
+ * Style de base des liens dans le pied de page, avec transition au survol.
+ */
 footer nav ul li a {
     color: white;
     text-decoration: none;
@@ -146,21 +208,35 @@ footer nav ul li a {
     border-radius: 5px;
 }
 
+/**
+ * footer nav ul li a:hover
+ * Survol des liens du footer avec soulignement et changement de couleur.
+ */
 footer nav ul li a:hover {
     color: white;
     text-decoration: underline white;
 }
 
-/* Pour que le footer soit en bas même si le contenu est insuffisant */
+/* -------------------------
+   Règles Globales pour le Positionnement
+------------------------- */
+
+/**
+ * body, html
+ * Assure que le footer reste en bas de la page même si le contenu est insuffisant.
+ */
 body, html {
     min-height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-/* Agrandit un peu le logo (optionnel) */
+/**
+ * #logo img (optionnel)
+ * Possibilité d'agrandir le logo via le footer.
+ */
 #logo img {
-    width: 300px !important;
-    height: auto !important;
-    margin-right: 20px !important;
+    width: 300px;
+    height: auto;
+    margin-right: 20px;
 }

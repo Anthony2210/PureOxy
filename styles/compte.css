@@ -1,4 +1,10 @@
-/* Variables CSS */
+/* ========================================================================
+   compte.css
+   Styles pour l'espace Compte de PureOxy, incluant la mise en page du dashboard,
+   les formulaires, les onglets, les favoris, l'historique et les commentaires.
+   ======================================================================== */
+
+/* Variables CSS globales */
 :root {
     --main-color: #6b8e23;
     --secondary-color: darkolivegreen;
@@ -11,7 +17,7 @@
     --padding-container: 40px 20px;
 }
 
-/* Container général */
+/* Conteneur général de l'espace compte */
 .compte-container {
     max-width: var(--max-width-container);
     margin: 0 auto;
@@ -19,7 +25,7 @@
     text-align: center;
 }
 
-/* Titres */
+/* Titres principaux */
 .compte-container h1,
 .compte-container h2 {
     font-size: 2.5em;
@@ -27,7 +33,7 @@
     margin-bottom: 30px;
 }
 
-/* Onglets personnalisés */
+/* Styles pour les onglets de navigation */
 .compte-tabs {
     display: flex;
     justify-content: center;
@@ -53,7 +59,7 @@
     border-bottom: 3px solid var(--secondary-color);
 }
 
-/* Layout Dashboard */
+/* Layout du dashboard */
 .dashboard {
     display: flex;
     flex-direction: row;
@@ -69,7 +75,7 @@
     gap: 20px;
 }
 
-/* Carte de profil */
+/* Carte de profil de l'utilisateur */
 .profile-card {
     background-color: var(--background-color);
     flex: 0 0 30%;
@@ -111,7 +117,7 @@
     display: block;
 }
 
-/* Formulaires */
+/* Styles des formulaires */
 .compte-form {
     text-align: left;
     max-width: 400px;
@@ -160,7 +166,7 @@
     font-family: 'League Spartan', sans-serif;
 }
 
-/* Champs valides/invalides */
+/* Styles pour champs valides et invalides */
 .input-field.valid {
     border-color: green;
 }
@@ -177,7 +183,7 @@
     margin: 5px 0;
 }
 
-/* Villes favorites */
+/* Section des villes favorites */
 .favorite-cities-section {
     width: 100%;
     max-width: 600px;
@@ -195,6 +201,7 @@
     margin-bottom: 15px;
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
 .favorite-cities-list {
@@ -229,7 +236,7 @@
     text-decoration: underline;
 }
 
-/* Suggestions */
+/* Formulaire d'ajout de ville favorite */
 .favorite-city-form {
     display: flex;
     align-items: center;
@@ -259,6 +266,7 @@
     outline: none;
 }
 
+/* Liste de suggestions pour le formulaire de favoris */
 .favorite-cities-section #suggestions-list {
     top: calc(100% + 5px);
     left: 0;
@@ -296,7 +304,7 @@
     color: var(--secondary-color);
 }
 
-/* Historique */
+/* Section historique des recherches */
 .history-section {
     width: 100%;
     max-width: 600px;
@@ -313,6 +321,7 @@
     margin-bottom: 15px;
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
 .history-list {
@@ -356,18 +365,7 @@
     color: var(--main-color);
 }
 
-
-/* Responsive */
-@media (max-width: 768px) {
-    .dashboard {
-        flex-direction: column;
-    }
-    .profile-card {
-        max-width: 100%;
-    }
-}
-
-/* ================== Mes derniers commentaires ================== */
+/* Section des commentaires de l'utilisateur */
 .user-comments-section {
     margin-top: 20px;
     text-align: left;

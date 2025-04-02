@@ -1,19 +1,38 @@
 <?php
+/**
+ * submit_comment.php
+ *
+ * Ce script gère la soumission d'un nouveau commentaire ou d'une réponse sur la page "details.php".
+ * Il reçoit la requête en AJAX, vérifie que l'utilisateur est connecté, valide le contenu,
+ * insère le commentaire dans la base et renvoie un aperçu HTML du commentaire ajouté.
+ *
+ * Références :
+ * - ChatGPT pour la structuration de la requête AJAX et la génération du retour HTML.
+ *
+ * Utilisation :
+ * - Ce fichier est appelé en AJAX depuis "commentaires.js" lors de la soumission d'un commentaire.
+ *
+ * Fichier placé dans le dossier fonctionnalites.
+ */
+
 session_start();
 require_once '../bd/bd.php';
 $db = new Database();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_comment'])) {
+    // Vérification de la connexion utilisateur
     if (!isset($_SESSION['id_users'])) {
         echo json_encode(['success' => false, 'message' => 'Vous devez être connecté pour poster un commentaire.']);
         exit;
     }
     $id_users = $_SESSION['id_users'];
+    // Vérification de la présence de l'identifiant de la ville
     if (!isset($_POST['id_ville']) || empty($_POST['id_ville'])) {
         echo json_encode(['success' => false, 'message' => 'Ville non spécifiée.']);
         exit;
     }
     $id_ville = (int) $_POST['id_ville'];
+    // Récupération et validation du contenu du commentaire
     $content = isset($_POST['content']) ? trim($_POST['content']) : '';
     if(empty($content)){
         echo json_encode(['success' => false, 'message' => 'Contenu vide.']);
@@ -25,12 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_comment'])) {
         $parent_id = (int) $_POST['parent_id'];
     }
 
+    // Insertion du commentaire dans la base
     $stmt = $db->prepare("INSERT INTO commentaires (parent_id, content, created_at, id_users, id_ville) VALUES (?, ?, NOW(), ?, ?)");
     $stmt->bind_param("isii", $parent_id, $content, $id_users, $id_ville);
     if($stmt->execute()){
         $new_id = $stmt->insert_id;
         $stmt->close();
-        // Récupération des infos utilisateur pour générer l'aperçu du commentaire
+        // Récupération des informations de l'utilisateur pour afficher le commentaire
         $stmtUser = $db->prepare("SELECT username, profile_picture FROM users WHERE id_users = ?");
         $stmtUser->bind_param("i", $id_users);
         $stmtUser->execute();

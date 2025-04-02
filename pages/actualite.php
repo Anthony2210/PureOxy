@@ -6,6 +6,7 @@
  * en extrayant les données du site Atmo France. Les articles sont affichés dans une grille
  * avec des liens vers des détails supplémentaires.
  *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();

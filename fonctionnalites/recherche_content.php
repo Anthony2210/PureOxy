@@ -1,5 +1,6 @@
-<!-- recherche-content.php -->
-<!-- Ce fichier contient uniquement le contenu de la barre de recherche et des résultats, sans structure HTML complète -->
+<!-- recherche_content.php -->
+<!-- Ce fichier contient uniquement le contenu de la barre de recherche et des résultats,
+     sans structure HTML complète, pour être inclus dans recherche.php -->
 <div id="search-container">
     <h1>Rechercher une ville</h1>
     <div class="search-input-wrapper">

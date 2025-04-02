@@ -1,3 +1,10 @@
+/* ========================================================================
+   details.css
+   Styles pour la page details, comprenant l'affichage en deux colonnes :
+   la colonne de gauche pour les informations de la ville et le classement des polluants,
+   et la colonne de droite pour les onglets (Historique, Prédictions) et les graphiques associés.
+   Il inclut également les styles pour la section des commentaires.
+   ======================================================================== */
 /* Conteneur global */
 .details-container {
     display: flex;
@@ -8,15 +15,14 @@
     padding: 0 20px;
 }
 
-/* === Colonne gauche === */
+/* Colonne gauche : informations sur la ville */
 .left-column {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 350px; /* Largeur fixe (ajuste si besoin) */
+    width: 350px;
 }
 
-/* Bloc infos Ville */
 .box-ville {
     background: white;
     padding: 20px;
@@ -45,20 +51,16 @@
     box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
 }
 
-/* Détails de la ville */
 .city-details {
-    display: block;
     background-color: rgba(255,255,255,0.8);
     box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
     padding: 10px;
     border-radius: 8px;
-
 }
+
 .city-detail {
     margin-bottom: 8px;
-    display: block;
     color: black;
-
 }
 
 /* Bloc Classement Polluants */
@@ -71,8 +73,7 @@
 }
 
 .polluants-title {
-    margin-top: 0;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     font-size: 1.2em;
     color: black;
     border-bottom: 2px solid black;
@@ -82,9 +83,7 @@
     gap: 10px;
     font-weight: 700;
 }
-.table {
-    border: 2px solid black;
-}
+
 .table-polluants {
     width: 100%;
     border-collapse: collapse;
@@ -93,6 +92,7 @@
     overflow: hidden;
     border: 2px solid black;
 }
+
 .table-polluants thead th {
     background: linear-gradient(135deg, #e0e0d1 0%, #f0f0f0 100%);
     color: #333;
@@ -101,6 +101,7 @@
     border-bottom: 2px solid black;
     font-weight: 700;
 }
+
 .table-polluants tbody td {
     padding: 8px;
     border: 1px solid #ddd;
@@ -108,12 +109,15 @@
     font-weight: 500;
     color: #444;
 }
+
 .table-polluants tr:nth-child(even) {
     background: #fafafa;
 }
+
 .table-polluants tr:hover {
     background-color: #f2f2e9;
 }
+
 .aucun-classement {
     font-style: italic;
     color: #666;
@@ -125,9 +129,9 @@
     box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
 }
 
-/* === Colonne droite : zone principale (onglets) === */
+/* Colonne droite : zone principale (onglets) */
 .right-column {
-    flex: 1; /* prend tout l'espace restant */
+    flex: 1;
 }
 
 /* Conteneur des onglets */
@@ -136,10 +140,10 @@
     border-radius: 10px;
     padding: 15px;
     background-color: #fff;
-    color : black;
+    color: black;
 }
 
-/* Liste d'onglets (Historique, Prédictions) */
+/* Liste des onglets principaux */
 .tabs {
     list-style: none;
     display: flex;
@@ -152,9 +156,6 @@
     padding: 10px 0;
     text-align: center;
     cursor: pointer;
-    border-top: 2px solid transparent;
-    border-right: 2px solid transparent;
-    border-left: 2px solid transparent;
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
@@ -169,21 +170,19 @@
     font-weight: bold;
 }
 
-/* Contenu principal des onglets */
+/* Contenu des onglets */
 .tab-content {
     margin-top: 15px;
     position: relative;
 }
-
-/* Chaque panneau d'onglet (Historique, Prédictions) */
 .tab-panel {
-    display: none;   /* Masqué par défaut */
+    display: none;
 }
 .tab-panel.active {
-    display: block;  /* Affiché quand actif */
+    display: block;
 }
 
-/* Sous-onglets (Bar, Ligne, Tableau) */
+/* Sous-onglets */
 .sub-tabs-container {
     margin-top: 15px;
     border: 2px solid #333a20;
@@ -204,9 +203,6 @@
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s;
-    border-top: 2px solid transparent;
-    border-right: 2px solid transparent;
-    border-left: 2px solid transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -220,8 +216,6 @@
     background-color: #e9f0d8;
     font-weight: bold;
 }
-
-/* Important : masquage des sous-onglets inactifs */
 .sub-tab-panel {
     display: none;
 }
@@ -229,23 +223,23 @@
     display: block;
 }
 
-/* Chart : occupe la largeur de son parent, hauteur fixée ou auto */
+/* Graphiques (Chart.js) */
 .chart {
     display: block;
     width: 100%;
-    height: 400px; /* Ajuste la hauteur du graphique si besoin */
+    height: 400px;
     margin: 0 auto;
 }
 
-/* Le tableau peut avoir une zone scrollable si trop grand */
+/* Zone scrollable pour le tableau */
 .table-scroll {
-    max-height: 400px !important; /* Ajuste si tu veux */
-    overflow-y: auto !important;  /* Barre de défilement verticale */
+    max-height: 400px !important;
+    overflow-y: auto !important;
     max-width: 100% !important;
     overflow-x: auto !important;
 }
 
-/* Filtres (polluant, mois) */
+/* Filtres pour les onglets */
 .filter-container {
     margin-bottom: 10px;
 }
@@ -259,7 +253,7 @@
     font-size: 0.9em;
 }
 
-/* Positionnement du bouton d'étoile en haut à droite */
+/* Bouton pour le favori positionné en haut à droite */
 .favorite-icon {
     position: absolute;
     top: 18px;
@@ -268,18 +262,16 @@
     border: none;
     cursor: pointer;
 }
-
-/* Style de l'icône selon son état */
 .favorite-icon i.fas {
     font-size: 1.8em;
-    color: #f4c542; /* Etoile pleine en jaune */
+    color: #f4c542;
 }
 .favorite-icon i.far {
     font-size: 1.8em;
-    color: #ccc; /* Etoile vide en gris */
+    color: #ccc;
 }
 
-/* Nouvelle version améliorée des particules */
+/* Effet de particules sur le bouton favori */
 .favorite-icon .particle {
     position: absolute;
     width: 6px;
@@ -303,7 +295,7 @@
     }
 }
 
-/* =================== Section Commentaires =================== */
+/* Section Commentaires */
 .comments-section {
     background: #fff;
     border: 2px solid #333a20;
@@ -311,7 +303,6 @@
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-
 .comments-section h2 {
     margin-top: 0;
     font-size: 1.5em;
@@ -320,11 +311,10 @@
     padding-bottom: 5px;
 }
 
-/* Formulaire d'ajout de commentaire */
+/* Formulaire de commentaire */
 #comment-form {
     margin-bottom: 20px;
 }
-
 #comment-form textarea {
     width: 100%;
     height: 80px;
@@ -334,7 +324,6 @@
     font-family: 'League Spartan', sans-serif;
     resize: vertical;
 }
-
 #comment-form button {
     margin-top: 10px;
     padding: 8px 16px;
@@ -346,7 +335,7 @@
     font-family: 'League Spartan', sans-serif;
 }
 
-/* Chaque commentaire */
+/* Style des commentaires */
 .comment {
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -354,14 +343,11 @@
     margin-bottom: 15px;
     background: #fafafa;
 }
-
-/* En-tête du commentaire */
 .comment-header {
     display: flex;
     align-items: center;
     margin-bottom: 8px;
 }
-
 .comment-avatar {
     width: 40px;
     height: 40px;
@@ -369,27 +355,23 @@
     margin-right: 10px;
     border: 2px solid #333a20;
 }
-
 .comment-username {
     font-weight: bold;
     color: #333;
     margin-right: 10px;
 }
-
 .comment-date {
     font-size: 0.8em;
     color: #999;
 }
-
-/* Corps du commentaire */
 .comment-body {
     margin-bottom: 10px;
-    margin-left : 50px;
+    margin-left: 50px;
     color: #444;
     line-height: 1.5;
 }
 
-/* Bouton de réponse */
+/* Bouton Répondre */
 .reply-button {
     background: none;
     border: none;
@@ -402,9 +384,8 @@
 /* Formulaire de réponse */
 .reply-form {
     margin-top: 10px;
-    margin-left: 50px; /* Décalage pour les réponses */
+    margin-left: 50px;
 }
-
 .reply-form textarea {
     width: 100%;
     height: 60px;
@@ -414,7 +395,6 @@
     font-family: 'League Spartan', sans-serif;
     resize: vertical;
 }
-
 .reply-form button {
     margin-top: 5px;
     padding: 6px 12px;
@@ -426,17 +406,15 @@
     font-size: 0.9em;
 }
 
-/* Conteneur pour les réponses (affichage limité à 1 niveau d'imbrication) */
+/* Conteneur des réponses */
 .replies {
     margin-left: 50px;
     margin-top: 10px;
-    /* Pas de nouvelle bordure pour limiter la hiérarchie */
 }
 
-/* Styles pour les boutons de vote */
-
-.comment-actions{
-    margin-left : 50px;
+/* Boutons de vote */
+.comment-actions {
+    margin-left: 50px;
 }
 .comment-actions button {
     background: none;
@@ -446,23 +424,15 @@
     padding: 5px;
     transition: color 0.3s;
 }
-
-/* Couleurs par défaut */
 .like-button i, .dislike-button i {
     color: #333a20;
 }
-
-/* Lorsque le like est voté, le pouce devient vert */
 .like-button.voted-like i {
     color: green;
 }
-
-/* Lorsque le dislike est voté, le pouce devient rouge */
 .dislike-button.voted-dislike i {
     color: red;
 }
-
-/* Ajoutez éventuellement un peu d'espace entre les compteurs et les boutons */
 .like-count, .dislike-count {
     margin: 0 10px;
     font-weight: bold;

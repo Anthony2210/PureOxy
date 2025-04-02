@@ -1,6 +1,7 @@
 /* ========================================================================
    recherche.css
-   Styles pour le conteneur de recherche et les suggestions
+   Styles pour le conteneur de recherche et l'affichage des suggestions
+   sur la page de recherche.
    ======================================================================== */
 
 /**
@@ -13,9 +14,10 @@
 
 /**
  * Search Container
+ * Conteneur principal pour la barre de recherche et le titre.
  */
 #search-container {
-    background-color: transparent; /* Laisser transparent pour voir la couleur de fond de la page */
+    background-color: transparent; /* Transparent pour laisser apparaître le fond */
     padding: 30px;
     border-radius: 8px;
     max-width: 700px;
@@ -35,6 +37,7 @@
 
 /**
  * Search Bar
+ * Styles pour le champ de saisie de la recherche.
  */
 #search-bar {
     width: 100%;
@@ -55,7 +58,7 @@
 
 /**
  * Search Input Wrapper
- * Conteneur pour l'input et les suggestions.
+ * Conteneur pour l'input et la liste des suggestions.
  */
 .search-input-wrapper {
     position: relative;
@@ -64,7 +67,7 @@
 
 /**
  * Suggestions List
- * Liste des suggestions avec animation.
+ * Liste déroulante des suggestions, avec animation d'apparition.
  */
 #suggestions-list {
     position: absolute;
@@ -112,6 +115,8 @@
 #suggestions-list li + li {
     border-top: 1px solid #eee;
 }
+
+/* Couleur de l'avertissement */
 .avertissement {
-    color : white;
+    color: white;
 }

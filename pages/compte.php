@@ -1,15 +1,25 @@
 <?php
 /**
- * Compte.php
+ * compte.php
  *
  * Gestion de la session utilisateur, connexion, inscription,
- * gestion des villes favorites et historique des recherches.
+ * gestion des villes favorites, historique des recherches et affichage
+ * des dernières interactions (commentaires, etc.).
+ *
+ * Références :
+ * - ChatGPT pour des conseils sur la structuration et la documentation.
+ *
+ * Utilisation :
+ * - Permet de se connecter ou de s'inscrire
+ * - Offre un espace personnel (dashboard) à l'utilisateur.
+ *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();
 ob_start();
 
-// Génération d'un jeton CSRF si non déjà défini.
+// Génération d'un jeton CSRF si non déjà défini
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -18,9 +28,9 @@ $csrf_token = $_SESSION['csrf_token'];
 require '../bd/bd.php';
 $db = new Database();
 
-/**
- * Gestion de la connexion de l'utilisateur.
- */
+/************************************************
+ * Connexion utilisateur
+ ************************************************/
 if (isset($_POST['login'])) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
@@ -51,9 +61,9 @@ if (isset($_POST['login'])) {
     }
 }
 
-/**
- * Gestion de l'inscription de l'utilisateur.
- */
+/************************************************
+ * Inscription utilisateur
+ ************************************************/
 if (isset($_POST['register'])) {
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $register_error = "Jeton CSRF invalide.";
@@ -108,9 +118,9 @@ if (isset($_POST['register'])) {
     }
 }
 
-/**
- * Récupération des données pour l'utilisateur connecté.
- */
+/************************************************
+ * Récupération des données de l'utilisateur connecté
+ ************************************************/
 if (isset($_SESSION['id_users'])) {
     $id_users = $_SESSION['id_users'];
 
@@ -190,9 +200,9 @@ if (isset($_SESSION['id_users'])) {
     }
 }
 
-/**
- * Ajout d'une ville favorite pour l'utilisateur connecté.
- */
+/************************************************
+ * Ajout d'une ville favorite
+ ************************************************/
 if (isset($_POST['add_favorite_city']) && isset($_SESSION['id_users'])) {
     $city_name = trim($_POST['city_name']);
     $id_users = $_SESSION['id_users'];
@@ -257,8 +267,6 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['id_users'])) {
     }
 
     if (isset($_POST['ajax']) && $_POST['ajax'] == '1') {
-        ini_set('display_errors', 0);
-        error_reporting(0);
         if (ob_get_length()) { ob_end_clean(); }
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -272,9 +280,9 @@ if (isset($_POST['add_favorite_city']) && isset($_SESSION['id_users'])) {
     }
 }
 
-/**
- * Suppression d'une recherche individuelle dans l'historique de l'utilisateur.
- */
+/************************************************
+ * Suppression d'une recherche individuelle
+ ************************************************/
 if (isset($_POST['delete_search']) && isset($_SESSION['id_users'])) {
     $search_query = $_POST['search_query'];
     $id_users = $_SESSION['id_users'];
@@ -311,9 +319,9 @@ if (isset($_POST['delete_search']) && isset($_SESSION['id_users'])) {
     }
 }
 
-/**
- * Efface l'historique des recherches de l'utilisateur.
- */
+/************************************************
+ * Effacement de l'historique des recherches
+ ************************************************/
 if (isset($_POST['clear_history']) && isset($_SESSION['id_users'])) {
     $id_users = $_SESSION['id_users'];
     $stmt = $db->prepare("DELETE FROM search_history WHERE id_users = ?");
@@ -338,13 +346,14 @@ if (isset($_POST['clear_history']) && isset($_SESSION['id_users'])) {
         exit;
     }
 }
+
+// Fonction utilitaire pour afficher le temps écoulé
 if (!function_exists('time_elapsed_string')) {
     function time_elapsed_string($datetime, $full = false) {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
 
-        // Calcul du nombre de semaines et jours restants
         $w = floor($diff->d / 7);
         $d = $diff->d - $w * 7;
 
@@ -379,9 +388,9 @@ if (!function_exists('time_elapsed_string')) {
     }
 }
 
-/**
- * Suppression d'une ville favorite de l'utilisateur.
- */
+/************************************************
+ * Suppression d'une ville favorite
+ ************************************************/
 if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     $city_name = $_POST['city_name'];
     $id_users = $_SESSION['id_users'];
@@ -424,6 +433,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Compte - PureOxy</title>
+    <!-- Inclusion des polices et des feuilles de style -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="../styles/base.css">
@@ -438,6 +448,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
 <body>
 <?php include '../includes/header.php'; ?>
 
+<!-- Conteneur pour afficher les messages d'erreur/succès -->
 <div id="message-container">
     <?php
     if (isset($login_error)) {
@@ -462,6 +473,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
     <h2>L’espace Compte</h2>
     <?php if (isset($_SESSION['id_users'])): ?>
         <div class="dashboard">
+            <!-- Carte de profil -->
             <div class="profile-card">
                 <div class="profile-avatar">
                     <img src="../images/user.png" alt="Photo de profil">
@@ -472,7 +484,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                     <a href="../fonctionnalites/deconnecter.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </div>
             </div>
+            <!-- Contenu du dashboard -->
             <div class="dashboard-content">
+                <!-- Villes favorites -->
                 <div class="favorite-cities-section">
                     <h3><i class="fas fa-city"></i> Vos villes favorites</h3>
                     <?php if (!empty($favorite_cities)): ?>
@@ -494,6 +508,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                         <p>Vous n'avez pas encore ajouté de villes favorites.</p>
                     <?php endif; ?>
 
+                    <!-- Formulaire pour ajouter une ville favorite -->
                     <form method="post" class="favorite-city-form" id="favorite-city-form">
                         <input type="text" id="favorite-city-input" placeholder="Entrez le nom d'une ville" autocomplete="off" required>
                         <input type="hidden" name="city_name" id="city_name_hidden">
@@ -502,8 +517,9 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                         <button type="submit" name="add_favorite_city" id="add-favorite-button" disabled><i class="fas fa-plus"></i> Ajouter</button>
                     </form>
                 </div>
+                <!-- Historique des recherches -->
                 <div class="history-section">
-                    <h3><i class="fas fa-history"></i>Historique des dernières recherches</h3>
+                    <h3><i class="fas fa-history"></i> Historique des dernières recherches</h3>
                     <?php if (!empty($search_history)): ?>
                         <ul class="history-list">
                             <?php foreach ($search_history as $search): ?>
@@ -530,16 +546,17 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                 </div>
             </div>
         </div>
+        <!-- Section pour les derniers commentaires de l'utilisateur -->
         <div class="user-comments-section">
             <h3><i class="fa-solid fa-comment"></i> Mes derniers commentaires</h3>
             <?php
-            // Récupération des 5 derniers commentaires postés par l'utilisateur connecté
+            // Récupération des 5 derniers commentaires postés par l'utilisateur
             $stmtComments = $db->prepare("SELECT c.*, dv.ville AS ville 
-            FROM commentaires c 
-            JOIN donnees_villes dv ON c.id_ville = dv.id_ville 
-            WHERE c.id_users = ? 
-            ORDER BY c.created_at DESC 
-            LIMIT 5");
+                FROM commentaires c 
+                JOIN donnees_villes dv ON c.id_ville = dv.id_ville 
+                WHERE c.id_users = ? 
+                ORDER BY c.created_at DESC 
+                LIMIT 5");
             $stmtComments->bind_param("i", $id_users);
             $stmtComments->execute();
             $resultComments = $stmtComments->get_result();
@@ -550,11 +567,11 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                 echo "<ul class='user-comments-list'>";
                 foreach ($user_comments as $comment) {
                     echo "<li>";
-                    // Lien vers la page détails pour la ville concernée
+                    // Lien vers la page de détails de la ville
                     echo "<a href='../fonctionnalites/details.php?ville=" . urlencode($comment['ville']) . "'>" . htmlspecialchars($comment['ville']) . "</a>";
                     // Affichage du contenu du commentaire
                     echo "<div class='comment-content'>" . htmlspecialchars($comment['content']) . "</div>";
-                    // Affichage de la date au format relatif
+                    // Affichage de la date relative
                     echo "<div class='comment-date'><i class='fa-solid fa-clock'></i> " . time_elapsed_string($comment['created_at']) . "</div>";
                     echo "</li>";
                 }
@@ -565,6 +582,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
             ?>
         </div>
     <?php else: ?>
+        <!-- Si l'utilisateur n'est pas connecté, affichage des onglets Connexion/Inscription -->
         <div class="compte-tabs">
             <button class="compte-tab-link active" onclick="openTab(event, 'connexion')">
                 <i class="fas fa-sign-in-alt"></i> Connexion
@@ -620,10 +638,8 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
                 <button type="submit" name="register" class="btn-register" disabled>S'inscrire</button>
             </form>
         </div>
-
     <?php endif; ?>
 </div>
-
 
 <main></main>
 <?php include '../includes/footer.php'; ?>
@@ -631,7 +647,7 @@ if (isset($_POST['delete_favorite_city']) && isset($_SESSION['id_users'])) {
 <!-- Inclusion des scripts externes -->
 <script src="../script/suggestions.js"></script>
 <script src="../script/compte.js"></script>
-<script src="../script/favorites.js"></script>
-<script src="../script/searchHistory.js"></script>
+<script src="../script/favoris.js"></script>
+<script src="../script/historique.js"></script>
 </body>
 </html>

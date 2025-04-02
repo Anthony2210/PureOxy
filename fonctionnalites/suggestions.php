@@ -1,4 +1,18 @@
 <?php
+/**
+ * suggestions.php
+ *
+ * Ce fichier renvoie en format JSON les suggestions de villes en fonction de la requête passée en GET.
+ * Il recherche dans la base de données les villes dont le nom ou le code postal commence par la chaîne fournie.
+ *
+ * Références :
+ * - ChatGPT pour la formulation de la requête SQL et la gestion du cache.
+ *
+ * Utilisation :
+ * - Ce fichier est appelé en AJAX par suggestions.js pour afficher les suggestions en temps réel.
+ *
+ * Fichier placé dans le dossier fonctionnalite.
+ */
 session_start();
 require_once('../bd/bd.php');
 $db = new Database();

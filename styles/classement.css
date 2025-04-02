@@ -1,38 +1,39 @@
 /* =======================================
    classement.css
-   Styles pour la page classement
+   Styles pour la page Classement de PureOxy.
+   Ce fichier définit l'apparence du conteneur du classement, du menu déroulant,
+   du tableau, et des éléments d'interactivité (pagination, survol, etc.).
    ======================================= */
 
-/* Section du classement */
+/* Conteneur principal de la page Classement */
 #classement {
     width: 90%;
     max-width: 1200px;
     margin: 40px auto;
-    background: #fff; /* Fond blanc pour la section */
+    background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 30px 20px;
     text-align: center;
+    font-size: 17px;
 }
 
-/* Le titre principal */
+/* Titre principal */
 #classement h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
     color: #6b8e23;
-    font-family: 'League Spartan', sans-serif;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Paragraphes explicatifs */
+/* Styles généraux pour les paragraphes */
 #classement p {
     margin-bottom: 15px;
     color: #333;
-    font-family: 'Open Sans', sans-serif;
     line-height: 1.5;
 }
 
-/* Label pour le polluant */
+/* Label du menu déroulant pour les polluants */
 .polluant-label {
     font-weight: bold;
     color: #556b2f;
@@ -40,13 +41,14 @@
     margin-right: 10px;
 }
 
-/* Menu déroulant polluant */
+/* Menu déroulant pour choisir un polluant */
 .pollutant-dropdown {
-    font-size: 1.1em;
-    padding: 8px 12px;
-    margin: 10px;
+    font-family: 'League Spartan', sans-serif;
+    text-align: left;
+    font-size: 1.08em;
+    padding: 10px 25px 9px 7px;
     border: 2px solid #6b8e23;
-    border-radius: 4px;
+    border-radius: 40px;
     background-color: #fff;
     color: #6b8e23;
     font-weight: bold;
@@ -59,7 +61,7 @@
     background-size: 12px;
 }
 
-/* Survol du menu déroulant */
+/* Changement de style au survol du menu déroulant */
 .pollutant-dropdown:hover {
     background-color: #f2f2f2;
     border-color: #556b2f;
@@ -73,7 +75,7 @@
     font-size: 0.95em;
 }
 
-/* Fieldset pour les cases à cocher */
+/* Fieldset des colonnes à afficher */
 #columns-choices {
     margin: 1em 0;
     border: 2px solid #6b8e23;
@@ -82,16 +84,17 @@
     display: inline-block;
 }
 
+/* Légende du fieldset */
 #columns-choices legend {
     font-weight: bold;
     color: #6b8e23;
     padding: 0 10px;
 }
 
+/* Style des labels dans le fieldset */
 #columns-choices label {
     margin: 0 10px;
     color: #333;
-    font-family: 'Open Sans', sans-serif;
 }
 
 /* Tableau de classement */
@@ -105,62 +108,67 @@
     overflow: hidden;
 }
 
+/* En-tête du tableau */
 .table-classement thead tr {
     background-color: #6b8e23;
     color: #fff;
 }
 
+/* Cellules du tableau */
 .table-classement th,
 .table-classement td {
     padding: 12px 20px;
     border: 1px solid #ddd;
     text-align: center;
     font-size: 1em;
-    font-family: 'Open Sans', sans-serif;
 }
 
-/* Curseur pointer sur les en-têtes triables */
+/* En-têtes cliquables pour le tri */
 .table-classement th {
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
+/* Changement de couleur des en-têtes au survol */
 .table-classement th:hover {
     background-color: #56751b;
 }
 
+/* Lignes paires du tableau */
 .table-classement tbody tr:nth-child(even) {
     background-color: #f3f3f3;
 }
 
+/* Effet de survol sur les lignes du tableau */
 .table-classement tbody tr:hover {
     background-color: #e9f5e1;
 }
 
-/* Couleurs de fond selon le seuil */
+/* Couleurs de fond pour indiquer l'état par rapport aux seuils */
 .bg-green {
-    background-color: #e2fce2; /* vert clair */
+    background-color: #e2fce2;
 }
 .bg-green:hover {
     background-color: #d2f8d2 !important;
 }
 
 .bg-orange {
-    background-color: #ffedcc; /* orange clair */
+    background-color: #ffedcc;
 }
 .bg-orange:hover {
     background-color: #ffe0b2 !important;
 }
 
 .bg-red {
-    background-color: #ffd6d6; /* rouge clair */
+    background-color: #ffd6d6;
 }
 .bg-red:hover {
     background-color: #ffcccc !important;
 }
 
-/* Bouton "Voir plus" */
+/* Bouton "Voir plus" pour la pagination */
 .btn-voir-plus {
+    font-family: 'League Spartan', sans-serif;
     display: inline-block;
     margin: 20px auto 0 auto;
     padding: 12px 25px;
@@ -177,17 +185,18 @@
     background-color: #56751b;
     transform: translateY(-2px);
 }
-/* Encadré global */
+
+/* Encadré pour le bloc d'informations sur le polluant */
 #polluant-box {
     display: flex;
-    flex-wrap: wrap;  /* permet le passage en colonne si l'écran est étroit */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
     margin: 20px auto;
     max-width: 900px;
 }
 
-/* Bloc Descriptif */
+/* Blocs descriptif et seuils pour le polluant */
 .polluant-descriptif, .polluant-thresholds {
     flex: 1 1 300px;
     background-color: #f9f9e9;
@@ -197,26 +206,27 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* Titres des blocs */
 .polluant-descriptif h3,
 .polluant-thresholds h3 {
     margin-top: 0;
     color: #6b8e23;
     text-decoration: underline;
-    font-family: 'League Spartan', sans-serif;
 }
 
-/* Contenu de la partie Seuils */
+/* Contenu du bloc des seuils */
 .polluant-thresholds-content {
     color: #333;
-    font-family: 'Open Sans', sans-serif;
     line-height: 1.5;
 }
 
+/* Paragraphes dans le bloc des seuils */
 .polluant-thresholds-content .threshold-box p {
     margin: 5px 0;
     font-size: 0.95em;
 }
 
+/* Mise en valeur des textes en gras dans le contenu */
 .polluant-thresholds-content strong {
     color: #556b2f;
 }

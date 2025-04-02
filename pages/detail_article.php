@@ -5,6 +5,7 @@
  * Cette page affiche les détails d'un article spécifique en extrayant les données depuis le site source.
  * Elle limite la longueur du contenu affiché et fournit un lien vers l'article complet sur le site source.
  *
+ * Fichier placé dans le dossier pages.
  */
 
 session_start();

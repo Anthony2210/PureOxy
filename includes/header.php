@@ -2,36 +2,49 @@
 /**
  * header.php
  *
- * En-tête du site PureOxy : logo, menu principal, chat.
+ * En-tête du site PureOxy.
+ * Ce fichier gère l'affichage du logo, du menu principal, et du composant chatbot.
+ * Il construit dynamiquement l'URL de base pour générer correctement les liens.
+ *
+ * Références :
+ * - ChatGPT pour la structuration et la documentation du code.
+ *
+ * Utilisation :
+ * - Inclure ce fichier dans les pages du site pour afficher l'en-tête commun.
+ *
+ * Fichier placé dans le dossier includes.
  */
 
+// Construction de l'URL de base à partir du schéma et de l'hôte de la requête actuelle
 $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
 ?>
 
 <header>
     <div id="header" class="container">
+        <!-- Logo du site avec lien vers la page d'accueil -->
         <div id="logo">
             <a href="<?php echo $baseUrl; ?>index.php">
                 <img src="<?php echo $baseUrl; ?>images/logo.png" alt="PureOxy Logo">
             </a>
         </div>
+        <!-- Menu de navigation principal -->
         <nav>
             <ul>
-                <!-- Accueil -->
+                <!-- Lien vers la page d'accueil -->
                 <li>
                     <a href="<?php echo $baseUrl; ?>index.php">
                         <i class="fas fa-home"></i> Accueil
                     </a>
                 </li>
 
-                <!-- Actualités -->
+                <!-- Lien vers la page des actualités -->
                 <li>
                     <a href="<?php echo $baseUrl; ?>pages/actualite.php">
                         <i class="far fa-newspaper"></i> Actualités
                     </a>
                 </li>
 
-                <!-- Données (menu déroulant) -->
+                <!-- Menu déroulant pour accéder aux pages de données -->
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <i class="fas fa-database"></i> Données <i class="fas fa-caret-down"></i>
@@ -55,7 +68,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                     </ul>
                 </li>
 
-                <!-- Compte (ou nom utilisateur si connecté) -->
+                <!-- Affichage du menu Compte ou du nom d'utilisateur s'il est connecté -->
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="dropdown">
                         <a href="javascript:void(0)">
@@ -81,16 +94,16 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                         </a>
                     </li>
                 <?php endif; ?>
-            <ul>
+            </ul>
         </nav>
     </div>
 
-    <!-- Chatbot -->
+    <!-- Composant Chatbot -->
     <div id="chatbot-container">
         <!-- Texte visible en mode minimisé -->
         <span id="chatbot-toggle-text">Chat</span>
 
-        <!-- Contenu de la chatbox (affiché en mode étendu) -->
+        <!-- Contenu complet du chatbot en mode étendu -->
         <div id="chatbot-content">
             <div id="chatbot-header">
                 PureOxy Chatbot
@@ -101,11 +114,8 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         </div>
     </div>
 
-    <!-- Lien vers le CSS du chatbot -->
+    <!-- Inclusion des styles et scripts pour le chatbot et les icônes -->
     <link rel="stylesheet" href="../styles/chatbot.css">
-    <!-- Font Awesome (icônes) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Script du chatbot -->
     <script src="../script/chatbot.js" defer></script>
 </header>
