@@ -69,23 +69,24 @@
  * Suggestions List
  * Liste déroulante des suggestions, avec animation d'apparition.
  */
+/* Suggestions List - style amélioré */
 #suggestions-list {
     position: absolute;
-    top: calc(100% + 5px);
+    top: calc(100% + 8px);
     left: 0;
     width: 100%;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    max-height: 200px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-height: 250px;
     overflow-y: auto;
     z-index: 1000;
     opacity: 0;
-    list-style-type: none;
-    padding: initial;
     visibility: hidden;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    padding: 0;
+    margin: 0;
 }
 
 #suggestions-list.show {
@@ -100,20 +101,16 @@
     color: #333;
     border-bottom: 1px solid #eee;
     background-color: #fff;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 #suggestions-list li:hover {
-    background-color: #f0f0f0;
-    color: #6b8e23;
+    background-color: #f7f7f7;
+    color: #4a7b3f;
 }
 
 #suggestions-list li:last-child {
     border-bottom: none;
-}
-
-#suggestions-list li + li {
-    border-top: 1px solid #eee;
 }
 
 /* Couleur de l'avertissement */
