@@ -62,7 +62,12 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
                         </li>
                         <li>
                             <a href="<?php echo $baseUrl; ?>pages/classement.php">
-                                <i class="fas fa-chart-bar"></i> Classement
+                                <i class="fa fa-table"></i> Classement
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo $baseUrl; ?>fonctionnalites/compare.php">
+                                <i class="fas fa-chart-bar"></i> Comparer
                             </a>
                         </li>
                     </ul>

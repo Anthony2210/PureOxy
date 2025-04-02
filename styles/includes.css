@@ -106,11 +106,9 @@ header nav ul li:hover > a {
     background-color: #fff;
     min-width: 160px;
     border-radius: 6px;
-    margin: 0;
-    padding: 5px 0;
     z-index: 1000;
-    max-height: 160px;
     overflow-y: auto;
+    margin-top: 1px;
 }
 
 /**
