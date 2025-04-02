@@ -5,7 +5,7 @@
     <h1>Rechercher une ville</h1>
     <div class="search-input-wrapper">
         <input type="text" id="search-bar" placeholder="Entrez le nom d'une ville" autocomplete="off">
-        <p class="avertissement">Veuillez noter que notre base de données couvre actuellement 443 villes.</p>
+        <p class="avertissement">Veuillez noter que notre base de données couvre actuellement 276 villes.</p>
         <ul id="suggestions-list"></ul>
     </div>
     <button id="search-button"><i class="fas fa-search"></i> Rechercher</button>
