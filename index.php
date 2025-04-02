@@ -35,7 +35,7 @@ include 'bd/bd.php';
             <h3>Nos fonctionnalités</h3>
             <ul class="features-list">
                 <li>
-                    <a href="http://localhost/PUREOXY/pages/carte.php">
+                    <a href="http://localhost/PureOxy/pages/carte.php">
                         <strong>Carte interactive</strong><br>
                         Visualisez les niveaux de pollution dans toute la France.
                     </a>
