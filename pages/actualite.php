@@ -1,20 +1,30 @@
 <?php
 /**
- * Actualite.php
- *
- * Cette page récupère et affiche les actualités concernant la qualité de l'air en France
- * en extrayant les données du site Atmo France. Les articles sont affichés dans une grille
- * avec des liens vers des détails supplémentaires.
- *
- * Fichier placé dans le dossier pages.
- */
-
+* actualite.php
+*
+* Ce fichier récupère les actualités sur la qualité de l'air en France depuis le site Atmo-France
+* et les affiche sous forme de cartes dans une grille HTML.
+*
+* Références :
+* - simple_html_dom pour le parsing du contenu HTML.
+* - ChatGPT pour la structuration de la requête et la sécurisation de l'affichage.
+*
+* Utilisation :
+* - Ce fichier est appelé directement via le navigateur pour afficher la liste d'articles.
+*
+* Fichier placé dans le dossier pages.
+*/
+declare(strict_types=1);
 session_start();
-ob_start();
 
-include '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../libs/simplehtmldom-master/simple_html_dom.php';
+
+$baseUrl = "https://www.atmo-france.org/actualites";
+$page = 0;
+$maxPages = 5;
+$articlesFound = false;
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,16 +33,13 @@ include '../includes/header.php';
     <title>PureOxy - Actualités sur la Qualité de l'Air</title>
     <!-- Polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Styles de Base -->
+    <!-- Feuilles de styles -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour la page d'actualité -->
     <link rel="stylesheet" href="../styles/actualites.css">
-    <!-- Styles pour les Boutons -->
     <link rel="stylesheet" href="../styles/boutons.css">
-    <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script></head>
+    <script src="../script/erreur_formulaire.js"></script>
+</head>
 <body>
 <main>
     <div class="content-wrapper">
@@ -40,86 +47,49 @@ include '../includes/header.php';
             <section>
                 <h2>Actualités sur la qualité de l'air en France</h2>
                 <div class="articles-grid">
-
                     <?php
-                    /**
-                     * Inclusion de la bibliothèque Simple HTML DOM pour l'analyse du HTML.
-                     *
-                     * Cette bibliothèque permet de parcourir et d'extraire des éléments spécifiques à partir du HTML récupéré.
-                     */
-                    include('../libs/simplehtmldom-master/simple_html_dom.php');
-
-                    /**
-                     * URL de base pour les actualités sur la qualité de l'air.
-                     */
-                    $base_url = "https://www.atmo-france.org/actualites";
-
-                    /**
-                     * Variables de contrôle pour la pagination des actualités.
-                     */
-                    $page = 0;
-                    $max_pages = 5; // Limite de pages à charger
-                    $articles_displayed = false;
-
-                    /**
-                     * Boucle pour parcourir les pages d'actualités jusqu'à la limite définie.
-                     */
-                    while ($page < $max_pages) {
-                        $url = $base_url . "?page=" . $page;
+                    while ($page < $maxPages) {
+                        $url = $baseUrl . "?page=" . $page;
                         $html = file_get_html($url);
-
                         if ($html) {
-                            $found_articles = false;
-                            /**
-                             * Parcourir chaque article trouvé dans la page.
-                             */
-                            foreach ($html->find('article.node') as $article) {
-                                $link = $article->find('a.all-block', 0)->href ?? '#';
-                                $title = $article->find('span.field--name-title', 0)->plaintext ?? 'Titre non disponible';
-                                $date = $article->find('div.c-card-infos', 0)->plaintext ?? 'Date non disponible';
-                                $image = $article->find('img', 0)->src ?? '';
-
-                                /**
-                                 * Générer le lien vers la page de détail de l'article en encodant l'URL source.
-                                 */
-                                $detail_link = "detail_article.php?url=" . urlencode("https://www.atmo-france.org" . $link);
-
-                                /**
-                                 * Afficher l'article dans une carte avec image, titre, date et lien vers les détails.
-                                 */
-                                echo "<div class='article-card'>";
-                                echo "<img src='https://www.atmo-france.org$image' alt='" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "'>";
-                                echo "<div class='article-content'>";
-                                echo "<h3><a href='" . htmlspecialchars($detail_link, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</a></h3>";
-                                echo "<p>" . htmlspecialchars($date, ENT_QUOTES, 'UTF-8') . "</p>";
-                                echo "<p><a href='" . htmlspecialchars($detail_link, ENT_QUOTES, 'UTF-8') . "'>Lire la suite</a></p>";
-                                echo "</div>";
-                                echo "</div>";
-
-                                $found_articles = true;
-                            }
-
-                            if (!$found_articles) {
-                                /**
-                                 * Si aucun article n'est trouvé dans la page, arrêter la boucle.
-                                 */
+                            $articlesOnPage = $html->find('article.node');
+                            if (empty($articlesOnPage)) {
                                 break;
                             }
-
-                            $articles_displayed = true;
+                            foreach ($articlesOnPage as $article) {
+                                $linkElement = $article->find('a.all-block', 0);
+                                $link = $linkElement ? $linkElement->href : '#';
+                                $titleElement = $article->find('span.field--name-title', 0);
+                                $title = $titleElement ? trim($titleElement->plaintext) : 'Titre non disponible';
+                                $dateElement = $article->find('div.c-card-infos', 0);
+                                $date = $dateElement ? trim($dateElement->plaintext) : 'Date non disponible';
+                                $imageElement = $article->find('img', 0);
+                                $image = $imageElement ? $imageElement->src : '';
+                                $detailLink = "detail_article.php?url=" . urlencode("https://www.atmo-france.org" . $link);
+                                ?>
+                                <div class="article-card">
+                                    <img src="https://www.atmo-france.org<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <div class="article-content">
+                                        <h3>
+                                            <a href="<?= htmlspecialchars($detailLink, ENT_QUOTES, 'UTF-8'); ?>">
+                                                <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>
+                                            </a>
+                                        </h3>
+                                        <p><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <p>
+                                            <a href="<?= htmlspecialchars($detailLink, ENT_QUOTES, 'UTF-8'); ?>">Lire la suite</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            $articlesFound = true;
                             $page++;
                         } else {
-                            /**
-                             * Si la récupération du HTML échoue, arrêter la boucle.
-                             */
                             break;
                         }
                     }
-
-                    /**
-                     * Afficher un message si aucun article n'a pu être chargé.
-                     */
-                    if (!$articles_displayed) {
+                    if (!$articlesFound) {
                         echo "<p>Impossible de charger les actualités pour le moment.</p>";
                     }
                     ?>
@@ -131,9 +101,6 @@ include '../includes/header.php';
 <!-- Bouton "Revenir vers le haut" -->
 <button id="backToTop">Revenir vers le haut</button>
 <script src="../script/backtotop.js"></script>
-
-<?php
-include '../includes/footer.php';
-?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 </body>
 </html>

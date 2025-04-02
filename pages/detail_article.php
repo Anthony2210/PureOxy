@@ -1,19 +1,34 @@
 <?php
 /**
- * detail_article.php
- *
- * Cette page affiche les détails d'un article spécifique en extrayant les données depuis le site source.
- * Elle limite la longueur du contenu affiché et fournit un lien vers l'article complet sur le site source.
- *
- * Fichier placé dans le dossier pages.
- */
-
+* detail_article.php
+*
+* Ce fichier récupère et affiche en détail un article sur la qualité de l'air depuis le site Atmo-France.
+* Il valide l'URL passée en paramètre et extrait le contenu HTML pertinent (titre, date, image et texte).
+*
+* Références :
+* - simple_html_dom pour le parsing du contenu HTML.
+* - ChatGPT pour la structuration de la requête et la sécurisation de l'affichage.
+*
+* Utilisation :
+* - Ce fichier est appelé lorsqu'un utilisateur clique sur un article dans la page actualite.php.
+*
+* Fichier placé dans le dossier pages.
+*/
+declare(strict_types=1);
 session_start();
-ob_start();
 
-include '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../libs/simplehtmldom-master/simple_html_dom.php';
+
+// Récupération et validation de l'URL passée en paramètre
+$urlParam = $_GET['url'] ?? '';
+if (!filter_var($urlParam, FILTER_VALIDATE_URL) || strpos($urlParam, "https://www.atmo-france.org") !== 0) {
+echo "<p>URL invalide.</p>";
+exit;
+}
+
+$html = file_get_html($urlParam);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -22,102 +37,79 @@ include '../includes/header.php';
     <title>Détail de l'Article</title>
     <!-- Polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Styles de Base -->
+    <!-- Feuilles de styles -->
     <link rel="stylesheet" href="../styles/base.css">
-    <!-- Styles pour l'En-tête -->
     <link rel="stylesheet" href="../styles/includes.css">
-    <!-- Styles pour la page des articles de presses -->
+    <!-- Style spécifique pour le détail d'article -->
     <link rel="stylesheet" href="../styles/actualites.css">
-    <!-- Styles pour les Boutons -->
-    <link rel="stylesheet" href="../styles/boutons.css">
-    <!-- Script de validation de formulaire -->
-    <script src="../script/erreur_formulaire.js"></script></head>
+    <script src="../script/erreur_formulaire.js"></script>
+</head>
 <body>
-
 <div class="detail-article-wrapper">
-    <p>
-        <a href="actualite.php" class="button back-button">← Retour aux actualités</a>
-    </p>
-
+    <a href="actualite.php" class="back-button">← Retour aux actualités</a>
     <?php
-    /**
-     * Inclusion de la bibliothèque Simple HTML DOM pour l'analyse du HTML.
-     *
-     * Cette bibliothèque permet de parcourir et d'extraire des éléments spécifiques à partir du HTML récupéré.
-     */
-    include('../libs/simplehtmldom-master/simple_html_dom.php');
+    if ($html) {
+        // Extraction du titre
+        $titleElement = $html->find('h1', 0);
+        $title = $titleElement ? trim($titleElement->plaintext) : 'Titre non disponible';
+        // Extraction de la date
+        $dateElement = $html->find('p.text-muted', 0);
+        $date = $dateElement ? trim($dateElement->plaintext) : 'Date non disponible';
+        // Extraction de l'image principale
+        $imageElement = $html->find('img.image-style-top-page-banner', 0);
+        $image = $imageElement ? $imageElement->src : '';
 
-    /**
-     * Vérifier si l'URL de l'article est passée en paramètre GET.
-     */
-    if (isset($_GET['url'])) {
-        $url = $_GET['url'];
-        $html = file_get_html($url);
-
-        if ($html) {
-            /**
-             * Extraction des informations de l'article.
-             */
-            $title = $html->find('h1', 0)->plaintext ?? 'Titre non disponible';
-            $date = $html->find('p.text-muted', 0)->plaintext ?? 'Date non disponible';
-            $image = $html->find('img.image-style-top-page-banner', 0)->src ?? '';
-
-            /**
-             * Limitation de la longueur du contenu affiché.
-             */
-            $char_limit = 3000;
-            $current_length = 0;
-            $content = '';
-
-            /**
-             * Parcourir chaque élément dans la section de contenu.
-             */
-            foreach ($html->find('div.field--name-field-text-content .field__item *') as $element) {
-                // Ajouter le texte HTML de l'élément (y compris les balises) tant qu'on n'a pas atteint la limite
-                $element_text = $element->outertext;
-                $element_length = strlen(strip_tags($element_text));
-
-                // Vérifier si l'ajout de cet élément dépasse la limite
-                if ($current_length + $element_length > $char_limit) {
-                    $remaining_chars = $char_limit - $current_length;
-                    $element_text = mb_substr(strip_tags($element_text), 0, $remaining_chars) . '...';
-                    $content .= "<p>" . htmlspecialchars($element_text, ENT_QUOTES, 'UTF-8') . "</p>";
-                    break;
+        // Extraction du contenu principal
+        $contentContainer = $html->find('div.field--name-field-text-content .field__item', 0);
+        $blocks = [];
+        if ($contentContainer) {
+            foreach ($contentContainer->find('p, h2, h3, h4, li') as $block) {
+                $blockText = trim($block->plaintext);
+                $blockHtml = trim($block->outertext);
+                if (strlen($blockText) > 20 && !in_array($blockText, array_map('strip_tags', $blocks))) {
+                    $blocks[] = $blockHtml;
                 }
-
-                // Ajouter l'élément complet au contenu
-                $content .= $element_text;
-                $current_length += $element_length;
             }
-
-            /**
-             * Afficher les informations extraites.
-             */
-            echo "<h2>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</h2>";
-            echo "<p><em>" . htmlspecialchars($date, ENT_QUOTES, 'UTF-8') . "</em></p>";
-            if ($image) {
-                echo "<img src='https://www.atmo-france.org" . htmlspecialchars($image, ENT_QUOTES, 'UTF-8') . "' alt='" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "'>";
-            }
-            echo "<div class='detail-article-content'>" . $content . "</div>";
-            echo "<p><a href='" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "' target='_blank' class='button'>Lire l'article complet sur le site source</a></p>";
-        } else {
-            /**
-             * Afficher un message si le contenu de l'article n'a pas pu être chargé.
-             */
-            echo "<p>Impossible de charger le contenu de l'article.</p>";
         }
+
+        $maxChars = 3000;
+        $finalContent = '';
+        $currentLength = 0;
+        $truncated = false;
+        foreach ($blocks as $blockHtml) {
+            $plainText = strip_tags($blockHtml);
+            $blockLength = mb_strlen($plainText);
+            if ($currentLength + $blockLength > $maxChars) {
+                $truncated = true;
+                break;
+            } else {
+                $finalContent .= $blockHtml;
+                $currentLength += $blockLength;
+            }
+        }
+        if ($truncated) {
+            $finalContent .= '<p>...</p>';
+        }
+        ?>
+        <h2><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></h2>
+        <p class="date"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php if ($image): ?>
+            <img src="https://www.atmo-france.org<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>">
+        <?php endif; ?>
+        <div class="detail-article-content">
+            <?= $finalContent; ?>
+        </div>
+        <p>
+            <a href="<?= htmlspecialchars($urlParam, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="button">
+                Lire l'article complet sur le site source
+            </a>
+        </p>
+        <?php
     } else {
-        /**
-         * Afficher un message si aucun article n'est sélectionné.
-         */
-        echo "<p>Aucun article sélectionné.</p>";
+        echo "<p>Impossible de charger le contenu de l'article.</p>";
     }
     ?>
 </div>
-
-<?php
-include '../includes/footer.php';
-?>
-
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 </body>
 </html>
