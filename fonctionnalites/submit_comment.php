@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_comment'])) {
         $user = $resultUser->fetch_assoc();
         $stmtUser->close();
 
-        // Génération de l'aperçu HTML du commentaire
+        // Génération de l'aperçu HTML du commentaire avec le bloc vote ajouté
         ob_start();
         ?>
         <div class="comment" data-id="<?php echo $new_id; ?>">
@@ -68,6 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_comment'])) {
                 <span class="comment-date"><?php echo date("Y-m-d H:i:s"); ?></span>
             </div>
             <div class="comment-body"><?php echo nl2br(htmlspecialchars($content)); ?></div>
+            <div class="comment-actions">
+                <button class="like-button" data-id="<?php echo $new_id; ?>" data-vote="1"><i class="fa-solid fa-thumbs-up"></i></button>
+                <span class="like-count">0</span>
+                <button class="dislike-button" data-id="<?php echo $new_id; ?>" data-vote="-1"><i class="fa-solid fa-thumbs-down"></i></button>
+                <span class="dislike-count">0</span>
+            </div>
             <?php if(isset($_SESSION['id_users'])): ?>
                 <button class="reply-button" data-parent="<?php echo $new_id; ?>">Répondre</button>
                 <div class="reply-form" data-parent-form="<?php echo $new_id; ?>" style="display:none;">

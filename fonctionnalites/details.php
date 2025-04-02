@@ -492,10 +492,14 @@ function time_elapsed_string($datetime, $full = false) {
     <div id="comments-list">
         <?php
         // Récupération des commentaires pour la ville, affichés par ordre chronologique
-        $stmtComments = $db->prepare("SELECT c.*, dv.ville AS ville 
+        // Modification : jointure avec la table users pour récupérer username et profile_picture
+        $stmtComments = $db->prepare("
+            SELECT c.*, dv.ville AS ville, u.username, u.profile_picture
             FROM commentaires c 
             JOIN donnees_villes dv ON c.id_ville = dv.id_ville 
-            WHERE c.id_ville = ? ORDER BY c.created_at ASC");
+            JOIN users u ON c.id_users = u.id_users
+            WHERE c.id_ville = ? ORDER BY c.created_at ASC
+        ");
         $stmtComments->bind_param("i", $idVille);
         $stmtComments->execute();
         $resultComments = $stmtComments->get_result();
@@ -561,10 +565,14 @@ function time_elapsed_string($datetime, $full = false) {
                 $likeClass = ($userVote === 1) ? 'voted-like' : '';
                 $dislikeClass = ($userVote === -1) ? 'voted-dislike' : '';
 
+                // Utilisation de valeurs par défaut en cas de données manquantes
+                $profilePicture = !empty($comment['profile_picture']) ? $comment['profile_picture'] : 'user.png';
+                $username = !empty($comment['username']) ? $comment['username'] : 'Utilisateur';
+
                 echo '<div class="comment" data-id="' . $comment['id_comm'] . '">';
                 echo '<div class="comment-header">';
-                echo '<img src="../images/' . htmlspecialchars($comment['profile_picture']) . '" alt="' . htmlspecialchars($comment['username']) . '" class="comment-avatar">';
-                echo '<span class="comment-username">' . htmlspecialchars($comment['username']) . '</span>';
+                echo '<img src="../images/' . htmlspecialchars($profilePicture) . '" alt="' . htmlspecialchars($username) . '" class="comment-avatar">';
+                echo '<span class="comment-username">' . htmlspecialchars($username) . '</span>';
                 echo '<span class="comment-date"><i class="fa-solid fa-clock"></i> ' . time_elapsed_string($comment['created_at']) . '</span>';
                 echo '</div>';
                 echo '<div class="comment-body">' . nl2br(htmlspecialchars($comment['content'])) . '</div>';
