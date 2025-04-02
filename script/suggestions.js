@@ -13,6 +13,10 @@
  * Fichier placé dans le dossier script.
  */
 
+// Variables globales pour le cache et la dernière requête
+let cache = {};
+let lastQuery = "";
+
 /**
  * Initialise les suggestions pour un champ de recherche spécifique.
  *
