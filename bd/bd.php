@@ -22,11 +22,19 @@
  *
  */
 
+<<<<<<< HEAD
+// Informations de connexion à la base de données.
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'root');
+define('DB_NAME', 'pureoxy');
+=======
 // Informations de connexion à la base de données
 define('DB_SERVER', 'localhost');  // Adresse du serveur de base de données (souvent 'localhost' en environnement local)
 define('DB_USERNAME', 'root');       // Nom d'utilisateur pour se connecter à MySQL
 define('DB_PASSWORD', '');           // Mot de passe associé (laisser vide dans certains environnements de développement)
 define('DB_NAME', 'pureoxy');        // Nom de la base de données à laquelle se connecter
+>>>>>>> b5134a07e552934fe88a71f44a261b2104a1e394
 
 /**
  * Classe Database

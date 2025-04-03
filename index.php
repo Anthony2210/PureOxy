@@ -60,8 +60,12 @@ session_start();
             <h3>Nos fonctionnalités</h3>
             <ul class="features-list">
                 <li>
+<<<<<<< HEAD
+                    <a href="http://localhost/PureOxy/pages/carte.php">
+=======
                     <!-- Lien vers la carte interactive des niveaux de pollution -->
                     <a href="http://localhost/PUREOXY/pages/carte.php">
+>>>>>>> b5134a07e552934fe88a71f44a261b2104a1e394
                         <strong>Carte interactive</strong><br>
                         Visualisez les niveaux de pollution dans toute la France.
                     </a>
