@@ -11,6 +11,8 @@
  *
  * Utilisation :
  * - Ce fichier est accessible via l'URL principale du site.
+ *
+ * Fichier placé à la racine du site.
  */
 
 // Démarrage de la session pour gérer les variables de session utilisateur
