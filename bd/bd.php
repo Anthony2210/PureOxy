@@ -22,19 +22,16 @@
  *
  */
 
-<<<<<<< HEAD
 // Informations de connexion à la base de données.
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
 define('DB_NAME', 'pureoxy');
-=======
 // Informations de connexion à la base de données
 define('DB_SERVER', 'localhost');  // Adresse du serveur de base de données (souvent 'localhost' en environnement local)
 define('DB_USERNAME', 'root');       // Nom d'utilisateur pour se connecter à MySQL
 define('DB_PASSWORD', '');           // Mot de passe associé (laisser vide dans certains environnements de développement)
 define('DB_NAME', 'pureoxy');        // Nom de la base de données à laquelle se connecter
->>>>>>> b5134a07e552934fe88a71f44a261b2104a1e394
 
 /**
  * Classe Database
@@ -44,7 +41,8 @@ define('DB_NAME', 'pureoxy');        // Nom de la base de données à laquelle s
  * pour éviter les problèmes d'encodage, et fournit des méthodes pour préparer des requêtes
  * SQL ainsi que pour accéder directement à l'objet de connexion.
  */
-class Database {
+class Database
+{
     /**
      * @var mysqli $connection Instance de connexion MySQLi utilisée pour interagir avec la base de données.
      */
@@ -61,7 +59,8 @@ class Database {
      *
      * @throws Exception En cas d'échec de la connexion, le script affiche un message d'erreur et s'arrête.
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Création de la connexion à la base de données
         $this->connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
@@ -87,7 +86,8 @@ class Database {
      * @return mysqli_stmt L'objet statement préparé.
      * @throws Exception Si la préparation de la requête échoue.
      */
-    public function prepare($query) {
+    public function prepare($query)
+    {
         // Préparation de la requête SQL via l'objet de connexion
         $stmt = $this->connection->prepare($query);
 
@@ -109,9 +109,11 @@ class Database {
      *
      * @return mysqli L'objet de connexion MySQLi.
      */
-    public function getConnection() {
+    public function getConnection()
+    {
         // Retour de l'objet de connexion à la base de données
         return $this->connection;
     }
 }
+
 ?>
