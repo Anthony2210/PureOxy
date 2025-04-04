@@ -22,11 +22,6 @@
  *
  */
 
-// Informations de connexion à la base de données.
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'root');
-define('DB_NAME', 'pureoxy');
 // Informations de connexion à la base de données
 define('DB_SERVER', 'localhost');  // Adresse du serveur de base de données (souvent 'localhost' en environnement local)
 define('DB_USERNAME', 'root');       // Nom d'utilisateur pour se connecter à MySQL
