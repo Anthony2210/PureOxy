@@ -27,7 +27,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
         <nav>
             <ul>
                 <li><a href="<?php echo $baseUrl; ?>pages/a-propos.php">À propos</a></li>
-                <li><a href="<?php echo $baseUrl; ?>pages/politique-confidentialite.php">Politique de confidentialité</a></li>
+                <li><a href="<?php echo $baseUrl; ?>pages/politique_confidentialite.php">Politique de confidentialité</a></li>
                 <li><a href="<?php echo $baseUrl; ?>pages/contact.php">Contact</a></li>
             </ul>
         </nav>
