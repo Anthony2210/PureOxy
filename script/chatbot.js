@@ -9,7 +9,7 @@
  * - ChatGPT pour la structuration du code et les commentaires.
  *
  * Utilisation :
- * - Ce fichier est inclus en différé dans toutes les pages appelant le chatbot pour initialiser le chatbot.
+ * - Ce fichier est inclus dans toutes les pages appelant le chatbot (via le header) pour initialiser le chatbot.
  *
  * Fichier placé dans le dossier script.
  */
