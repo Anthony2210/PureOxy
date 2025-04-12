@@ -40,8 +40,7 @@ $db = new Database();
         <div class="col-md-3">
             <label><i class="fa-solid fa-chart-line"></i> Type de données :</label><br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="data-type" id="data-historique" value="historique"
-                       checked>
+                <input class="form-check-input" type="radio" name="data-type" id="data-historique" value="historique" checked>
                 <label class="form-check-label" for="data-historique">Historique</label>
             </div>
             <div class="form-check form-check-inline">
@@ -101,9 +100,6 @@ $db = new Database();
             <label for="city-selection"><i class="fa-solid fa-magnifying-glass"></i> Rechercher une ville :</label>
             <input type="text" id="city-selection" class="form-control" placeholder="Entrez le nom d'une ville...">
             <ul id="suggestions-list-compare" class="list-group"></ul>
-        </div>
-        <div class="col-md-6 d-flex align-items-end">
-            <button id="add-city" class="btn btn-secondary btn-sm">Ajouter la ville</button>
         </div>
     </div>
 

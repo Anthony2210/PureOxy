@@ -87,9 +87,11 @@ function getGroupData($filterType, $groupValue, $data_type, $month, $pollutantFi
                 $query = "SELECT polluant, ROUND(avg_value, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
             }
         } elseif ($data_type == "habitants") {
-            $query = "SELECT polluant, ROUND(avg_par_habitant, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
+            // Pour "habitants", ne pas arrondir
+            $query = "SELECT polluant, avg_par_habitant as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
         } elseif ($data_type == "superficie") {
-            $query = "SELECT polluant, ROUND(avg_par_km2, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
+            // Pour "superficie", ne pas arrondir
+            $query = "SELECT polluant, avg_par_km2 as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
         }
         if (!empty($pollutantFilter)) {
             $query .= " AND polluant = ?";
@@ -117,7 +119,11 @@ function getGroupData($filterType, $groupValue, $data_type, $month, $pollutantFi
         $stmtPoll->close();
     }
     foreach($groupData as $p => &$value){
-        $value = $counts[$p] > 0 ? round($value / $counts[$p], 2) : 0;
+        if($data_type === "habitants" || $data_type === "superficie"){
+            $value = $counts[$p] > 0 ? ($value / $counts[$p]) : 0;
+        } else {
+            $value = $counts[$p] > 0 ? round($value / $counts[$p], 2) : 0;
+        }
     }
     return $groupData;
 }
@@ -173,9 +179,11 @@ foreach ($cities as $cityName) {
                     $query = "SELECT polluant, ROUND(avg_value, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
                 }
             } elseif ($data_type == "habitants") {
-                $query = "SELECT polluant, ROUND(avg_par_habitant, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
+                // Pour habitants, ne pas arrondir
+                $query = "SELECT polluant, avg_par_habitant as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
             } elseif ($data_type == "superficie") {
-                $query = "SELECT polluant, ROUND(avg_par_km2, 2) as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
+                // Pour superficie, ne pas arrondir
+                $query = "SELECT polluant, avg_par_km2 as avg_value FROM moy_pollution_villes WHERE id_ville = ?";
             }
             if (!empty($pollutantFilter)) {
                 $query .= " AND polluant = ?";
