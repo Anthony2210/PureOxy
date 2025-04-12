@@ -19,7 +19,7 @@ $db = new Database();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>PureOxy - Comparaison des villes et groupes</title>
+    <title>PureOxy - Comparaison des villes</title>
     <!-- Polices, Bootstrap, FontAwesome et styles personnalisés -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -33,7 +33,7 @@ $db = new Database();
 <?php include '../includes/header.php'; ?>
 
 <div class="container my-4">
-    <h1 class="text-center">Comparaison des villes / Groupes</h1>
+    <h1 class="text-center">Comparaison des villes</h1>
 
     <!-- Filtres généraux -->
     <div class="row mb-3">
