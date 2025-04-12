@@ -102,8 +102,12 @@ function getGroupData($filterType, $groupValue, $data_type, $month, $pollutantFi
         $stmtPoll->execute();
         $resultPoll = $stmtPoll->get_result();
         while ($poll = $resultPoll->fetch_assoc()) {
+            // Filtrer les valeurs négatives et les polluants à exclure ("C6H6" et "SO2")
+            if ($poll['avg_value'] < 0 || $poll['polluant'] === "C6H6" || $poll['polluant'] === "SO2") {
+                continue;
+            }
             $p = $poll['polluant'];
-            if(!isset($groupData[$p])){
+            if (!isset($groupData[$p])) {
                 $groupData[$p] = 0;
                 $counts[$p] = 0;
             }
@@ -185,6 +189,10 @@ foreach ($cities as $cityName) {
             $resultPoll = $stmtPoll->get_result();
             $cityData = [];
             while ($poll = $resultPoll->fetch_assoc()) {
+                // Filtrer les valeurs négatives et les polluants "C6H6" et "SO2"
+                if ($poll['avg_value'] < 0 || $poll['polluant'] === "C6H6" || $poll['polluant'] === "SO2") {
+                    continue;
+                }
                 $cityData[$poll['polluant']] = $poll['avg_value'];
                 if (!in_array($poll['polluant'], $allPollutants)) {
                     $allPollutants[] = $poll['polluant'];
