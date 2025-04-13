@@ -319,12 +319,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         params.append('cities', selectedCities.join(','));
 
+        console.log("PARAMS envoyés à PHP :", params.toString());
+
         fetch('../fonctionnalites/get_compare_data.php', {
             method: 'POST',
             body: params
         })
             .then(response => response.json())
             .then(data => {
+                console.log("RÉPONSE reçue depuis get_compare_data.php :", data);
                 if (compareChart) compareChart.destroy();
                 const ctx = document.getElementById('compare-chart').getContext('2d');
                 compareChart = new Chart(ctx, {
