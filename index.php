@@ -11,6 +11,8 @@
  *
  * Utilisation :
  * - Ce fichier est accessible via l'URL principale du site.
+ *
+ * Fichier placé à la racine du site.
  */
 
 // Démarrage de la session pour gérer les variables de session utilisateur
@@ -58,7 +60,10 @@ session_start();
             <h3>Nos fonctionnalités</h3>
             <ul class="features-list">
                 <li>
-                    <a href="http://localhost/PureOxy/pages/carte.php">
+<<<<<<< HEAD
+                    <a href="http://localhost/PUREOXY/pages/carte.php">
+=======
+>>>>>>> 82f97fa1c1f3e1516fc0b9519ca189486268e7f6
                     <!-- Lien vers la carte interactive des niveaux de pollution -->
                     <a href="http://localhost/PUREOXY/pages/carte.php">
                         <strong>Carte interactive</strong><br>
