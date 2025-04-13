@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-
+# aide de chatgpt
 # --------------------------------------------------------
 # 1) Charger les données réelles de 2024
 # --------------------------------------------------------

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import datetime
 from sklearn.ensemble import GradientBoostingRegressor
-
+# aide chatgpt pour l'initialisation des étapes
 # ------------------------------------------------------------------
 # 1) LIRE LE FICHIER AGRÉGÉ
 # ------------------------------------------------------------------
