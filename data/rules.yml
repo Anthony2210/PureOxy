@@ -1,7 +1,12 @@
 version: "3.1"
 
 rules:
-  - rule: Utiliser Mistral pour répondre
-    steps: 
+  - rule: Répondre à une question générale avec Mistral
+    steps:
       - intent: question_generale
       - action: action_mistral_response
+
+  - rule: Présenter le site PureOxy
+    steps:
+    - intent: presenter_site
+    - action: utter_presenter_site

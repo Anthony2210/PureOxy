@@ -144,21 +144,24 @@ function selectCity(city, inputId, suggestionsListId, hiddenInputId, addButtonId
 // Initialisation des suggestions pour le champ de recherche
 document.addEventListener('DOMContentLoaded', function() {
     initializeSuggestions('search-bar', 'suggestions-list');
-});
 
-// Gestion du bouton de recherche
-const searchBar = document.getElementById("search-bar");
-const searchButton = document.getElementById("search-button");
+    const searchBar = document.getElementById("search-bar");
+    const searchButton = document.getElementById("search-button");
 
-searchButton.addEventListener("click", function() {
-    let query = searchBar.value.trim();
-    if (query !== "") {
-        // Met en majuscule la première lettre de chaque mot
-        query = query.split(' ').map(function(word) {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        }).join(' ');
-        window.location.href = `/PUREOXY/fonctionnalites/details.php?ville=${encodeURIComponent(query)}`;
-    } else {
-        alert("Veuillez entrer le nom d'une ville.");
+    if (searchButton && searchBar) {
+        searchButton.addEventListener("click", function () {
+            let query = searchBar.value.trim();
+            if (query !== "") {
+                query = query.split(' ').map(function (word) {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }).join(' ');
+                const url = `/fonctionnalites/details.php?ville=${encodeURIComponent(query)}`;
+                window.location.href = url;
+
+                
+            } else {
+                alert("Veuillez entrer le nom d'une ville.");
+            }
+        });
     }
 });

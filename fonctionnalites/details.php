@@ -352,7 +352,7 @@ function time_elapsed_string($datetime, $full = false) {
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button onclick="window.location.href='http://localhost/PUREOXY/pages/classement.php'" style="margin-top: 10px;">
+                <button onclick="window.location.href='../pages/classement.php'" style="margin-top: 10px;">
                     Voir le classement complet
                 </button>
             <?php else: ?>

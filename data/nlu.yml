@@ -18,8 +18,11 @@ nlu:
     - Quelle est la différence entre PM10 et PM2.5 ?
     - Est-ce que respirer l’air en ville est dangereux ?
     - Explique-moi la pollution de l’air
-
-- intent: out_of_scope
+    
+- intent: presenter_site
   examples: |
-    - Raconte-moi une blague
-    - Je veux commander une pizza
+    - présente moi le site PureOxy
+    - c’est quoi PureOxy ?
+    - parle moi du site PureOxy
+    - que propose PureOxy ?
+    - que fait PureOxy ?

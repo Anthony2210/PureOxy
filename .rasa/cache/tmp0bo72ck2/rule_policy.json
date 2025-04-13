@@ -1,0 +1,22 @@
+{
+  "lookup": {
+    "rules": {
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"demander_pollution\"}}]": "action_pollution_data",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"demander_pollution\"}}, {\"prev_action\": {\"action_name\": \"action_pollution_data\"}, \"user\": {\"intent\": \"demander_pollution\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"question_generale\"}}]": "action_mistral_response",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"question_generale\"}}, {\"prev_action\": {\"action_name\": \"action_mistral_response\"}, \"user\": {\"intent\": \"question_generale\"}}]": "action_listen"
+    },
+    "rule_only_slots": [],
+    "rule_only_loops": [],
+    "rules_for_loop_unhappy_path": {},
+    "rules_not_in_stories": [
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"demander_pollution\"}}]",
+      "predicting default action with intent session_start",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"question_generale\"}}, {\"prev_action\": {\"action_name\": \"action_mistral_response\"}, \"user\": {\"intent\": \"question_generale\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"demander_pollution\"}}, {\"prev_action\": {\"action_name\": \"action_pollution_data\"}, \"user\": {\"intent\": \"demander_pollution\"}}]",
+      "predicting default action with intent restart",
+      "predicting default action with intent back",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"question_generale\"}}]"
+    ]
+  }
+}

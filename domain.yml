@@ -2,7 +2,14 @@ version: "3.1"
 
 intents:
   - question_generale
+  - presenter_site
 
 actions:
   - action_mistral_response
 
+responses:
+  utter_presenter_site:
+    - text: >
+        PureOxy est un site qui fournit des informations sur la qualité de l'air dans plusieurs villes françaises. 
+        Il permet de consulter les données de pollution actuelles, passées et prévues. 
+        L’objectif est d’aider les citoyens à prendre des décisions éclairées pour leur santé et leurs déplacements.

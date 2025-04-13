@@ -16,7 +16,7 @@
  */
 
 // Construction de l'URL de base à partir du schéma et de l'hôte de la requête actuelle
-$baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOXY/';
+$baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/';
 ?>
 
 <header>
@@ -120,7 +120,7 @@ $baseUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/PUREOX
     </div>
 
     <!-- Inclusion des styles et scripts pour le chatbot et les icônes -->
-    <link rel="stylesheet" href="../styles/chatbot.css">
+    <link rel="stylesheet" href="/styles/oxy.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="../script/chatbot.js" defer></script>
+    <script src="/script/oxy.js" defer></script>
 </header>

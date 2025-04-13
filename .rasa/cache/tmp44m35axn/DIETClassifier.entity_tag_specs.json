@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-date",
+      "2": "I-date",
+      "3": "L-date",
+      "4": "U-date",
+      "5": "B-ville",
+      "6": "I-ville",
+      "7": "L-ville",
+      "8": "U-ville",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-date": 1,
+      "I-date": 2,
+      "L-date": 3,
+      "U-date": 4,
+      "B-ville": 5,
+      "I-ville": 6,
+      "L-ville": 7,
+      "U-ville": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]
