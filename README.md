@@ -1,53 +1,66 @@
-# PureOxy
-## Présentation
+PureOxy
+Présentation
 PureOxy est une plateforme de visualisation, d'analyse et de prédiction de la qualité de l'air en France.
-Le projet a été développé dans le cadre des cours de Gestion de Projet et Sciences des Données 4 du département MIASHS (Université Paul Valéry, Montpellier 3).
+Le projet a été développé dans le cadre des cours de Gestion de Projet et Sciences des Données 4 de la licence MIASHS (Université Paul Valéry, Montpellier 3).
+
+Le site est accessible librement en ligne à l'adresse suivante : http://pureoxy.rf.gd/
+à noter que seul le chatbot IA ne fonctionne pas en continu, car il est hébergé sur notre propre serveur que nous lançons ponctuellement.
 
 Notre objectif est de fournir un outil accessible aux citoyens, chercheurs et décideurs, pour mieux comprendre la pollution atmosphérique, comparer les villes, et anticiper les évolutions grâce aux prédictions basées sur le machine learning.
 
-## Fonctionnalités principales
+Fonctionnalités principales
 Carte interactive des niveaux de pollution en France (filtrage par polluant et par mois).
 
-### Système de recherche par ville avec autocomplétion.
+Système de recherche par ville avec autocomplétion.
 
-### Détail de la pollution par ville (historique et prévisions).
+Détail de la pollution par ville (historique et prévisions).
 
-### Système de commentaires et de favoris pour les utilisateurs connectés.
+Système de commentaires et de favoris pour les utilisateurs connectés.
 
-### Page de classement des villes selon différents polluants.
+Page de classement des villes selon différents polluants.
 
-### Page de comparaison avancée entre villes (par densité, superficie, population...).
+Page de comparaison avancée entre villes (densité, superficie, population...).
 
-### Prédictions des niveaux de pollution pour 2025-2026 avec modèles ML (RandomForest).
+Prédictions des niveaux de pollution pour 2025-2026 avec modèles de Machine Learning (RandomForest).
 
-### Chatbot IA intégré pour répondre aux questions environnementales (basé sur Mistral AI).
+Chatbot IA intégré pour répondre aux questions environnementales (basé sur Mistral AI).
 
-### Interface utilisateur épurée avec navigation fluide.
+Interface utilisateur épurée avec navigation fluide.
 
-### Gestion sécurisée des comptes utilisateurs.
+Gestion sécurisée des comptes utilisateurs.
 
-## Architecture du projet
-### Back-end : PHP + MySQL
+Architecture du projet
+Back-end : PHP + MySQL
 
-### Front-end : HTML / CSS / JavaScript
+Front-end : HTML / CSS / JavaScript
 
-## Bibliothèques utilisées :
+Bibliothèques et technologies utilisées
+Leaflet : pour l'affichage de la carte interactive.
 
-### Leaflet (cartes interactives)
+Chart.js : pour la création de graphiques dynamiques.
 
-### Chart.js (graphiques dynamiques)
+AJAX / Fetch API : pour les communications asynchrones avec le serveur.
 
-### AJAX / Fetch API
+Simple HTML DOM : pour la récupération d'actualités environnementales.
 
-### Simple HTML DOM pour l'actualité
+Rasa + Ollama : pour l'intégration du chatbot IA Mistral.
 
-### Rasa + Ollama pour l'intégration du chatbot IA
+Données utilisées
+Données environnementales : OpenAQ, DataGouv, LCSQA, Geod'Air.
 
-## Données utilisées
-### Données environnementales : OpenAQ, DataGouv, LCSQA, Geod'Air.
+Données géographiques : INSEE, geo.api.gouv.fr.
 
-###Données géographiques : INSEE, geo.api.gouv.fr.
+Intégration de 5 ans de données historiques pour plus de 275 villes.
+Génération de prévisions de pollution pour l'année 2025 via des modèles de machine learning.
 
-Intégration de 5 ans de données historiques pour 275 villes.
+Notes supplémentaires
+Le chatbot IA n'est pas actif en permanence sur la version en ligne, car son serveur doit être lancé manuellement par notre équipe.
 
-Génération de prévisions pour l'année 2025 via Machine Learning.
+Équipe
+Anthony Combes-Aguera
+
+Mohamed Rekhis Chaouki
+
+Ayoub Akkouh
+
+Wassim Harraga
