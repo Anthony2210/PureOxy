@@ -41,7 +41,7 @@ Génération de prévisions de pollution pour l'année 2025 via des modèles de 
 ## Notes supplémentaires
 Le chatbot IA n'est pas actif en permanence sur la version en ligne, car son serveur doit être lancé manuellement par notre équipe.
 
-### Équipe
+## Équipe
 - Anthony Combes-Aguera
 - Mohamed Rekhis Chaouki
 - Ayoub Akkouh
