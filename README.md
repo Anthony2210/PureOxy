@@ -1,50 +1,50 @@
-#PureOxy
-##Présentation
+# PureOxy
+## Présentation
 PureOxy est une plateforme de visualisation, d'analyse et de prédiction de la qualité de l'air en France.
 Le projet a été développé dans le cadre des cours de Gestion de Projet et Sciences des Données 4 du département MIASHS (Université Paul Valéry, Montpellier 3).
 
 Notre objectif est de fournir un outil accessible aux citoyens, chercheurs et décideurs, pour mieux comprendre la pollution atmosphérique, comparer les villes, et anticiper les évolutions grâce aux prédictions basées sur le machine learning.
 
-##Fonctionnalités principales
+## Fonctionnalités principales
 Carte interactive des niveaux de pollution en France (filtrage par polluant et par mois).
 
-###Système de recherche par ville avec autocomplétion.
+### Système de recherche par ville avec autocomplétion.
 
-###Détail de la pollution par ville (historique et prévisions).
+### Détail de la pollution par ville (historique et prévisions).
 
-###Système de commentaires et de favoris pour les utilisateurs connectés.
+### Système de commentaires et de favoris pour les utilisateurs connectés.
 
-###Page de classement des villes selon différents polluants.
+### Page de classement des villes selon différents polluants.
 
-###Page de comparaison avancée entre villes (par densité, superficie, population...).
+### Page de comparaison avancée entre villes (par densité, superficie, population...).
 
-###Prédictions des niveaux de pollution pour 2025-2026 avec modèles ML (RandomForest).
+### Prédictions des niveaux de pollution pour 2025-2026 avec modèles ML (RandomForest).
 
-###Chatbot IA intégré pour répondre aux questions environnementales (basé sur Mistral AI).
+### Chatbot IA intégré pour répondre aux questions environnementales (basé sur Mistral AI).
 
-###Interface utilisateur épurée avec navigation fluide.
+### Interface utilisateur épurée avec navigation fluide.
 
-###Gestion sécurisée des comptes utilisateurs.
+### Gestion sécurisée des comptes utilisateurs.
 
-##Architecture du projet
-###Back-end : PHP + MySQL
+## Architecture du projet
+### Back-end : PHP + MySQL
 
-###Front-end : HTML / CSS / JavaScript
+### Front-end : HTML / CSS / JavaScript
 
-##Bibliothèques utilisées :
+## Bibliothèques utilisées :
 
-###Leaflet (cartes interactives)
+### Leaflet (cartes interactives)
 
-###Chart.js (graphiques dynamiques)
+### Chart.js (graphiques dynamiques)
 
-###AJAX / Fetch API
+### AJAX / Fetch API
 
-###Simple HTML DOM pour l'actualité
+### Simple HTML DOM pour l'actualité
 
-###Rasa + Ollama pour l'intégration du chatbot IA
+### Rasa + Ollama pour l'intégration du chatbot IA
 
-##Données utilisées
-###Données environnementales : OpenAQ, DataGouv, LCSQA, Geod'Air.
+## Données utilisées
+### Données environnementales : OpenAQ, DataGouv, LCSQA, Geod'Air.
 
 ###Données géographiques : INSEE, geo.api.gouv.fr.
 
